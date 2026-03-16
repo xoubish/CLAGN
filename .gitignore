@@ -1,0 +1,29 @@
+# Large data files
+data/*.parquet.gzip
+data/*.parquet
+data/*.fits
+data/*.hdf5
+
+# Keep the Zeltyn CSV (small, needed to run the notebook)
+!data/zeltyn2024_table5.csv
+
+# PDFs (papers)
+*.pdf
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Conda / env
+.conda/
+*.egg
+
+# macOS
+.DS_Store
