@@ -158,10 +158,18 @@ Exclusions (`exclude_flag`, `exclude_reason`):
       M = clip(max(zeltyn_density_ratio/3, clagn_score/0.15), 0, 2)  (manifold CLAGN-likeness, 1 = threshold)
       P = clip(|log10(flux_now/flux_at_last_spec)| / log10(1.5), 0, 2)  (W1 from unWISE to 2020-12, ZTF r to 2025; larger of the two)
       S = 1 if years_since_last_spec >= 3 else 0.3;  B = 1.0 / 0.8 / 0.5 / 0.25 for r < 18.5 / 19 / 19.5 / fainter
-      **priority = B * S * (M + P) + 0.5 * class_change_flag**
+      **priority = B * S * (M + P) + 0.5 * class_change_flag**;  per night **priority_night = priority * W_moon**
+      with W_moon = 1.0 (>= 60 deg from the moon) / 0.7 (40-60) / 0.4 (30-40); < 30 deg excluded.
       Tiers: T3 Zeltyn CL-AGN; T2 Zeltyn EVQ with M >= 1 or in Zeltyn region; T1 pool object with M >= 1; T4 control
-      (pool, clagn_score = 0, zeltyn_density_ratio <= 0.3, outside both regions). Allocation per night: hrs >= 1.5,
-      moon separation >= 40 deg, r <= 19.5, z <= 0.8 (T3 exempt); slots 14 / 34 / 34; caps T3 <= 3, T4 <= 4 per night.
+      (pool, clagn_score = 0, zeltyn_density_ratio <= 0.3, outside both regions). Allocation per night: hrs >= 1.5
+      above airmass 2 inside the window, z <= 0.8 (T3 exempt); slots 14 / 34 / 34; caps T3 <= 3, T4 <= 4 per night;
+      floors so every proposal tier is represented: Sep 23 T3 1 / T2 1 / T4 2, October nights T3 3 / T2 3 / T4 4.
+      Controls (T4) use the opposite score, priority = B * S * (1 - min(P, 1)): bright, photometrically quiet objects
+      off both CLAGN regions. Rank within a night = order of priority_night among the selected set (floors do not
+      change ranks). P now takes the largest of: unWISE W1 (to 2020) vs W1 at the archival spectrum, NEOWISE-R W1
+      (to 2024) vs at-spectrum, NEOWISE-R 2024 vs 2014, and ZTF r now vs r at the last spectrum.
+      **No magnitude cut** (user decision 2026-09-03): brightness and moon distance only weight the ranking.
+      The pool WISE fetch therefore covers r < 19.5 (r < 19 first, 19-19.5 added afterwards); 19.5-20 not fetched.
 - [x] Write `data/master_list_scored.csv` and `data/targets_<night>.csv` (top list + backups).
 
 ---
@@ -174,7 +182,13 @@ Exclusions (`exclude_flag`, `exclude_reason`):
       each October night is moon-free). All bright time -> bright targets and/or > 40 deg from the moon.
       Computed by `05_observability.py` (astroplan); it adds hrs_<night>, minX_<night>, moonsep_<night> columns.
 - [x] RA windows used for the parent pool (`02_parent_pool.py`): 15.5h-24h, 0h-4.5h, 6.5h-11h; Dec > -15.
-- [ ] Palomar: Dec > -25 comfortable. NGPS: r < 19.5-20 for ~15-30 min exposures (proposal ETC: r=18.5 -> 8-10 min).
+- [x] Exposure model (2026-09-03, in `04_score_tiers.py`): t_exp = 9 min * (7/10)^2 * 10^(0.8 (r-18.5)) * 10^(0.4 dsky),
+      dsky = 1 mag (Ha usable, z <= 0.55) or 2 mag (Hb needed) for the moon at > 60 deg, +0.5 at 40-60 deg, +1 inside
+      40 deg; floor 8, cap 60 min; +5 min overhead. Anchor: proposal NGPS ETC, r=18.5 dark -> 9 min at S/N 10.
+      Roughly: r=18 -> 4/h, r=18.5 -> 3/h (Ha) or 2/h (Hb), r=19 -> 2/h (Ha) or 1/h (Hb) under a bright moon.
+      Allocation fills a time budget (4.3 h Sep 23; 9.5 h each October night) by priority per hour of telescope time;
+      tier floors only take targets costing <= 30 min. Re-check with the NGPS ETC (moon phase set) before the run.
+- [ ] Palomar: Dec > -25 comfortable.
 - [ ] Which lines land in DBSP range: Hα to z~0.4; Hβ, [OIII] to z~0.8; MgII beyond.
 - [ ] astroplan: hours above airmass 2 per night, moon separation, per target.
 - [ ] Final list: `data/targets_<run>.ecsv` + finder charts. Keep a backup list per RA hour.
@@ -210,9 +224,19 @@ CLAGN/
                                           workers: `wise 19.0 <worker> <nworkers>`); projection + scores
   03_spectra_inventory.py <csv> <tag>   <- SDSS DR19 allspec + DESI DR1 epochs per target
   03b_ztf_now.py <csv> <tag> ...        <- current ZTF g/r photometry and change since a reference MJD
+  03c_neowise_now.py <csv> <tag>        <- NEOWISE-R single-exposure W1/W2 to 2024-02 via IRSA Gator bulk upload
+                                          (100 positions/request, ~35 s); per-visit medians; feeds P and the trend
   04_score_tiers.py                <- master list, priority, tiers, per-night allocation -> targets_<night>.csv
+  08_time_axis.py                  <- test of the "region offset = time axis" idea (see Section 8)
   05_observability.py <in> <out>   <- astroplan hours/airmass/moon per night (run on Zeltyn and pool tables)
   06_finder_charts.py targets_<night>.csv  <- PS1 finder charts + text target list in finders/<night>/
+  07b_cutouts.py                   <- 64" thumbnails per target: SDSS DR18 gri JPEG (SkyServer ImgCutout) and ZTF g/r
+                                      reference-image cutouts from IRSA IBE (ztf/products/ref; stored with CD1_1>0, CD2_2<0,
+                                      so flip both axes for N-up E-left) -> data/cutouts/, embedded as data URIs in the page
+  07_make_webpage.py               <- self-contained "CLAGN Night Sheet" (web/clagn_night_sheet.html): cards per target
+                                      with light curves, manifold position, archival epochs, NGPS line coverage, and a
+                                      slot for the observed spectrum (data/ngps_spectra/<name>.csv). Published as an artifact.
+  run_after_wise.sh                <- runs 02 project -> subset -> 03 -> 03b -> 04 -> 06 -> 07
   data/                            <- all outputs (parquet/pkl/caches gitignored)
   from_AGNzoo/                     <- legacy notebooks, code, figures, paper-era data
 ```
@@ -241,6 +265,23 @@ The top-level `code_src/` is the newer Fornax code and is not import-compatible 
   CL-AGNs (6.3x, a genuine held-out number since EVQs were not used to define the region). **Decision still
   pending**: which population the discovery tier should be modelled on. The proposal's 6x figure corresponds
   to the EVQ-vs-Sample-A number of the Zeltyn-defined region, not to a CL-AGN held-out test.
+- 2026-09-03 (evening): DR16 parent pool projected (`02_parent_pool.py`): 25,913 z<0.8 r<20 quasars in the run RA
+  windows; unWISE W1 fetched for the 10,660 with r<19, 10,575 projected. In Zeltyn-defined region 774 (7.3%, vs
+  2.8% of Sample A), in Turn-on/off-defined region 398, kNN clagn_score>=0.15 1,397, Zeltyn density ratio>=3 744.
+  The two region flags are disjoint (0 objects in both). M>=1: 1,941 (median z 0.42, median r 18.5);
+  observable with moon sep >= 40 deg: 280 on Sep 23, ~910 on each October night -> Tier 1 supply is not the
+  limiting factor; the photometric-change term P and brightness decide the ranking. Enrichment (spectra + ZTF)
+  capped at the top 600 by M plus 150 controls.
+- 2026-09-03 (late): Is the offset between the literature-CLAGN region and the Zeltyn region a *time* axis?
+  (`08_time_axis.py`, `data/manifold_time_axis.{csv,png}`). Position along the axis between the two region centroids
+  does not correlate with the epoch of the largest W1 step (Spearman rho ~ 0 for CLAGN+EVQ, n=344) nor with the share
+  of the change after 2015. But the mean normalised W1 profiles differ in *shape*: Sample A Turn-off objects are
+  bright in 2010-11 (1.25, 1.18 x median) and flat ~1.0 from 2013 on; Turn-on objects are faint in 2010-11 (0.83,
+  0.80) and rise to 1.0 by 2014; Zeltyn CL-AGNs and EVQs decline gently and monotonically 1.06 -> 0.97 across
+  2010-2020. So the two regions encode "large change at the start of the WISE window" vs "slow steady fade through
+  2020", not a continuous clock. Consequence for 2026: do not extrapolate along the axis; the right signature for an
+  object changing *now* is a change in the last epochs, which needs post-2020 photometry (ZTF to 2025 is in; NEOWISE
+  single-exposure photometry to 2024 from IRSA would extend W1 by 3-4 yr and is the natural next enrichment).
 - 2026-09-03: Step zero. `~/Dropbox/sample.ecsv` (2042 rows) is **not** the Sample A table: labels disagree
   for objectid >= 1000 and a light-curve fingerprint test (unWISE W1/W2 fetched at its coordinates vs the
   parquet light curve of the same objectid) shows different epochs/fluxes for objectids 0, 63, 153, 1000.

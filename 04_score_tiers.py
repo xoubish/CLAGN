@@ -27,9 +27,32 @@ import pandas as pd
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, 'data')
-NIGHTS = {'sep23': 14, 'oct26': 34, 'oct27': 34}          # target slots per night (~20 min each incl. overhead)
+NIGHTS = {'sep23': 20, 'oct26': 45, 'oct27': 45}          # loose upper bound on list length; the time budget below governs
+HOURS = {'sep23': 4.3, 'oct26': 9.5, 'oct27': 9.5}        # usable science hours per window (twilight-to-mid / full night, minus ~0.5 h standards)
 QUOTA = {'T3': 3, 'T4': 4}                                # per-night caps for revisit / control tiers
-MIN_HRS, MIN_MOONSEP, RMAX, ZMAX = 1.5, 40.0, 19.5, 0.8
+OVERHEAD_MIN = 5.0                                        # slew + acquisition + readout per target
+
+
+def exposure_minutes(r, z, moonsep):
+    """On-source minutes for S/N ~ 7 per bin on the diagnostic broad line, scaled from the proposal's NGPS ETC anchor
+    (r = 18.5, dark sky: ~9 min for S/N ~ 10). Sky-limited scaling: t ~ (S/N)^2 * 10^(0.8 dr) * 10^(0.4 dsky).
+    Bright moon adds ~2 mag of sky in the blue-green (Hb region) and ~1 mag in the red (Ha region) at > 60 deg,
+    +0.5 mag more at 40-60 deg and +1 mag more inside 40 deg. Ha is usable to z ~ 0.55 in NGPS; beyond that the
+    diagnostic is Hb, which costs the blue-green sky penalty. Floor 8 min (practical minimum), cap 60 min."""
+    r = np.where(np.isfinite(r), r, 20.0); z = np.where(np.isfinite(z), z, 0.5)
+    dsky = np.where(z <= 0.55, 1.0, 2.0) + np.select([moonsep >= 60, moonsep >= 40], [0.0, 0.5], 1.0)
+    t = 9.0 * (7.0 / 10.0) ** 2 * 10 ** (0.8 * (r - 18.5)) * 10 ** (0.4 * dsky)
+    return np.clip(t, 8.0, 60.0)
+# per-night floors so the science tiers of the proposal are all represented (filled first, from each tier's own
+# priority order); the remaining slots go by overall priority
+FLOOR = {'sep23': {'T3': 1, 'T2': 1, 'T4': 2}, 'oct26': {'T3': 3, 'T2': 3, 'T4': 4}, 'oct27': {'T3': 3, 'T2': 3, 'T4': 4}}
+# No magnitude cut: brightness only weights the priority (B). Moon separation is a weight too (W_moon), with a
+# hard floor at MIN_MOONSEP degrees.
+MIN_HRS, MIN_MOONSEP, ZMAX = 1.5, 30.0, 0.8
+
+
+def moon_weight(sep):
+    return np.select([sep >= 60, sep >= 40, sep >= MIN_MOONSEP], [1.0, 0.7, 0.4], 0.0)
 
 
 def load(name, required=False):
@@ -138,6 +161,14 @@ def build_master():
 
     m = pd.concat(frames, ignore_index=True, sort=False)
 
+    # ---------------- NEOWISE-R W1 to 2024 (03c_neowise_now.py), both tags
+    neo = [x for x in (load('neowise_now_pool.csv'), load('neowise_now_zeltyn.csv')) if x is not None]
+    if neo:
+        neo = pd.concat(neo).drop_duplicates('name')
+        m = m.merge(neo[['name', 'n_visits', 'mjd_last_neo', 'w1_first', 'w1_last', 'dw1_neowise', 'w1_slope_2yr', 'w1_flux_last_mjy']], on='name', how='left')
+        if 'w1_at_spec_mjy' in m:
+            m['w1_ratio_2024_over_spec'] = m.w1_flux_last_mjy / m.w1_at_spec_mjy
+
     # ---------------- proprietary SDSS-V epochs, if the user exported them (data/sdssv_internal_epochs.csv)
     # expected columns (case-insensitive): ra, dec (or plug_ra/plug_dec), mjd, class, subclass, z, zwarning; optional spectroflux_r
     sv = load('sdssv_internal_epochs.csv')
@@ -173,16 +204,33 @@ def build_master():
 
     # ---------------- scores
     m['M'] = np.clip(np.fmax(m.zeltyn_density_ratio.fillna(0) / 3.0, m.clagn_score.fillna(0) / 0.15), 0, 2)
-    p_w1 = np.abs(np.log10(m.get('w1_ratio_now_over_spec', pd.Series(np.nan, index=m.index)))) / np.log10(1.5)
-    p_ztf = np.abs(m.get('dr_since_ref', pd.Series(np.nan, index=m.index))) / (2.5 * np.log10(1.5))
-    m['P'] = np.clip(np.fmax(p_w1.fillna(0), p_ztf.fillna(0)), 0, 2)
+    nanS = pd.Series(np.nan, index=m.index)
+    p_w1 = np.abs(np.log10(m.get('w1_ratio_now_over_spec', nanS))) / np.log10(1.5)          # unWISE to 2020 vs at-spectrum
+    p_w1b = np.abs(np.log10(m.get('w1_ratio_2024_over_spec', nanS))) / np.log10(1.5)        # NEOWISE 2024 vs at-spectrum
+    p_neo = np.abs(m.get('dw1_neowise', nanS)) / (2.5 * np.log10(1.5))                      # NEOWISE 2024 vs 2014 (all objects)
+    p_ztf = np.abs(m.get('dr_since_ref', nanS)) / (2.5 * np.log10(1.5))
+    m['P'] = np.clip(np.fmax.reduce([p_w1.fillna(0), p_w1b.fillna(0), p_neo.fillna(0), p_ztf.fillna(0)]), 0, 2)
     m['S'] = np.where(m.years_since_last_spec >= 3, 1.0, 0.3)
     m['B'] = brightness_weight(m.r_mag.fillna(20.5))
     m['priority'] = (m.B * m.S * (m.M + m.P) + 0.5 * m.class_change_flag.fillna(False).astype(float)).round(3)
+    # controls (T4) are the opposite case: we want bright, photometrically QUIET objects off the CLAGN regions
+    isT4 = m.tier == 'T4'
+    m.loc[isT4, 'priority'] = (m.B[isT4] * m.S[isT4] * (1.0 - np.clip(m.P[isT4], 0, 1))).round(3)
+    # diagnostic features inside the NGPS range (3200-10400 A) at each redshift
+    NGPS = (3200.0, 10400.0)
+    LINES = [('MgII', 2798.0), ('Hb+[OIII]', 5007.0), ('Ha', 6563.0), ('CaII_trip', 8600.0), ('[SIII]9531', 9531.0)]
+    def lines_in_range(z):
+        if not np.isfinite(z):
+            return ''
+        return '+'.join(n for n, w in LINES if NGPS[0] <= w * (1 + z) <= NGPS[1])
+    m['lines_in_ngps'] = m.z.map(lines_in_range)
     # expected transition direction from the photometry (fading type-1 -> turn-off candidate, brightening -> turn-on)
-    ratio = m.get('w1_ratio_now_over_spec', pd.Series(np.nan, index=m.index))
-    dr = m.get('dr_since_ref', pd.Series(np.nan, index=m.index))
-    m['trend'] = np.select([(ratio < 1 / 1.3) | (dr > 0.3), (ratio > 1.3) | (dr < -0.3)], ['fading', 'brightening'], 'flat/unknown')
+    ratio = m.get('w1_ratio_now_over_spec', nanS)
+    dr = m.get('dr_since_ref', nanS)
+    dw1 = m.get('dw1_neowise', nanS)
+    fading = (ratio < 1 / 1.3) | (dr > 0.3) | (dw1 > 0.3)
+    brightening = (ratio > 1.3) | (dr < -0.3) | (dw1 < -0.3)
+    m['trend'] = np.select([fading & brightening, fading, brightening], ['mixed (IR vs optical)', 'fading', 'brightening'], 'flat/unknown')
     return m
 
 
@@ -192,23 +240,40 @@ def allocate(m):
         hrs, sep = m.get(f'hrs_{night}'), m.get(f'moonsep_{night}')
         if hrs is None:
             print(f'   no observability columns for {night}'); continue
-        elig = (hrs >= MIN_HRS) & (sep >= MIN_MOONSEP) & (m.r_mag.fillna(99) <= RMAX) & ((m.z <= ZMAX) | (m.tier == 'T3')) \
+        elig = (hrs >= MIN_HRS) & (sep >= MIN_MOONSEP) & ((m.z <= ZMAX) | (m.tier == 'T3')) \
                & m.tier.isin(['T1', 'T2', 'T3', 'T4']) & ~m.name.isin(picked)
-        cand = m[elig].sort_values(['priority', 'r_mag'], ascending=[False, True])
-        chosen = []
+        cand = m[elig].copy()
+        cand['priority_night'] = (cand.priority * moon_weight(sep[elig].values)).round(3)   # moon distance weights, not cuts
+        cand['t_exp_min'] = exposure_minutes(cand.r_mag.values, cand.z.values, sep[elig].values).round(0)
+        cand['t_total_min'] = cand.t_exp_min + OVERHEAD_MIN
+        # rank by science return per minute of telescope time, so a bright target is not out-competed by a faint one
+        cand['prio_per_hour'] = (60.0 * cand.priority_night / cand.t_total_min).round(3)
+        cand = cand.sort_values(['prio_per_hour', 'r_mag'], ascending=[False, True])
+        budget = HOURS[night] * 60.0
+        chosen, used = [], 0.0
         counts = {'T1': 0, 'T2': 0, 'T3': 0, 'T4': 0}
-        for _, row in cand.iterrows():
-            if len(chosen) >= nslots:
-                break
+        # pass 1: tier floors (only targets that cost <= 30 min on source; expensive ones stay as backups)
+        for tier, nmin in FLOOR.get(night, {}).items():
+            for ix in cand.index[(cand.tier == tier) & (cand.t_exp_min <= 30)][:nmin]:
+                chosen.append(ix); counts[tier] += 1; used += cand.at[ix, 't_total_min']
+        # pass 2: best return per hour until the night's minutes are spent (caps respected)
+        for ix, row in cand.iterrows():
+            if len(chosen) >= nslots or used + row.t_total_min > budget:
+                if used + 6 + OVERHEAD_MIN > budget or len(chosen) >= nslots:
+                    break
+                continue
+            if ix in chosen:
+                continue
             if row.tier in QUOTA and counts[row.tier] >= QUOTA[row.tier]:
                 continue
-            chosen.append(row.name); counts[row.tier] += 1
-        sel = m.loc[chosen].copy(); sel['night'] = night
-        sel['rank'] = np.arange(1, len(sel) + 1)
+            chosen.append(ix); counts[row.tier] += 1; used += row.t_total_min
+        sel = cand.loc[chosen].sort_values('prio_per_hour', ascending=False).copy(); sel['night'] = night
+        sel['rank'] = np.arange(1, len(sel) + 1)                       # rank = return-per-hour order within the selected set
         backups = cand[~cand.index.isin(chosen)].head(nslots).copy(); backups['night'] = night; backups['rank'] = 0
         lists[night] = pd.concat([sel, backups])
         picked |= set(sel.name)
-        print(f'   {night}: {len(sel)} targets ({counts}), {len(backups)} backups; eligible pool {elig.sum()}')
+        print(f'   {night}: {len(sel)} targets ({counts}) using {used/60:.1f} of {HOURS[night]} h '
+              f'(median exposure {sel.t_exp_min.median():.0f} min), {len(backups)} backups; eligible pool {elig.sum()}')
     return lists
 
 
@@ -217,8 +282,9 @@ if __name__ == '__main__':
     m.to_csv(os.path.join(DATA, 'master_list_scored.csv'), index=False)
     print(f'master list: {len(m)} rows; tiers: {m.tier.value_counts().to_dict()}')
     lists = allocate(m)
-    cols = ['rank', 'night', 'tier', 'name', 'ra', 'dec', 'z', 'r_mag', 'priority', 'M', 'P', 'trend', 'years_since_last_spec', 'n_spec',
-            'last_class', 'clagn_score', 'zeltyn_density_ratio', 'in_region_zeltyn', 'notes']
+    cols = ['rank', 'night', 'tier', 'name', 'ra', 'dec', 'z', 'r_mag', 't_exp_min', 'prio_per_hour', 'priority_night', 'priority', 'M', 'P', 'trend',
+            'years_since_last_spec', 'n_spec', 'last_class', 'clagn_score', 'zeltyn_density_ratio', 'in_region_zeltyn',
+            'lines_in_ngps', 'notes']
     for night, df in lists.items():
         cols_n = cols + [f'hrs_{night}', f'minX_{night}', f'moonsep_{night}']
         df[[c for c in cols_n if c in df.columns]].to_csv(os.path.join(DATA, f'targets_{night}.csv'), index=False)
