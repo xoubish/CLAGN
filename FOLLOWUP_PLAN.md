@@ -42,6 +42,11 @@ Added 2026-09-03 (scripts at top level, outputs in `data/`, large files gitignor
 - `data/zeltyn_coords.csv` (J-names -> RA/Dec), `data/zeltyn_candidates_prelim.csv` (embedding + spectra join,
   sorted by in-region then clagn_score: the Tier 2/3 pool).
 - `data/df_lc_020724.parquet.gzip` re-downloaded (243 MB, 8307 objects incl. 6209 SPIDER-only).
+- 2026-09-03 evening: full pipeline run on the r<19 pool (`run_after_wise.sh`) + `rescore.sh` with NEOWISE:
+  `targets_sep23.csv` 18 primaries / 20 backups (4.2 of 4.3 h), `targets_oct26.csv` 41 / 45 (9.4 of 9.5 h),
+  `targets_oct27.csv` 41 / 45 (9.4 of 9.5 h); median exposure 8 min, median r ~ 18.0. Finder charts in `finders/`,
+  cutouts in `data/cutouts/`, page at web/clagn_night_sheet.html (published artifact, About tab included).
+  Pending: 19-19.5 mag WISE fetch (then re-run `run_after_wise.sh`), SDSS-V internal epochs, NGPS ETC check.
 
 What is missing (gitignored, never committed anywhere):
 

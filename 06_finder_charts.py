@@ -74,12 +74,12 @@ def main():
     outdir = os.path.join(HERE, 'finders', night); os.makedirs(outdir, exist_ok=True)
     sc = SkyCoord(df.ra.values * u.deg, df.dec.values * u.deg)
     with open(os.path.join(outdir, f'targetlist_{night}.txt'), 'w') as f:
-        f.write('# name                   RA(J2000)     Dec(J2000)    z      r    tier prio  status  comment\n')
+        f.write('# name                   RA(J2000)     Dec(J2000)    z      r    tier  exposure    status  comment\n')
         for (_, row), c in zip(df.iterrows(), sc):
             status = 'primary' if row['rank'] > 0 else 'backup'
             f.write(f"{row['name']:22s} {c.ra.to_string(u.hour, sep=':', precision=2, pad=True):12s} "
                     f"{c.dec.to_string(u.deg, sep=':', precision=1, alwayssign=True, pad=True):12s} {row.z:5.3f} {row.r_mag:5.1f} "
-                    f"{row.tier:4s} {row.priority:4.2f}  {status:7s} {row.get('trend', '')}, last spec {row.years_since_last_spec:.1f} yr ago; "
+                    f"{row.tier:4s} {str(row.get('exp_plan', '')):11s} {status:7s} {row.get('trend', '')}, last spec {row.years_since_last_spec:.1f} yr ago; "
                     f"{row.get('notes', '')}\n")
     prim = df[df['rank'] > 0]
     for _, row in prim.iterrows():

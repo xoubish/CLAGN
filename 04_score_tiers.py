@@ -246,6 +246,9 @@ def allocate(m):
         cand['priority_night'] = (cand.priority * moon_weight(sep[elig].values)).round(3)   # moon distance weights, not cuts
         cand['t_exp_min'] = exposure_minutes(cand.r_mag.values, cand.z.values, sep[elig].values).round(0)
         cand['t_total_min'] = cand.t_exp_min + OVERHEAD_MIN
+        # exposure plan: >= 2 sub-exposures for cosmic-ray rejection, each <= ~10 min
+        nexp = np.maximum(2, np.ceil(cand.t_exp_min / 10.0)).astype(int)
+        cand['exp_plan'] = [f'{n} x {t/n:.0f} min' for n, t in zip(nexp, cand.t_exp_min)]
         # rank by science return per minute of telescope time, so a bright target is not out-competed by a faint one
         cand['prio_per_hour'] = (60.0 * cand.priority_night / cand.t_total_min).round(3)
         cand = cand.sort_values(['prio_per_hour', 'r_mag'], ascending=[False, True])
@@ -282,7 +285,7 @@ if __name__ == '__main__':
     m.to_csv(os.path.join(DATA, 'master_list_scored.csv'), index=False)
     print(f'master list: {len(m)} rows; tiers: {m.tier.value_counts().to_dict()}')
     lists = allocate(m)
-    cols = ['rank', 'night', 'tier', 'name', 'ra', 'dec', 'z', 'r_mag', 't_exp_min', 'prio_per_hour', 'priority_night', 'priority', 'M', 'P', 'trend',
+    cols = ['rank', 'night', 'tier', 'name', 'ra', 'dec', 'z', 'r_mag', 't_exp_min', 'exp_plan', 'prio_per_hour', 'priority_night', 'priority', 'M', 'P', 'trend',
             'years_since_last_spec', 'n_spec', 'last_class', 'clagn_score', 'zeltyn_density_ratio', 'in_region_zeltyn',
             'lines_in_ngps', 'notes']
     for night, df in lists.items():

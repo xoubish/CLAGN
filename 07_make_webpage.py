@@ -150,6 +150,7 @@ def main():
                                hrs=round(float(getattr(tr, f'hrs_{tr.night}', np.nan)), 1), moonsep=float(getattr(tr, f'moonsep_{tr.night}', np.nan)),
                                minx=float(getattr(tr, f'minX_{tr.night}', np.nan)),
                                texp=float(getattr(tr, 't_exp_min', np.nan)) if pd.notna(getattr(tr, 't_exp_min', np.nan)) else None,
+                               plan=str(getattr(tr, 'exp_plan', '')) if pd.notna(getattr(tr, 'exp_plan', np.nan)) else '',
                                pph=float(getattr(tr, 'prio_per_hour', np.nan)) if pd.notna(getattr(tr, 'prio_per_hour', np.nan)) else None))
         z = float(r.z) if pd.notna(r.z) else None
         lines = [dict(name=n, obs=round(w * (1 + z), 0), inrange=bool(3200 <= w * (1 + z) <= 10400)) for n, w in LINES] if z is not None else []
@@ -186,8 +187,16 @@ def main():
         sub = t[(t.night == n) & (t['rank'] > 0)]
         meta['counts'] = sub.tier.value_counts().to_dict(); meta['n_primary'] = int(len(sub)); meta['n_backup'] = int(((t.night == n) & (t['rank'] == 0)).sum())
 
+    # program numbers for the About tab
+    def nrows(fn):
+        p = os.path.join(DATA, fn); return int(sum(1 for _ in open(p)) - 1) if os.path.exists(p) else None
+    pool_scored = pd.read_csv(os.path.join(DATA, 'parent_pool_scored.csv'), usecols=['projected', 'psfmag_r']) if os.path.exists(os.path.join(DATA, 'parent_pool_scored.csv')) else None
+    stats = dict(n_sampleA=len(A), n_sampleA_clagn=int(A.is_known_clagn.sum()), n_zeltyn=len(zc), n_zeltyn_clagn=int(zc['class_zeltyn'].str.startswith('CL-AGN').sum()),
+                 n_pool=nrows('parent_pool_dr16qso.csv'), n_pool_projected=int(pool_scored.projected.fillna(False).sum()) if pool_scored is not None else None,
+                 n_T1=int((m.tier == 'T1').sum()), n_T4=int((m.tier == 'T4').sum()), n_lit=nrows('literature_clagn.csv'),
+                 n_targets=len(targets), n_primary={k: v['n_primary'] for k, v in NIGHT_META.items()})
     payload = dict(generated=datetime.datetime.now().strftime('%Y-%m-%d %H:%M'), nights=NIGHT_META, tiers=TIER_LABEL,
-                   manifold=manifold, targets=targets)
+                   manifold=manifold, targets=targets, stats=stats)
     html = TEMPLATE.replace('__DATA__', json.dumps(payload, separators=(',', ':'), allow_nan=False))
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, 'w') as fh:
@@ -288,6 +297,20 @@ th{font:600 11px "Barlow Condensed",sans-serif;letter-spacing:.1em;text-transfor
 td.n{text-align:right}
 .toggle{background:none;border:none;color:var(--accent);font:inherit;font-size:12.5px;cursor:pointer;padding:4px 0}
 .badge{display:inline-block;padding:1px 7px;border-radius:999px;border:1px solid var(--hair2);font:600 11px "Barlow Condensed",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);margin-left:8px;vertical-align:middle}
+.about{display:grid;grid-template-columns:minmax(0,68ch) minmax(280px,380px);gap:40px;padding:18px 4px 30px}
+.about .col{min-width:0}
+.about h2{font:600 34px/1.05 "Barlow Condensed",sans-serif;margin:6px 0 10px;text-wrap:balance}
+.about .lede{font-size:18px;line-height:1.45;color:var(--ink2);margin:0 0 18px}
+.about h3{font:600 13px "Barlow Condensed",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);margin:26px 0 8px}
+.about p,.about li{font-size:16px;line-height:1.55;color:var(--ink)}
+.about ul{padding-left:20px;margin:6px 0}
+.about li{margin:4px 0}
+.about .fine{font-size:13px;color:var(--ink3);margin-top:28px}
+.about table.tiers td{padding:8px 8px 10px 0;font-size:14px;line-height:1.45;color:var(--ink2)}
+.about table.tiers td:first-child{padding-right:12px;white-space:nowrap}
+.about table.tiers b{color:var(--ink);display:block;margin-bottom:2px}
+.side-col h3:first-child{margin-top:8px}
+@media (max-width:1000px){.about{grid-template-columns:1fr}}
 .over{background:var(--surface);border:1px solid var(--hair);border-radius:4px;padding:6px 16px 12px;margin:8px 0 18px}
 .over svg{display:block;max-height:420px}
 .tgt:hover{stroke:var(--ink)}
@@ -323,7 +346,7 @@ function save(){ try{ localStorage.setItem('clagn_ns', JSON.stringify({night:sta
 
 /* ---------- header controls ---------- */
 const tabs = document.getElementById('tabs');
-[...Object.entries(D.nights).map(([k,v])=>[k,v.label]), ['all','All nights']].forEach(([k,lab])=>{
+[...Object.entries(D.nights).map(([k,v])=>[k,v.label]), ['all','All nights'], ['about','About']].forEach(([k,lab])=>{
   const b=document.createElement('button'); b.className='tab'; b.textContent=lab; b.dataset.k=k;
   b.setAttribute('aria-pressed', String(state.night===k));
   b.onclick=()=>{state.night=k; save(); render();}; tabs.appendChild(b);
@@ -433,6 +456,56 @@ function overview(list, nk){
     <div class="legend" style="margin-top:6px"><span><i style="--c:var(--ink3);opacity:.6"></i>Sample A (Hemmati+2026)</span><span><i class="tri" style="--c:var(--ink2)"></i>literature turn-on ▲ / turn-off ▼</span><span><i style="--c:var(--desi)"></i>Zeltyn+2024 CL-AGN</span><span><i style="--c:transparent;border:1.5px solid var(--desi)"></i>Zeltyn+2024 EVQ</span><span><i class="band"></i>Zeltyn-enriched bins</span><span><i class="band" style="background:rgba(25,158,112,.18);border-color:var(--t3)"></i>turn-on/off-enriched bins</span><span style="margin-left:auto">large dots: ${nk==='all'?'all':'this night’s'} targets by tier (click to jump)</span></div></section>`;
 }
 
+/* ---------- About tab ---------- */
+function about(){
+  const S=D.stats||{}, N=D.nights, n=v=>v==null?'—':Number(v).toLocaleString();
+  const tierRows=[
+    ['T1','Manifold-selected discovery targets',`Bright SDSS quasars (z &lt; 0.8) in the run's RA windows whose WISE W1 light curve places them in the changing-look-enriched part of the manifold and which have never been reported to change. Each has an archival SDSS spectrum from 2000–2018 as the baseline. ${n(S.n_T1)} qualify; the nights take the best per hour of telescope time.`,'var(--t1)'],
+    ['T2','EVQs completing a transition',`Extremely variable quasars from Zeltyn et al. (2024) whose broad lines had dimmed strongly by 2020–21 without disappearing, and which sit in the CLAGN region. A 2026 spectrum tests whether the transition completed.`,'var(--t2)'],
+    ['T3','Confirmed CLAGNs, revisited',`Spectroscopically confirmed SDSS-V changing-look AGN (${n(S.n_zeltyn_clagn)} in the sample). A few of the brightest per night, to test for state reversal and to check that the manifold region really predicts change.`,'var(--t3)'],
+    ['T4','Controls',`Bright, photometrically quiet quasars from the low-variability side of the manifold, outside both enriched regions, where no spectral change is expected. Needed to claim that the region predicts change rather than that all quasars change.`,'var(--t4)']];
+  return `<section class="about">
+  <div class="col">
+    <h2>Catching AGN before they turn off</h2>
+    <p class="lede">A spectroscopic follow-up of changing-look AGN candidates with the Palomar 200-inch and NGPS in 2026B, selected from the shape of their mid-infrared light curves rather than from a prior spectral change.</p>
+    <h3>Why</h3>
+    <p>Changing-look AGN (CLAGN) gain or lose their broad emission lines on timescales of months to years, together with large continuum changes. They are rare, roughly 0.4–1.25 % of re-observed quasars, and almost all have been found by chance in repeat spectroscopy. A purely photometric way to pick them out would let surveys like LSST target them deliberately.</p>
+    <p>Hemmati et al. (2026, ApJ 998, 130) built a low-dimensional map, a UMAP manifold, of the WISE/NEOWISE W1 light curves of ~${n(S.n_sampleA)} AGN at z &lt; 1 (Sample A), without using any labels. Known turn-on and turn-off CLAGNs from the literature occupy distinct parts of that map. Projecting the ${n(S.n_zeltyn)} SDSS-V CLAGNs and extremely variable quasars of Zeltyn et al. (2024), which were not used in training, shows them concentrating in a compact region too: the Zeltyn EVQs land there at 6.3× the rate of the general sample. Interestingly the SDSS-V CLAGNs and the literature CLAGNs sit in <em>different</em> regions. Their mean W1 curves show why: the literature objects changed before or around the start of WISE (2010–13), the SDSS-V ones faded slowly through the whole decade. Both regions are used here.</p>
+    <h3>The runs</h3>
+    <p>${Object.values(N).map(v=>`<b>${v.date}</b>, ${v.part} (${v.window}; moon ${v.moon}, ${v.moon_note})`).join('; ')}. All three are bright time, so the ranking favours bright targets and large moon separation, and every exposure estimate includes the moon.</p>
+    <h3>How targets are ranked</h3>
+    <p>Every candidate gets <span class="mono">priority = B · S · (M + P)</span>, plus 0.5 if the pipeline class of its archival spectra changed between epochs.</p>
+    <ul>
+      <li><b>M</b>, manifold likeness: the larger of the local density of Zeltyn CLAGNs around the object on the map and the fraction of literature CLAGNs among its 50 nearest neighbours, each normalised so 1 is the threshold; capped at 2.</li>
+      <li><b>P</b>, photometric change since the last spectrum: the largest of the W1 change to 2020 (unWISE), to 2024 (NEOWISE-R) and the ZTF r change to 2025, in units where 1 means a factor 1.5; capped at 2. This is the term that says <em>something is happening now</em>.</li>
+      <li><b>S</b>, staleness: 1 if the last spectrum is at least three years old, else 0.3.</li>
+      <li><b>B</b>, brightness: 1.0, 0.8, 0.5, 0.25 for r brighter than 18.5, 19, 19.5 and fainter. There is no magnitude cut.</li>
+    </ul>
+    <p>Per night, the priority is multiplied by a moon-distance weight (1 beyond 60°, 0.7 at 40–60°, 0.4 at 30–40°; closer is excluded) and divided by the estimated exposure time, so the list is ordered by <em>science return per hour</em>. The exposure model scales the proposal's NGPS ETC point (r = 18.5, dark: 9 min at S/N 10) to S/N ≈ 7 on the diagnostic broad line: Hα for z ≤ 0.55, else Hβ, with the bright moon adding about 1 mag of sky in the red and 2 in the blue-green. Roughly 4 targets per hour at r = 18, 2 per hour at r = 19 with Hα, 1 per hour if Hβ is needed. Each night's usable hours are filled in that order, with floors so that every tier is represented and caps on revisits and controls. Objects within 2″ of a published CLAGN or of a Zeltyn object are excluded from Tier 1.</p>
+    <h3>What a card shows</h3>
+    <ul>
+      <li><b>Light curves:</b> ZTF g and r nightly medians (2018–2025), unWISE W1 and W2 (2010–2020) and NEOWISE-R W1 visits (2014–2024) in mJy; every archival spectral epoch as a marker (grey SDSS, gold DESI) and the three run dates as gold bands.</li>
+      <li><b>Manifold:</b> the object's position among Sample A (grey), the literature turn-on/off objects (▲ ▼), the Zeltyn CLAGNs and EVQs (gold) and the two enriched regions (shaded).</li>
+      <li><b>Archival spectra:</b> every SDSS epoch from DR19, including SDSS-V through 2022–23, and DESI DR1, with the pipeline class and redshift where available.</li>
+      <li><b>What NGPS sees:</b> the lines that fall inside 3200–10400 Å at the object's redshift, against the narrower SDSS range.</li>
+      <li><b>Imaging:</b> 64″ cutouts from SDSS (gri) and the ZTF g and r reference images, north up and east left.</li>
+      <li><b>NGPS spectrum:</b> empty until observed; drop <span class="mono">data/ngps_spectra/&lt;name&gt;.csv</span> in the repository and regenerate.</li>
+    </ul>
+    <h3>Status and caveats</h3>
+    <p>Lists are current as of ${D.generated}. Candidate pool: ${n(S.n_pool)} DR16 quasars in the RA windows, ${n(S.n_pool_projected)} with WISE light curves and manifold positions; ${n(S.n_lit)} published CLAGN positions used for exclusion. The exposure model is a scaling and should be checked against the NGPS ETC with the moon phase set. SDSS-V spectra taken after the DR19 cutoff (2023 onward) are not public; a check against the collaboration's internal spAll will de-prioritise anything recently re-observed. The unWISE record ends in December 2020 and NEOWISE in early 2024, so the most recent mid-infrared behaviour is unknown; ZTF covers the optical to 2025.</p>
+    <p class="fine">Pipeline: github repository CLAGN (scripts 00–08), data from IRSA (unWISE, NEOWISE-R, ZTF), SDSS DR16/DR19, DESI DR1, NOIRLab Data Lab, MAST/PS1. Contact: S. Hemmati (Caltech/IPAC).</p>
+  </div>
+  <aside class="col side-col">
+    <h3>Tiers</h3>
+    <table class="tiers">${tierRows.map(([k,t,d,c])=>`<tr><td><span class="tier" style="--c:${c};margin:0"><i></i>${k}</span></td><td><b>${t}</b><div>${d}</div></td></tr>`).join('')}</table>
+    <h3>Tonight's counts</h3>
+    <table><thead><tr><th>night</th><th>primary</th><th>backups</th><th>by tier</th></tr></thead><tbody>${Object.values(N).map(v=>`<tr><td>${v.label}</td><td class="n mono">${v.n_primary}</td><td class="n mono">${v.n_backup}</td><td>${Object.entries(v.counts||{}).sort().map(([k,c])=>`${k} ${c}`).join(' · ')}</td></tr>`).join('')}</tbody></table>
+    <h3>Proposal in one line</h3>
+    <p>Are objects in the CLAGN-enriched part of a photometric variability manifold more likely to show changing-look behaviour? A spectrum now, against a 2000–2018 SDSS baseline, answers it per object; the controls answer it for the method.</p>
+  </aside>
+</section>`;
+}
+
 /* ---------- NGPS wavelength ruler ---------- */
 function ruler(t){
   const W=560, H=84, p=28, a=3200, b=10400; const X=lin(a,b,p,W-p);
@@ -471,7 +544,7 @@ function card(t, nightKey){
         <b>r</b><span class="v mono">${fmt(t.rmag,1)}</span>
         <b>hours</b><span class="v mono">${fmt(n.hrs,1)} <span style="color:var(--ink3)">best airmass ${fmt(n.minx,2)}</span></span>
         <b>moon</b><span class="v mono">${fmt(n.moonsep,0)}°</span>
-        <b>exposure</b><span class="v mono">${n.texp!=null?`~${fmt(n.texp,0)} min`:'—'} <span style="color:var(--ink3)">${n.pph!=null?`${fmt(n.pph,1)} /h`:''}</span></span>
+        <b>exposure</b><span class="v mono">${n.plan||(n.texp!=null?`~${fmt(n.texp,0)} min`:'—')} <span style="color:var(--ink3)">${n.pph!=null?`${fmt(n.pph,1)} /h`:''}</span></span>
         <b>last spec</b><span class="v">${t.mjd_last!=null?`${fmt(t.yrs,1)} yr ago`:'none'} <span style="color:var(--ink3)">${esc(t.last_class)}</span></span>
         <b>trend</b><span class="v">${esc(t.trend)}</span>
       </div>
@@ -513,6 +586,7 @@ function spectrum(t){
 function render(){
   document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.k===state.night)));
   const nk=state.night, main=document.getElementById('main'), info=document.getElementById('nightinfo');
+  if(nk==='about'){ info.innerHTML=`<div><b>About</b><span class="v">what this program is, how targets are chosen, and how to read a card</span></div>`; main.innerHTML=about(); return; }
   if(nk!=='all'){ const n=D.nights[nk]; const counts=Object.entries(n.counts||{}).sort().map(([k,v])=>`${k} ${v}`).join(' · ');
     info.innerHTML=`<div><b>Night</b><span class="v">${n.date} · ${n.part}</span></div><div><b>Window</b><span class="v mono">${n.window}</span></div><div><b>LST</b><span class="v mono">${n.lst}</span></div><div><b>Moon</b><span class="v">${n.moon} · ${n.moon_pos}</span><br>${n.moon_note}</div><div><b>Slots</b><span class="v">${n.n_primary} primary · ${n.n_backup} backups</span><br>${counts}</div>`;
   } else info.innerHTML=`<div><b>View</b><span class="v">all three nights, best priority first</span></div>`;
