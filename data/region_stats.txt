@@ -1,0 +1,38 @@
+[     4s] Sample A objects after removing SPIDER-only: 2098
+[    18s] Sample A: 1965 survive GP cut, 5 dropped for NaN
+Turn-on 76, Turn-off 92, either 167
+[    80s] UMAP fitted on 1960 objects
+[    81s] wrote /Users/shemmati/Desktop/CLAGN/data/sampleA_embedding_objectid.csv (Sample A part; Zeltyn-defined region column added later)
+   chunk 0: AWS Error NETWORK_CONNECTION during GetObject operation: curlCode: 6, Couldn't r ... retry 1/5
+[  3455s]   fetched chunk 1/11
+[  3502s]   fetched chunk 2/11
+[  3581s]   fetched chunk 3/11
+[  3646s]   fetched chunk 4/11
+[  3708s]   fetched chunk 5/11
+[  3760s]   fetched chunk 6/11
+[  3861s]   fetched chunk 7/11
+[  3935s]   fetched chunk 8/11
+[  4022s]   fetched chunk 9/11
+[  4113s]   fetched chunk 10/11
+[  4135s]   fetched chunk 11/11
+[  4135s] Zeltyn rows 204, with unWISE data: 202
+[  4136s] Zeltyn all: 190 survive GP cut, 0 dropped for NaN
+
+=== Region definitions (10x10 bins, enrichment > 3x) ===
+Zeltyn-defined: 7 bins; Sample A inside 55 (2.8%); known CLAGN inside 2/167; non-CLAGN inside 53
+   held-out Zeltyn CL-AGN (z<1) inside 33/111 (30%),  EVQ inside 12/68  -> enrichment vs Sample A fraction: CL-AGN 10.6x, EVQ 6.3x
+   non-CLAGN Sample A inside, by label: WISE_Variable 20, SDSS_QSO 17, Optical_Variable 8, SPIDER_AGN 4, SPIDER_BL+SPIDER_QSOBL 2, SPIDER_BL+SPIDER_AGNBL 1, TDE 1
+SampleA Turn-on/off-defined: 8 bins; Sample A inside 174 (8.9%); known CLAGN inside 60/167; non-CLAGN inside 114
+   held-out Zeltyn CL-AGN (z<1) inside 12/111 (11%),  EVQ inside 17/68  -> enrichment vs Sample A fraction: CL-AGN 1.2x, EVQ 2.8x
+   non-CLAGN Sample A inside, by label: SDSS_QSO 56, WISE_Variable 38, SPIDER_BL+SPIDER_QSOBL 6, SPIDER_AGN 6, Optical_Variable 3, SPIDER_BL+SPIDER_AGNBL 2, Optical_Variable+Galex_Variable 1, Galex_Variable 1, TDE 1
+
+=== kNN clagn_score (k=50): fraction of Turn-on/off among nearest Sample A neighbours ===
+Sample A overall CLAGN fraction: 0.085
+  Sample A SDSS_QSO-only           median 0.040  frac>0.15: 0.14  n=950
+  Sample A WISE_Variable-only      median 0.060  frac>0.15: 0.22  n=411
+  Sample A Turn-on                 median 0.140  frac>0.15: 0.39  n=76
+  Sample A Turn-off                median 0.170  frac>0.15: 0.58  n=92
+  Zeltyn CL-AGN z<1                median 0.100  frac>0.15: 0.27  n=111
+  Zeltyn EVQ z<1                   median 0.140  frac>0.15: 0.49  n=68
+
+[  4148s] done. Files written to data/.

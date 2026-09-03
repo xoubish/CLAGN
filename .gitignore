@@ -1,11 +1,29 @@
-# Large data files
-data/*.parquet.gzip
-data/*.parquet
+# ---- large / regenerable data --------------------------------------------
+# light-curve parquets (Sample A download, unWISE caches), anywhere in the tree
+*.parquet
+*.parquet.gzip
 data/*.fits
 data/*.hdf5
+# fitted UMAP model (3 MB); rebuild with 01_rebuild_manifold.py
+data/*.pkl
+# unWISE chunk cache (02_parent_pool.py wise, 01_rebuild_manifold.py)
+data/wise_cache/
+# per-object ZTF light curves (03b_ztf_now.py), 40+ MB
+data/ztf_cache/
+# 26k-row DR16 pool tables, 4-7 MB each; regenerate with 02_parent_pool.py and 05_observability.py
+data/parent_pool_*.csv
+# per-epoch spectra tables; the *_summary_* files are kept
+data/spectra_epochs_*.csv
+# NED raw retry dumps (merged into literature_clagn.csv)
+data/literature_clagn_ned_retry*.csv
+data/*.log
+data/*.pdf
 
-# Keep the Zeltyn CSV (small, needed to run the notebook)
+# keep the small inputs the pipeline needs
 !data/zeltyn2024_table5.csv
+
+# ---- finder charts (PNG, ~0.6 MB each); the text target lists are kept -----
+finders/**/*.png
 
 # PDFs (papers)
 *.pdf
@@ -27,3 +45,6 @@ build/
 
 # macOS
 .DS_Store
+
+# Claude Code local settings
+.claude/settings.local.json
