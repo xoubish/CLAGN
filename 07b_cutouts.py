@@ -27,13 +27,29 @@ IBE_SEARCH = 'https://irsa.ipac.caltech.edu/ibe/search/ztf/products/ref'
 IBE_DATA = 'https://irsa.ipac.caltech.edu/ibe/data/ztf/products/ref'
 
 
+IRSA_FC = 'https://irsa.ipac.caltech.edu/applications/finderchart/servlet/api'
+
+
 def sdss_jpeg(ra, dec, path):
+    """SDSS gri colour JPEG from SkyServer; if SkyServer is down, fall back to IRSA's Finder Chart service (SDSS DR7 r band),
+    which also tells us whether SDSS imaging exists there at all ('outside SDSS')."""
     if os.path.exists(path):
         return True
-    r = requests.get('https://skyserver.sdss.org/dr18/SkyServerWS/ImgCutout/getjpeg',
-                     params={'ra': ra, 'dec': dec, 'scale': SIZE_ARCSEC / 160.0, 'width': 160, 'height': 160}, timeout=90)
+    try:
+        r = requests.get('https://skyserver.sdss.org/dr18/SkyServerWS/ImgCutout/getjpeg',
+                         params={'ra': ra, 'dec': dec, 'scale': SIZE_ARCSEC / 160.0, 'width': 160, 'height': 160}, timeout=90)
+        if r.ok and r.headers.get('content-type', '').startswith('image'):
+            open(path, 'wb').write(r.content); return True
+    except Exception as e:
+        print(f'   skyserver: {str(e)[:50]}', flush=True)
+    # IRSA fallback: subsetsize in arcmin; r-band grayscale JPEG (N up, E left)
+    q = requests.get(IRSA_FC, params={'mode': 'prog', 'locstr': f'{ra} {dec}', 'subsetsize': SIZE_ARCSEC / 60.0, 'survey': 'sdss'}, timeout=120)
+    if not q.ok or '<totalimages>0</totalimages>' in q.text or 'status="ok"' not in q.text:
+        return 'outside SDSS' if q.ok else False
+    r = requests.get(IRSA_FC, params={'mode': 'getImage', 'RA': ra, 'DEC': dec, 'subsetsize': SIZE_ARCSEC / 60.0, 'thumbnail_size': 'medium',
+                                      'survey': 'sdss', 'sdss_bands': 'r', 'type': 'jpgurl'}, timeout=120)
     if r.ok and r.headers.get('content-type', '').startswith('image'):
-        open(path, 'wb').write(r.content); return True
+        open(path, 'wb').write(r.content); return 'irsa'
     return False
 
 

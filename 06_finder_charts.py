@@ -7,6 +7,7 @@ and finders/<night>/targetlist_<night>.txt  (name, RA/Dec sexagesimal, epoch, ma
 Only rows with rank > 0 (the primary list) get charts; backups go in the text list flagged 'backup'.
 """
 import io, os, sys, time
+import glob
 import numpy as np
 import pandas as pd
 import requests
@@ -84,6 +85,9 @@ def main():
     prim = df[df['rank'] > 0]
     for _, row in prim.iterrows():
         outpng = os.path.join(outdir, f"{int(row['rank']):02d}_{row['name']}.png")
+        if not os.path.exists(outpng):                       # same target under an old rank prefix: rename instead of refetching
+            for old in glob.glob(os.path.join(outdir, f"[0-9][0-9]_{glob.escape(row['name'])}.png")):
+                os.replace(old, outpng); break
         if not os.path.exists(outpng):
             chart(row, outpng, size)
             print(f'   {os.path.basename(outpng)}', flush=True)

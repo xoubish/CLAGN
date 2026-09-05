@@ -244,6 +244,14 @@ def main():
     for n, meta in NIGHT_META.items():
         sub = t[(t.night == n) & (t['rank'] > 0)]
         meta['counts'] = sub.tier.value_counts().to_dict(); meta['n_primary'] = int(len(sub)); meta['n_backup'] = int(((t.night == n) & (t['rank'] == 0)).sum())
+        sp = os.path.join(DATA, f'schedule_{n}.csv')
+        if os.path.exists(sp):
+            S = pd.read_csv(sp).fillna('')
+            meta['schedule'] = [dict(kind=r.kind, name=str(r.name), start=r.start_local, end=r.end_local, minutes=int(r.minutes) if r.minutes != '' else 0,
+                                     X=(round(float(r.airmass), 2) if r.airmass != '' else None), moon=(int(r.moonsep) if r.moonsep != '' else None),
+                                     plan=str(r.plan), label=str(r.label), tier=str(r.tier)) for r in S.itertuples() if r.kind != 'gap']
+            meta['idle_min'] = int(S[S.kind == 'gap'].minutes.sum()) if len(S) else 0
+            meta['n_filler'] = int((S.kind == 'filler').sum())
 
     # program numbers for the About tab
     def nrows(fn):
@@ -322,6 +330,8 @@ header{position:sticky;top:0;z-index:5;background:var(--ground);border-bottom:1p
 .bar h1{margin:0;font:600 26px/1 "Barlow Condensed",sans-serif;letter-spacing:.01em}
 .bar h1 small{display:block;font:400 12px/1.3 "Source Sans 3",sans-serif;color:var(--ink3);letter-spacing:.08em;text-transform:uppercase;margin-top:4px}
 .tabs{display:flex;gap:4px}
+.sched-wrap{background:var(--surface);border:1px solid var(--hair);border-radius:4px;padding:10px 14px;margin:0 0 14px;overflow-x:auto}
+table.sched{width:100%;border-collapse:collapse;font-size:12.5px;white-space:nowrap}table.sched td:last-child{white-space:normal;min-width:260px}table.sched th{text-align:left;font-weight:500;color:var(--muted);padding:4px 8px;border-bottom:1px solid var(--line)}table.sched td{padding:3px 8px;border-bottom:1px solid var(--line)}table.sched td.n{text-align:right}
 .tab{background:none;border:1px solid var(--hair);color:var(--ink2);padding:6px 12px;border-radius:3px;font:600 15px "Barlow Condensed",sans-serif;letter-spacing:.03em;cursor:pointer}
 .tab[aria-pressed="true"]{border-color:var(--accent);color:var(--ink);background:var(--accent-soft)}
 .tab:focus-visible,.chip:focus-visible,input:focus-visible,.toggle:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -570,6 +580,7 @@ function about(){
       <li><b>Archival spectra:</b> every SDSS epoch from DR19, including SDSS-V through 2022–23, and DESI DR1, with the pipeline class and redshift where available.</li>
       <li><b>What NGPS sees:</b> the lines that fall inside 3200–10400 Å at the object's redshift, against the narrower SDSS range.</li>
       <li><b>Imaging:</b> 64″ cutouts from SDSS (gri) and the ZTF g and r reference images, north up and east left.</li>
+      <li><b>Observing sequence:</b> each night tab opens with the time-ordered plan from 11_schedule.py (greedy: priority per hour, setting targets first, CALSPEC standards at both ends; 'filler' rows come from the wider pool when no listed target is up). Card ranks follow this order.</li>
       <li><b>NGPS spectrum:</b> empty until observed; drop <span class="mono">data/ngps_spectra/&lt;name&gt;.csv</span> in the repository and regenerate.</li>
     </ul>
     <h3>Status and caveats</h3>
@@ -686,6 +697,16 @@ function spectrum(t){
 }
 
 /* ---------- render ---------- */
+function scheduleTable(n){
+  const rows=n.schedule.map((b,i)=>{
+    const isT=b.kind==='primary'||b.kind==='filler';
+    const nm=isT?`<span class="tgt mono" data-name="${esc(b.name)}" style="cursor:pointer;text-decoration:underline dotted">${esc(b.name)}</span>`:`<span class="mono">${esc(b.name)}</span>`;
+    const kind=b.kind==='standard'?`<span class="pill">standard</span>`:b.kind==='filler'?`<span class="pill" title="from the pool, fills time when no listed target is up">filler</span>`:`<span class="pill" style="background:var(--accent);color:var(--bg)">${esc(b.tier)}</span>`;
+    return `<tr><td class="mono">${b.start}</td><td class="mono">${b.end}</td><td>${kind}</td><td>${nm}</td><td class="n mono">${b.X??''}</td><td class="n mono">${b.moon??''}</td><td class="n mono">${b.minutes}</td><td class="small">${esc(b.plan)} ${esc(b.label||'')}</td></tr>`;}).join('');
+  return `<div class="section">Observing sequence · local time · ${n.schedule.filter(b=>b.kind!=='standard').length} targets, ${n.n_filler||0} fillers, ${n.idle_min||0} min unfilled</div>
+  <div class="sched-wrap"><table class="sched"><thead><tr><th>start</th><th>end</th><th>kind</th><th>target</th><th>X</th><th>moon °</th><th>min</th><th>plan</th></tr></thead><tbody>${rows}</tbody></table>
+  <div class="small" style="margin-top:6px">Greedy order: priority per hour, targets that set within 2.5 h first, tier caps kept; standards are CALSPEC stars (the Quicklook DRP builds sensitivity functions only from those). Click a name to jump to its card. Text copy: finders/&lt;night&gt;/schedule_&lt;night&gt;.txt</div></div>`;
+}
 function render(){
   document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.k===state.night)));
   const nk=state.night, main=document.getElementById('main'), info=document.getElementById('nightinfo');
@@ -699,6 +720,7 @@ function render(){
   const prim=list.filter(t=>nk==='all'||t.nights.find(x=>x.night===nk).rank>0).sort((a,b)=>{ if(nk!=='all'){return a.nights.find(x=>x.night===nk).rank-b.nights.find(x=>x.night===nk).rank;} return key(b)-key(a); });
   const back=nk==='all'?[]:list.filter(t=>t.nights.find(x=>x.night===nk).rank===0).sort((a,b)=>key(b)-key(a));
   let html=overview([...prim,...back], nk);
+  if(nk!=='all' && D.nights[nk].schedule) html+=scheduleTable(D.nights[nk]);
   if(prim.length) html+=`<div class="section">${nk==='all'?'All targets':'Primary list'} · ${prim.length}</div>`+prim.map(t=>card(t,nk)).join('');
   if(back.length) html+=`<div class="section">Backups · ${back.length}</div>`+back.map(t=>card(t,nk)).join('');
   if(!html) html='<div class="empty">Nothing matches the current filters.</div>';

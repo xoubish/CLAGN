@@ -58,7 +58,7 @@ def rows_for(night):
         texp = float(r.t_exp_min) if pd.notna(getattr(r, 't_exp_min', np.nan)) else 10.0
         nexp = int(max(2, np.ceil(texp / 10.0))); per = min(900, int(round(texp * 60 / nexp / 10) * 10))
         status = 'primary' if r.rank > 0 else 'backup'
-        note = (f'{r.tier} #{int(r.rank)} p{r.priority_night:.1f}' if r.rank > 0 else f'{r.tier} backup')[:24]
+        note = (f'{r.tier} #{int(r.rank)} {getattr(r, "sched_start", "") or ""} p{r.priority_night:.1f}'.replace('  ', ' ') if r.rank > 0 else f'{r.tier} backup')[:24]
         mm = m.loc[r.name] if r.name in m.index else None
         comment = (f'{status}; {r.tier}; z={z:.3f}; r={rmag:.1f}; line {line} at {w:.0f} A ({ch}); trend {getattr(r, "trend", "")}; '
                    f'last spectrum {getattr(r, "years_since_last_spec", np.nan):.1f} yr ago; exposure model {texp:.0f} min; '
@@ -68,7 +68,23 @@ def rows_for(night):
         out_fixed.append({**base, 'exptime': f'SET {per}'})
         out_snr.append({**base, 'exptime': f'SNR {SNR_TARGET}'})
     cols = ['name', 'RA', 'DECL', 'slitwidth', 'exptime', 'nexp', 'binspect', 'binspat', 'slitangle', 'airmass_max', 'mag', 'magsystem', 'magfilter', 'channel', 'wrange', 'Note', 'Comment']
-    return pd.DataFrame(out_fixed)[cols], pd.DataFrame(out_snr)[cols]
+    fx, sn = pd.DataFrame(out_fixed)[cols], pd.DataFrame(out_snr)[cols]
+    # CALSPEC standards chosen by 11_schedule.py open and close the night (the Quicklook DRP only makes sensitivity functions from CALSPEC stars)
+    sp = os.path.join(DATA, f'schedule_{night}.csv')
+    if os.path.exists(sp):
+        S = pd.read_csv(sp); S = S[S.kind == 'standard']
+        std_rows = []
+        for r in S.itertuples():
+            c = SkyCoord(r.ra * u.deg, r.dec * u.deg)
+            std_rows.append(dict(name=str(r.name).replace(' ', ''), RA=c.ra.to_string(u.hour, sep=':', precision=1, pad=True),
+                                 DECL=c.dec.to_string(u.deg, sep=':', precision=0, alwayssign=True, pad=True), slitwidth='SET 3.0', exptime='SET 60', nexp=2,
+                                 binspect=BINSPEC, binspat=BINSPAT, slitangle='PA', airmass_max=AIRMASS_MAX, mag=round(float(r.r_mag), 2), magsystem='Vega', magfilter='V',
+                                 channel='R', wrange='6000:7000', Note=f'std {r.label} {r.start_local}'[:24],
+                                 Comment=f'spectrophotometric standard, {r.plan}; wide slit, keep counts < 50k and > 1k; same binning as science'[:1024]))
+        if std_rows:
+            first, last = pd.DataFrame(std_rows[:1])[cols], pd.DataFrame(std_rows[1:])[cols]
+            fx = pd.concat([first, fx, last], ignore_index=True); sn = pd.concat([first, sn, last], ignore_index=True)
+    return fx, sn
 
 
 if __name__ == '__main__':

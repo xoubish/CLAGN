@@ -424,3 +424,36 @@ review before pushing, or add it to `.gitignore` once internal rows exist.
 **Expected use.** Re-observed objects (an SDSS-V epoch in 2024-26) lose recency weight unless the new spectrum itself
 shows a class change — those become confirmed CLAGNs and jump the queue as state-tracking targets. AQMES cadence
 objects are the ones likely to have gained epochs.
+
+## 10. Run preparation (2026-09-05): observing sequence, standards, Quicklook ingest
+
+**Why a scheduler.** 04 fills each night's time budget by priority per hour but not by *when* a target is up. Running the
+first greedy sequence showed the consequence: on Sep 23 the RA 15.5-17.5h picks all set within ~2 h (9 of 18 could be
+observed), and on the October nights the RA 7-11h picks rise only after midnight while the first half of the night sat
+idle (~5 h, 22 of 41 picks unplaceable). `11_schedule.py` now does the allocation in time: 5-min steps from astronomical
+twilight; at each free moment the best observable candidate by priority/(t_exp+5 min) x2 for 04's picks (they carry the
+tier floors) x up to 4 when setting within 2.5 h x0.6 if much better placed later x an airmass factor; tier caps kept;
+candidates are all scored objects observable that night with moon >= 30 deg, so idle hours are filled from the pool
+('filler' rows). Outputs: `data/schedule_<night>.csv`, `finders/<night>/schedule_<night>.txt`, and `targets_<night>.csv`
+re-ranked in time order (unplaced picks -> backups, fillers appended, `origin`, `sched_start`). The night sheet shows the
+sequence at the top of each night tab. rescore.sh: 04 -> 11 -> 06 -> 06b -> 07b -> 03d -> 07.
+
+**Standards.** The Quicklook DRP builds sensitivity functions only from stars in the HST CALSPEC list
+(archive.stsci.edu/hlsps/reference-atlases/cdbs/current_calspec/); other stars silently give none. Kept 20 CALSPEC stars
+reachable from Palomar (`data/standards_spectrophotometric.csv`, Simbad coordinates; P177D/P330E from CALSPEC). The
+scheduler opens and closes each night with the brightest one at airmass < 1.6 (V < 13.6 for the full moon), 2 x 30-120 s,
+counts must stay < ~50,000 (saturation) and > ~1,000 (S/N) per the manual; use the same binning as the science frames.
+
+**Quicklook products (manual 2025-07-02, C. Fremling).** `/media/data_archive/<UTDATE>_reduced/`: `spec1d/` = CSV
+(wavelength, flux) saved with 'Extract/Save' per channel; `spec2d/` = multi-extension FITS (data, sky model, wavelength
+solution, bad-pixel map, illumination flat); sensitivity-function FITS at top level. `12_ngps_ingest.py <dir>` merges the
+channel CSVs onto the 6 A grid, writes `data/ngps_spectra/<name>.csv`, measures the 03d EW indices and prints a verdict
+against the last archival epoch (>50% broad-line loss = turn-off candidate; >2x gain = turn-on; ~40% = re-observe).
+Tested on a synthetic dimmed P5554. Then 07 puts the spectrum in the card's NGPS slot.
+
+**ETC.** The NGPS exposure-time calculator exists only as a button in the observing/planning GUI (inputs: mag, filter,
+source type, channel, SNR wavelength range, binning, extraction, slit, seeing, airmass, sky brightness; keep 'No Slicer'
+checked). Not scriptable: the exposure model stays a scaling to be spot-checked in the GUI on the afternoon of Sep 23.
+
+**Thumbnails.** The 4 missing SDSS cutouts were a SkyServer outage (all inside the footprint); refetched. 07b now falls
+back to IRSA's Finder Chart service (SDSS DR7 r band) and reports 'outside SDSS' when IRSA has no image there.
