@@ -172,19 +172,28 @@ def main():
     targets = pd.DataFrame({'idx': np.arange(len(tin)), 'ra': tin[ra_col].astype(float), 'dec': tin[dec_col].astype(float),
                             'name': tin[name_col].astype(str)})
     t0 = time.time()
-    print(f'{len(targets)} targets. SDSS DR19 allspec ...', flush=True)
-    ep = sdss_allspec(targets)
+    # cache: targets already present in a previous epochs file for this tag are not queried again
+    prev_path = os.path.join(DATA, f'spectra_epochs_{tag}.csv')
+    prev = pd.read_csv(prev_path, low_memory=False) if os.path.exists(prev_path) else None
+    done_names = set(prev.name.astype(str)) if prev is not None and 'name' in prev else set()
+    todo = targets[~targets.name.isin(done_names)]
+    print(f'{len(targets)} targets ({len(done_names & set(targets.name))} already inventoried, {len(todo)} to query). SDSS DR19 allspec ...', flush=True)
+    ep = sdss_allspec(todo) if len(todo) else pd.DataFrame()
     ep = sdss_classes(ep) if len(ep) else ep
     if len(ep):
         ep['source'] = 'SDSS'
         ep['is_coadd'] = ep['coadd'].astype(str).str.contains('allepoch')
     print(f'[{time.time()-t0:.0f}s] SDSS epochs: {len(ep)}  (coadd rows: {int(ep.is_coadd.sum()) if len(ep) else 0}). DESI DR1 ...', flush=True)
-    de = desi_zpix(targets)
+    de = desi_zpix(todo) if len(todo) else pd.DataFrame()
     if len(de):
         de['source'] = 'DESI'; de['sdss_phase'] = np.nan; de['is_coadd'] = False
         de['spectroflux_r'] = np.nan; de['subclass'] = ''
     allep = pd.concat([ep, de], ignore_index=True, sort=False)
-    allep = allep.merge(targets[['idx', 'name']], on='idx', how='left')
+    allep = allep.merge(targets[['idx', 'name']], on='idx', how='left') if len(allep) else allep
+    if prev is not None:
+        keep = prev[prev.name.isin(targets.name)].drop(columns=['idx'], errors='ignore')
+        keep = keep.merge(targets[['idx', 'name']], on='name', how='left')
+        allep = pd.concat([keep, allep], ignore_index=True, sort=False)
     allep.to_csv(os.path.join(DATA, f'spectra_epochs_{tag}.csv'), index=False)
     summ = summarise(allep, targets)
     summ.to_csv(os.path.join(DATA, f'spectra_summary_{tag}.csv'), index=False)

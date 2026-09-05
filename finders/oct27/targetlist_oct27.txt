@@ -1,87 +1,87 @@
-# name                   RA(J2000)     Dec(J2000)    z      r    tier prio  status  comment
-P20498                 09:37:43.36  +20:44:45.0  0.348  18.3 T1   2.75  primary flat/unknown, last spec 9.5 yr ago; DR16 QSO, SDSS spectrum 9560-57805-954
-P18532                 08:52:59.22  +03:13:20.6  0.297  16.5 T1   2.75  primary fading, last spec 4.8 yr ago; DR16 QSO, SDSS spectrum 565-52225-383
-P22169                 09:52:09.56  +21:43:13.3  0.079  17.8 T1   2.75  primary fading, last spec 20.7 yr ago; DR16 QSO, SDSS spectrum 2295-53734-17
-P24803                 10:37:51.82  +33:48:50.2  0.051  17.3 T1   2.71  primary flat/unknown, last spec 21.5 yr ago; DR16 QSO, SDSS spectrum 1982-53436-506
-P14895                 07:58:53.62  +11:19:44.1  0.430  18.3 T1   2.68  primary fading, last spec 4.6 yr ago; DR16 QSO, SDSS spectrum 2418-53794-432
-P22777                 10:14:58.12  +31:39:31.7  0.119  18.1 T1   2.68  primary brightening, last spec 21.5 yr ago; DR16 QSO, SDSS spectrum 1956-53437-368
-P18234                 08:42:20.12  +07:56:18.4  0.104  17.5 T1   2.67  primary flat/unknown, last spec 22.5 yr ago; DR16 QSO, SDSS spectrum 1298-52964-339
-P21426                 09:47:12.57  +10:15:21.2  0.283  17.5 T1   2.62  primary brightening, last spec 23.4 yr ago; DR16 QSO, SDSS spectrum 1305-52757-507
-P19458                 09:07:02.18  +40:59:23.6  0.449  18.3 T1   2.60  primary fading, last spec 23.6 yr ago; DR16 QSO, SDSS spectrum 1200-52668-187
-P19857                 09:16:16.00  +39:26:57.3  0.533  18.2 T1   2.58  primary flat/unknown, last spec 10.5 yr ago; DR16 QSO, SDSS spectrum 8831-57448-739
-P17421                 08:35:35.81  +24:59:40.2  0.330  15.8 T1   2.58  primary brightening, last spec 8.7 yr ago; DR16 QSO, SDSS spectrum 9606-58103-292
-P14634                 07:44:15.99  +35:58:40.2  0.133  18.2 T1   2.57  primary fading, last spec 25.4 yr ago; DR16 QSO, SDSS spectrum 542-51993-364
-P25014                 10:38:59.58  +42:27:42.3  0.221  17.6 T1   2.57  primary flat/unknown, last spec 5.3 yr ago; DR16 QSO, SDSS spectrum 8364-58138-880
-P18107                 08:44:34.98  +00:55:17.8  0.439  17.9 T1   2.56  primary flat/unknown, last spec 4.6 yr ago; DR16 QSO, SDSS spectrum 467-51901-433
-P14650                 07:44:20.76  +38:18:39.9  0.412  18.1 T1   2.56  primary flat/unknown, last spec 4.6 yr ago; DR16 QSO, SDSS spectrum 433-51873-422
-P14487                 07:57:46.05  +15:04:19.4  0.485  17.6 T1   2.56  primary flat/unknown, last spec 4.8 yr ago; DR16 QSO, SDSS spectrum 2266-53679-382
-P21919                 09:56:27.01  +54:04:15.0  0.207  18.3 T1   2.54  primary brightening, last spec 18.5 yr ago; DR16 QSO, SDSS spectrum 769-54530-79
-P18591                 09:10:11.15  +54:27:23.6  0.622  17.5 T1   2.53  primary flat/unknown, last spec 13.6 yr ago; DR16 QSO, SDSS spectrum 5728-56334-107
-P16576                 08:22:22.41  +41:43:27.8  0.341  18.2 T1   2.52  primary flat/unknown, last spec 18.5 yr ago; DR16 QSO, SDSS spectrum 761-54524-261
-P19053                 09:28:32.07  +21:07:05.7  0.167  18.3 T1   2.51  primary flat/unknown, last spec 20.7 yr ago; DR16 QSO, SDSS spectrum 2289-53708-519
-P24412                 10:43:36.48  +32:39:17.2  0.116  18.5 T1   3.07  primary brightening, last spec 21.5 yr ago; DR16 QSO, SDSS spectrum 2019-53430-521
-P16250                 08:29:32.71  +57:18:04.5  0.461  18.4 T1   2.68  primary brightening, last spec 18.8 yr ago; DR16 QSO, SDSS spectrum 1873-54437-12
-P15401                 08:18:29.35  +24:08:46.9  0.311  18.3 T1   2.47  primary brightening, last spec 5.6 yr ago; DR16 QSO, SDSS spectrum 1585-52962-157
-P19438                 09:18:45.92  +06:02:26.1  0.794  17.7 T1   2.47  primary flat/unknown, last spec 4.8 yr ago; DR16 QSO, SDSS spectrum 991-52707-361
-P14703                 07:55:37.03  +25:42:39.0  0.444  17.5 T1   2.47  primary flat/unknown, last spec 4.9 yr ago; DR16 QSO, SDSS spectrum 928-52578-510
-P21938                 09:55:04.55  +17:05:56.4  0.138  17.7 T1   2.47  primary fading, last spec 19.7 yr ago; DR16 QSO, SDSS spectrum 2583-54095-441
-P14236                 07:28:37.76  +44:36:46.1  0.277  18.3 T1   2.46  primary flat/unknown, last spec 21.8 yr ago; DR16 QSO, SDSS spectrum 1866-53314-246
-P19705                 09:14:40.39  +28:23:30.6  0.735  17.8 T1   2.46  primary flat/unknown, last spec 21.6 yr ago; DR16 QSO, SDSS spectrum 1937-53388-400
-P16938                 08:41:41.67  +40:52:37.7  0.765  17.4 T1   2.45  primary flat/unknown, last spec 3.4 yr ago; DR16 QSO, SDSS spectrum 829-52296-384
-P15823                 08:04:08.02  +39:47:28.4  0.112  18.0 T1   2.44  primary fading, last spec 24.9 yr ago; DR16 QSO, SDSS spectrum 545-52202-212
-P21566                 09:44:18.77  +40:54:07.5  0.349  18.4 T1   2.81  primary flat/unknown, last spec 4.5 yr ago; DR16 QSO, SDSS spectrum 1216-52709-394
-P17123                 08:53:57.88  +46:33:50.6  0.549  18.3 T1   2.43  primary flat/unknown, last spec 4.8 yr ago; DR16 QSO, SDSS spectrum 7327-56715-884
-P21407                 09:46:36.42  +20:56:11.0  0.279  17.5 T1   2.42  primary flat/unknown, last spec 9.4 yr ago; DR16 QSO, SDSS spectrum 9580-57865-885
-P15126                 07:56:19.08  +12:29:29.1  0.266  17.9 T1   2.41  primary fading, last spec 4.9 yr ago; DR16 QSO, SDSS spectrum 2264-53682-90
-J083716.47+035606.1    08:37:16.47  +03:56:06.1  0.063  17.2 T3   1.13  primary flat/unknown, last spec 4.5 yr ago; Zeltyn+2024 CL-AGN, SDSS-V last epoch MJD 59630
-P22241                 10:29:55.09  +39:20:47.2  0.210  17.8 T4   0.94  primary flat/unknown, last spec 22.7 yr ago; DR16 QSO, SDSS spectrum 1428-52998-550
-P15670                 08:04:05.85  +35:24:24.9  0.105  17.8 T4   0.94  primary flat/unknown, last spec 4.7 yr ago; DR16 QSO, SDSS spectrum 891-52584-522
-P15234                 08:01:05.35  +44:10:41.0  0.471  17.2 T4   0.92  primary flat/unknown, last spec 11.5 yr ago; DR16 QSO, SDSS spectrum 8277-57073-732
-P23919                 10:16:15.20  +38:30:24.5  0.633  17.9 T4   0.97  primary flat/unknown, last spec 9.6 yr ago; DR16 QSO, SDSS spectrum 8855-57780-586
-J090254.12+015429.1    09:02:54.12  +01:54:29.1  0.166  18.6 T3   1.10  primary flat/unknown, last spec 4.6 yr ago; Zeltyn+2024 CL-AGN, SDSS-V last epoch MJD 59592
-J090459.92-004206.9    09:04:59.92  -00:42:06.9  0.282  19.0 T3   1.38  primary flat/unknown, last spec 4.8 yr ago; Zeltyn+2024 CL-AGN, SDSS-V last epoch MJD 59536
-P21297                 09:46:00.97  +52:29:44.4  0.448  18.1 T1   2.41  backup  flat/unknown, last spec 11.6 yr ago; DR16 QSO, SDSS spectrum 7287-57042-820
-P18343                 08:59:15.65  +01:18:00.6  0.282  18.3 T1   2.40  backup  flat/unknown, last spec 4.5 yr ago; DR16 QSO, SDSS spectrum 469-51913-499
-P21583                 09:44:51.57  +56:20:37.8  0.138  18.2 T1   2.40  backup  brightening, last spec 25.4 yr ago; DR16 QSO, SDSS spectrum 556-51991-530
-P22664                 10:24:16.74  +24:22:11.7  0.766  17.7 T1   2.39  backup  flat/unknown, last spec 4.6 yr ago; DR16 QSO, SDSS spectrum 6465-56279-60
-P19194                 09:18:41.84  +19:20:41.5  0.719  17.9 T1   2.58  backup  flat/unknown, last spec 9.5 yr ago; DR16 QSO, SDSS spectrum 9554-57807-630
-P14836                 07:45:28.14  +19:19:52.7  0.687  18.0 T1   2.75  backup  flat/unknown, last spec 4.6 yr ago; DR16 QSO, SDSS spectrum 1263-52708-114
-P22838                 10:08:58.28  +38:02:18.9  0.670  18.0 T1   2.94  backup  fading, last spec 4.4 yr ago; DR16 QSO, SDSS spectrum 1426-52993-545
-P16004                 08:27:32.70  +14:23:39.4  0.397  18.1 T1   2.38  backup  flat/unknown, last spec 4.7 yr ago; DR16 QSO, SDSS spectrum 2425-54139-338
-P19713                 09:04:55.96  +30:06:13.3  0.109  18.0 T1   2.37  backup  flat/unknown, last spec 22.8 yr ago; DR16 QSO, SDSS spectrum 1590-52974-17
-P20904                 09:47:33.22  +10:05:08.8  0.139  16.8 T1   2.34  backup  fading, last spec 3.6 yr ago; DR16 QSO, SDSS spectrum 1305-52757-548
-P15439                 08:20:24.22  +23:34:50.5  0.470  17.7 T1   2.34  backup  flat/unknown, last spec 3.8 yr ago; DR16 QSO, SDSS spectrum 1926-53317-378
-P24442                 10:44:24.96  +46:52:13.3  0.716  18.0 T1   2.88  backup  flat/unknown, last spec 23.7 yr ago; DR16 QSO, SDSS spectrum 962-52620-72
-P19518                 09:17:15.00  +28:08:28.2  0.104  17.8 T1   2.34  backup  fading, last spec 21.6 yr ago; DR16 QSO, SDSS spectrum 1937-53388-480
-P15996                 08:08:33.23  +11:16:07.4  0.460  18.3 T1   2.33  backup  fading, last spec 4.5 yr ago; DR16 QSO, SDSS spectrum 2420-54086-293
-P19830                 09:07:15.17  +06:20:17.7  0.452  17.8 T1   2.33  backup  brightening, last spec 4.7 yr ago; DR16 QSO, SDSS spectrum 1191-52674-70
-P23283                 10:00:54.96  +26:22:42.4  0.506  17.7 T1   2.33  backup  flat/unknown, last spec 8.6 yr ago; DR16 QSO, SDSS spectrum 9627-58132-538
-P21077                 09:35:04.85  +10:52:06.7  0.139  18.2 T1   2.33  backup  flat/unknown, last spec 22.5 yr ago; DR16 QSO, SDSS spectrum 1741-53052-161
-P18870                 09:19:55.35  +55:21:37.1  0.123  16.6 T1   2.32  backup  fading, last spec 25.7 yr ago; DR16 QSO, SDSS spectrum 451-51908-133
-P21743                 09:59:31.67  +50:44:49.1  0.143  16.9 T1   2.31  backup  flat/unknown, last spec 3.4 yr ago; DR16 QSO, SDSS spectrum 7282-56660-707
-P20614                 09:39:52.76  +35:53:58.8  0.136  17.8 T1   2.31  backup  flat/unknown, last spec 15.6 yr ago; DR16 QSO, SDSS spectrum 4575-55590-314
-P18130                 08:42:03.73  +40:18:31.3  0.152  16.7 T1   2.31  backup  fading, last spec 3.5 yr ago; DR16 QSO, SDSS spectrum 829-52296-275
-P17143                 08:54:04.84  +19:33:41.9  0.482  18.6 T1   3.19  backup  brightening, last spec 8.6 yr ago; DR16 QSO, SDSS spectrum 9557-58098-825
-P21314                 09:33:47.76  +21:14:36.4  0.172  17.2 T1   2.29  backup  fading, last spec 20.7 yr ago; DR16 QSO, SDSS spectrum 2292-53713-272
-P21087                 09:41:44.82  +57:51:23.7  0.159  17.8 T1   2.29  backup  fading, last spec 4.5 yr ago; DR16 QSO, SDSS spectrum 452-51911-80
-P5028                  21:27:05.42  +10:50:45.1  0.264  18.2 T1   2.29  backup  flat/unknown, last spec 5.2 yr ago; DR16 QSO, SDSS spectrum 730-52466-196
-P19368                 09:00:07.99  +36:46:10.6  0.517  17.7 T1   2.27  backup  flat/unknown, last spec 10.5 yr ago; DR16 QSO, SDSS spectrum 8860-57458-184
-P15892                 08:21:33.61  +47:02:37.3  0.128  17.8 T1   2.27  backup  fading, last spec 25.8 yr ago; DR16 QSO, SDSS spectrum 441-51868-453
-P4872                  17:44:32.99  +53:51:19.7  0.215  18.3 T1   2.27  backup  fading, last spec 3.6 yr ago; DR16 QSO, SDSS spectrum 362-51999-9
-P20523                 09:37:59.61  +45:38:01.9  0.429  18.3 T1   2.26  backup  flat/unknown, last spec 3.5 yr ago; DR16 QSO, SDSS spectrum 1202-52672-330
-P15022                 07:49:16.73  +39:13:07.8  0.463  16.6 T1   2.25  backup  flat/unknown, last spec 25.8 yr ago; DR16 QSO, SDSS spectrum 433-51873-573
-P15902                 08:21:50.69  +18:51:50.8  0.070  17.7 T1   2.25  backup  flat/unknown, last spec 21.7 yr ago; DR16 QSO, SDSS spectrum 2082-53358-23
-P18047                 08:36:39.86  +11:19:20.9  0.335  17.2 T1   2.24  backup  flat/unknown, last spec 3.6 yr ago; DR16 QSO, SDSS spectrum 2426-53795-184
-P23121                 10:05:58.92  +30:52:53.0  0.632  17.8 T1   2.23  backup  brightening, last spec 8.6 yr ago; DR16 QSO, SDSS spectrum 10451-58141-659
-P15296                 08:02:20.70  +13:51:18.9  0.112  18.0 T1   2.22  backup  fading, last spec 20.8 yr ago; DR16 QSO, SDSS spectrum 2268-53682-355
-P22063                 09:50:48.39  +39:26:50.5  0.206  16.5 T1   2.22  backup  flat/unknown, last spec 4.6 yr ago; DR16 QSO, SDSS spectrum 1277-52765-332
-P23155                 10:29:12.58  +40:42:19.8  0.147  18.2 T1   2.21  backup  flat/unknown, last spec 8.6 yr ago; DR16 QSO, SDSS spectrum 8363-58140-92
-P20632                 09:39:39.77  +19:45:55.7  0.466  18.2 T1   2.21  backup  flat/unknown, last spec 9.5 yr ago; DR16 QSO, SDSS spectrum 9552-57814-794
-P17407                 08:36:58.91  +44:26:02.4  0.254  15.6 T1   2.20  backup  flat/unknown, last spec 3.6 yr ago; DR16 QSO, SDSS spectrum 762-52232-498
-P17083                 08:52:06.15  +46:50:50.6  0.360  18.4 T1   2.53  backup  brightening, last spec 12.5 yr ago; DR16 QSO, SDSS spectrum 7327-56715-800
-P15392                 08:18:12.29  +16:36:36.7  0.112  17.6 T1   2.19  backup  flat/unknown, last spec 20.7 yr ago; DR16 QSO, SDSS spectrum 2269-53711-614
-P20689                 09:42:15.13  +09:00:15.8  0.213  16.9 T1   2.17  backup  flat/unknown, last spec 4.4 yr ago; DR16 QSO, SDSS spectrum 1305-52757-281
-P18154                 08:59:17.59  +10:55:09.2  0.296  17.1 T1   2.17  backup  flat/unknown, last spec 4.7 yr ago; DR16 QSO, SDSS spectrum 2575-54085-81
-P21950                 09:54:38.66  +30:08:43.4  0.340  18.5 T1   2.67  backup  flat/unknown, last spec 8.6 yr ago; DR16 QSO, SDSS spectrum 10448-58158-161
-P16613                 08:00:33.09  +16:42:30.4  0.463  18.5 T1   2.83  backup  fading, last spec 4.6 yr ago; DR16 QSO, SDSS spectrum 2081-53357-316
-P21948                 09:55:24.74  +28:46:29.1  0.550  17.4 T1   2.16  backup  flat/unknown, last spec 7.8 yr ago; DR16 QSO, SDSS spectrum 11349-58441-642
+# name                   RA(J2000)     Dec(J2000)    z      r    tier  exposure    status  comment
+P17003                 08:34:17.91  +49:14:39.2  0.173  16.9 T1   2 x 4 min   primary brightening, last spec 11.6 yr ago; DR16 QSO, SDSS spectrum 7311-57038-389
+P24691                 10:48:40.50  +54:13:02.3  0.104  18.0 T1   2 x 4 min   primary flat/unknown, last spec 24.4 yr ago; DR16 QSO, SDSS spectrum 906-52368-14
+P20636                 09:39:32.88  +25:23:56.5  0.398  17.8 T1   2 x 4 min   primary brightening, last spec 8.8 yr ago; DR16 QSO, SDSS spectrum 9630-58086-100
+P15441                 08:20:45.37  +24:31:52.9  0.652  16.7 T1   2 x 4 min   primary brightening, last spec 4.8 yr ago; DR16 QSO, SDSS spectrum 11125-58433-162
+P21269                 09:45:24.12  +29:13:08.2  0.269  18.3 T1   2 x 4 min   primary brightening, last spec 8.6 yr ago; DR16 QSO, SDSS spectrum 10430-58155-268
+P15447                 08:13:24.02  +54:22:36.8  0.043  17.0 T1   2 x 4 min   primary mixed (IR vs optical), last spec 21.6 yr ago; DR16 QSO, SDSS spectrum 1871-53384-66
+P20317                 09:17:55.02  +05:37:49.7  0.348  18.4 T1   2 x 5 min   primary fading, last spec 4.8 yr ago; DR16 QSO, SDSS spectrum 991-52707-349
+P25017                 10:38:53.29  +39:21:51.2  0.055  18.3 T1   2 x 4 min   primary brightening, last spec 22.7 yr ago; DR16 QSO, SDSS spectrum 1430-53002-598
+P20498                 09:37:43.36  +20:44:45.0  0.348  18.3 T1   2 x 4 min   primary flat/unknown, last spec 9.5 yr ago; DR16 QSO, SDSS spectrum 9560-57805-954
+P15022                 07:49:16.73  +39:13:07.8  0.463  16.6 T1   2 x 4 min   primary flat/unknown, last spec 25.8 yr ago; DR16 QSO, SDSS spectrum 433-51873-573; also in the CLAGN region of the ZTF+W1 manifold
+P22169                 09:52:09.56  +21:43:13.3  0.079  17.8 T1   2 x 4 min   primary fading, last spec 20.7 yr ago; DR16 QSO, SDSS spectrum 2295-53734-17
+P24442                 10:44:24.96  +46:52:13.3  0.716  18.0 T1   2 x 6 min   primary flat/unknown, last spec 23.7 yr ago; DR16 QSO, SDSS spectrum 962-52620-72; also in the CLAGN region of the ZTF+W1 manifold
+P15296                 08:02:20.70  +13:51:18.9  0.112  18.0 T1   2 x 4 min   primary fading, last spec 20.8 yr ago; DR16 QSO, SDSS spectrum 2268-53682-355; also in the CLAGN region of the ZTF+W1 manifold
+P23155                 10:29:12.58  +40:42:19.8  0.147  18.2 T1   2 x 4 min   primary flat/unknown, last spec 8.6 yr ago; DR16 QSO, SDSS spectrum 8363-58140-92; also in the CLAGN region of the ZTF+W1 manifold
+P24803                 10:37:51.82  +33:48:50.2  0.051  17.3 T1   2 x 4 min   primary flat/unknown, last spec 21.5 yr ago; DR16 QSO, SDSS spectrum 1982-53436-506
+P14895                 07:58:53.62  +11:19:44.1  0.430  18.3 T1   2 x 4 min   primary fading, last spec 4.6 yr ago; DR16 QSO, SDSS spectrum 2418-53794-432
+P22777                 10:14:58.12  +31:39:31.7  0.119  18.1 T1   2 x 4 min   primary mixed (IR vs optical), last spec 21.5 yr ago; DR16 QSO, SDSS spectrum 1956-53437-368
+P18234                 08:42:20.12  +07:56:18.4  0.104  17.5 T1   2 x 4 min   primary flat/unknown, last spec 22.5 yr ago; DR16 QSO, SDSS spectrum 1298-52964-339
+P19458                 09:07:02.18  +40:59:23.6  0.449  18.3 T1   2 x 4 min   primary fading, last spec 23.6 yr ago; DR16 QSO, SDSS spectrum 1200-52668-187
+P19857                 09:16:16.00  +39:26:57.3  0.533  18.2 T1   2 x 4 min   primary flat/unknown, last spec 10.5 yr ago; DR16 QSO, SDSS spectrum 8831-57448-739
+P17421                 08:35:35.81  +24:59:40.2  0.330  15.8 T1   2 x 4 min   primary brightening, last spec 8.7 yr ago; DR16 QSO, SDSS spectrum 9606-58103-292
+P14634                 07:44:15.99  +35:58:40.2  0.133  18.2 T1   2 x 4 min   primary fading, last spec 25.4 yr ago; DR16 QSO, SDSS spectrum 542-51993-364
+P14650                 07:44:20.76  +38:18:39.9  0.412  18.1 T1   2 x 4 min   primary flat/unknown, last spec 4.6 yr ago; DR16 QSO, SDSS spectrum 433-51873-422
+P14487                 07:57:46.05  +15:04:19.4  0.485  17.6 T1   2 x 4 min   primary flat/unknown, last spec 4.8 yr ago; DR16 QSO, SDSS spectrum 2266-53679-382
+P21919                 09:56:27.01  +54:04:15.0  0.207  18.3 T1   2 x 4 min   primary brightening, last spec 18.5 yr ago; DR16 QSO, SDSS spectrum 769-54530-79
+P17083                 08:52:06.15  +46:50:50.6  0.360  18.3 T1   2 x 4 min   primary brightening, last spec 12.5 yr ago; DR16 QSO, SDSS spectrum 7327-56715-800
+P18591                 09:10:11.15  +54:27:23.6  0.622  17.5 T1   2 x 4 min   primary flat/unknown, last spec 13.6 yr ago; DR16 QSO, SDSS spectrum 5728-56334-107
+P16576                 08:22:22.41  +41:43:27.8  0.341  18.2 T1   2 x 4 min   primary brightening, last spec 18.5 yr ago; DR16 QSO, SDSS spectrum 761-54524-261
+P24412                 10:43:36.48  +32:39:17.2  0.116  18.5 T1   2 x 6 min   primary brightening, last spec 21.5 yr ago; DR16 QSO, SDSS spectrum 2019-53430-521
+P16250                 08:29:32.71  +57:18:04.5  0.461  18.4 T1   2 x 4 min   primary brightening, last spec 18.8 yr ago; DR16 QSO, SDSS spectrum 1873-54437-12
+P19438                 09:18:45.92  +06:02:26.1  0.794  17.7 T1   2 x 4 min   primary flat/unknown, last spec 4.8 yr ago; DR16 QSO, SDSS spectrum 991-52707-361
+P21938                 09:55:04.55  +17:05:56.4  0.138  17.7 T1   2 x 4 min   primary fading, last spec 19.7 yr ago; DR16 QSO, SDSS spectrum 2583-54095-441
+P19705                 09:14:40.39  +28:23:30.6  0.735  17.8 T1   2 x 4 min   primary flat/unknown, last spec 21.6 yr ago; DR16 QSO, SDSS spectrum 1937-53388-400
+P14236                 07:28:37.76  +44:36:46.1  0.277  18.3 T1   2 x 4 min   primary flat/unknown, last spec 21.8 yr ago; DR16 QSO, SDSS spectrum 1866-53314-246
+J090315.11+010623.1    09:03:15.11  +01:06:23.1  0.122  18.1 T3   2 x 4 min   primary fading, last spec 5.4 yr ago; Zeltyn+2024 CL-AGN, SDSS-V last epoch MJD 59313; archival Hβ: turned off
+P15603                 08:10:34.86  +38:56:09.9  0.152  18.1 T4   2 x 4 min   primary flat/unknown, last spec 24.7 yr ago; DR16 QSO, SDSS spectrum 759-52254-163
+P18244                 08:50:38.15  +30:39:32.3  0.179  18.1 T4   2 x 4 min   primary flat/unknown, last spec 22.7 yr ago; DR16 QSO, SDSS spectrum 1270-52991-107
+P22241                 10:29:55.09  +39:20:47.2  0.210  17.8 T4   2 x 4 min   primary flat/unknown, last spec 22.7 yr ago; DR16 QSO, SDSS spectrum 1428-52998-550
+P15670                 08:04:05.85  +35:24:24.9  0.105  17.8 T4   2 x 4 min   primary flat/unknown, last spec 4.7 yr ago; DR16 QSO, SDSS spectrum 891-52584-522
+J090254.12+015429.1    09:02:54.12  +01:54:29.1  0.166  18.6 T3   2 x 8 min   primary flat/unknown, last spec 4.6 yr ago; Zeltyn+2024 CL-AGN, SDSS-V last epoch MJD 59592; archival Hβ: turned on
+J090459.92-004206.9    09:04:59.92  -00:42:06.9  0.282  19.0 T3   3 x 9 min   primary flat/unknown, last spec 4.8 yr ago; Zeltyn+2024 CL-AGN, SDSS-V last epoch MJD 59536; archival Hβ: turned off
+P18532                 08:52:59.22  +03:13:20.6  0.297  16.5 T1   2 x 4 min   backup  fading, last spec 4.8 yr ago; DR16 QSO, SDSS spectrum 565-52225-383
+P6406                  22:42:31.84  +24:09:30.3  0.218  17.4 T1   2 x 4 min   backup  fading, last spec 4.8 yr ago; DR16 QSO, SDSS spectrum 7653-57306-32; also in the CLAGN region of the ZTF+W1 manifold
+P16938                 08:41:41.67  +40:52:37.7  0.765  17.4 T1   2 x 4 min   backup  flat/unknown, last spec 3.4 yr ago; DR16 QSO, SDSS spectrum 829-52296-384
+P17314                 08:48:20.87  +40:27:22.6  0.087  17.5 T1   2 x 4 min   backup  fading, last spec 24.6 yr ago; DR16 QSO, SDSS spectrum 829-52296-520
+P22994                 10:07:10.44  +35:03:01.4  0.439  18.2 T1   2 x 4 min   backup  brightening, last spec 21.6 yr ago; DR16 QSO, SDSS spectrum 1951-53389-186; also in the CLAGN region of the ZTF+W1 manifold
+P21566                 09:44:18.77  +40:54:07.5  0.349  18.4 T1   2 x 5 min   backup  flat/unknown, last spec 4.5 yr ago; DR16 QSO, SDSS spectrum 1216-52709-394
+P17123                 08:53:57.88  +46:33:50.6  0.549  18.3 T1   2 x 4 min   backup  flat/unknown, last spec 4.8 yr ago; DR16 QSO, SDSS spectrum 7327-56715-884
+P19250                 09:27:03.19  +52:23:16.5  0.602  16.7 T1   2 x 4 min   backup  flat/unknown, last spec 3.6 yr ago; DR16 QSO, SDSS spectrum 7290-57073-896; also in the CLAGN region of the ZTF+W1 manifold
+P19194                 09:18:41.84  +19:20:41.5  0.719  17.9 T1   2 x 4 min   backup  flat/unknown, last spec 9.5 yr ago; DR16 QSO, SDSS spectrum 9554-57807-630
+P14836                 07:45:28.14  +19:19:52.7  0.687  18.0 T1   2 x 5 min   backup  flat/unknown, last spec 4.6 yr ago; DR16 QSO, SDSS spectrum 1263-52708-114
+P22838                 10:08:58.28  +38:02:18.9  0.670  18.0 T1   2 x 6 min   backup  fading, last spec 4.4 yr ago; DR16 QSO, SDSS spectrum 1426-52993-545
+P16004                 08:27:32.70  +14:23:39.4  0.397  18.1 T1   2 x 4 min   backup  flat/unknown, last spec 4.7 yr ago; DR16 QSO, SDSS spectrum 2425-54139-338
+P19713                 09:04:55.96  +30:06:13.3  0.109  18.0 T1   2 x 4 min   backup  flat/unknown, last spec 22.8 yr ago; DR16 QSO, SDSS spectrum 1590-52974-17
+P20807                 09:38:09.17  +66:18:26.1  0.120  18.0 T1   2 x 4 min   backup  mixed (IR vs optical), last spec 18.7 yr ago; DR16 QSO, SDSS spectrum 1878-54474-92; also in the CLAGN region of the ZTF+W1 manifold
+P20904                 09:47:33.22  +10:05:08.8  0.139  16.8 T1   2 x 4 min   backup  fading, last spec 3.6 yr ago; DR16 QSO, SDSS spectrum 1305-52757-548
+P15439                 08:20:24.22  +23:34:50.5  0.470  17.7 T1   2 x 4 min   backup  flat/unknown, last spec 3.8 yr ago; DR16 QSO, SDSS spectrum 1926-53317-378
+P19518                 09:17:15.00  +28:08:28.2  0.104  17.8 T1   2 x 4 min   backup  fading, last spec 21.6 yr ago; DR16 QSO, SDSS spectrum 1937-53388-480
+P19830                 09:07:15.17  +06:20:17.7  0.452  17.8 T1   2 x 4 min   backup  brightening, last spec 4.7 yr ago; DR16 QSO, SDSS spectrum 1191-52674-70
+P23283                 10:00:54.96  +26:22:42.4  0.506  17.7 T1   2 x 4 min   backup  flat/unknown, last spec 8.6 yr ago; DR16 QSO, SDSS spectrum 9627-58132-538
+P21077                 09:35:04.85  +10:52:06.7  0.139  18.2 T1   2 x 4 min   backup  flat/unknown, last spec 22.5 yr ago; DR16 QSO, SDSS spectrum 1741-53052-161
+P18870                 09:19:55.35  +55:21:37.1  0.123  16.6 T1   2 x 4 min   backup  mixed (IR vs optical), last spec 25.7 yr ago; DR16 QSO, SDSS spectrum 451-51908-133
+P21743                 09:59:31.67  +50:44:49.1  0.143  16.9 T1   2 x 4 min   backup  flat/unknown, last spec 3.4 yr ago; DR16 QSO, SDSS spectrum 7282-56660-707
+P20614                 09:39:52.76  +35:53:58.8  0.136  17.8 T1   2 x 4 min   backup  flat/unknown, last spec 15.6 yr ago; DR16 QSO, SDSS spectrum 4575-55590-314
+P17143                 08:54:04.84  +19:33:41.9  0.482  18.6 T1   2 x 6 min   backup  brightening, last spec 8.6 yr ago; DR16 QSO, SDSS spectrum 9557-58098-825
+P5656                  21:57:47.49  +02:47:25.0  0.705  18.0 T1   2 x 6 min   backup  flat/unknown, last spec 7.8 yr ago; DR16 QSO, SDSS spectrum 11329-58426-81; also in the CLAGN region of the ZTF+W1 manifold
+P21314                 09:33:47.76  +21:14:36.4  0.172  17.2 T1   2 x 4 min   backup  fading, last spec 20.7 yr ago; DR16 QSO, SDSS spectrum 2292-53713-272
+P19368                 09:00:07.99  +36:46:10.6  0.517  17.7 T1   2 x 4 min   backup  flat/unknown, last spec 10.5 yr ago; DR16 QSO, SDSS spectrum 8860-57458-184
+P15892                 08:21:33.61  +47:02:37.3  0.128  17.8 T1   2 x 4 min   backup  fading, last spec 25.8 yr ago; DR16 QSO, SDSS spectrum 441-51868-453
+P4872                  17:44:32.99  +53:51:19.7  0.215  18.3 T1   2 x 4 min   backup  fading, last spec 3.6 yr ago; DR16 QSO, SDSS spectrum 362-51999-9
+P15902                 08:21:50.69  +18:51:50.8  0.070  17.7 T1   2 x 4 min   backup  flat/unknown, last spec 21.7 yr ago; DR16 QSO, SDSS spectrum 2082-53358-23
+P18047                 08:36:39.86  +11:19:20.9  0.335  17.2 T1   2 x 4 min   backup  flat/unknown, last spec 3.6 yr ago; DR16 QSO, SDSS spectrum 2426-53795-184
+P23121                 10:05:58.92  +30:52:53.0  0.632  17.8 T1   2 x 4 min   backup  brightening, last spec 8.6 yr ago; DR16 QSO, SDSS spectrum 10451-58141-659
+P22063                 09:50:48.39  +39:26:50.5  0.206  16.5 T1   2 x 4 min   backup  flat/unknown, last spec 4.6 yr ago; DR16 QSO, SDSS spectrum 1277-52765-332
+P19053                 09:28:32.07  +21:07:05.7  0.167  18.3 T1   2 x 4 min   backup  flat/unknown, last spec 20.7 yr ago; DR16 QSO, SDSS spectrum 2289-53708-519
+P20632                 09:39:39.77  +19:45:55.7  0.466  18.2 T1   2 x 4 min   backup  brightening, last spec 9.5 yr ago; DR16 QSO, SDSS spectrum 9552-57814-794
+P17407                 08:36:58.91  +44:26:02.4  0.254  15.6 T1   2 x 4 min   backup  flat/unknown, last spec 3.6 yr ago; DR16 QSO, SDSS spectrum 762-52232-498
+P20689                 09:42:15.13  +09:00:15.8  0.213  16.9 T1   2 x 4 min   backup  flat/unknown, last spec 4.4 yr ago; DR16 QSO, SDSS spectrum 1305-52757-281
+P15401                 08:18:29.35  +24:08:46.9  0.311  18.3 T1   2 x 4 min   backup  brightening, last spec 5.6 yr ago; DR16 QSO, SDSS spectrum 1585-52962-157
+P18154                 08:59:17.59  +10:55:09.2  0.296  17.1 T1   2 x 4 min   backup  flat/unknown, last spec 4.7 yr ago; DR16 QSO, SDSS spectrum 2575-54085-81
+P21950                 09:54:38.66  +30:08:43.4  0.340  18.5 T1   2 x 6 min   backup  fading, last spec 8.6 yr ago; DR16 QSO, SDSS spectrum 10448-58158-161
+P16986                 08:34:54.88  +55:34:21.5  0.242  18.5 T1   2 x 6 min   backup  flat/unknown, last spec 12.9 yr ago; DR16 QSO, SDSS spectrum 5153-56577-372; also in the CLAGN region of the ZTF+W1 manifold
+P16613                 08:00:33.09  +16:42:30.4  0.463  18.5 T1   2 x 6 min   backup  fading, last spec 4.6 yr ago; DR16 QSO, SDSS spectrum 2081-53357-316
+P21948                 09:55:24.74  +28:46:29.1  0.550  17.4 T1   2 x 4 min   backup  flat/unknown, last spec 7.8 yr ago; DR16 QSO, SDSS spectrum 11349-58441-642
+P25741                 10:41:46.78  +52:33:28.2  0.678  17.1 T1   2 x 4 min   backup  flat/unknown, last spec 3.4 yr ago; DR16 QSO, SDSS spectrum 8173-57375-121
+P15823                 08:04:08.02  +39:47:28.4  0.112  18.0 T1   2 x 4 min   backup  fading, last spec 24.9 yr ago; DR16 QSO, SDSS spectrum 545-52202-212

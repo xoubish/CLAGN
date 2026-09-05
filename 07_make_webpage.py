@@ -160,6 +160,43 @@ def main():
             if os.path.exists(cp) and os.path.getsize(cp) > 100:
                 import base64
                 cut[kind] = f'data:{mime};base64,' + base64.b64encode(open(cp, 'rb').read()).decode('ascii')
+        # archival spectra (03d_fetch_spectra.py): up to four epochs for the overlay + the full EW history
+        spec = None
+        sp_p = os.path.join(DATA, 'spectra_dl', f'{name}.json')
+        if os.path.exists(sp_p):
+            recs = json.load(open(sp_p))
+            recs = [r for r in recs if r.get('flux') and any(v is not None for v in r['flux'])]
+            if recs:
+                sdss = [r for r in recs if r.get('source', 'SDSS') == 'SDSS' and not r.get('coadd')]
+                coadd = [r for r in recs if r.get('source', 'SDSS') == 'SDSS' and r.get('coadd')]
+                desi = [r for r in recs if r.get('source') == 'DESI']
+                pick = []
+                if sdss:
+                    pick.append(sdss[0])
+                    if len(sdss) > 1 and sdss[-1] is not sdss[0]:
+                        pick.append(sdss[-1])
+                if coadd:
+                    pick.append(coadd[-1])
+                if desi:
+                    pick.append(desi[0])
+                def rebin12(fl):
+                    a = np.array([np.nan if v is None else v for v in fl], float)
+                    a = a[:len(a) // 2 * 2].reshape(-1, 2)
+                    with np.errstate(all='ignore'):
+                        m = np.nanmean(a, axis=1)
+                    return [None if np.isnan(v) else round(float(v), 2) for v in m]
+                w12 = [round(float(w), 1) for w in np.array(recs[0]['wave'])[:len(recs[0]['wave']) // 2 * 2].reshape(-1, 2).mean(axis=1)]
+                def lab(r):
+                    d = mjd_to_date(r['mjd']) if r.get('mjd') and np.isfinite(r['mjd']) else ''
+                    src = 'DESI' if r.get('source') == 'DESI' else ('SDSS-V coadd' if r.get('coadd') else f"SDSS {str(r.get('program', '')).strip() or ''}".strip())
+                    return f'{d[:7]} {src}'.strip()
+                spec = dict(wave=w12, epochs=[dict(label=lab(r), flux=rebin12(r['flux']), cls=str(r['meta'].get('class', '') or ''),
+                                                    z=r['meta'].get('z'), ew_hb=r.get('ew', {}).get('Hb'), ew_ha=r.get('ew', {}).get('Ha')) for r in pick],
+                            history=[dict(date=mjd_to_date(r['mjd']) if r.get('mjd') and np.isfinite(r['mjd']) else '', src=('DESI' if r.get('source') == 'DESI' else 'SDSS'),
+                                          prog=str(r.get('program', '')).strip(), coadd=bool(r.get('coadd')), cls=str(r['meta'].get('class', '') or ''),
+                                          ew_hb=(None if r.get('ew', {}).get('Hb') is None or not np.isfinite(r['ew']['Hb']) else round(r['ew']['Hb'], 1)),
+                                          ew_ha=(None if r.get('ew', {}).get('Ha') is None or not np.isfinite(r['ew']['Ha']) else round(r['ew']['Ha'], 1)),
+                                          sn=r['meta'].get('sn_median_all')) for r in recs])
         spec_p = os.path.join(DATA, 'ngps_spectra', f'{name}.csv')
         ngps = None
         if os.path.exists(spec_p):
@@ -174,13 +211,13 @@ def main():
             name=name, jname=jname, tier=r.tier, source=r.source_catalog, ra=round(float(r.ra), 6), dec=round(float(r.dec), 6),
             sex=sc.to_string('hmsdms', sep=':', precision=1), z=z, rmag=f('r_mag', 2), priority=f('priority'),
             M=f('M'), P=f('P'), S=f('S'), B=f('B'), trend=str(r.get('trend', '')), notes=str(r.get('notes', '')),
-            clagn_score=f('clagn_score'), density=f('zeltyn_density_ratio', 2), in_zeltyn=bool(r.get('in_region_zeltyn', False)),
+            clagn_score=f('clagn_score'), density=f('zeltyn_density_ratio', 2), m_comb=f('M_combined', 2), in_zeltyn=bool(r.get('in_region_zeltyn', False)),
             in_clagn=bool(r.get('in_region_clagn', False)), ux=f('umap_x'), uy=f('umap_y'),
             n_spec=f('n_spec', 0), yrs=f('years_since_last_spec', 1), last_class=str(r.get('last_class', '')),
             mjd_last=f('mjd_last_spec', 1), w1_ratio=f('w1_ratio_now_over_spec', 2), dr_ref=f('dr_since_ref', 2),
             r_last=f('r_last', 2), g_last=f('g_last', 2), mjd_last_ztf=f('mjd_last_ztf', 1),
             lines=lines, nights=nights, epochs=epochs_for(name, ep_tables), ztf=ztf_series(name), wise=wise.get(name, {}), ngps=ngps,
-            cut=cut, neo=neo.get(name, [])))
+            cut=cut, neo=neo.get(name, []), spec=spec))
 
     # night summary counts
     for n, meta in NIGHT_META.items():
@@ -202,6 +239,14 @@ def main():
     with open(OUT, 'w') as fh:
         fh.write(html)
     print(f'wrote {OUT}: {len(targets)} targets, {os.path.getsize(OUT)/1e6:.1f} MB')
+    # standalone copy for GitHub Pages (docs/index.html): the artifact host wraps the fragment in a document, GitHub does not
+    head_end = html.find('<header>')
+    standalone = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1">\n'
+                  + html[:head_end] + '</head>\n<body>\n' + html[head_end:] + '\n</body>\n</html>\n')
+    os.makedirs(os.path.join(HERE, 'docs'), exist_ok=True)
+    with open(os.path.join(HERE, 'docs', 'index.html'), 'w') as fh:
+        fh.write(standalone)
+    print(f'wrote docs/index.html (standalone, {os.path.getsize(os.path.join(HERE, "docs", "index.html"))/1e6:.1f} MB)')
 
 
 TEMPLATE = r'''<title>CLAGN Night Sheet</title>
@@ -311,6 +356,9 @@ td.n{text-align:right}
 .about table.tiers b{color:var(--ink);display:block;margin-bottom:2px}
 .side-col h3:first-child{margin-top:8px}
 @media (max-width:1000px){.about{grid-template-columns:1fr}}
+.card .foot .specrow{grid-column:1 / -1}
+.ewhist{margin-top:6px;max-width:640px}
+.ewhist td,.ewhist th{padding:2px 6px}
 .over{background:var(--surface);border:1px solid var(--hair);border-radius:4px;padding:6px 16px 12px;margin:8px 0 18px}
 .over svg{display:block;max-height:420px}
 .tgt:hover{stroke:var(--ink)}
@@ -506,6 +554,26 @@ function about(){
 </section>`;
 }
 
+/* ---------- archival spectra overlay + EW history ---------- */
+const SPECC=['var(--ink3)','var(--t1)','var(--accent)','var(--t2)'];
+function specPanel(t){
+  const S=t.spec; if(!S||!S.epochs.length) return `<div class="empty">No archival spectrum file fetched yet.</div>`;
+  const W=900,H=240,pL=46,pR=12,pT=30,pB=34; const w=S.wave; const X=lin(w[0],w[w.length-1],pL,W-pR);
+  const vals=[]; S.epochs.forEach(e=>e.flux.forEach(v=>{ if(v!=null) vals.push(v); })); vals.sort((a,b)=>a-b);
+  const lo=Math.min(0,vals[Math.floor(vals.length*.01)]), hi=vals[Math.ceil(vals.length*.995)-1]*1.05; const Y=lin(lo,hi,H-pB,pT);
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Archival spectra of ${esc(t.name)}">`;
+  niceTicks(lo,hi,4).forEach(v=>{ s+=`<line class="grid" x1="${pL}" x2="${W-pR}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${pL-5}" y="${Y(v)+3.5}" text-anchor="end">${v.toFixed(0)}</text>`; });
+  s+=`<text x="${pL+4}" y="${pT+10}" style="fill:var(--ink2)">F<tspan baseline-shift="sub" font-size="8">λ</tspan> · 10⁻¹⁷ erg s⁻¹ cm⁻² Å⁻¹</text>`;
+  // rest-frame line markers, labels on two rows so Hβ and [O III] never collide
+  if(t.z!=null){ [['Mg II',2798,0],['Hβ',4861,1],['[O III]',5007,0],['Hα',6563,1]].forEach(([nm,l0,row])=>{ const lo_=l0*(1+t.z); if(lo_<w[0]||lo_>w[w.length-1]) return; const x=X(lo_); s+=`<line x1="${x}" x2="${x}" y1="${pT-2}" y2="${H-pB}" stroke="var(--hair2)" stroke-width="1"/><text x="${x}" y="${row?pT-4:pT-16}" text-anchor="middle" style="fill:var(--ink3);font-size:10px">${nm}</text>`; }); }
+  S.epochs.forEach((e,i)=>{ let d='',pen=false; e.flux.forEach((v,k)=>{ if(v==null){pen=false;return;} const x=X(w[k]).toFixed(1), y=Y(Math.min(v,hi)).toFixed(1); d+=(pen?'L':'M')+x+','+y; pen=true; }); s+=`<path d="${d}" fill="none" stroke="${SPECC[i%SPECC.length]}" stroke-width="${i===S.epochs.length-1?1.6:1.1}" opacity="${i===0?.9:.95}"/>`; });
+  s+=`<line class="axis" x1="${pL}" x2="${W-pR}" y1="${H-pB}" y2="${H-pB}"/>`; niceTicks(w[0],w[w.length-1],7).forEach(v=>{ const x=X(v); if(x<pL||x>W-pR) return; s+=`<text x="${x}" y="${H-pB+14}" text-anchor="middle">${v}</text>`; }); s+=`<text x="${W-pR}" y="${H-3}" text-anchor="end">observed wavelength, Å</text>`;
+  s+='</svg>';
+  const leg=`<div class="legend" style="margin-top:4px">${S.epochs.map((e,i)=>`<span><i style="--c:${SPECC[i%SPECC.length]};border-radius:0;height:3px;width:16px"></i>${esc(e.label)} <span style="color:var(--ink3)">${esc(e.cls)}${e.ew_hb!=null?` · EW(Hβ) ${e.ew_hb.toFixed(0)} Å`:''}${e.ew_ha!=null?` · EW(Hα) ${e.ew_ha.toFixed(0)} Å`:''}</span></span>`).join('')}</div>`;
+  const hist=S.history.length>1?`<table class="ewhist"><thead><tr><th>epoch</th><th>source</th><th>class</th><th>EW Hβ</th><th>EW Hα</th></tr></thead><tbody>${S.history.map(h=>`<tr><td class="mono">${h.date}</td><td>${h.src}${h.coadd?' coadd':''} <span style="color:var(--ink3)">${esc(h.prog)}</span></td><td>${esc(h.cls)}</td><td class="n mono">${h.ew_hb==null?'—':h.ew_hb}</td><td class="n mono">${h.ew_ha==null?'—':h.ew_ha}</td></tr>`).join('')}</tbody></table>`:'';
+  return s+leg+hist;
+}
+
 /* ---------- NGPS wavelength ruler ---------- */
 function ruler(t){
   const W=560, H=84, p=28, a=3200, b=10400; const X=lin(a,b,p,W-p);
@@ -564,12 +632,13 @@ function card(t, nightKey){
     <div class="side">
       ${Object.keys(t.cut||{}).length?`<div class="mini"><h4>Imaging · 64″ · N up, E left</h4><div class="cuts">${[['sdss','SDSS gri'],['ztf_g','ZTF g ref'],['ztf_r','ZTF r ref']].filter(([k])=>t.cut[k]).map(([k,lab])=>`<figure><img src="${t.cut[k]}" alt="${lab} cutout of ${esc(t.name)}" width="88" height="88"><figcaption>${lab}</figcaption></figure>`).join('')}</div></div>`:''}
       <div class="mini"><h4>W1 manifold</h4>${manifold(t)}
-        <div style="font-size:12px;color:var(--ink3)">kNN score ${fmt(t.clagn_score,2)}${t.density!=null?` · Zeltyn density ${fmt(t.density,1)}×`:''}${t.in_zeltyn?' · in Zeltyn region':''}${t.in_clagn?' · in turn-on/off region':''}</div></div>
+        <div style="font-size:12px;color:var(--ink3)">kNN score ${fmt(t.clagn_score,2)}${t.density!=null?` · Zeltyn density ${fmt(t.density,1)}×`:''}${t.in_zeltyn?' · in Zeltyn region':''}${t.in_clagn?' · in turn-on/off region':''}${t.m_comb!=null?`<br>ZTF+W1 manifold score ${fmt(t.m_comb,2)} ${t.m_comb>=1?'(agrees)':t.m_comb<0.5?'(disagrees)':''}`:''}</div></div>
       <div class="mini"><h4>Archival spectra <span class="badge">${epochs.length}</span></h4>
         ${epochs.length?`<table><thead><tr><th>date</th><th>survey</th><th>class</th><th>z</th></tr></thead><tbody>${shown}</tbody>${hidden?`<tbody hidden>${hidden}</tbody>`:''}</table>${hidden?`<button class="toggle" onclick="const b=this.previousElementSibling.querySelector('tbody[hidden],tbody[data-open]');if(b.hidden){b.hidden=false;b.dataset.open=1;this.textContent='fewer epochs'}else{b.hidden=true;delete b.dataset.open;this.textContent='all ${epochs.length} epochs'}">all ${epochs.length} epochs</button>`:''}`:'<div class="empty">No epoch inventory yet.</div>'}
       </div>
     </div>
     <div class="foot">
+      <div class="specrow"><h4>Archival spectra <span style="color:var(--ink3);font-weight:400;text-transform:none;letter-spacing:0">rest-frame EW from fixed windows, positive = emission</span></h4>${specPanel(t)}</div>
       <div><h4>What NGPS sees at z = ${fmt(t.z,3)}</h4>${ruler(t)}<div style="font-size:12.5px;color:var(--ink2)">${esc(t.notes)}</div></div>
       <div><h4>NGPS spectrum</h4>${t.ngps?spectrum(t):`<div class="spec-slot"><div>Not yet observed · planned ${esc(D.nights[nk]?.label??'')}${isBackup?' (backup)':''}<br><span style="font-size:12px">drop data/ngps_spectra/${esc(t.name)}.csv and regenerate</span></div></div>`}</div>
     </div>

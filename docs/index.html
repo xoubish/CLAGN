@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CLAGN Night Sheet</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -121,6 +126,8 @@ footer{max-width:1500px;margin:20px auto 0;padding:14px 22px;color:var(--ink3);f
 @media (max-width:700px){.card{grid-template-columns:1fr}.card .id{border-right:none;border-bottom:1px solid var(--hair)}}
 </style>
 
+</head>
+<body>
 <header>
   <div class="bar">
     <h1>CLAGN Night Sheet<small>Palomar 200-inch · NGPS · 2026B</small></h1>
@@ -423,3 +430,6 @@ function render(){
 document.getElementById('foot').innerHTML=`Generated ${D.generated} from the CLAGN pipeline (Hemmati et al. 2026 W1 manifold; Zeltyn et al. 2024 SDSS-V CLAGNs; SDSS DR19 + DESI DR1 spectra; ZTF + unWISE light curves). Priority = B·S·(M+P) weighted by moon distance per night; nights are filled by priority per hour of telescope time using an exposure model scaled from the NGPS ETC (S/N ~7 on the diagnostic line under a bright moon; the "/h" figure on each card). Grey dots: Sample A; gold dots: Zeltyn CL-AGNs; shaded: enriched regions.`;
 render();
 </script>
+
+</body>
+</html>

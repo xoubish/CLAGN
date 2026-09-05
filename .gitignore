@@ -16,6 +16,11 @@ data/parent_pool_*.csv
 data/spectra_epochs_*.csv
 # image cutout thumbnails for the night sheet (07b_cutouts.py), regenerable
 data/cutouts/
+# downloaded SDSS spectrum files and their compact per-target JSON (03d_fetch_spectra.py), regenerable
+data/spectra_cache/
+data/spectra_dl/
+# NEOWISE Gator batch cache
+data/neowise_cache/
 # scratch tables written by helper runs
 data/_*.csv
 # NED raw retry dumps (merged into literature_clagn.csv)

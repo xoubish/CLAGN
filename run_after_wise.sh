@@ -49,6 +49,9 @@ for n in sep23 oct26 oct27; do rm -rf finders/$n; $PY 06_finder_charts.py data/t
 echo "== 6b. image cutouts (SDSS gri JPEG, ZTF g/r reference images via IRSA IBE)"
 $PY 07b_cutouts.py 2>&1 | grep -v -i "warning\|warn(" | tail -1
 
+echo "== 6c. archival spectra (SDSS all epochs via sas_url, DESI DR1 via SPARCL) for the listed targets"
+$PY 03d_fetch_spectra.py 2>&1 | grep -v -i "warning\|warn(" | tail -1
+
 echo "== 7. night sheet web page (web/clagn_night_sheet.html; republish with the Artifact tool / share the file)"
 $PY 07_make_webpage.py 2>&1 | grep -v -i "warning\|warn(" | tail -1
 echo "done."

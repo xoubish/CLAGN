@@ -173,6 +173,14 @@ Exclusions (`exclude_flag`, `exclude_reason`):
       off both CLAGN regions. Rank within a night = order of priority_night among the selected set (floors do not
       change ranks). P now takes the largest of: unWISE W1 (to 2020) vs W1 at the archival spectrum, NEOWISE-R W1
       (to 2024) vs at-spectrum, NEOWISE-R 2024 vs 2014, and ZTF r now vs r at the last spectrum.
+      State-reversal candidates (2026-09-03): from the downloaded archival spectra, `spec_dir` = "turned off" if the
+      rest-frame Hβ EW fell by > 50% between the first and last SDSS epoch (first EW > 8 Å), "turned on" if it more than
+      doubled (last EW > 8 Å). If the current photometry (ZTF r since the last spectrum, NEOWISE W1 2014-24, W1 slope
+      2022-24) points the other way, the target is a reversal candidate and gets +0.5 priority. Motivation: recurrent
+      CLAGNs show dim-state plateaus of ~4-7 yr before re-brightening (Wang et al. 2025, ApJ 981, 129, eight recurrent
+      CLAGNs; SDSS J1011+5442 back to type 1 in 2024 after turning off 2003-15), and turn-on flares can fade within
+      months to years (1ES 1927+654). Objects that turned off in 2019-21 are therefore due, and 2018-22 turn-ons may
+      already be fading.
       **No magnitude cut** (user decision 2026-09-03): brightness and moon distance only weight the ranking.
       The pool WISE fetch therefore covers r < 19.5 (r < 19 first, 19-19.5 added afterwards); 19.5-20 not fetched.
 - [x] Write `data/master_list_scored.csv` and `data/targets_<night>.csv` (top list + backups).
@@ -227,8 +235,14 @@ CLAGN/
   01_rebuild_manifold.py           <- Sample A W1 UMAP with objectids, Zeltyn projection, region stats, umap_w1_model.pkl
   02_parent_pool.py query|wise|project  <- DR16 z<0.8 r<20 quasars in the run RA windows; unWISE fetch (parallel
                                           workers: `wise 19.0 <worker> <nworkers>`); projection + scores
-  03_spectra_inventory.py <csv> <tag>   <- SDSS DR19 allspec + DESI DR1 epochs per target
+  03_spectra_inventory.py <csv> <tag>   <- SDSS DR19 allspec + DESI DR1 epochs per target (targets already in
+                                          data/spectra_epochs_<tag>.csv are reused, only new ones are queried)
   03b_ztf_now.py <csv> <tag> ...        <- current ZTF g/r photometry and change since a reference MJD
+  03d_fetch_spectra.py [targets csv]    <- downloads every SDSS spectrum epoch (sas_url from allspec: DR17 lite files for
+                                          SDSS-I..IV, DR19 v6_1_3 lite incl. SDSS-V allepoch coadds) and DESI DR1 spectra via
+                                          SPARCL (client >= 1.3.0 works; 1.2.5 did not); 6 Å rebinned JSON per target in
+                                          data/spectra_dl/, model-free rest-frame EW(Hb, Ha) per epoch and the pipeline
+                                          SPZLINE/ZLINE fits in data/spectra_lines.csv. Shown on the night sheet cards.
   03c_neowise_now.py <csv> <tag>        <- NEOWISE-R single-exposure W1/W2 to 2024-02 via IRSA Gator bulk upload
                                           (100 positions/request, ~35 s); per-visit medians; feeds P and the trend
   04_score_tiers.py                <- master list, priority, tiers, per-night allocation -> targets_<night>.csv
@@ -287,6 +301,24 @@ The top-level `code_src/` is the newer Fornax code and is not import-compatible 
   2020", not a continuous clock. Consequence for 2026: do not extrapolate along the axis; the right signature for an
   object changing *now* is a change in the last epochs, which needs post-2020 photometry (ZTF to 2025 is in; NEOWISE
   single-exposure photometry to 2024 from IRSA would extend W1 by 3-4 yr and is the natural next enrichment).
+- 2026-09-04: Multi-band manifold test (`09_multiband_test.py`, `data/multiband_test.csv`), held-out Zeltyn objects vs
+  Sample A SDSS_QSO; ZTF binned to 3 d and cut at MJD 60067 to match Sample A:
+
+  | bands | AUC CL-AGN | AUC EVQ | held-out Zeltyn-region enrichment | literature-region enrichment |
+  |---|---|---|---|---|
+  | W1 (DTW) | 0.656 | 0.707 | 10.6x (27% captured, 2.7% QSO inside) | 1.7x |
+  | W1+W2 (DTW) | 0.627 | 0.702 | 4.2x | 1.8x |
+  | ZTF g,r (manhattan) | 0.494 | 0.564 | 4.9x | 1.1x |
+  | ZTF g,r + W1,W2 (manhattan) | 0.635 | 0.684 | 4.4x | 12x (11% captured, 0.9% QSO inside) |
+
+  Reading: W1 alone is the best predictor of new CLAGNs; the optical bands add SED/redshift structure and short-timescale
+  noise. The combined space's one virtue is that the literature and SDSS-V CLAGNs overlap there (12x in a tiny corner).
+  Decision: keep the W1 manifold for selection; `10_combined_rescore.py` scores the enriched candidates in a ZTF g,r + W1
+  space (manhattan): AUC 0.70 CL-AGN / 0.69 EVQ, held-out enrichment 7.1x; Spearman 0.18 with the W1-space M, so it is a
+  near-independent second vote. Of 91 scored primaries only 4 (W1-position-only, P<1, M_combined<0.5) lacked support; 65
+  non-selected T1 candidates score >= 1 in both spaces (28 with r<18.5). 2026-09-04: priority += 0.5 when M_combined >= 1,
+  -= 0.3 when M_combined < 0.5 and P < 1 (T1 only); M_combined shown on the cards. Full-pool reselection in a combined
+  space is not feasible before the runs (ZTF light curves for 16,500 more quasars).
 - 2026-09-03: Step zero. `~/Dropbox/sample.ecsv` (2042 rows) is **not** the Sample A table: labels disagree
   for objectid >= 1000 and a light-curve fingerprint test (unWISE W1/W2 fetched at its coordinates vs the
   parquet light curve of the same objectid) shows different epochs/fluxes for objectids 0, 63, 153, 1000.

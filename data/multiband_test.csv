@@ -1,0 +1,5 @@
+bands,nA,nZ_cl,nZ_evq,auc_clagn_vs_qso,auc_evq_vs_qso,heldout_frac_inside,qso_frac_inside,heldout_enrichment,litregion_zeltyn_inside,litregion_qso_inside,litregion_enrichment,knn_median_zeltyn_cl,knn_median_qso
+W1 (DTW),1960,111,68,0.656,0.707,0.266,0.027,10.64,0.099,0.059,1.68,0.1,0.04
+W1+W2 (DTW),1904,104,67,0.627,0.702,0.338,0.083,4.22,0.038,0.021,1.81,0.1,0.08
+"ZTF g,r (manhattan)",1879,100,67,0.494,0.564,0.261,0.056,4.91,0.08,0.072,1.12,0.08,0.08
+"ZTF g,r + W1,W2 (manhattan)",1799,93,66,0.635,0.684,0.16,0.042,4.38,0.108,0.009,12.0,0.08,0.06

@@ -202,6 +202,21 @@ def build_master():
             newer_ref = m.r_at_last_sdssv_internal.notna() & m.r_last.notna()
             m.loc[newer_ref, 'dr_since_ref'] = m.loc[newer_ref, 'r_last'] - m.loc[newer_ref, 'r_at_last_sdssv_internal']
 
+    # ---------------- archival spectral direction (03d_fetch_spectra.py) -> state-reversal candidates
+    # spec_dir: what the archival Hβ EW did between first and last SDSS epoch; a target whose *current* photometry moves the
+    # other way (turned off, now brightening; turned on, now fading) is a state-reversal candidate. The recurrent-CLAGN
+    # literature (dim-state plateaus of ~4-7 yr; turn-on flares that fade within months to years) makes these the best
+    # bets for catching a change in 2026, so they get the same +0.5 bonus as an archival class change.
+    m['spec_dir'] = ''; m['reversal_candidate'] = False
+    sl = load('spectra_lines.csv')
+    if sl is not None and len(sl):
+        S = sl[sl.source == 'SDSS'].sort_values('mjd'); g = S.groupby('name')
+        f, l = g.first(), g.last()
+        span = (l.mjd - f.mjd) > 365
+        off = span & (l.EW_Hb_rest < 0.5 * f.EW_Hb_rest) & (f.EW_Hb_rest > 8)
+        on = span & (l.EW_Hb_rest > 2 * f.EW_Hb_rest.clip(lower=1)) & (l.EW_Hb_rest > 8)
+        sd = pd.Series('', index=f.index); sd[off] = 'turned off'; sd[on] = 'turned on'
+        m['spec_dir'] = m.name.map(sd).fillna('')
     # ---------------- scores
     m['M'] = np.clip(np.fmax(m.zeltyn_density_ratio.fillna(0) / 3.0, m.clagn_score.fillna(0) / 0.15), 0, 2)
     nanS = pd.Series(np.nan, index=m.index)
@@ -228,9 +243,38 @@ def build_master():
     ratio = m.get('w1_ratio_now_over_spec', nanS)
     dr = m.get('dr_since_ref', nanS)
     dw1 = m.get('dw1_neowise', nanS)
-    fading = (ratio < 1 / 1.3) | (dr > 0.3) | (dw1 > 0.3)
-    brightening = (ratio > 1.3) | (dr < -0.3) | (dw1 < -0.3)
+    slope = m.get('w1_slope_2yr', nanS)
+    fading = (ratio < 1 / 1.3) | (dr > 0.3) | (dw1 > 0.3) | (slope > 0.1)
+    brightening = (ratio > 1.3) | (dr < -0.3) | (dw1 < -0.3) | (slope < -0.1)
     m['trend'] = np.select([fading & brightening, fading, brightening], ['mixed (IR vs optical)', 'fading', 'brightening'], 'flat/unknown')
+    # second, near-independent vote from the ZTF g,r + W1 manifold (10_combined_rescore.py; Spearman 0.18 with the W1 score,
+    # AUC 0.70 on held-out Zeltyn CL-AGNs): +0.5 when both manifolds agree (M_combined >= 1), -0.3 when the combined space
+    # disagrees (M_combined < 0.5) and there is no large photometric change to fall back on (P < 1). Only enriched candidates
+    # have ZTF light curves and therefore a combined score; others are unaffected.
+    cs = load('combined_scores.csv')
+    m['M_combined'] = np.nan
+    if cs is not None and len(cs):
+        cs = cs.drop_duplicates('name').set_index('name')
+        mc = np.clip(np.fmax(cs.zeltyn_density / 3.0, cs.knn_lit_frac / 0.15), 0, 2)
+        m['M_combined'] = m.name.map(mc)
+        # discovery tiers only: T3 are confirmed CLAGNs (manifold vote irrelevant), and for controls a high combined
+        # score is a contamination flag, not a merit
+        agree = (m.M_combined >= 1) & m.tier.isin(['T1', 'T2'])
+        disagree = (m.M_combined < 0.5) & (m.P < 1) & (m.tier == 'T1')
+        bad_ctrl = (m.M_combined >= 1) & (m.tier == 'T4')
+        m.loc[agree, 'priority'] = (m.loc[agree, 'priority'] + 0.5).round(3)
+        m.loc[disagree, 'priority'] = (m.loc[disagree, 'priority'] - 0.3).clip(lower=0).round(3)
+        m.loc[bad_ctrl, 'priority'] = (m.loc[bad_ctrl, 'priority'] * 0.3).round(3)
+        m.loc[agree, 'notes'] = m.loc[agree, 'notes'].astype(str) + '; also in the CLAGN region of the ZTF+W1 manifold'
+        m.loc[bad_ctrl, 'notes'] = m.loc[bad_ctrl, 'notes'].astype(str) + '; CLAGN-like in the ZTF+W1 manifold: weak control'
+        print(f'   combined-manifold score for {int(m.M_combined.notna().sum())} objects: {int(agree.sum())} T1/T2 agree (+0.5), '
+              f'{int(disagree.sum())} T1 disagree without photometric change (-0.3), {int(bad_ctrl.sum())} controls demoted')
+    rev = ((m.spec_dir == 'turned off') & brightening & ~fading) | ((m.spec_dir == 'turned on') & fading & ~brightening)
+    m['reversal_candidate'] = rev.fillna(False)
+    m.loc[m.reversal_candidate, 'priority'] = (m.loc[m.reversal_candidate, 'priority'] + 0.5).round(3)
+    m.loc[m.spec_dir != '', 'notes'] = m.loc[m.spec_dir != '', 'notes'].astype(str) + '; archival Hβ: ' + m.loc[m.spec_dir != '', 'spec_dir']
+    m.loc[m.reversal_candidate, 'notes'] = m.loc[m.reversal_candidate, 'notes'].astype(str) + ' -> photometry now points the other way: STATE-REVERSAL CANDIDATE'
+    print(f'   archival Hβ direction known for {(m.spec_dir != "").sum()} objects; state-reversal candidates: {int(m.reversal_candidate.sum())}')
     return m
 
 
@@ -287,7 +331,7 @@ if __name__ == '__main__':
     lists = allocate(m)
     cols = ['rank', 'night', 'tier', 'name', 'ra', 'dec', 'z', 'r_mag', 't_exp_min', 'exp_plan', 'prio_per_hour', 'priority_night', 'priority', 'M', 'P', 'trend',
             'years_since_last_spec', 'n_spec', 'last_class', 'clagn_score', 'zeltyn_density_ratio', 'in_region_zeltyn',
-            'lines_in_ngps', 'notes']
+            'M_combined', 'lines_in_ngps', 'spec_dir', 'reversal_candidate', 'notes']
     for night, df in lists.items():
         cols_n = cols + [f'hrs_{night}', f'minX_{night}', f'moonsep_{night}']
         df[[c for c in cols_n if c in df.columns]].to_csv(os.path.join(DATA, f'targets_{night}.csv'), index=False)

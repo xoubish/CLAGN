@@ -8,5 +8,6 @@ cd "$(dirname "$0")"
 echo "== score, tier, allocate";  $PY 04_score_tiers.py 2>&1 | grep -v -i "warning\|warn(" | tee data/score_tiers.log | sed -n 1,8p
 echo "== finder charts";          for n in sep23 oct26 oct27; do rm -rf finders/$n; $PY 06_finder_charts.py data/targets_$n.csv 2>&1 | grep -v -i "warning\|warn(" | tail -1; done
 echo "== cutouts";                $PY 07b_cutouts.py 2>&1 | grep -v -i "warning\|warn(" | tail -1
+echo "== archival spectra";       $PY 03d_fetch_spectra.py 2>&1 | grep -v -i "warning\|warn(" | tail -1
 echo "== night sheet";            $PY 07_make_webpage.py 2>&1 | grep -v -i "warning\|warn(" | tail -1
 echo "done."
