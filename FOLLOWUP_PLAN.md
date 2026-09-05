@@ -381,3 +381,46 @@ The top-level `code_src/` is the newer Fornax code and is not import-compatible 
 - W1 only vs W1+W2 vs ZTF+WISE manifold for scoring. Paper: W1 cleanest for CLAGN separation.
 - Whether to build the bigger DR16Q parent pool (Section 2) or stay with Sample A.
 - Priority score formula (Section 4).
+
+## 9. Proprietary SDSS-V epochs (2026-09-05)
+
+Source: `SDSSV-Data-Access.pdf` (Vanderbosch & Prince, IPAC lunch seminar 2024-05-22) plus the sdss_access docs and
+Zach Vanderbosch's `Spec_Tools/SDSS/sdssv_utils.py` on GitHub, from which the SAS path conventions below are taken.
+
+**What the public data already give us.** DR19 `allspec` covers SDSS-V BOSS through MJD 60130 (2023-06-26), pipeline
+v6_1_3. Of our 100 primaries, 20 have an SDSS-V epoch (AQMES-wide/medium and one eFEDS carton); 325 of the 17,594
+scored objects do. Anything SDSS-V observed after mid-2023 is invisible to us today.
+
+**What the internal archive adds.** `https://data.sdss5.org/sas/sdsswork/bhm/boss/spectro/redux/<version>/` holds
+the newest reductions (idlspec2d tags: v6_1_3 = DR19/IPL-3, v6_2_0 Dec 2024, v6_2_1 Mar 2026; `master` = latest, less
+vetted). `spAll-lite-<version>.fits.gz` lists every visit; spectra sit at
+`spectra/lite/<FIELD:06d>/<MJD>/spec-<FIELD>-<MJD>-<CATALOGID>.fits` (epoch coadds under `epoch/spectra/lite/`, the
+`allepoch` coadd under `spectra/lite/allepoch/<MJD>/`) — the same layout as the DR19 tree, so `03d_fetch_spectra.py`
+reads them unchanged. Access is HTTP basic auth via `~/.netrc` (`machine data.sdss5.org`, chmod 600). The
+credentials are collaboration-only and are passed by phone or in person; IPAC/Caltech holders listed on the slide
+include Matthew Graham, Luisa Rebull, Tom Prince, Kareem El-Badry (Caltech CoCo rep) and Zach Vanderbosch. Not on
+this machine yet: `~/.netrc` has no SDSS entry.
+
+**Pipeline.** `03f_sdssv_internal.py [--version vX_Y_Z|master] [--coadd daily|epoch]` lists the SAS versions, downloads
+the spAll-lite once (`data/sdssv_internal/`, ~650 MB, resumable), matches within 2" of the master-list positions, keeps
+epochs newer than DR19 and writes `data/sdssv_internal_epochs.csv` (04: recency S, class change, r at the new epoch,
+so `dr_since_ref` is measured from the latest spectrum) and `data/spectra_epochs_sdssvint.csv` (03d downloads the
+spec-lite files with the same .netrc). `--dry-run` just lists versions; `--public-dr19` runs the identical code on the
+public DR19 spAll-lite as an end-to-end test (results in `data/_sdssv_test_*.csv`).
+
+**End-to-end test (2026-09-05, `--public-dr19`).** Run on the public DR19 spAll-lite (643 MB, 2.18 M rows): 9,383
+visits match 2,624 of the 17,594 scored objects; for the 1,054 inventoried targets it recovers all 1,489 DR19 allspec
+daily epochs (100%), with byte-identical spec-lite paths (root aside). It also finds 42 daily visits that DR19 allspec
+lacks (FPS-era fields 21152, 1011xx), so the spAll route is if anything more complete. Two lessons folded in: FITS
+columns are big-endian (cast before pandas), and 44 objects sit in the master list under two names (Zeltyn J-name and
+pool P-name), so the match keeps every target within 2", not just the nearest. Test cache: `data/sdssv_internal/public_dr19/`.
+
+**Data-rights guard.** All internal products are git-ignored (`data/sdssv_internal/`, `sdssv_internal_epochs.csv`,
+`spectra_epochs_*.csv`, `spectra_dl/`); 03d tags each spectrum `proprietary`; 07 builds two payloads: the
+claude.ai artifact (private) shows the internal epochs labelled "SDSS-V internal", while `docs/index.html` (public
+GitHub Pages) drops them and the notes that name them. `spectra_lines.csv` (git-tracked) has a `proprietary` column:
+review before pushing, or add it to `.gitignore` once internal rows exist.
+
+**Expected use.** Re-observed objects (an SDSS-V epoch in 2024-26) lose recency weight unless the new spectrum itself
+shows a class change — those become confirmed CLAGNs and jump the queue as state-tracking targets. AQMES cadence
+objects are the ones likely to have gained epochs.

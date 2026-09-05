@@ -128,6 +128,9 @@ def one(name, epochs, ra=None, dec=None):
     os.makedirs(os.path.join(CACHE, name), exist_ok=True)
     out = []
     epochs = epochs.drop_duplicates('sas_url')
+    if 'proprietary' not in epochs:
+        epochs = epochs.assign(proprietary=False)
+    epochs = epochs.assign(proprietary=epochs.proprietary.fillna(False).astype(bool))
     for e in epochs.sort_values('mjd').itertuples():
         url = str(e.sas_url)
         if not url.startswith('http'):
@@ -141,7 +144,7 @@ def one(name, epochs, ra=None, dec=None):
         except Exception as ex:
             print(f'   {name} {os.path.basename(url)}: parse failed {str(ex)[:60]}', flush=True); continue
         rec.update(mjd=float(e.mjd), phase=(int(e.sdss_phase) if pd.notna(e.sdss_phase) else None), program=str(getattr(e, 'programname', '')),
-                   coadd=bool(getattr(e, 'is_coadd', False)), url=url, source='SDSS')
+                   coadd=bool(getattr(e, 'is_coadd', False)), url=url, source='SDSS', proprietary=bool(getattr(e, 'proprietary', False)))
         out.append(rec)
     # several allspec rows can point at different reductions of the same night (daily / epoch / allepoch coadds);
     # keep one spectrum per (rounded MJD), the one with the highest S/N, but always keep the allepoch coadd too
@@ -196,7 +199,7 @@ def main():
             json.dump(recs, open(os.path.join(OUT, f'{name}.json'), 'w'), separators=(',', ':'))
             for r in recs:
                 L = r['lines']; g = lambda ln, key: L.get(ln, {}).get(key, np.nan)
-                rows.append(dict(name=name, source=r.get('source', 'SDSS'), mjd=r['mjd'], phase=r['phase'], program=r['program'], coadd=r['coadd'], cls=r['meta'].get('class'),
+                rows.append(dict(name=name, source=r.get('source', 'SDSS'), proprietary=bool(r.get('proprietary', False)), mjd=r['mjd'], phase=r['phase'], program=r['program'], coadd=r['coadd'], cls=r['meta'].get('class'),
                                  subclass=r['meta'].get('subclass'), z=r['meta'].get('z'), sn=r['meta'].get('sn_median_all'),
                                  EW_Hb_rest=r.get('ew', {}).get('Hb', np.nan), EW_Ha_rest=r.get('ew', {}).get('Ha', np.nan),
                                  Hb_area=g('H_beta', 'area'), Hb_area_err=g('H_beta', 'area_err'), Hb_ew=g('H_beta', 'ew'), Hb_sigma=g('H_beta', 'sigma'),

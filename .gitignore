@@ -57,3 +57,7 @@ build/
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# ---- PROPRIETARY SDSS-V collaboration data (03f_sdssv_internal.py): never push ---------------
+data/sdssv_internal/
+data/sdssv_internal_epochs.csv

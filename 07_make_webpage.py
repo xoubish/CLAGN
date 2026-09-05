@@ -96,7 +96,53 @@ def epochs_for(name, ep_tables):
     return rows
 
 
+
+def build_spec(recs):
+    """Overlay (up to four epochs) + EW history from 03d records; None if nothing usable."""
+    recs = [r for r in recs if r.get('flux') and any(v is not None for v in r['flux'])]
+    if not recs:
+        return None
+    sdss = [r for r in recs if r.get('source', 'SDSS') == 'SDSS' and not r.get('coadd')]
+    coadd = [r for r in recs if r.get('source', 'SDSS') == 'SDSS' and r.get('coadd')]
+    desi = [r for r in recs if r.get('source') == 'DESI']
+    pick = []
+    if sdss:
+        pick.append(sdss[0])
+        if len(sdss) > 1 and sdss[-1] is not sdss[0]:
+            pick.append(sdss[-1])
+    if coadd:
+        pick.append(coadd[-1])
+    if desi:
+        pick.append(desi[0])
+    def rebin12(fl):
+        a = np.array([np.nan if v is None else v for v in fl], float)
+        a = a[:len(a) // 2 * 2].reshape(-1, 2)
+        with np.errstate(all='ignore'):
+            m = np.nanmean(a, axis=1)
+        return [None if np.isnan(v) else round(float(v), 2) for v in m]
+    w12 = [round(float(w), 1) for w in np.array(recs[0]['wave'])[:len(recs[0]['wave']) // 2 * 2].reshape(-1, 2).mean(axis=1)]
+    def srcname(r):
+        if r.get('source') == 'DESI':
+            return 'DESI'
+        if r.get('coadd'):
+            return 'SDSS-V coadd'
+        if r.get('proprietary'):
+            return 'SDSS-V internal'
+        return f"SDSS {str(r.get('program', '')).strip() or ''}".strip()
+    def lab(r):
+        d = mjd_to_date(r['mjd']) if r.get('mjd') and np.isfinite(r['mjd']) else ''
+        return f'{d[:7]} {srcname(r)}'.strip()
+    def ewv(r, k):
+        v = r.get('ew', {}).get(k)
+        return None if v is None or not np.isfinite(v) else round(v, 1)
+    return dict(wave=w12, epochs=[dict(label=lab(r), flux=rebin12(r['flux']), cls=str(r['meta'].get('class', '') or ''),
+                                       z=r['meta'].get('z'), ew_hb=r.get('ew', {}).get('Hb'), ew_ha=r.get('ew', {}).get('Ha')) for r in pick],
+                history=[dict(date=mjd_to_date(r['mjd']) if r.get('mjd') and np.isfinite(r['mjd']) else '', src=('DESI' if r.get('source') == 'DESI' else ('SDSS-V internal' if r.get('proprietary') else 'SDSS')),
+                              prog=str(r.get('program', '')).strip(), coadd=bool(r.get('coadd')), cls=str(r['meta'].get('class', '') or ''),
+                              ew_hb=ewv(r, 'Hb'), ew_ha=ewv(r, 'Ha'), sn=r['meta'].get('sn_median_all')) for r in recs])
+
 def main():
+    n_proprietary = 0
     t, m = load_targets()
     names = t.name.unique().tolist()
     mm = m.set_index('name')
@@ -161,43 +207,15 @@ def main():
             if os.path.exists(cp) and os.path.getsize(cp) > 100:
                 import base64
                 cut[kind] = f'data:{mime};base64,' + base64.b64encode(open(cp, 'rb').read()).decode('ascii')
-        # archival spectra (03d_fetch_spectra.py): up to four epochs for the overlay + the full EW history
-        spec = None
+        # archival spectra (03d_fetch_spectra.py); the public docs/ copy gets the same card without proprietary SDSS-V epochs
+        spec = spec_public = None
         sp_p = os.path.join(DATA, 'spectra_dl', f'{name}.json')
         if os.path.exists(sp_p):
             recs = json.load(open(sp_p))
-            recs = [r for r in recs if r.get('flux') and any(v is not None for v in r['flux'])]
-            if recs:
-                sdss = [r for r in recs if r.get('source', 'SDSS') == 'SDSS' and not r.get('coadd')]
-                coadd = [r for r in recs if r.get('source', 'SDSS') == 'SDSS' and r.get('coadd')]
-                desi = [r for r in recs if r.get('source') == 'DESI']
-                pick = []
-                if sdss:
-                    pick.append(sdss[0])
-                    if len(sdss) > 1 and sdss[-1] is not sdss[0]:
-                        pick.append(sdss[-1])
-                if coadd:
-                    pick.append(coadd[-1])
-                if desi:
-                    pick.append(desi[0])
-                def rebin12(fl):
-                    a = np.array([np.nan if v is None else v for v in fl], float)
-                    a = a[:len(a) // 2 * 2].reshape(-1, 2)
-                    with np.errstate(all='ignore'):
-                        m = np.nanmean(a, axis=1)
-                    return [None if np.isnan(v) else round(float(v), 2) for v in m]
-                w12 = [round(float(w), 1) for w in np.array(recs[0]['wave'])[:len(recs[0]['wave']) // 2 * 2].reshape(-1, 2).mean(axis=1)]
-                def lab(r):
-                    d = mjd_to_date(r['mjd']) if r.get('mjd') and np.isfinite(r['mjd']) else ''
-                    src = 'DESI' if r.get('source') == 'DESI' else ('SDSS-V coadd' if r.get('coadd') else f"SDSS {str(r.get('program', '')).strip() or ''}".strip())
-                    return f'{d[:7]} {src}'.strip()
-                spec = dict(wave=w12, epochs=[dict(label=lab(r), flux=rebin12(r['flux']), cls=str(r['meta'].get('class', '') or ''),
-                                                    z=r['meta'].get('z'), ew_hb=r.get('ew', {}).get('Hb'), ew_ha=r.get('ew', {}).get('Ha')) for r in pick],
-                            history=[dict(date=mjd_to_date(r['mjd']) if r.get('mjd') and np.isfinite(r['mjd']) else '', src=('DESI' if r.get('source') == 'DESI' else 'SDSS'),
-                                          prog=str(r.get('program', '')).strip(), coadd=bool(r.get('coadd')), cls=str(r['meta'].get('class', '') or ''),
-                                          ew_hb=(None if r.get('ew', {}).get('Hb') is None or not np.isfinite(r['ew']['Hb']) else round(r['ew']['Hb'], 1)),
-                                          ew_ha=(None if r.get('ew', {}).get('Ha') is None or not np.isfinite(r['ew']['Ha']) else round(r['ew']['Ha'], 1)),
-                                          sn=r['meta'].get('sn_median_all')) for r in recs])
+            spec = build_spec(recs)
+            spec_public = build_spec([r for r in recs if not r.get('proprietary')])
+            if any(r.get('proprietary') for r in recs):
+                n_proprietary += 1
         spec_p = os.path.join(DATA, 'ngps_spectra', f'{name}.csv')
         ngps = None
         if os.path.exists(spec_p):
@@ -220,7 +238,7 @@ def main():
             mjd_last=f('mjd_last_spec', 1), w1_ratio=f('w1_ratio_now_over_spec', 2), dr_ref=f('dr_since_ref', 2),
             r_last=f('r_last', 2), g_last=f('g_last', 2), mjd_last_ztf=f('mjd_last_ztf', 1),
             lines=lines, nights=nights, epochs=epochs_for(name, ep_tables), ztf=ztf_series(name), wise=wise.get(name, {}), ngps=ngps,
-            cut=cut, neo=neo.get(name, []), spec=spec))
+            cut=cut, neo=neo.get(name, []), spec=spec, spec_public=spec_public))
 
     # night summary counts
     for n, meta in NIGHT_META.items():
@@ -237,12 +255,24 @@ def main():
                  n_targets=len(targets), n_primary={k: v['n_primary'] for k, v in NIGHT_META.items()})
     payload = dict(generated=datetime.datetime.now().strftime('%Y-%m-%d %H:%M'), nights=NIGHT_META, tiers=TIER_LABEL,
                    manifold=manifold, targets=targets, stats=stats)
+    # public variant of every card first (docs/index.html), then strip the duplicate key from the private (artifact) payload
+    pub = []
+    for tg in targets:
+        q = dict(tg); q['spec'] = q.pop('spec_public', None)
+        q['notes'] = '; '.join(x for x in str(q.get('notes', '')).split('; ') if 'SDSS-V internal' not in x)
+        pub.append(q)
+    for tg in targets:
+        tg.pop('spec_public', None)
     html = TEMPLATE.replace('__DATA__', json.dumps(payload, separators=(',', ':'), allow_nan=False))
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, 'w') as fh:
         fh.write(html)
     print(f'wrote {OUT}: {len(targets)} targets, {os.path.getsize(OUT)/1e6:.1f} MB')
-    # standalone copy for GitHub Pages (docs/index.html): the artifact host wraps the fragment in a document, GitHub does not
+    # standalone copy for GitHub Pages (docs/index.html): the artifact host wraps the fragment in a document, GitHub does not.
+    # The public copy carries no proprietary SDSS-V spectra (03f_sdssv_internal.py) and no note that names their epochs.
+    if n_proprietary:
+        print(f'   {n_proprietary} targets carry proprietary SDSS-V epochs: shown in the artifact copy only, removed from docs/index.html')
+    html = TEMPLATE.replace('__DATA__', json.dumps(dict(payload, targets=pub), separators=(',', ':'), allow_nan=False))
     head_end = html.find('<header>')
     standalone = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1">\n'
                   + html[:head_end] + '</head>\n<body>\n' + html[head_end:] + '\n</body>\n</html>\n')
