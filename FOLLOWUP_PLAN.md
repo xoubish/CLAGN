@@ -249,9 +249,11 @@ CLAGN/
   08_time_axis.py                  <- test of the "region offset = time axis" idea (see Section 8)
   05_observability.py <in> <out>   <- astroplan hours/airmass/moon per night (run on Zeltyn and pool tables)
   06_finder_charts.py targets_<night>.csv  <- PS1 finder charts + text target list in finders/<night>/
-  07b_cutouts.py                   <- 64" thumbnails per target: SDSS DR18 gri JPEG (SkyServer ImgCutout) and ZTF g/r
-                                      reference-image cutouts from IRSA IBE (ztf/products/ref; stored with CD1_1>0, CD2_2<0,
-                                      so flip both axes for N-up E-left) -> data/cutouts/, embedded as data URIs in the page
+  07b_cutouts.py                   <- 40" thumbnails per target (2026-09-05; was 64"): SDSS DR18 gri JPEG (SkyServer
+                                      ImgCutout) and PS1 g, r stack cutouts (0.25"/pix, fitscut) -> data/cutouts/, embedded as
+                                      data URIs. ZTF g/r reference cutouts (IRSA IBE; stored with CD1_1>0, CD2_2<0, flip both
+                                      axes for N-up E-left) remain available with FETCH_ZTF=True but are too coarse at 40".
+                                      The public copy of the page is docs/index.html -> https://xoubish.github.io/CLAGN/
   07_make_webpage.py               <- self-contained "CLAGN Night Sheet" (web/clagn_night_sheet.html): cards per target
                                       with light curves, manifold position, archival epochs, NGPS line coverage, and a
                                       slot for the observed spectrum (data/ngps_spectra/<name>.csv). Published as an artifact.

@@ -21,7 +21,8 @@ import matplotlib.pyplot as plt
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, 'data')
 CUT = os.path.join(DATA, 'cutouts')
-SIZE_ARCSEC = 64
+FETCH_ZTF = False                     # ZTF reference cutouts (1"/pix) replaced by PS1 stacks (0.25"/pix) for the zoomed view
+SIZE_ARCSEC = 40                      # field of view of every thumbnail (was 64; zoomed in 2026-09-05)
 IBE_SEARCH = 'https://irsa.ipac.caltech.edu/ibe/search/ztf/products/ref'
 IBE_DATA = 'https://irsa.ipac.caltech.edu/ibe/data/ztf/products/ref'
 
@@ -30,9 +31,37 @@ def sdss_jpeg(ra, dec, path):
     if os.path.exists(path):
         return True
     r = requests.get('https://skyserver.sdss.org/dr18/SkyServerWS/ImgCutout/getjpeg',
-                     params={'ra': ra, 'dec': dec, 'scale': 0.4, 'width': 160, 'height': 160}, timeout=90)
+                     params={'ra': ra, 'dec': dec, 'scale': SIZE_ARCSEC / 160.0, 'width': 160, 'height': 160}, timeout=90)
     if r.ok and r.headers.get('content-type', '').startswith('image'):
         open(path, 'wb').write(r.content); return True
+    return False
+
+
+def ps1_png(ra, dec, band, path, tries=3):
+    """Pan-STARRS1 stack cutout (0.25"/pix, ~23 mag depth) as an asinh-stretched PNG, N up E left."""
+    if os.path.exists(path):
+        return True
+    size_pix = int(SIZE_ARCSEC / 0.25)
+    for attempt in range(tries):
+        try:
+            tab = requests.get('https://ps1images.stsci.edu/cgi-bin/ps1filenames.py', params={'ra': ra, 'dec': dec, 'filters': band, 'type': 'stack'}, timeout=120).text
+            lines = [l for l in tab.splitlines() if l and not l.startswith('projcell')]
+            if not lines:
+                return False                       # south of Dec -30 or outside PS1
+            fname = lines[0].split()[7]
+            r = requests.get(f'https://ps1images.stsci.edu/cgi-bin/fitscut.cgi?ra={ra:.6f}&dec={dec:.6f}&size={size_pix}&format=fits&red={fname}', timeout=180)
+            r.raise_for_status()
+            img = fits.open(io.BytesIO(r.content))[0].data
+            if img is None or img.ndim != 2:
+                return False
+            img = np.nan_to_num(img.astype(float))
+            norm = ImageNormalize(img, interval=PercentileInterval(99.3), stretch=AsinhStretch(0.1))
+            fig = plt.figure(figsize=(1.6, 1.6), dpi=100); ax = fig.add_axes([0, 0, 1, 1]); ax.axis('off')
+            ax.imshow(img, origin='lower', cmap='gray_r', norm=norm, interpolation='nearest')   # PS1 cutouts: N up, E left
+            fig.savefig(path, dpi=100); plt.close(fig)
+            return True
+        except Exception as e:
+            print(f'   ps1 {band} attempt {attempt+1}: {str(e)[:60]}', flush=True); time.sleep(5)
     return False
 
 
@@ -84,7 +113,13 @@ def one(row):
         got['sdss'] = sdss_jpeg(ra, dec, os.path.join(CUT, f'{name}_sdss.jpg'))
     except Exception as e:
         got['sdss'] = f'ERR {str(e)[:40]}'
+    for b in ('g', 'r'):
+        try:
+            got[f'ps1_{b}'] = ps1_png(ra, dec, b, os.path.join(CUT, f'{name}_ps1_{b}.png'))
+        except Exception as e:
+            got[f'ps1_{b}'] = f'ERR {str(e)[:40]}'
     need = [fc for fc in ('zg', 'zr') if not os.path.exists(os.path.join(CUT, f'{name}_ztf_{fc[1]}.png'))]
+    need = [] if not FETCH_ZTF else need
     if need:
         try:
             refs = ztf_refs(ra, dec)

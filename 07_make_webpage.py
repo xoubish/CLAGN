@@ -155,7 +155,8 @@ def main():
         z = float(r.z) if pd.notna(r.z) else None
         lines = [dict(name=n, obs=round(w * (1 + z), 0), inrange=bool(3200 <= w * (1 + z) <= 10400)) for n, w in LINES] if z is not None else []
         cut = {}
-        for kind, ext, mime in [('sdss', 'jpg', 'image/jpeg'), ('ztf_g', 'png', 'image/png'), ('ztf_r', 'png', 'image/png')]:
+        for kind, ext, mime in [('sdss', 'jpg', 'image/jpeg'), ('ps1_g', 'png', 'image/png'), ('ps1_r', 'png', 'image/png'),
+                                ('ztf_g', 'png', 'image/png'), ('ztf_r', 'png', 'image/png')]:
             cp = os.path.join(DATA, 'cutouts', f'{name}_{kind}.{ext}')
             if os.path.exists(cp) and os.path.getsize(cp) > 100:
                 import base64
@@ -630,7 +631,7 @@ function card(t, nightKey){
       <div style="color:var(--ink3);font-size:12.5px;margin-top:2px">${esc(change)}${t.mjd_last_ztf?` · ZTF through ${mjdToYear(t.mjd_last_ztf).toFixed(1)}`:''}</div>
     </div>
     <div class="side">
-      ${Object.keys(t.cut||{}).length?`<div class="mini"><h4>Imaging · 64″ · N up, E left</h4><div class="cuts">${[['sdss','SDSS gri'],['ztf_g','ZTF g ref'],['ztf_r','ZTF r ref']].filter(([k])=>t.cut[k]).map(([k,lab])=>`<figure><img src="${t.cut[k]}" alt="${lab} cutout of ${esc(t.name)}" width="88" height="88"><figcaption>${lab}</figcaption></figure>`).join('')}</div></div>`:''}
+      ${Object.keys(t.cut||{}).length?`<div class="mini"><h4>Imaging · 40″ · N up, E left</h4><div class="cuts">${(t.cut.ps1_g||t.cut.ps1_r?[['sdss','SDSS gri'],['ps1_g','PS1 g'],['ps1_r','PS1 r']]:[['sdss','SDSS gri'],['ztf_g','ZTF g ref'],['ztf_r','ZTF r ref']]).filter(([k])=>t.cut[k]).map(([k,lab])=>`<figure><img src="${t.cut[k]}" alt="${lab} cutout of ${esc(t.name)}" width="88" height="88"><figcaption>${lab}</figcaption></figure>`).join('')}</div></div>`:''}
       <div class="mini"><h4>W1 manifold</h4>${manifold(t)}
         <div style="font-size:12px;color:var(--ink3)">kNN score ${fmt(t.clagn_score,2)}${t.density!=null?` · Zeltyn density ${fmt(t.density,1)}×`:''}${t.in_zeltyn?' · in Zeltyn region':''}${t.in_clagn?' · in turn-on/off region':''}${t.m_comb!=null?`<br>ZTF+W1 manifold score ${fmt(t.m_comb,2)} ${t.m_comb>=1?'(agrees)':t.m_comb<0.5?'(disagrees)':''}`:''}</div></div>
       <div class="mini"><h4>Archival spectra <span class="badge">${epochs.length}</span></h4>
