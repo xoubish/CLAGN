@@ -153,9 +153,9 @@ def main():
                                plan=str(getattr(tr, 'exp_plan', '')) if pd.notna(getattr(tr, 'exp_plan', np.nan)) else '',
                                pph=float(getattr(tr, 'prio_per_hour', np.nan)) if pd.notna(getattr(tr, 'prio_per_hour', np.nan)) else None))
         z = float(r.z) if pd.notna(r.z) else None
-        lines = [dict(name=n, obs=round(w * (1 + z), 0), inrange=bool(3200 <= w * (1 + z) <= 10400)) for n, w in LINES] if z is not None else []
+        lines = [dict(name=n, obs=round(w * (1 + z), 0), inrange=bool(3050 <= w * (1 + z) <= 10400)) for n, w in LINES] if z is not None else []
         cut = {}
-        for kind, ext, mime in [('sdss', 'jpg', 'image/jpeg'), ('ps1_g', 'png', 'image/png'), ('ps1_r', 'png', 'image/png'),
+        for kind, ext, mime in [('sdss', 'jpg', 'image/jpeg'), ('ps1_g', 'jpg', 'image/jpeg'), ('ps1_r', 'jpg', 'image/jpeg'),
                                 ('ztf_g', 'png', 'image/png'), ('ztf_r', 'png', 'image/png')]:
             cp = os.path.join(DATA, 'cutouts', f'{name}_{kind}.{ext}')
             if os.path.exists(cp) and os.path.getsize(cp) > 100:
@@ -213,6 +213,8 @@ def main():
             sex=sc.to_string('hmsdms', sep=':', precision=1), z=z, rmag=f('r_mag', 2), priority=f('priority'),
             M=f('M'), P=f('P'), S=f('S'), B=f('B'), trend=str(r.get('trend', '')), notes=str(r.get('notes', '')),
             clagn_score=f('clagn_score'), density=f('zeltyn_density_ratio', 2), m_comb=f('M_combined', 2), in_zeltyn=bool(r.get('in_region_zeltyn', False)),
+            fracflux=f('fracflux_w1', 2), n_nbr=f('n_ps1_8as', 0), nbr_dz=f('nbr_min_dz', 1), blend=bool(r.get('blend_flag', False)),
+            blend_kind=str(r.get('blend_kind', '') if pd.notna(r.get('blend_kind', '')) else ''),
             in_clagn=bool(r.get('in_region_clagn', False)), ux=f('umap_x'), uy=f('umap_y'),
             n_spec=f('n_spec', 0), yrs=f('years_since_last_spec', 1), last_class=str(r.get('last_class', '')),
             mjd_last=f('mjd_last_spec', 1), w1_ratio=f('w1_ratio_now_over_spec', 2), dr_ref=f('dr_since_ref', 2),
@@ -577,12 +579,12 @@ function specPanel(t){
 
 /* ---------- NGPS wavelength ruler ---------- */
 function ruler(t){
-  const W=560, H=84, p=28, a=3200, b=10400; const X=lin(a,b,p,W-p);
+  const W=560, H=84, p=28, a=3050, b=10400; const X=lin(a,b,p,W-p);
   let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Emission lines in the NGPS range for ${esc(t.name)}">`;
-  // title row, then the NGPS bar, then the thinner SDSS/BOSS bar for comparison, then tick labels
-  s+=`<text x="${p}" y="11" style="fill:var(--ink2)">NGPS 3200–10400 Å</text>`;
+  // title row, then the four NGPS channels (U G R I, overlapping bandpasses), then the thinner SDSS/BOSS bar, then ticks
+  s+=`<text x="${p}" y="11" style="fill:var(--ink2)">NGPS 3050–10400 Å · channels U G R I</text>`;
   s+=`<text x="${W-p}" y="11" text-anchor="end">thin bar: SDSS / BOSS 3800–9200 Å</text>`;
-  s+=`<rect x="${X(a)}" y="30" width="${X(b)-X(a)}" height="14" rx="2" fill="var(--raised)"/>`;
+  [['U',3050,4430],['G',4250,5960],['R',5620,7950],['I',7530,10400]].forEach(([c,lo_,hi_],i)=>{ s+=`<rect x="${X(lo_)}" y="${30+(i%2)*7}" width="${X(hi_)-X(lo_)}" height="7" rx="1" fill="var(--raised)" stroke="var(--hair2)" stroke-width=".5"/><text x="${(X(lo_)+X(hi_))/2}" y="${i%2?42.5:36}" text-anchor="middle" style="font-size:7px;fill:var(--ink3)">${c}</text>`; });
   s+=`<rect x="${X(3800)}" y="48" width="${X(9200)-X(3800)}" height="3" rx="1" fill="var(--hair2)"/>`;
   [3200,4000,5000,6000,7000,8000,9000,10400].forEach(w=>{ s+=`<text x="${X(w)}" y="76" text-anchor="middle">${w}</text>`; });
   // line labels alternate above / below the bar so neighbours (Hβ, [O III]) never collide
@@ -631,7 +633,8 @@ function card(t, nightKey){
       <div style="color:var(--ink3);font-size:12.5px;margin-top:2px">${esc(change)}${t.mjd_last_ztf?` · ZTF through ${mjdToYear(t.mjd_last_ztf).toFixed(1)}`:''}</div>
     </div>
     <div class="side">
-      ${Object.keys(t.cut||{}).length?`<div class="mini"><h4>Imaging · 40″ · N up, E left</h4><div class="cuts">${(t.cut.ps1_g||t.cut.ps1_r?[['sdss','SDSS gri'],['ps1_g','PS1 g'],['ps1_r','PS1 r']]:[['sdss','SDSS gri'],['ztf_g','ZTF g ref'],['ztf_r','ZTF r ref']]).filter(([k])=>t.cut[k]).map(([k,lab])=>`<figure><img src="${t.cut[k]}" alt="${lab} cutout of ${esc(t.name)}" width="88" height="88"><figcaption>${lab}</figcaption></figure>`).join('')}</div></div>`:''}
+      ${Object.keys(t.cut||{}).length?`<div class="mini"><h4>Imaging · 40″ · N up, E left</h4><div class="cuts">${(t.cut.ps1_g||t.cut.ps1_r?[['sdss','SDSS gri'],['ps1_g','PS1 g'],['ps1_r','PS1 r']]:[['sdss','SDSS gri'],['ztf_g','ZTF g ref'],['ztf_r','ZTF r ref']]).filter(([k])=>t.cut[k]).map(([k,lab])=>`<figure><img src="${t.cut[k]}" alt="${lab} cutout of ${esc(t.name)}" width="88" height="88"><figcaption>${lab}</figcaption></figure>`).join('')}</div>
+        <div style="font-size:12px;color:${t.blend?'var(--accent)':'var(--ink3)'};margin-top:4px">${t.fracflux!=null?`WISE beam: ${fmt(100*t.fracflux,0)}% of W1 flux is the target (unWISE)`:'WISE blending not checked'}${t.n_nbr!=null?` · ${t.n_nbr} PS1 neighbour${t.n_nbr==1?'':'s'} within 8″${t.nbr_dz!=null?` (brightest Δz ${t.nbr_dz>0?'+':''}${fmt(t.nbr_dz,1)})`:''}`:''}${t.blend?' · NEIGHBOUR BLEND':(t.blend_kind==='extended host'?' · extended host':(t.blend_kind==='minor neighbour'?' · minor neighbour':''))}</div></div>`:''}
       <div class="mini"><h4>W1 manifold</h4>${manifold(t)}
         <div style="font-size:12px;color:var(--ink3)">kNN score ${fmt(t.clagn_score,2)}${t.density!=null?` · Zeltyn density ${fmt(t.density,1)}×`:''}${t.in_zeltyn?' · in Zeltyn region':''}${t.in_clagn?' · in turn-on/off region':''}${t.m_comb!=null?`<br>ZTF+W1 manifold score ${fmt(t.m_comb,2)} ${t.m_comb>=1?'(agrees)':t.m_comb<0.5?'(disagrees)':''}`:''}</div></div>
       <div class="mini"><h4>Archival spectra <span class="badge">${epochs.length}</span></h4>

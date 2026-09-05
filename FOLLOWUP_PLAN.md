@@ -201,6 +201,37 @@ Exclusions (`exclude_flag`, `exclude_reason`):
       Roughly: r=18 -> 4/h, r=18.5 -> 3/h (Ha) or 2/h (Hb), r=19 -> 2/h (Ha) or 1/h (Hb) under a bright moon.
       Allocation fills a time budget (4.3 h Sep 23; 9.5 h each October night) by priority per hour of telescope time;
       tier floors only take targets costing <= 30 min. Re-check with the NGPS ETC (moon phase set) before the run.
+- [x] NGPS documentation read 2026-09-05 (https://caltechopticalobservatories.github.io/NGPS/). Facts that changed or
+      confirmed our assumptions:
+      * Coverage 3050-10400 Å in four simultaneous channels: U 3050-4430, G 4250-5960, R 5620-7950, I 7530-10400
+        (was 3200-10400 in our code; corrected in 04 and the page ruler, which now shows the channels).
+      * Slit: a 3-slice adjustable IFU, slices 50" long, 0.36-10" wide (0.37-10" tested); R ~ 4000-4500 at 0.4",
+        R > 1500 at 1.5". The ETC page says SNR with all three slices is currently inaccurate because of "known issues
+        with the current slicer hardware" and recommends the single central slice -> plan on ONE slit of the chosen
+        width, not 3x capture. Target-list default slit is 1.3"; we use SET 1.3 with binning 2x3 (BINSPAT x BINSPEC,
+        from the observing page's table: 2x2 for 1.0", 2x3 for 1.5" in 1-1.5" seeing; 4xN in > 2" seeing).
+      * Acquisition: astrometric solve on the ACAM (4.4' x 4.15', 0.26"/px, offset ~8' from the slit, needs >= 4
+        unsaturated stars; solves > 99% of fields), requirement < 120 s from slew end to exposure start, 90 s achieved
+        in automatic mode. Guiding automatic; 30 s ACAM exposures OK in bright time. Our 5-min overhead per target
+        stands (slew + acquisition + readout).
+      * Readout (2x1 binning): U 64 s, G 31 s, R/I 55 s per exposure; cosmic-ray rates 1-3 %/hr -> "split long
+        integrations into exposures of 900 s or less" (quick start). Our sub-exposure plan (>= 2 x <= 10 min) complies.
+      * Calibrations: 3 ThAr + 3 FeAr arcs + 7 biases per channel and binning mode; >= 5 dome flats (7-10 for U, G) per
+        slit-width + binning combination; taken in the afternoon; internal focus done by the Support Astronomer.
+        Standards: at least one spectrophotometric standard near the start and one near the end of the night.
+      * ETC: reports the average single-wavelength-bin SNR over a user window (matches the "per bin" S/N of our model);
+        inputs are seeing at 6400 Å, V-band sky brightness (mag/arcsec^2), airmass, channel, binning, slit; no cloud
+        term. Keep "No Slicer" checked. Our exposure model should be re-anchored with the ETC using the single-slice
+        setting and a bright-moon V sky (~18.5-19.5 mag/arcsec^2) before the run.
+      * Target list: CSV with a header (name, RA HH:MM:SS.S, DECL +DD:MM:SS, J2000) plus slitwidth ("SET 1.3" | "PSF X"
+        | "SNR X"), exptime ("SET s" | "SNR X"), nexp, binspect, binspat, slitangle (deg | "PA"), airmass_max, and the
+        ETC columns mag, magsystem, magfilter, channel, wrange ("a:b" Å) that let the sequencer solve exposure times;
+        Note <= 24 chars, Comment <= 1024 chars. `06b_ngps_targetlist.py` writes finders/<night>/ngps_<night>_fixed.csv
+        (our SET times) and ngps_<night>_snr.csv (exptime "SNR 7" with mag/channel/wrange on Hα or Hβ) for each night.
+      * Data products: Quicklook DRP (MATLAB) reduces all four channels and three slices within tens of seconds of
+        readout; spec2d/ multi-extension FITS and spec1d/ FITS saved from the GUI; flux calibration via CALSPEC
+        sensitivity functions. The night sheet's spectrum slot currently expects a CSV; add a spec1d FITS reader once
+        we have a sample file.
 - [ ] Palomar: Dec > -25 comfortable.
 - [ ] Which lines land in DBSP range: Hα to z~0.4; Hβ, [OIII] to z~0.8; MgII beyond.
 - [ ] astroplan: hours above airmass 2 per night, moon separation, per target.
@@ -243,6 +274,18 @@ CLAGN/
                                           SPARCL (client >= 1.3.0 works; 1.2.5 did not); 6 Å rebinned JSON per target in
                                           data/spectra_dl/, model-free rest-frame EW(Hb, Ha) per epoch and the pipeline
                                           SPZLINE/ZLINE fits in data/spectra_lines.csv. Shown on the night sheet cards.
+  03e_blending.py <csv> <tag>           <- WISE-beam blending check (user's point 2026-09-05: W1 PSF 6.1", 2.75" pixels):
+                                          unWISE DR1 fracflux_w1/w2 (fraction of the W1 flux at the target that is the
+                                          target) via Data Lab TAP, plus PS1 DR2 neighbours within 8" (count, separation,
+                                          Δz) and a rough W1 contamination estimate (neighbours assumed 1.5 mag bluer in
+                                          z-W1 than a quasar). blend_kind: "neighbour" (a PS1 source within 8" contributing
+                                          > 15% of W1 or fracflux_w1 < 0.8 with a neighbour) -> priority scaled by the clean
+                                          fraction (floor 0.5) unless the ZTF change confirms; "extended host" (fracflux < 0.8,
+                                          no neighbour: the deblender split the host; dilution only) and "minor neighbour"
+                                          (< 15%) are annotated only. 2026-09-05 result: of 1,061 candidates 75 neighbour blends,
+                                          25 extended hosts, 48 minor; of the 100 primaries 8 / 6 / 4. Notable: P15022 has a
+                                          star 2.5" away 2.2 mag brighter in z (W1 mostly the star's); P3478 owns 39% of its W1;
+                                          P20067's neighbour 6.5" away is 0.5 mag brighter in z (its spectral change is real).
   03c_neowise_now.py <csv> <tag>        <- NEOWISE-R single-exposure W1/W2 to 2024-02 via IRSA Gator bulk upload
                                           (100 positions/request, ~35 s); per-visit medians; feeds P and the trend
   04_score_tiers.py                <- master list, priority, tiers, per-night allocation -> targets_<night>.csv

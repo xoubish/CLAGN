@@ -58,7 +58,7 @@ def ps1_png(ra, dec, band, path, tries=3):
             norm = ImageNormalize(img, interval=PercentileInterval(99.3), stretch=AsinhStretch(0.1))
             fig = plt.figure(figsize=(1.6, 1.6), dpi=100); ax = fig.add_axes([0, 0, 1, 1]); ax.axis('off')
             ax.imshow(img, origin='lower', cmap='gray_r', norm=norm, interpolation='nearest')   # PS1 cutouts: N up, E left
-            fig.savefig(path, dpi=100); plt.close(fig)
+            fig.savefig(path, dpi=100, pil_kwargs={'quality': 82, 'optimize': True}); plt.close(fig)   # JPEG: ~8 KB vs ~50 KB PNG
             return True
         except Exception as e:
             print(f'   ps1 {band} attempt {attempt+1}: {str(e)[:60]}', flush=True); time.sleep(5)
@@ -115,7 +115,7 @@ def one(row):
         got['sdss'] = f'ERR {str(e)[:40]}'
     for b in ('g', 'r'):
         try:
-            got[f'ps1_{b}'] = ps1_png(ra, dec, b, os.path.join(CUT, f'{name}_ps1_{b}.png'))
+            got[f'ps1_{b}'] = ps1_png(ra, dec, b, os.path.join(CUT, f'{name}_ps1_{b}.jpg'))
         except Exception as e:
             got[f'ps1_{b}'] = f'ERR {str(e)[:40]}'
     need = [fc for fc in ('zg', 'zr') if not os.path.exists(os.path.join(CUT, f'{name}_ztf_{fc[1]}.png'))]

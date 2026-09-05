@@ -232,7 +232,7 @@ def build_master():
     isT4 = m.tier == 'T4'
     m.loc[isT4, 'priority'] = (m.B[isT4] * m.S[isT4] * (1.0 - np.clip(m.P[isT4], 0, 1))).round(3)
     # diagnostic features inside the NGPS range (3200-10400 A) at each redshift
-    NGPS = (3200.0, 10400.0)
+    NGPS = (3050.0, 10400.0)          # U 3050-4430, G 4250-5960, R 5620-7950, I 7530-10400 Å (technical specifications page)
     LINES = [('MgII', 2798.0), ('Hb+[OIII]', 5007.0), ('Ha', 6563.0), ('CaII_trip', 8600.0), ('[SIII]9531', 9531.0)]
     def lines_in_range(z):
         if not np.isfinite(z):
@@ -269,6 +269,33 @@ def build_master():
         m.loc[bad_ctrl, 'notes'] = m.loc[bad_ctrl, 'notes'].astype(str) + '; CLAGN-like in the ZTF+W1 manifold: weak control'
         print(f'   combined-manifold score for {int(m.M_combined.notna().sum())} objects: {int(agree.sum())} T1/T2 agree (+0.5), '
               f'{int(disagree.sum())} T1 disagree without photometric change (-0.3), {int(bad_ctrl.sum())} controls demoted')
+    # W1 blending (03e_blending.py): if the WISE beam holds a substantial neighbour, the W1-based change and manifold
+    # position are less trustworthy; keep the target but scale its priority by the clean fraction (floor 0.5) unless the
+    # optical (ZTF) change confirms it, and say so in the notes.
+    bl = [x for x in (load('blending_pool.csv'), load('blending_zeltyn.csv'), load('blending_targets.csv')) if x is not None]
+    m['fracflux_w1'] = np.nan; m['n_ps1_8as'] = np.nan; m['nbr_min_dz'] = np.nan; m['w1_contam_est'] = np.nan; m['blend_flag'] = False; m['blend_kind'] = ''
+    if bl:
+        b = pd.concat(bl).drop_duplicates('name').set_index('name')
+        for c in ['fracflux_w1', 'n_ps1_8as', 'nbr_min_dz', 'w1_contam_est']:
+            m[c] = m.name.map(b[c])
+        m['blend_kind'] = m.name.map(b['blend_kind']).fillna('')
+        m['blend_flag'] = m.blend_kind == 'neighbour'
+        # neighbour blends: the W1 change may belong to the neighbour -> scale by the clean fraction (floor 0.5) unless the
+        # optical change (ZTF, sub-arcsecond) confirms it. Extended hosts only dilute the amplitude: annotate, no penalty.
+        clean = (1 - m.w1_contam_est.fillna(0)).where(m.fracflux_w1.isna() | (m.fracflux_w1 > 1 - m.w1_contam_est.fillna(0)), m.fracflux_w1).clip(0.5, 1.0)
+        # the blend penalty is waived when the change is confirmed independently of WISE: by the ZTF r change (sub-arcsecond
+        # resolution) or by the archival spectra themselves (3" fibre: Hβ EW direction or a pipeline class change)
+        ztf_ok = (np.abs(m.get('dr_since_ref', nanS)) > 0.3).fillna(False)
+        spec_ok = (m.spec_dir != '') | m.class_change_flag.fillna(False).astype(bool)
+        scale = np.where(m.blend_flag & ~ztf_ok & ~spec_ok, clean, 1.0)
+        m['priority'] = (m.priority * scale).round(3)
+        nb = m.blend_flag
+        m.loc[nb, 'notes'] = m.loc[nb, 'notes'].astype(str) + '; W1 NEIGHBOUR BLEND: ~' + (100 * (1 - clean[nb])).round(0).astype(int).astype(str) + '% of the WISE flux from a neighbour within 8"'
+        eh = m.blend_kind == 'extended host'
+        m.loc[eh, 'notes'] = m.loc[eh, 'notes'].astype(str) + '; extended host in the WISE beam (unWISE own-flux fraction ' + (100 * m.fracflux_w1[eh]).round(0).astype(int).astype(str) + '%)'
+        mn = m.blend_kind == 'minor neighbour'
+        m.loc[mn, 'notes'] = m.loc[mn, 'notes'].astype(str) + '; minor neighbour within 8" (< 15% of the W1 flux)'
+        print(f'   blending: {int(m.fracflux_w1.notna().sum())} objects checked, {int(nb.sum())} neighbour blends (priority scaled unless ZTF confirms), {int(eh.sum())} extended hosts (annotated)')
     rev = ((m.spec_dir == 'turned off') & brightening & ~fading) | ((m.spec_dir == 'turned on') & fading & ~brightening)
     m['reversal_candidate'] = rev.fillna(False)
     m.loc[m.reversal_candidate, 'priority'] = (m.loc[m.reversal_candidate, 'priority'] + 0.5).round(3)
@@ -331,7 +358,7 @@ if __name__ == '__main__':
     lists = allocate(m)
     cols = ['rank', 'night', 'tier', 'name', 'ra', 'dec', 'z', 'r_mag', 't_exp_min', 'exp_plan', 'prio_per_hour', 'priority_night', 'priority', 'M', 'P', 'trend',
             'years_since_last_spec', 'n_spec', 'last_class', 'clagn_score', 'zeltyn_density_ratio', 'in_region_zeltyn',
-            'M_combined', 'lines_in_ngps', 'spec_dir', 'reversal_candidate', 'notes']
+            'M_combined', 'fracflux_w1', 'n_ps1_8as', 'blend_flag', 'blend_kind', 'lines_in_ngps', 'spec_dir', 'reversal_candidate', 'notes']
     for night, df in lists.items():
         cols_n = cols + [f'hrs_{night}', f'minX_{night}', f'moonsep_{night}']
         df[[c for c in cols_n if c in df.columns]].to_csv(os.path.join(DATA, f'targets_{night}.csv'), index=False)

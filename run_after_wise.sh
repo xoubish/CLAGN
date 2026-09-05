@@ -46,6 +46,9 @@ $PY 04_score_tiers.py 2>&1 | grep -v -i "warning\|warn(" | tee data/score_tiers.
 echo "== 6. finder charts"
 for n in sep23 oct26 oct27; do rm -rf finders/$n; $PY 06_finder_charts.py data/targets_$n.csv 2>&1 | grep -v -i "warning\|warn(" | tail -1; done
 
+echo "== 6a. NGPS-format target lists (after the finders step, which recreates finders/<night>/)"
+$PY 06b_ngps_targetlist.py 2>&1 | tail -3
+
 echo "== 6b. image cutouts (SDSS gri JPEG, ZTF g/r reference images via IRSA IBE)"
 $PY 07b_cutouts.py 2>&1 | grep -v -i "warning\|warn(" | tail -1
 

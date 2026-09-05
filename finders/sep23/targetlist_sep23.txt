@@ -1,34 +1,33 @@
 # name                   RA(J2000)     Dec(J2000)    z      r    tier  exposure    status  comment
 P3178                  16:43:31.91  +30:48:35.6  0.184  17.9 T1   2 x 4 min   primary fading, last spec 5.2 yr ago; DR16 QSO, SDSS spectrum 1342-52793-321
 P472                   15:54:46.28  +36:07:18.5  0.153  18.2 T1   2 x 4 min   primary mixed (IR vs optical), last spec 5.2 yr ago; DR16 QSO, SDSS spectrum 1417-53141-532
-P4107                  16:49:09.59  +36:13:25.9  0.031  15.9 T1   2 x 4 min   primary flat/unknown, last spec 14.4 yr ago; DR16 QSO, SDSS spectrum 819-52409-472
-P3718                  16:35:13.80  +32:53:47.1  0.160  18.3 T1   2 x 4 min   primary flat/unknown, last spec 24.0 yr ago; DR16 QSO, SDSS spectrum 1058-52520-10
 P2911                  16:24:47.78  +34:23:29.4  0.151  17.9 T1   2 x 4 min   primary brightening, last spec 5.3 yr ago; DR16 QSO, SDSS spectrum 1058-52520-327
-P3109                  16:22:50.03  +43:00:20.5  0.078  17.0 T1   2 x 4 min   primary flat/unknown, last spec 5.4 yr ago; DR16 QSO, SDSS spectrum 815-52374-166
-P4529                  17:13:22.59  +32:56:28.0  0.102  17.1 T1   2 x 4 min   primary brightening, last spec 4.3 yr ago; DR16 QSO, SDSS spectrum 976-52413-619
+P3109                  16:22:50.03  +43:00:20.5  0.078  17.0 T1   2 x 4 min   primary flat/unknown, last spec 5.4 yr ago; DR16 QSO, SDSS spectrum 815-52374-166; extended host in the WISE beam (unWISE own-flux fraction 74%)
+P4529                  17:13:22.59  +32:56:28.0  0.102  17.1 T1   2 x 4 min   primary brightening, last spec 4.3 yr ago; DR16 QSO, SDSS spectrum 976-52413-619; minor neighbour within 8" (< 15% of the W1 flux)
 P803                   15:36:12.09  +52:41:54.6  0.561  17.6 T1   2 x 4 min   primary flat/unknown, last spec 8.5 yr ago; DR16 QSO, SDSS spectrum 795-52378-528
-P3478                  16:55:16.55  +32:15:55.2  0.178  18.1 T1   2 x 4 min   primary flat/unknown, last spec 23.3 yr ago; DR16 QSO, SDSS spectrum 1176-52791-482
-P4612                  17:13:12.65  +31:00:59.2  0.283  18.4 T1   2 x 4 min   primary brightening, last spec 4.3 yr ago; DR16 QSO, SDSS spectrum 978-52441-428
+P4612                  17:13:12.65  +31:00:59.2  0.283  18.4 T1   2 x 4 min   primary brightening, last spec 4.3 yr ago; DR16 QSO, SDSS spectrum 978-52441-428; minor neighbour within 8" (< 15% of the W1 flux)
 P4572                  17:07:49.80  +45:07:20.2  0.294  18.4 T1   2 x 4 min   primary mixed (IR vs optical), last spec 8.9 yr ago; DR16 QSO, SDSS spectrum 8535-58019-95
-P458                   15:47:24.34  +51:37:47.0  0.141  18.5 T1   2 x 5 min   primary brightening, last spec 25.3 yr ago; DR16 QSO, SDSS spectrum 618-52049-221
+P458                   15:47:24.34  +51:37:47.0  0.141  18.5 T1   2 x 5 min   primary brightening, last spec 25.3 yr ago; DR16 QSO, SDSS spectrum 618-52049-221; minor neighbour within 8" (< 15% of the W1 flux)
 P410                   15:53:24.26  +49:07:27.0  0.258  17.8 T1   2 x 4 min   primary flat/unknown, last spec 9.3 yr ago; DR16 QSO, SDSS spectrum 8437-57894-681
 P3274                  16:32:33.17  +16:47:51.8  0.337  17.6 T1   2 x 4 min   primary fading, last spec 5.2 yr ago; DR16 QSO, SDSS spectrum 2207-53558-196
 P1823                  16:20:39.13  +43:08:14.6  0.620  18.2 T1   2 x 8 min   primary mixed (IR vs optical), last spec 3.2 yr ago; DR16 QSO, SDSS spectrum 815-52374-431; also in the CLAGN region of the ZTF+W1 manifold
-P3765                  16:32:08.10  +45:52:17.9  0.058  17.2 T4   2 x 4 min   primary flat/unknown, last spec 25.0 yr ago; DR16 QSO, SDSS spectrum 627-52144-261
+P2207                  16:00:25.50  +47:50:42.0  0.735  17.8 T1   2 x 4 min   primary brightening, last spec 5.2 yr ago; DR16 QSO, SDSS spectrum 813-52354-339
+P2714                  16:05:59.94  +39:11:42.4  0.391  17.6 T1   2 x 4 min   primary flat/unknown, last spec 5.3 yr ago; DR16 QSO, SDSS spectrum 10732-58253-384; also in the CLAGN region of the ZTF+W1 manifold
+P2879                  16:28:17.12  +20:03:48.7  0.570  17.6 T1   2 x 4 min   primary flat/unknown, last spec 5.2 yr ago; DR16 QSO, SDSS spectrum 1854-53566-151
+P3765                  16:32:08.10  +45:52:17.9  0.058  17.2 T4   2 x 4 min   primary flat/unknown, last spec 25.0 yr ago; DR16 QSO, SDSS spectrum 627-52144-261; minor neighbour within 8" (< 15% of the W1 flux)
 P2650                  16:25:59.56  +37:56:37.9  0.364  18.1 T4   2 x 4 min   primary flat/unknown, last spec 23.3 yr ago; DR16 QSO, SDSS spectrum 1337-52767-624
 J162829.18+432948.6    16:28:29.18  +43:29:48.6  0.260  18.8 T3   2 x 10 min  primary flat/unknown, last spec 3.2 yr ago; Zeltyn+2024 CL-AGN, SDSS-V last epoch MJD 60107
-P2207                  16:00:25.50  +47:50:42.0  0.735  17.8 T1   2 x 4 min   backup  brightening, last spec 5.2 yr ago; DR16 QSO, SDSS spectrum 813-52354-339
-P2714                  16:05:59.94  +39:11:42.4  0.391  17.6 T1   2 x 4 min   backup  flat/unknown, last spec 5.3 yr ago; DR16 QSO, SDSS spectrum 10732-58253-384; also in the CLAGN region of the ZTF+W1 manifold
-P2879                  16:28:17.12  +20:03:48.7  0.570  17.6 T1   2 x 4 min   backup  flat/unknown, last spec 5.2 yr ago; DR16 QSO, SDSS spectrum 1854-53566-151
 P2716                  16:13:01.63  +37:17:14.9  0.069  16.4 T1   2 x 4 min   backup  fading, last spec 23.3 yr ago; DR16 QSO, SDSS spectrum 1056-52764-444
-P4675                  17:14:48.51  +33:27:38.3  0.185  17.9 T1   2 x 4 min   backup  fading, last spec 4.3 yr ago; DR16 QSO, SDSS spectrum 2973-54591-190
+P4675                  17:14:48.51  +33:27:38.3  0.185  17.9 T1   2 x 4 min   backup  fading, last spec 4.3 yr ago; DR16 QSO, SDSS spectrum 2973-54591-190; minor neighbour within 8" (< 15% of the W1 flux)
+P3718                  16:35:13.80  +32:53:47.1  0.160  18.3 T1   2 x 4 min   backup  flat/unknown, last spec 24.0 yr ago; DR16 QSO, SDSS spectrum 1058-52520-10; W1 NEIGHBOUR BLEND: ~24% of the WISE flux from a neighbour within 8"
 P3800                  16:31:15.53  +23:52:57.5  0.059  17.3 T1   2 x 4 min   backup  fading, last spec 22.2 yr ago; DR16 QSO, SDSS spectrum 1572-53177-478
-P1655                  16:18:43.66  +55:31:08.2  0.083  18.3 T1   2 x 4 min   backup  flat/unknown, last spec 5.3 yr ago; DR16 QSO, SDSS spectrum 8065-58248-867
+P1655                  16:18:43.66  +55:31:08.2  0.083  18.3 T1   2 x 4 min   backup  flat/unknown, last spec 5.3 yr ago; DR16 QSO, SDSS spectrum 8065-58248-867; W1 NEIGHBOUR BLEND: ~24% of the WISE flux from a neighbour within 8"
 P2921                  16:11:12.63  +46:04:55.1  0.515  18.2 T1   2 x 4 min   backup  flat/unknown, last spec 24.2 yr ago; DR16 QSO, SDSS spectrum 814-52443-376
 P2258                  16:14:33.86  +54:40:50.2  0.233  18.4 T1   2 x 4 min   backup  fading, last spec 5.4 yr ago; DR16 QSO, SDSS spectrum 7565-56809-107
 P4311                  17:21:09.49  +35:42:16.1  0.283  18.5 T1   2 x 5 min   backup  mixed (IR vs optical), last spec 15.2 yr ago; DR16 QSO, SDSS spectrum 4994-55739-945
 P3456                  16:36:06.12  +17:26:53.3  0.355  18.4 T1   2 x 5 min   backup  mixed (IR vs optical), last spec 5.2 yr ago; DR16 QSO, SDSS spectrum 2207-53558-583
 P1060                  15:45:34.57  +57:36:25.2  0.268  18.3 T1   2 x 4 min   backup  fading, last spec 8.4 yr ago; DR16 QSO, SDSS spectrum 6791-56429-960
+P4107                  16:49:09.59  +36:13:25.9  0.031  15.9 T1   2 x 4 min   backup  flat/unknown, last spec 14.4 yr ago; DR16 QSO, SDSS spectrum 819-52409-472; W1 NEIGHBOUR BLEND: ~28% of the WISE flux from a neighbour within 8"
 P4122                  16:58:18.40  +33:19:51.0  0.717  17.4 T1   2 x 4 min   backup  flat/unknown, last spec 4.3 yr ago; DR16 QSO, SDSS spectrum 972-52435-259
 P4581                  17:08:04.21  +38:03:25.2  0.312  18.0 T1   2 x 4 min   backup  flat/unknown, last spec 5.2 yr ago; DR16 QSO, SDSS spectrum 10761-58283-44
 P190                   15:44:40.47  +46:53:53.0  0.204  18.1 T1   2 x 4 min   backup  brightening, last spec 23.4 yr ago; DR16 QSO, SDSS spectrum 1168-52731-431
@@ -36,4 +35,5 @@ P4872                  17:44:32.99  +53:51:19.7  0.215  18.3 T1   2 x 4 min   ba
 P1455                  15:34:25.20  +58:16:34.8  0.137  18.0 T1   2 x 4 min   backup  brightening, last spec 8.4 yr ago; DR16 QSO, SDSS spectrum 8425-58226-582
 P4035                  16:57:18.41  +34:16:37.0  0.100  18.2 T1   2 x 4 min   backup  brightening, last spec 5.3 yr ago; DR16 QSO, SDSS spectrum 972-52435-433
 P3                     15:58:11.24  +40:11:13.0  0.298  18.2 T1   2 x 4 min   backup  flat/unknown, last spec 8.2 yr ago; DR16 QSO, SDSS spectrum 10734-58280-806
-P2927                  16:25:08.33  +46:39:18.6  0.151  17.8 T1   2 x 4 min   backup  brightening, last spec 24.4 yr ago; DR16 QSO, SDSS spectrum 624-52377-139
+P3368                  16:41:11.98  +26:19:32.3  0.243  18.0 T1   2 x 4 min   backup  flat/unknown, last spec 3.2 yr ago; DR16 QSO, SDSS spectrum 1423-53167-373
+P3441                  16:36:48.37  +49:00:49.8  0.517  17.4 T1   2 x 4 min   backup  flat/unknown, last spec 5.2 yr ago; DR16 QSO, SDSS spectrum 8056-57186-232
