@@ -74,13 +74,14 @@ def main():
                                           w2=('w2mpro', 'median'), n=('w1mpro', 'size')).reset_index()
     v = v[v.n >= 3]
     v.to_csv(os.path.join(DATA, f'neowise_visits_{tag}.csv'), index=False)
+    nfr = fr.name.value_counts()
     rows = []
     for name, g in v.groupby('name'):
         g = g.sort_values('mjd')
         first = g[g.mjd < g.mjd.min() + 400].w1.median(); last = g[g.mjd > g.mjd.max() - 400].w1.median()
         rr = g[g.mjd > g.mjd.max() - 730]
         slope = np.polyfit((rr.mjd - rr.mjd.min()) / 365.25, rr.w1, 1)[0] if len(rr) >= 3 and rr.mjd.max() - rr.mjd.min() > 300 else np.nan
-        rows.append(dict(name=name, n_frames=int(fr[fr.name == name].shape[0]), n_visits=len(g), mjd_first_neo=g.mjd.min(), mjd_last_neo=g.mjd.max(),
+        rows.append(dict(name=name, n_frames=int(nfr.get(name, 0)), n_visits=len(g), mjd_first_neo=g.mjd.min(), mjd_last_neo=g.mjd.max(),
                          w1_first=first, w1_last=last, dw1_neowise=last - first, w1_slope_2yr=slope, w1_amp_visits=g.w1.max() - g.w1.min(),
                          w1_flux_last_mjy=W1_ZP_JY * 1e3 * 10 ** (-0.4 * last), w2_last=g[g.mjd > g.mjd.max() - 400].w2.median()))
     out = pd.DataFrame(rows)

@@ -64,3 +64,5 @@ data/sdssv_internal_epochs.csv
 data/sdssv_discovery*.csv
 data/master_list_private.csv
 data/spectra_lines_private.csv
+data/sdssv_calibration*
+data/sdssv_internal_*.csv
