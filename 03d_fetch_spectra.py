@@ -33,14 +33,22 @@ def fetch(url, path, tries=3):
         return path
     for attempt in range(tries):
         try:
-            r = requests.get(url, timeout=180)
+            r = requests.get(url, timeout=180)          # data.sdss5.org needs the login file; requests reads it on its own
             if r.ok and len(r.content) > 10000:
                 open(path, 'wb').write(r.content); return path
             if r.status_code == 404:
                 return None
+            if r.status_code in (401, 403):
+                if not fetch.auth_warned:
+                    print(f'   HTTP {r.status_code} for {url.split("/sas/")[0]}: credentials missing or rejected, proprietary spectra skipped')
+                    fetch.auth_warned = True
+                return None
         except Exception:
             time.sleep(5 * (attempt + 1))
     return None
+
+
+fetch.auth_warned = False
 
 
 def parse(path):
@@ -212,7 +220,12 @@ def main():
     if len(L):
         L['Hb_over_OIII'] = L.Hb_area / L.OIII_area.where(L.OIII_area > 0)
         L['Ha_over_OIII'] = L.Ha_area / L.OIII_area.where(L.OIII_area > 0)
-    L.to_csv(os.path.join(DATA, 'spectra_lines.csv'), index=False)
+    # proprietary SDSS-V epochs go to the git-ignored private table; the tracked spectra_lines.csv stays public
+    prop = L.proprietary.fillna(False).astype(bool) if 'proprietary' in L else pd.Series(False, index=L.index)
+    L[~prop].to_csv(os.path.join(DATA, 'spectra_lines.csv'), index=False)
+    if prop.any():
+        L[prop].to_csv(os.path.join(DATA, 'spectra_lines_private.csv'), index=False)
+        print(f'   {int(prop.sum())} proprietary epoch rows -> data/spectra_lines_private.csv (git-ignored)')
     print(f'done: {len(L)} epoch spectra for {L.name.nunique() if len(L) else 0} targets in {time.time()-t0:.0f}s -> data/spectra_dl/*.json, data/spectra_lines.csv')
 
 

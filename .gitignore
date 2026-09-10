@@ -61,3 +61,6 @@ build/
 # ---- PROPRIETARY SDSS-V collaboration data (03f_sdssv_internal.py): never push ---------------
 data/sdssv_internal/
 data/sdssv_internal_epochs.csv
+data/sdssv_discovery*.csv
+data/master_list_private.csv
+data/spectra_lines_private.csv

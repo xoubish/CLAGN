@@ -58,9 +58,9 @@ def ztf_series(name, tags=('zeltyn', 'pool')):
                 b = df[(df.filtercode == fc) & np.isfinite(df.mag)].copy()
                 if not len(b):
                     continue
-                b['night'] = np.floor(b.mjd)
+                b['night'] = np.floor(b.mjd / 7.0)      # weekly medians: the card shows years-long trends, and 300 cards must stay under the 16 MB artifact limit
                 g = b.groupby('night').agg(mjd=('mjd', 'median'), mag=('mag', 'median'), err=('magerr', 'median'), n=('mag', 'size'))
-                out[key] = [[round(r.mjd, 2), round(r.mag, 3), round(float(r.err), 3)] for r in g.itertuples()]
+                out[key] = [[round(r.mjd, 1), round(r.mag, 3), round(float(r.err), 2)] for r in g.itertuples()]
             return out
     return {}
 
@@ -125,9 +125,7 @@ def build_spec(recs):
         if r.get('source') == 'DESI':
             return 'DESI'
         if r.get('coadd'):
-            return 'SDSS-V coadd'
-        if r.get('proprietary'):
-            return 'SDSS-V internal'
+            return 'SDSS coadd'
         return f"SDSS {str(r.get('program', '')).strip() or ''}".strip()
     def lab(r):
         d = mjd_to_date(r['mjd']) if r.get('mjd') and np.isfinite(r['mjd']) else ''
@@ -137,9 +135,15 @@ def build_spec(recs):
         return None if v is None or not np.isfinite(v) else round(v, 1)
     return dict(wave=w12, epochs=[dict(label=lab(r), flux=rebin12(r['flux']), cls=str(r['meta'].get('class', '') or ''),
                                        z=r['meta'].get('z'), ew_hb=r.get('ew', {}).get('Hb'), ew_ha=r.get('ew', {}).get('Ha')) for r in pick],
-                history=[dict(date=mjd_to_date(r['mjd']) if r.get('mjd') and np.isfinite(r['mjd']) else '', src=('DESI' if r.get('source') == 'DESI' else ('SDSS-V internal' if r.get('proprietary') else 'SDSS')),
+                history=[dict(date=mjd_to_date(r['mjd']) if r.get('mjd') and np.isfinite(r['mjd']) else '', src=('DESI' if r.get('source') == 'DESI' else 'SDSS'),
                               prog=str(r.get('program', '')).strip(), coadd=bool(r.get('coadd')), cls=str(r['meta'].get('class', '') or ''),
                               ew_hb=ewv(r, 'Hb'), ew_ha=ewv(r, 'Ha'), sn=r['meta'].get('sn_median_all')) for r in recs])
+
+def public_note(s):
+    """Notes as they may appear on the page: no fragment that names a proprietary data source."""
+    s = '' if s is None or (not isinstance(s, str) and pd.isna(s)) else str(s)
+    return '; '.join(x for x in s.split('; ') if 'SDSS-V' not in x)
+
 
 def main():
     n_proprietary = 0
@@ -192,7 +196,7 @@ def main():
         sc = SkyCoord(r.ra * u.deg, r.dec * u.deg)
         nights = []
         for tr in t[t.name == name].itertuples():
-            nights.append(dict(night=tr.night, rank=int(tr.rank), prio=float(tr.priority_night) if pd.notna(tr.priority_night) else None,
+            nights.append(dict(night=tr.night, rank=int(tr.rank), why=public_note(getattr(tr, 'why_night', '')), prio=float(tr.priority_night) if pd.notna(tr.priority_night) else None,
                                hrs=round(float(getattr(tr, f'hrs_{tr.night}', np.nan)), 1), moonsep=float(getattr(tr, f'moonsep_{tr.night}', np.nan)),
                                minx=float(getattr(tr, f'minX_{tr.night}', np.nan)),
                                texp=float(getattr(tr, 't_exp_min', np.nan)) if pd.notna(getattr(tr, 't_exp_min', np.nan)) else None,
@@ -207,15 +211,18 @@ def main():
             if os.path.exists(cp) and os.path.getsize(cp) > 100:
                 import base64
                 cut[kind] = f'data:{mime};base64,' + base64.b64encode(open(cp, 'rb').read()).decode('ascii')
-        # archival spectra (03d_fetch_spectra.py); the public docs/ copy gets the same card without proprietary SDSS-V epochs
+        if 'ps1_g' in cut or 'ps1_r' in cut:            # the card shows SDSS + PS1 when PS1 exists: do not embed the unused ZTF thumbnails
+            cut.pop('ztf_g', None); cut.pop('ztf_r', None)
+        # archival spectra (03d_fetch_spectra.py). Proprietary epochs never reach the page, in either copy: the scoring may use
+        # them, the page neither shows nor names them.
         spec = spec_public = None
         sp_p = os.path.join(DATA, 'spectra_dl', f'{name}.json')
         if os.path.exists(sp_p):
-            recs = json.load(open(sp_p))
-            spec = build_spec(recs)
-            spec_public = build_spec([r for r in recs if not r.get('proprietary')])
-            if any(r.get('proprietary') for r in recs):
+            recs_all = json.load(open(sp_p))
+            recs = [r for r in recs_all if not r.get('proprietary')]
+            if len(recs) < len(recs_all):
                 n_proprietary += 1
+            spec = spec_public = build_spec(recs)
         spec_p = os.path.join(DATA, 'ngps_spectra', f'{name}.csv')
         ngps = None
         if os.path.exists(spec_p):
@@ -229,7 +236,7 @@ def main():
         targets.append(dict(
             name=name, jname=jname, tier=r.tier, source=r.source_catalog, ra=round(float(r.ra), 6), dec=round(float(r.dec), 6),
             sex=sc.to_string('hmsdms', sep=':', precision=1), z=z, rmag=f('r_mag', 2), priority=f('priority'),
-            M=f('M'), P=f('P'), S=f('S'), B=f('B'), trend=str(r.get('trend', '')), notes=str(r.get('notes', '')),
+            M=f('M'), P=f('P'), S=f('S'), B=f('B'), trend=str(r.get('trend', '')), notes=public_note(r.get('notes', '')), why=public_note(r.get('why', '')),
             clagn_score=f('clagn_score'), density=f('zeltyn_density_ratio', 2), m_comb=f('M_combined', 2), in_zeltyn=bool(r.get('in_region_zeltyn', False)),
             fracflux=f('fracflux_w1', 2), n_nbr=f('n_ps1_8as', 0), nbr_dz=f('nbr_min_dz', 1), blend=bool(r.get('blend_flag', False)),
             blend_kind=str(r.get('blend_kind', '') if pd.notna(r.get('blend_kind', '')) else ''),
@@ -267,7 +274,7 @@ def main():
     pub = []
     for tg in targets:
         q = dict(tg); q['spec'] = q.pop('spec_public', None)
-        q['notes'] = '; '.join(x for x in str(q.get('notes', '')).split('; ') if 'SDSS-V internal' not in x)
+        q['notes'] = public_note(q.get('notes', ''))
         pub.append(q)
     for tg in targets:
         tg.pop('spec_public', None)
@@ -277,9 +284,8 @@ def main():
         fh.write(html)
     print(f'wrote {OUT}: {len(targets)} targets, {os.path.getsize(OUT)/1e6:.1f} MB')
     # standalone copy for GitHub Pages (docs/index.html): the artifact host wraps the fragment in a document, GitHub does not.
-    # The public copy carries no proprietary SDSS-V spectra (03f_sdssv_internal.py) and no note that names their epochs.
     if n_proprietary:
-        print(f'   {n_proprietary} targets carry proprietary SDSS-V epochs: shown in the artifact copy only, removed from docs/index.html')
+        print(f'   {n_proprietary} targets have proprietary epochs on disk: withheld from both copies of the page')
     html = TEMPLATE.replace('__DATA__', json.dumps(dict(payload, targets=pub), separators=(',', ':'), allow_nan=False))
     head_end = html.find('<header>')
     standalone = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1">\n'
@@ -361,6 +367,8 @@ h2{margin:10px 0 2px;font:600 21px/1.1 "Barlow Condensed",sans-serif;letter-spac
 .kv b{font-weight:600;color:var(--ink3);font-family:"Barlow Condensed",sans-serif;letter-spacing:.06em;text-transform:uppercase;font-size:11.5px;padding-top:2px}
 .kv .v{color:var(--ink)}
 .meters{margin-top:12px;display:grid;gap:5px}
+.why{margin-top:10px;font-size:12px;line-height:1.45;color:var(--ink2)}
+.why b{display:block;font:600 11px "Barlow Condensed",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:2px}
 .meter{display:grid;grid-template-columns:22px 1fr 34px;align-items:center;gap:8px;font-size:12px;color:var(--ink2)}
 .meter b{font:600 12px "Barlow Condensed",sans-serif;color:var(--ink3);letter-spacing:.06em}
 .meter .track{height:5px;background:var(--raised);border-radius:3px;overflow:hidden}
@@ -553,7 +561,7 @@ function about(){
   const tierRows=[
     ['T1','Manifold-selected discovery targets',`Bright SDSS quasars (z &lt; 0.8) in the run's RA windows whose WISE W1 light curve places them in the changing-look-enriched part of the manifold and which have never been reported to change. Each has an archival SDSS spectrum from 2000–2018 as the baseline. ${n(S.n_T1)} qualify; the nights take the best per hour of telescope time.`,'var(--t1)'],
     ['T2','EVQs completing a transition',`Extremely variable quasars from Zeltyn et al. (2024) whose broad lines had dimmed strongly by 2020–21 without disappearing, and which sit in the CLAGN region. A 2026 spectrum tests whether the transition completed.`,'var(--t2)'],
-    ['T3','Confirmed CLAGNs, revisited',`Spectroscopically confirmed SDSS-V changing-look AGN (${n(S.n_zeltyn_clagn)} in the sample). A few of the brightest per night, to test for state reversal and to check that the manifold region really predicts change.`,'var(--t3)'],
+    ['T3','Confirmed CLAGNs, revisited',`Spectroscopically confirmed changing-look AGN from Zeltyn et al. (2024) (${n(S.n_zeltyn_clagn)} in the sample). A few of the brightest per night, to test for state reversal and to check that the manifold region really predicts change.`,'var(--t3)'],
     ['T4','Controls',`Bright, photometrically quiet quasars from the low-variability side of the manifold, outside both enriched regions, where no spectral change is expected. Needed to claim that the region predicts change rather than that all quasars change.`,'var(--t4)']];
   return `<section class="about">
   <div class="col">
@@ -561,7 +569,7 @@ function about(){
     <p class="lede">A spectroscopic follow-up of changing-look AGN candidates with the Palomar 200-inch and NGPS in 2026B, selected from the shape of their mid-infrared light curves rather than from a prior spectral change.</p>
     <h3>Why</h3>
     <p>Changing-look AGN (CLAGN) gain or lose their broad emission lines on timescales of months to years, together with large continuum changes. They are rare, roughly 0.4–1.25 % of re-observed quasars, and almost all have been found by chance in repeat spectroscopy. A purely photometric way to pick them out would let surveys like LSST target them deliberately.</p>
-    <p>Hemmati et al. (2026, ApJ 998, 130) built a low-dimensional map, a UMAP manifold, of the WISE/NEOWISE W1 light curves of ~${n(S.n_sampleA)} AGN at z &lt; 1 (Sample A), without using any labels. Known turn-on and turn-off CLAGNs from the literature occupy distinct parts of that map. Projecting the ${n(S.n_zeltyn)} SDSS-V CLAGNs and extremely variable quasars of Zeltyn et al. (2024), which were not used in training, shows them concentrating in a compact region too: the Zeltyn EVQs land there at 6.3× the rate of the general sample. Interestingly the SDSS-V CLAGNs and the literature CLAGNs sit in <em>different</em> regions. Their mean W1 curves show why: the literature objects changed before or around the start of WISE (2010–13), the SDSS-V ones faded slowly through the whole decade. Both regions are used here.</p>
+    <p>Hemmati et al. (2026, ApJ 998, 130) built a low-dimensional map, a UMAP manifold, of the WISE/NEOWISE W1 light curves of ~${n(S.n_sampleA)} AGN at z &lt; 1 (Sample A), without using any labels. Known turn-on and turn-off CLAGNs from the literature occupy distinct parts of that map. Projecting the ${n(S.n_zeltyn)} CLAGNs and extremely variable quasars of Zeltyn et al. (2024), which were not used in training, shows them concentrating in a compact region too: the Zeltyn EVQs land there at 6.3× the rate of the general sample. Interestingly the Zeltyn CLAGNs and the literature CLAGNs sit in <em>different</em> regions. Their mean W1 curves show why: the literature objects changed before or around the start of WISE (2010–13), the Zeltyn ones faded slowly through the whole decade. Both regions are used here.</p>
     <h3>The runs</h3>
     <p>${Object.values(N).map(v=>`<b>${v.date}</b>, ${v.part} (${v.window}; moon ${v.moon}, ${v.moon_note})`).join('; ')}. All three are bright time, so the ranking favours bright targets and large moon separation, and every exposure estimate includes the moon.</p>
     <h3>How targets are ranked</h3>
@@ -577,14 +585,14 @@ function about(){
     <ul>
       <li><b>Light curves:</b> ZTF g and r nightly medians (2018–2025), unWISE W1 and W2 (2010–2020) and NEOWISE-R W1 visits (2014–2024) in mJy; every archival spectral epoch as a marker (grey SDSS, gold DESI) and the three run dates as gold bands.</li>
       <li><b>Manifold:</b> the object's position among Sample A (grey), the literature turn-on/off objects (▲ ▼), the Zeltyn CLAGNs and EVQs (gold) and the two enriched regions (shaded).</li>
-      <li><b>Archival spectra:</b> every SDSS epoch from DR19, including SDSS-V through 2022–23, and DESI DR1, with the pipeline class and redshift where available.</li>
+      <li><b>Archival spectra:</b> every SDSS epoch from DR19 (through 2023) and DESI DR1, with the pipeline class and redshift where available.</li>
       <li><b>What NGPS sees:</b> the lines that fall inside 3200–10400 Å at the object's redshift, against the narrower SDSS range.</li>
       <li><b>Imaging:</b> 64″ cutouts from SDSS (gri) and the ZTF g and r reference images, north up and east left.</li>
       <li><b>Observing sequence:</b> each night tab opens with the time-ordered plan from 11_schedule.py (greedy: priority per hour, setting targets first, CALSPEC standards at both ends; 'filler' rows come from the wider pool when no listed target is up). Card ranks follow this order.</li>
       <li><b>NGPS spectrum:</b> empty until observed; drop <span class="mono">data/ngps_spectra/&lt;name&gt;.csv</span> in the repository and regenerate.</li>
     </ul>
     <h3>Status and caveats</h3>
-    <p>Lists are current as of ${D.generated}. Candidate pool: ${n(S.n_pool)} DR16 quasars in the RA windows, ${n(S.n_pool_projected)} with WISE light curves and manifold positions; ${n(S.n_lit)} published CLAGN positions used for exclusion. The exposure model is a scaling and should be checked against the NGPS ETC with the moon phase set. SDSS-V spectra taken after the DR19 cutoff (2023 onward) are not public; a check against the collaboration's internal spAll will de-prioritise anything recently re-observed. The unWISE record ends in December 2020 and NEOWISE in early 2024, so the most recent mid-infrared behaviour is unknown; ZTF covers the optical to 2025.</p>
+    <p>Lists are current as of ${D.generated}. Candidate pool: ${n(S.n_pool)} DR16 quasars in the RA windows, ${n(S.n_pool_projected)} with WISE light curves and manifold positions; ${n(S.n_lit)} published CLAGN positions used for exclusion. The exposure model is a scaling and should be checked against the NGPS ETC with the moon phase set. The unWISE record ends in December 2020 and NEOWISE in early 2024, so the most recent mid-infrared behaviour is unknown; ZTF covers the optical to 2025.</p>
     <p class="fine">Pipeline: github repository CLAGN (scripts 00–08), data from IRSA (unWISE, NEOWISE-R, ZTF), SDSS DR16/DR19, DESI DR1, NOIRLab Data Lab, MAST/PS1. Contact: S. Hemmati (Caltech/IPAC).</p>
   </div>
   <aside class="col side-col">
@@ -667,6 +675,7 @@ function card(t, nightKey){
         ${meter('B',t.B,1,'brightness weight')}
         <div class="meter"><b>Σ</b><span></span><span class="mono" style="color:var(--ink)">${fmt(n.prio??t.priority,2)}</span></div>
       </div>
+      <div class="why"><b>Why</b>${esc((n&&n.why)||t.why||'')}</div>
     </div>
     <div class="chart">
       <div class="legend"><span><i style="--c:var(--g)"></i>ZTF g</span><span><i style="--c:var(--r)"></i>ZTF r</span><span><i style="--c:var(--w1)"></i>unWISE W1 (W2 faint)</span><span><i style="--c:transparent;border:2px solid var(--w1)"></i>NEOWISE-R visits to 2024</span><span><i class="tri" style="--c:var(--sdss)"></i>SDSS epoch</span><span><i class="tri" style="--c:var(--desi)"></i>DESI epoch</span><span><i class="band"></i>NGPS run</span></div>
@@ -727,7 +736,7 @@ function render(){
   main.innerHTML=html;
   main.querySelectorAll('.tgt').forEach(c=>c.addEventListener('click',()=>{ const el=document.getElementById('c-'+c.dataset.name); if(el){ el.scrollIntoView({behavior:'smooth',block:'start'}); el.style.outline='2px solid var(--accent)'; setTimeout(()=>el.style.outline='',1800);} }));
 }
-document.getElementById('foot').innerHTML=`Generated ${D.generated} from the CLAGN pipeline (Hemmati et al. 2026 W1 manifold; Zeltyn et al. 2024 SDSS-V CLAGNs; SDSS DR19 + DESI DR1 spectra; ZTF + unWISE light curves). Priority = B·S·(M+P) weighted by moon distance per night; nights are filled by priority per hour of telescope time using an exposure model scaled from the NGPS ETC (S/N ~7 on the diagnostic line under a bright moon; the "/h" figure on each card). Grey dots: Sample A; gold dots: Zeltyn CL-AGNs; shaded: enriched regions.`;
+document.getElementById('foot').innerHTML=`Generated ${D.generated} from the CLAGN pipeline (Hemmati et al. 2026 W1 manifold; Zeltyn et al. 2024 CLAGNs; SDSS DR19 + DESI DR1 spectra; ZTF + unWISE light curves). Priority = B·S·(M+P) weighted by moon distance per night; nights are filled by priority per hour of telescope time using an exposure model scaled from the NGPS ETC (S/N ~7 on the diagnostic line under a bright moon; the "/h" figure on each card). Grey dots: Sample A; gold dots: Zeltyn CL-AGNs; shaded: enriched regions.`;
 render();
 </script>
 '''

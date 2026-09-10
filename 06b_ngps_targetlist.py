@@ -62,7 +62,7 @@ def rows_for(night):
         mm = m.loc[r.name] if r.name in m.index else None
         comment = (f'{status}; {r.tier}; z={z:.3f}; r={rmag:.1f}; line {line} at {w:.0f} A ({ch}); trend {getattr(r, "trend", "")}; '
                    f'last spectrum {getattr(r, "years_since_last_spec", np.nan):.1f} yr ago; exposure model {texp:.0f} min; '
-                   f'{str(getattr(r, "notes", ""))[:400]}')[:1024]
+                   f'{str(getattr(r, "notes", ""))[:300]}; WHY: {str(getattr(r, "why_night", getattr(r, "why", "")))[:450]}')[:1024]
         base = dict(name=r.name, RA=ra, DECL=dec, slitwidth=f'SET {SLIT}', nexp=nexp, binspect=BINSPEC, binspat=BINSPAT, slitangle='PA',
                     airmass_max=AIRMASS_MAX, mag=round(rmag, 2), magsystem='AB', magfilter='r', channel=ch, wrange=wrange, Note=note, Comment=comment)
         out_fixed.append({**base, 'exptime': f'SET {per}'})

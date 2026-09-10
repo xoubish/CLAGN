@@ -27,7 +27,8 @@ import pandas as pd
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, 'data')
-NIGHTS = {'sep23': 20, 'oct26': 45, 'oct27': 45}          # loose upper bound on list length; the time budget below governs
+NIGHTS = {'sep23': 20, 'oct26': 45, 'oct27': 45}          # loose upper bound on the number of PRIMARY targets; the time budget below governs
+LIST_LEN = 100                                            # ranked list length per night (primaries + backups) so the observer can walk down it by priority
 HOURS = {'sep23': 4.3, 'oct26': 9.5, 'oct27': 9.5}        # usable science hours per window (twilight-to-mid / full night, minus ~0.5 h standards)
 QUOTA = {'T3': 3, 'T4': 4}                                # per-night caps for revisit / control tiers
 OVERHEAD_MIN = 5.0                                        # slew + acquisition + readout per target
@@ -53,6 +54,35 @@ MIN_HRS, MIN_MOONSEP, ZMAX = 1.5, 30.0, 0.8
 
 def moon_weight(sep):
     return np.select([sep >= 60, sep >= 40, sep >= MIN_MOONSEP], [1.0, 0.7, 0.4], 0.0)
+
+
+# quality gate for proprietary SDSS-V epochs (see the SDSS-V block in main)
+SDSSV_MIN_SN, SDSSV_MAX_DR, SDSSV_MIN_DR_FLIP = 2.0, 0.6, 0.3
+_ztf_lc = {}
+
+
+def ztf_r_near(name, mjd, win=45):
+    """Median ZTF r within +-win days of mjd (falls back to +-120 d; needs >= 3 points), from the 03b cache
+    data/ztf_cache/{pool,zeltyn}/<name>.csv; NaN when there is no light curve or no contemporaneous points."""
+    if name not in _ztf_lc:
+        lc = None
+        for sub in ('pool', 'zeltyn'):
+            p = os.path.join(DATA, 'ztf_cache', sub, f'{name}.csv')
+            if os.path.exists(p):
+                try:
+                    t = pd.read_csv(p, usecols=['mjd', 'mag', 'filtercode']); lc = t[t.filtercode == 'zr'][['mjd', 'mag']]
+                except Exception:
+                    lc = None
+                break
+        _ztf_lc[name] = lc
+    lc = _ztf_lc[name]
+    if lc is None or not len(lc):
+        return np.nan
+    for w in (win, 120):
+        sel = lc[(lc.mjd > mjd - w) & (lc.mjd < mjd + w)]
+        if len(sel) >= 3:
+            return float(sel.mag.median())
+    return np.nan
 
 
 def load(name, required=False):
@@ -104,7 +134,7 @@ def build_master():
         # Zeltyn r_mag from SDSS-V synthetic flux; prefer current ZTF r when available
         zt['r_mag'] = zt['r_last'].fillna(zt['r_mag'])
     zt['tier'] = np.where(z.is_clagn, 'T3', np.where((z.clagn_score >= 0.15) | z.in_region_zeltyn, 'T2', 'T0'))
-    zt['notes'] = 'Zeltyn+2024 ' + z['class_zeltyn'].astype(str) + ', SDSS-V last epoch MJD ' + z.mjd_last.round(0).astype('Int64').astype(str)
+    zt['notes'] = 'Zeltyn+2024 ' + z['class_zeltyn'].astype(str) + ', last SDSS epoch MJD ' + z.mjd_last.round(0).astype('Int64').astype(str)
     frames = [zt]
 
     # ---------------- pool tiers
@@ -160,6 +190,9 @@ def build_master():
         frames.append(pt)
 
     m = pd.concat(frames, ignore_index=True, sort=False)
+    # provenance that must never reach the tracked outputs or the web page (proprietary SDSS-V epochs): kept in notes_private,
+    # written only to the git-ignored data/master_list_private.csv
+    m['notes_private'] = ''
 
     # ---------------- NEOWISE-R W1 to 2024 (03c_neowise_now.py), both tags
     neo = [x for x in (load('neowise_now_pool.csv'), load('neowise_now_zeltyn.csv')) if x is not None]
@@ -169,19 +202,44 @@ def build_master():
         if 'w1_at_spec_mjy' in m:
             m['w1_ratio_2024_over_spec'] = m.w1_flux_last_mjy / m.w1_at_spec_mjy
 
-    # ---------------- proprietary SDSS-V epochs, if the user exported them (data/sdssv_internal_epochs.csv)
-    # expected columns (case-insensitive): ra, dec (or plug_ra/plug_dec), mjd, class, subclass, z, zwarning; optional spectroflux_r
+    # ---------------- proprietary SDSS-V epochs, if the user exported them (03f_sdssv_internal.py -> data/sdssv_internal_epochs.csv)
+    # expected columns (case-insensitive): ra, dec (or plug_ra/plug_dec), mjd, class, subclass, z, zwarning; optional name,
+    # sn_median_all, spectroflux_r.
+    # QUALITY GATE (2026-09-09): an epoch counts only if ZWARNING == 0, SN_MEDIAN_ALL >= SDSSV_MIN_SN and its spectrophotometric
+    # r agrees with the contemporaneous ZTF r (median within +-45 d, else +-120 d) to SDSSV_MAX_DR mag.  Reason: P17497's
+    # MJD 60353 epoch had r_spec = 20.1, S/N 4, ZWARNING 4 and a wrong z while ZTF sat at r = 17.6 that month, i.e. a
+    # mis-positioned fibre, not a turn-off; unvetted it flagged a class change AND knocked the target out via the recency
+    # factor.  Rejected epochs are recorded in notes and never update recency, class or the reference brightness.
     sv = load('sdssv_internal_epochs.csv')
     if sv is not None and len(sv):
         sv.columns = [c.lower() for c in sv.columns]
         sv = sv.rename(columns={'plug_ra': 'ra', 'plug_dec': 'dec', 'fiber_ra': 'ra', 'fiber_dec': 'dec'})
-        from astropy.coordinates import SkyCoord
-        import astropy.units as u
-        cm = SkyCoord(m.ra.values * u.deg, m.dec.values * u.deg); cs = SkyCoord(sv.ra.values * u.deg, sv.dec.values * u.deg)
-        idx, sep, _ = cs.match_to_catalog_sky(cm)
-        sv = sv[sep.arcsec < 2].assign(mi=idx[sep.arcsec < 2])
+        if 'name' in sv and sv.name.isin(m.name).any():
+            # 03f emits one row per master-list name sharing a position (a Zeltyn J-name and its pool P-name), so match by
+            # name: nearest-position matching would update only one of the two
+            mi_of = pd.Series(m.index.values, index=m.name.values); mi_of = mi_of[~mi_of.index.duplicated()]
+            sv = sv[sv.name.isin(mi_of.index)].assign(mi=lambda d: mi_of.reindex(d.name).values)
+        else:
+            from astropy.coordinates import SkyCoord
+            import astropy.units as u
+            cm = SkyCoord(m.ra.values * u.deg, m.dec.values * u.deg); cs = SkyCoord(sv.ra.values * u.deg, sv.dec.values * u.deg)
+            idx, sep, _ = cs.match_to_catalog_sky(cm)
+            sv = sv[sep.arcsec < 2].assign(mi=idx[sep.arcsec < 2]); sv['name'] = m.name.values[sv.mi.values]
+        fr = pd.to_numeric(sv.get('spectroflux_r', np.nan), errors='coerce')
+        sv['r_spec'] = np.where(fr > 0, 22.5 - 2.5 * np.log10(fr.where(fr > 0)), np.nan)
+        sv['r_ztf'] = [ztf_r_near(nm, mj) for nm, mj in zip(sv.name, sv.mjd)]
+        sv['ok'] = (pd.to_numeric(sv.get('zwarning', 1), errors='coerce').fillna(1) == 0) \
+                   & (pd.to_numeric(sv.get('sn_median_all', 0), errors='coerce').fillna(0) >= SDSSV_MIN_SN) \
+                   & (sv.r_ztf.isna() | sv.r_spec.isna() | ((sv.r_spec - sv.r_ztf).abs() <= SDSSV_MAX_DR))
+        n_bad = int((~sv.ok).sum()); n_flux_bad = int((sv.r_ztf.notna() & sv.r_spec.notna() & ((sv.r_spec - sv.r_ztf).abs() > SDSSV_MAX_DR)).sum())
         n_new = 0
         for mi, g in sv.groupby('mi'):
+            bad = g[~g.ok]
+            if len(bad):
+                m.at[mi, 'notes_private'] = str(m.at[mi, 'notes_private']) + f'; SDSS-V epoch MJD {", ".join(f"{x:.0f}" for x in bad.mjd)} REJECTED by the quality gate (zwarning / S/N / flux vs ZTF)'
+            g = g[g.ok]
+            if not len(g):
+                continue
             newer = g[g.mjd > m.at[mi, 'mjd_last_spec']] if pd.notna(m.at[mi, 'mjd_last_spec']) else g
             if not len(newer):
                 continue
@@ -191,13 +249,26 @@ def build_master():
             m.at[mi, 'mjd_last_spec'] = last.mjd
             m.at[mi, 'years_since_last_spec'] = (61286.0 - last.mjd) / 365.25
             if 'class' in newer and pd.notna(last.get('class')):
-                prev = str(m.at[mi, 'last_class'])
-                m.at[mi, 'class_change_flag'] = bool(m.at[mi, 'class_change_flag']) or (prev not in ('', '?', 'nan') and prev != str(last['class']))
-                m.at[mi, 'last_class'] = str(last['class'])
+                prev = str(m.at[mi, 'last_class']); cur = str(last['class'])
+                flipped = prev not in ('', '?', 'nan') and prev != cur
+                # a real turn-off/on moves the continuum too: require the spectrophotometric r at the new epoch to differ from
+                # the DR16 r by > SDSSV_MIN_DR_FLIP in the matching sense (GALAXY = fainter, QSO = brighter).  P5291 (z = 0.7,
+                # r = 17.6 unchanged in ZTF for 7 yr) is labelled GALAXY in a 15-min visit: template ambiguity, not a change.
+                dr16 = float(m.at[mi, 'r_mag']) if pd.notna(m.at[mi, 'r_mag']) else np.nan
+                dr_flip = (last.r_spec - dr16) if (pd.notna(last.get('r_spec')) and np.isfinite(dr16)) else np.nan
+                corroborated = np.isnan(dr_flip) or (cur == 'GALAXY' and dr_flip > SDSSV_MIN_DR_FLIP) or (cur == 'QSO' and dr_flip < -SDSSV_MIN_DR_FLIP) \
+                               or (cur not in ('GALAXY', 'QSO'))
+                if flipped and corroborated:
+                    m.at[mi, 'class_change_flag'] = True
+                    m.at[mi, 'notes_private'] = str(m.at[mi, 'notes_private']) + (f'; SDSS-V: {prev} -> {cur} with r {dr_flip:+.2f} mag vs DR16' if np.isfinite(dr_flip) else f'; SDSS-V: {prev} -> {cur}')
+                elif flipped:
+                    m.at[mi, 'notes_private'] = str(m.at[mi, 'notes_private']) + f'; SDSS-V labels it {cur} but r unchanged ({dr_flip:+.2f} mag vs DR16): class flip NOT counted'
+                if not flipped or corroborated:
+                    m.at[mi, 'last_class'] = cur
             if 'spectroflux_r' in newer and pd.notna(last.get('spectroflux_r')) and last.spectroflux_r > 0:
                 m.at[mi, 'r_at_last_sdssv_internal'] = 22.5 - 2.5 * np.log10(last.spectroflux_r)
-            m.at[mi, 'notes'] = str(m.at[mi, 'notes']) + f'; SDSS-V internal epoch MJD {last.mjd:.0f}'
-        print(f'   SDSS-V internal epochs: {len(sv)} rows matched, {n_new} objects gained a newer epoch')
+            m.at[mi, 'notes_private'] = str(m.at[mi, 'notes_private']) + f'; SDSS-V internal epoch MJD {last.mjd:.0f}'
+        print(f'   SDSS-V internal epochs: {len(sv)} rows matched, {n_bad} rejected by the quality gate ({n_flux_bad} for flux vs ZTF), {n_new} objects gained a newer epoch')
         if 'r_at_last_sdssv_internal' in m and 'r_last' in m:
             newer_ref = m.r_at_last_sdssv_internal.notna() & m.r_last.notna()
             m.loc[newer_ref, 'dr_since_ref'] = m.loc[newer_ref, 'r_last'] - m.loc[newer_ref, 'r_at_last_sdssv_internal']
@@ -208,7 +279,8 @@ def build_master():
     # literature (dim-state plateaus of ~4-7 yr; turn-on flares that fade within months to years) makes these the best
     # bets for catching a change in 2026, so they get the same +0.5 bonus as an archival class change.
     m['spec_dir'] = ''; m['reversal_candidate'] = False
-    sl = load('spectra_lines.csv')
+    sl = [x for x in (load('spectra_lines.csv'), load('spectra_lines_private.csv')) if x is not None]   # 03d keeps proprietary epochs in the private file
+    sl = pd.concat(sl, ignore_index=True) if sl else None
     if sl is not None and len(sl):
         S = sl[sl.source == 'SDSS'].sort_values('mjd'); g = S.groupby('name')
         f, l = g.first(), g.last()
@@ -247,6 +319,33 @@ def build_master():
     fading = (ratio < 1 / 1.3) | (dr > 0.3) | (dw1 > 0.3) | (slope > 0.1)
     brightening = (ratio > 1.3) | (dr < -0.3) | (dw1 < -0.3) | (slope < -0.1)
     m['trend'] = np.select([fading & brightening, fading, brightening], ['mixed (IR vs optical)', 'fading', 'brightening'], 'flat/unknown')
+    # ---------------- plain-language reason for the priority: every factor with its value (night sheet card + target lists)
+    zr3 = m.zeltyn_density_ratio.fillna(0) / 3.0; ck = m.clagn_score.fillna(0) / 0.15
+    m_txt = np.where(m.M <= 0, 'W1 light curve outside the CLAGN regions',
+                     np.where(zr3 >= ck, 'W1 light curve in the Zeltyn CL-AGN region, ' + m.zeltyn_density_ratio.fillna(0).round(1).astype(str) + 'x enriched',
+                              'W1 light curve near literature CLAGNs, kNN score ' + m.clagn_score.fillna(0).round(2).astype(str)))
+    pk = pd.DataFrame({'ztf': p_ztf.fillna(0), 'w1': p_w1.fillna(0), 'w1b': p_w1b.fillna(0), 'neo': p_neo.fillna(0)}).idxmax(axis=1)
+    r24 = m.get('w1_ratio_2024_over_spec', nanS)
+    def p_text(i):
+        if m.P[i] <= 0:
+            return 'no measured photometric change'
+        k = pk[i]
+        if k == 'ztf':
+            return f'ZTF r {"faded" if dr[i] > 0 else "brightened"} {abs(dr[i]):.2f} mag since the last spectrum'
+        if k == 'w1':
+            return f'W1 flux now {ratio[i]:.2f}x its level at the last spectrum (unWISE to 2020)'
+        if k == 'w1b':
+            return f'W1 flux in 2024 {r24[i]:.2f}x its level at the last spectrum (NEOWISE)'
+        return f'W1 {"faded" if dw1[i] > 0 else "brightened"} {abs(dw1[i]):.2f} mag from 2014 to 2024 (NEOWISE)'
+    yrs = m.years_since_last_spec
+    s_txt = np.where(m.S >= 1, 'last spectrum ' + yrs.round(1).astype(str) + ' yr ago',
+                     'last spectrum only ' + yrs.round(1).astype(str) + ' yr ago, so x0.3')
+    base = (m.B * m.S * (m.M + m.P)).round(2)
+    m['why'] = [f'M {M:.2f} ({mt}) + P {P:.2f} ({p_text(i)}), x S {S:.1f} ({st}), x B {B:.2f} (r = {rr:.1f}) = {b:.2f}'
+                for i, M, mt, P, S, st, B, rr, b in zip(m.index, m.M, m_txt, m.P, m.S, s_txt, m.B, m.r_mag, base)]
+    m.loc[isT4, 'why'] = ['control: bright and photometrically quiet, off the CLAGN regions; B x S x (1 - P) = ' + f'{v:.2f}' for v in m.priority[isT4]]
+    cc = m.class_change_flag.fillna(False).astype(bool) & ~isT4
+    m.loc[cc, 'why'] = m.loc[cc, 'why'] + '; +0.5 class change between spectra'
     # second, near-independent vote from the ZTF g,r + W1 manifold (10_combined_rescore.py; Spearman 0.18 with the W1 score,
     # AUC 0.70 on held-out Zeltyn CL-AGNs): +0.5 when both manifolds agree (M_combined >= 1), -0.3 when the combined space
     # disagrees (M_combined < 0.5) and there is no large photometric change to fall back on (P < 1). Only enriched candidates
@@ -267,6 +366,9 @@ def build_master():
         m.loc[bad_ctrl, 'priority'] = (m.loc[bad_ctrl, 'priority'] * 0.3).round(3)
         m.loc[agree, 'notes'] = m.loc[agree, 'notes'].astype(str) + '; also in the CLAGN region of the ZTF+W1 manifold'
         m.loc[bad_ctrl, 'notes'] = m.loc[bad_ctrl, 'notes'].astype(str) + '; CLAGN-like in the ZTF+W1 manifold: weak control'
+        m.loc[agree, 'why'] = m.loc[agree, 'why'] + '; +0.5 the ZTF+W1 manifold agrees'
+        m.loc[disagree, 'why'] = m.loc[disagree, 'why'] + '; -0.3 the ZTF+W1 manifold disagrees and there is no large photometric change'
+        m.loc[bad_ctrl, 'why'] = m.loc[bad_ctrl, 'why'] + '; x0.3 control that looks CLAGN-like in the ZTF+W1 manifold'
         print(f'   combined-manifold score for {int(m.M_combined.notna().sum())} objects: {int(agree.sum())} T1/T2 agree (+0.5), '
               f'{int(disagree.sum())} T1 disagree without photometric change (-0.3), {int(bad_ctrl.sum())} controls demoted')
     # W1 blending (03e_blending.py): if the WISE beam holds a substantial neighbour, the W1-based change and manifold
@@ -289,6 +391,8 @@ def build_master():
         spec_ok = (m.spec_dir != '') | m.class_change_flag.fillna(False).astype(bool)
         scale = np.where(m.blend_flag & ~ztf_ok & ~spec_ok, clean, 1.0)
         m['priority'] = (m.priority * scale).round(3)
+        scaled = m.blend_flag & ~ztf_ok & ~spec_ok
+        m.loc[scaled, 'why'] = m.loc[scaled, 'why'] + '; x' + pd.Series(np.asarray(clean, float), index=m.index)[scaled].round(2).astype(str) + ' W1 neighbour blend, change not confirmed by ZTF or spectra'
         nb = m.blend_flag
         m.loc[nb, 'notes'] = m.loc[nb, 'notes'].astype(str) + '; W1 NEIGHBOUR BLEND: ~' + (100 * (1 - clean[nb])).round(0).astype(int).astype(str) + '% of the WISE flux from a neighbour within 8"'
         eh = m.blend_kind == 'extended host'
@@ -302,6 +406,9 @@ def build_master():
     m.loc[m.spec_dir != '', 'notes'] = m.loc[m.spec_dir != '', 'notes'].astype(str) + '; archival Hβ: ' + m.loc[m.spec_dir != '', 'spec_dir']
     m.loc[m.reversal_candidate, 'notes'] = m.loc[m.reversal_candidate, 'notes'].astype(str) + ' -> photometry now points the other way: STATE-REVERSAL CANDIDATE'
     print(f'   archival Hβ direction known for {(m.spec_dir != "").sum()} objects; state-reversal candidates: {int(m.reversal_candidate.sum())}')
+    rv = m.reversal_candidate
+    m.loc[rv, 'why'] = m.loc[rv, 'why'] + '; +0.5 state-reversal candidate (archival Hβ ' + m.loc[rv, 'spec_dir'] + ', photometry now moving the other way)'
+    m['why'] = m.why + '; = priority ' + m.priority.astype(str)
     return m
 
 
@@ -343,7 +450,13 @@ def allocate(m):
             chosen.append(ix); counts[row.tier] += 1; used += row.t_total_min
         sel = cand.loc[chosen].sort_values('prio_per_hour', ascending=False).copy(); sel['night'] = night
         sel['rank'] = np.arange(1, len(sel) + 1)                       # rank = return-per-hour order within the selected set
-        backups = cand[~cand.index.isin(chosen)].head(nslots).copy(); backups['night'] = night; backups['rank'] = 0
+        backups = cand[~cand.index.isin(chosen)].head(max(LIST_LEN - len(chosen), 0)).copy(); backups['night'] = night; backups['rank'] = 0
+        # per-night reason: the same score, weighted by moon distance and divided by the time the target costs
+        for d in (sel, backups):
+            if len(d):
+                d['why_night'] = d.why + '; ' + night + ': x' + pd.Series(moon_weight(sep[d.index].values), index=d.index).astype(str) + ' for moon ' \
+                    + sep[d.index].round(0).astype(int).astype(str) + ' deg = ' + d.priority_night.astype(str) + '; ' + d.t_exp_min.astype(int).astype(str) \
+                    + ' min on source + 5 overhead -> ' + d.prio_per_hour.astype(str) + ' per hour (ranking key)'
         lists[night] = pd.concat([sel, backups])
         picked |= set(sel.name)
         print(f'   {night}: {len(sel)} targets ({counts}) using {used/60:.1f} of {HOURS[night]} h '
@@ -353,12 +466,15 @@ def allocate(m):
 
 if __name__ == '__main__':
     m = build_master()
-    m.to_csv(os.path.join(DATA, 'master_list_scored.csv'), index=False)
+    # the tracked (public) table carries no proprietary provenance; the full table goes to the git-ignored private copy
+    PRIVATE_COLS = ['notes_private', 'r_at_last_sdssv_internal']
+    m.to_csv(os.path.join(DATA, 'master_list_private.csv'), index=False)
+    m.drop(columns=[c for c in PRIVATE_COLS if c in m.columns]).to_csv(os.path.join(DATA, 'master_list_scored.csv'), index=False)
     print(f'master list: {len(m)} rows; tiers: {m.tier.value_counts().to_dict()}')
     lists = allocate(m)
     cols = ['rank', 'night', 'tier', 'name', 'ra', 'dec', 'z', 'r_mag', 't_exp_min', 'exp_plan', 'prio_per_hour', 'priority_night', 'priority', 'M', 'P', 'trend',
             'years_since_last_spec', 'n_spec', 'last_class', 'clagn_score', 'zeltyn_density_ratio', 'in_region_zeltyn',
-            'M_combined', 'fracflux_w1', 'n_ps1_8as', 'blend_flag', 'blend_kind', 'lines_in_ngps', 'spec_dir', 'reversal_candidate', 'notes']
+            'M_combined', 'fracflux_w1', 'n_ps1_8as', 'blend_flag', 'blend_kind', 'lines_in_ngps', 'spec_dir', 'reversal_candidate', 'notes', 'why', 'why_night']
     for night, df in lists.items():
         cols_n = cols + [f'hrs_{night}', f'minX_{night}', f'moonsep_{night}']
         df[[c for c in cols_n if c in df.columns]].to_csv(os.path.join(DATA, f'targets_{night}.csv'), index=False)

@@ -81,17 +81,19 @@ def main():
             f.write(f"{row['name']:22s} {c.ra.to_string(u.hour, sep=':', precision=2, pad=True):12s} "
                     f"{c.dec.to_string(u.deg, sep=':', precision=1, alwayssign=True, pad=True):12s} {row.z:5.3f} {row.r_mag:5.1f} "
                     f"{row.tier:4s} {str(row.get('exp_plan', '')):11s} {status:7s} {row.get('trend', '')}, last spec {row.years_since_last_spec:.1f} yr ago; "
-                    f"{row.get('notes', '')}\n")
+                    f"{row.get('notes', '')} | WHY: {row.get('why_night', row.get('why', ''))}\n")
     prim = df[df['rank'] > 0]
-    for _, row in prim.iterrows():
-        outpng = os.path.join(outdir, f"{int(row['rank']):02d}_{row['name']}.png")
+    backs = df[df['rank'] <= 0].reset_index(drop=True)      # ranked list continues into the backups: bNN_ prefix in list order
+    todo = [(f"{int(row['rank']):02d}", row) for _, row in prim.iterrows()] + [(f"b{i + 1:02d}", row) for i, row in backs.iterrows()]
+    for tag, row in todo:
+        outpng = os.path.join(outdir, f"{tag}_{row['name']}.png")
         if not os.path.exists(outpng):                       # same target under an old rank prefix: rename instead of refetching
-            for old in glob.glob(os.path.join(outdir, f"[0-9][0-9]_{glob.escape(row['name'])}.png")):
+            for old in glob.glob(os.path.join(outdir, f"[0-9b][0-9][0-9]_{glob.escape(row['name'])}.png")) + glob.glob(os.path.join(outdir, f"[0-9][0-9]_{glob.escape(row['name'])}.png")):
                 os.replace(old, outpng); break
         if not os.path.exists(outpng):
             chart(row, outpng, size)
             print(f'   {os.path.basename(outpng)}', flush=True)
-    print(f'{len(prim)} charts + target list in {outdir}')
+    print(f'{len(prim)} primary + {len(backs)} backup charts + target list in {outdir}')
 
 
 if __name__ == '__main__':

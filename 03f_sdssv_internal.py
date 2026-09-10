@@ -4,8 +4,11 @@
 Public DR19 (used by 03_spectra_inventory.py) ends at MJD 60130 (2023-06).  The internal spAll of the newest pipeline
 version carries every BHM epoch since then.  This script:
   1. lists https://data.sdss5.org/sas/sdsswork/bhm/boss/spectro/redux/ and picks the newest tagged version (or --version),
-  2. downloads spAll-lite-<version>.fits.gz once into data/sdssv_internal/ (a few hundred MB, resumable cache),
-  3. matches every row within 2" of a master-list position (data/master_list_scored.csv, or the CSVs given),
+  2. downloads <version>/summary/<coadd>/spAll-lite-<version>.fits.gz once into data/sdssv_internal/<coadd>/ (v6_2_1 daily:
+     4.6 GB gzipped, 15.8 M rows x 1193 B = 18.8 GB uncompressed; resumable, parallel-range download, cached),
+     then STREAMS it: rows are decoded chunk by chunk from the gzip and only those in an (RA, Dec) cell touched by a
+     target survive, so the table is never held in memory,
+  3. matches every surviving row within 2" of a master-list position (data/master_list_scored.csv, or the CSVs given),
   4. writes  data/sdssv_internal_epochs.csv        -> read by 04_score_tiers.py (recency, class change, r at the new epoch)
              data/spectra_epochs_sdssvint.csv      -> read by 03d_fetch_spectra.py, which then downloads the spec-lite files
      Rows already public in DR19 (MJD <= 60130 for the same object) are dropped, so only genuinely new epochs are added.
@@ -22,6 +25,7 @@ Everything this script writes is PROPRIETARY collaboration data: data/sdssv_inte
 Usage: /opt/anaconda3/bin/python 03f_sdssv_internal.py [--version v6_2_1|master] [--coadd daily|epoch] [--dry-run] [targets.csv ...]
 """
 import os, re, sys, glob, time, netrc, argparse
+import gzip
 import numpy as np
 import pandas as pd
 import requests
@@ -58,12 +62,60 @@ def list_versions(s):
     return vers, ('master' in r.text)
 
 
-def download(s, url, path, tries=3):
-    """Resumable download with a progress line; returns path (cached if complete)."""
-    done = os.path.join(path + '.ok')
+def download(s, url, path, tries=3, workers=8, seg=64 << 20):
+    """Resumable download; returns path (cached once <path>.ok exists).
+    The SAS delivers only ~0.5 MB/s per connection but accepts many, so the file is fetched as `workers` parallel byte
+    ranges of `seg` bytes written in place (os.pwrite); finished segments are listed in <path>.parts, so an interrupted
+    run resumes.  A plain sequential download is the fallback when the server does not advertise byte ranges."""
+    done = path + '.ok'
     if os.path.exists(done) and os.path.exists(path):
         return path
     os.makedirs(os.path.dirname(path), exist_ok=True)
+    h = s.head(url, timeout=120, allow_redirects=True)
+    if h.status_code == 401:
+        sys.exit('HTTP 401 from the SAS: the credentials were rejected')
+    h.raise_for_status()
+    total = int(h.headers.get('Content-Length', 0))
+    if total and h.headers.get('Accept-Ranges') == 'bytes':
+        import json, threading
+        from concurrent.futures import ThreadPoolExecutor
+        parts = path + '.parts'
+        finished = set(json.load(open(parts))) if os.path.exists(parts) else set()
+        if not finished and os.path.exists(path):                      # partial file from the sequential fallback: its prefix is good
+            finished = set(range(os.path.getsize(path) // seg))
+        with open(path, 'ab') as f:
+            if f.tell() < total:
+                f.truncate(total)                                      # sparse preallocation
+        nseg = -(-total // seg); todo = [i for i in range(nseg) if i not in finished]
+        fd = os.open(path, os.O_RDWR); lock = threading.Lock(); t0 = time.time(); got = [len(finished) * seg]; new = [0]
+        print(f'   {os.path.basename(path)}: {len(finished)}/{nseg} segments cached, fetching {len(todo)} with {workers} connections')
+        def fetch(i):
+            lo, hi = i * seg, min(total, (i + 1) * seg) - 1
+            for attempt in range(tries):
+                try:
+                    with s.get(url, headers={'Range': f'bytes={lo}-{hi}'}, stream=True, timeout=300) as r:
+                        if r.status_code != 206:
+                            raise IOError(f'HTTP {r.status_code} for bytes {lo}-{hi}')
+                        off = lo
+                        for chunk in r.iter_content(1 << 20):
+                            os.pwrite(fd, chunk, off); off += len(chunk)
+                        if off != hi + 1:
+                            raise IOError(f'short range: got {off - lo} of {hi + 1 - lo} bytes')
+                    with lock:
+                        finished.add(i); json.dump(sorted(finished), open(parts, 'w')); got[0] += hi + 1 - lo; new[0] += hi + 1 - lo
+                        rate = new[0] / 1e6 / max(time.time() - t0, 1)
+                        print(f'\r   {os.path.basename(path)}: {min(got[0], total)/1e6:.0f}/{total/1e6:.0f} MB  {rate:.1f} MB/s, ~{(total - got[0]) / 1e6 / max(rate, 0.01) / 60:.0f} min left', end='', flush=True)
+                    return
+                except Exception as e:
+                    err = e; time.sleep(5 * (attempt + 1))
+            raise err
+        with ThreadPoolExecutor(workers) as ex:
+            list(ex.map(fetch, todo))
+        os.close(fd); print()
+        if os.path.exists(parts):
+            os.remove(parts)
+        open(done, 'w').write('ok')
+        return path
     for attempt in range(tries):
         have = os.path.getsize(path) if os.path.exists(path) else 0
         hdr = {'Range': f'bytes={have}-'} if have else {}
@@ -87,37 +139,148 @@ def download(s, url, path, tries=3):
     return path
 
 
-def spall_table(path):
-    """Columns we need from spAll-lite, robust to the column renames between v6_0 and v6_2."""
-    with fits.open(path, memmap=False) as h:
-        d = h[1].data; names = set(d.columns.names)
-        def col(*cands, default=np.nan):
-            for c in cands:
-                if c in names:
-                    return d[c]
-            return np.full(len(d), default)
-        t = pd.DataFrame(dict(
-            ra=col('FIBER_RA', 'PLUG_RA', 'RACAT').astype(float), dec=col('FIBER_DEC', 'PLUG_DEC', 'DECCAT').astype(float),
-            field=col('FIELD', 'PLATE').astype(int), mjd=col('MJD').astype(int), catalogid=col('CATALOGID').astype(np.int64),
-            sdss_id=col('SDSS_ID', default=-1).astype(np.int64),
-            cls=[str(x).strip() for x in col('CLASS', default='')], subclass=[str(x).strip() for x in col('SUBCLASS', default='')],
-            z=col('Z').astype(float), zwarning=col('ZWARNING').astype(int), sn_median_all=col('SN_MEDIAN_ALL').astype(float),
-            firstcarton=[str(x).strip() for x in col('FIRSTCARTON', default='')], programname=[str(x).strip() for x in col('PROGRAMNAME', default='')],
-            objtype=[str(x).strip() for x in col('OBJTYPE', default='')], nexp=col('NEXP', default=0).astype(int), exptime=col('EXPTIME', default=0).astype(float),
-        ))
-        sf = np.asarray(col('SPECTROFLUX'), dtype=float)          # FITS arrays are big-endian: cast before pandas sees them
-        t['spectroflux_g'] = sf[:, 1] if sf.ndim == 2 else np.nan
-        t['spectroflux_r'] = sf[:, 2] if sf.ndim == 2 else np.nan
-        t['spectroflux_i'] = sf[:, 3] if sf.ndim == 2 else np.nan
+def spall_url(version, coadd, public=False):
+    """Where the spAll-lite summary table lives.
+    Internal SAS (idlspec2d v6_2+):  <version>/summary/<coadd>/spAll-lite-<version>[-epoch|-allepoch].fits.gz
+                                     (v6_2_1: daily 4.6 GB, epoch 5.3 GB, allepoch 0.5 GB; master = rolling daily reduction)
+    Public DR19 tree (v6_1_3):       <version>/[epoch/]spAll-lite-<version>.fits.gz"""
+    if public:
+        return f'{REDUX}/{version}/' + ('epoch/' if coadd == 'epoch' else '') + f'spAll-lite-{version}.fits.gz'
+    return f'{REDUX}/{version}/summary/{coadd}/spAll-lite-{version}{"" if coadd == "daily" else "-" + coadd}.fits.gz'
+
+
+FITS_DTYPES = {'L': 'S1', 'B': 'u1', 'I': '>i2', 'J': '>i4', 'K': '>i8', 'E': '>f4', 'D': '>f8'}
+
+
+def _fits_row_dtype(hdr):
+    """numpy dtype of one binary-table row from its header (fixed-width columns only, which is all spAll has)."""
+    fields = []
+    for i in range(1, hdr['TFIELDS'] + 1):
+        name, form = hdr[f'TTYPE{i}'], hdr[f'TFORM{i}'].strip()
+        mo = re.fullmatch(r'(\d*)([A-Z])(.*)', form)
+        n, code = int(mo.group(1) or 1), mo.group(2)
+        if code == 'A':
+            fields.append((name, f'S{n}'))
+        elif code in FITS_DTYPES:
+            fields.append((name, FITS_DTYPES[code]) if n == 1 else (name, FITS_DTYPES[code], (n,)))
+        else:
+            raise ValueError(f'column {name}: unsupported TFORM {form}')
+    dt = np.dtype(fields)
+    if dt.itemsize != hdr['NAXIS1']:
+        raise ValueError(f'row size mismatch: dtype {dt.itemsize} B vs NAXIS1 {hdr["NAXIS1"]} B')
+    return dt
+
+
+def _read_header(f):
+    """Read 2880-byte blocks from a stream until the END card; returns the astropy Header."""
+    raw = b''
+    while True:
+        blk = f.read(2880)
+        if len(blk) < 2880:
+            raise IOError('truncated FITS header')
+        raw += blk
+        if any(blk[j:j + 80] == b'END'.ljust(80) for j in range(0, 2880, 80)):
+            return fits.Header.fromstring(raw)
+
+
+def _skip_data(f, hdr):
+    n = abs(hdr.get('BITPIX', 8)) // 8
+    for i in range(1, hdr.get('NAXIS', 0) + 1):
+        n *= hdr[f'NAXIS{i}']
+    if hdr.get('NAXIS', 0) and n:
+        f.read(n + (-n) % 2880)
+
+
+def radec(arr):
+    """(ra, dec) as native floats from a structured spAll chunk, whatever the column generation calls them."""
+    ra = next(c for c in ('FIBER_RA', 'PLUG_RA', 'RACAT') if c in arr.dtype.names)
+    dec = next(c for c in ('FIBER_DEC', 'PLUG_DEC', 'DECCAT') if c in arr.dtype.names)
+    return arr[ra].astype(float), arr[dec].astype(float)
+
+
+def stream_spall(path, select, convert=None, chunk_rows=250_000):
+    """Stream the gzipped spAll-lite chunk by chunk (~300 MB in flight, the 18.8 GB table is never held in memory).
+    select(arr)  -> boolean mask over a structured-array chunk (which rows to keep);
+    convert(arr) -> optional reduction of the kept rows (e.g. spall_table, or a compact recarray) applied per chunk.
+    Returns the concatenation of the kept (converted) chunks: a structured array, or whatever convert returns
+    (DataFrames are concatenated with pandas)."""
+    keep = []; nkept = 0; t0 = time.time()
+    with gzip.open(path, 'rb') as f:
+        h0 = _read_header(f); _skip_data(f, h0)
+        h1 = _read_header(f); dt = _fits_row_dtype(h1); nrows = h1['NAXIS2']
+        print(f'   spAll-lite: {nrows:,} rows x {dt.itemsize} B ({nrows * dt.itemsize / 1e9:.1f} GB), {len(dt.names)} columns; streaming ...')
+        done = 0
+        while done < nrows:
+            n = min(chunk_rows, nrows - done)
+            buf = f.read(n * dt.itemsize)
+            if len(buf) < n * dt.itemsize:
+                raise IOError(f'truncated spAll data after {done + len(buf) // dt.itemsize:,} rows: delete {path} and its .ok file and rerun')
+            arr = np.frombuffer(buf, dtype=dt, count=n)
+            sel = select(arr)
+            if sel.any():
+                part = arr[sel].copy(); nkept += len(part)
+                keep.append(convert(part) if convert else part)
+            done += n
+            if done % (chunk_rows * 8) == 0 or done == nrows:
+                print(f'\r   {done / 1e6:5.1f} M rows, {nkept:,} kept, {time.time() - t0:.0f}s', end='', flush=True)
+    print()
+    if not keep:
+        return np.zeros(0, dtype=dt) if convert is None else convert(np.zeros(0, dtype=dt))
+    return pd.concat(keep, ignore_index=True) if isinstance(keep[0], pd.DataFrame) else np.concatenate(keep)
+
+
+def spall_rows_near(path, ra_t, dec_t, cell_deg=0.01, chunk_rows=250_000):
+    """Structured array of the spAll rows that fall in an (RA, Dec) cell touched by a target (cell = 36", plus the 8
+    neighbours, so every row within 2" of a target is kept for the exact match in main()); a few thousand rows survive."""
+    ncell = int(round(360 / cell_deg))
+    def key(ra, dec):
+        return (np.floor(ra / cell_deg).astype(np.int64) % ncell) * 100_000 + np.floor((dec + 90) / cell_deg).astype(np.int64)
+    ira = np.floor(ra_t / cell_deg).astype(np.int64); idec = np.floor((dec_t + 90) / cell_deg).astype(np.int64)
+    keys = np.unique(np.concatenate([((ira + di) % ncell) * 100_000 + idec + dj for di in (-1, 0, 1) for dj in (-1, 0, 1)]))
+    def select(arr):
+        ra, dec = radec(arr)
+        ok = np.isfinite(ra) & np.isfinite(dec) & (np.abs(dec) <= 90)
+        return ok & np.isin(key(np.where(ok, ra, 0.0), np.where(ok, dec, 0.0)), keys)
+    return stream_spall(path, select, chunk_rows=chunk_rows)
+
+
+def spall_table(d):
+    """Columns we need, from a structured array of spAll-lite rows; robust to the column renames between v6_0 and v6_2."""
+    names = set(d.dtype.names)
+    def col(*cands, default=np.nan):
+        for c in cands:
+            if c in names:
+                return d[c]
+        return np.full(len(d), default)
+    def s(*cands):
+        v = col(*cands, default=b'')
+        return [x.decode('ascii', 'replace').strip() if isinstance(x, bytes) else str(x).strip() for x in v]
+    t = pd.DataFrame(dict(
+        ra=col('FIBER_RA', 'PLUG_RA', 'RACAT').astype(float), dec=col('FIBER_DEC', 'PLUG_DEC', 'DECCAT').astype(float),
+        field=col('FIELD', 'PLATE').astype(int), mjd=col('MJD').astype(int), catalogid=col('CATALOGID').astype(np.int64),
+        sdss_id=col('SDSS_ID', default=-1).astype(np.int64), spec_file=s('SPEC_FILE'), obs=s('OBS'), run2d_row=s('RUN2D'),
+        cls=s('CLASS'), subclass=s('SUBCLASS'),
+        z=col('Z').astype(float), zwarning=col('ZWARNING').astype(int), sn_median_all=col('SN_MEDIAN_ALL').astype(float),
+        firstcarton=s('FIRSTCARTON'), programname=s('PROGRAMNAME'), objtype=s('OBJTYPE'),
+        nexp=col('NEXP', default=0).astype(int), exptime=col('EXPTIME', default=0).astype(float),
+        fieldquality=s('FIELDQUALITY'), specprimary=col('SPECPRIMARY', default=-1).astype(int), nspecobs=col('NSPECOBS', default=-1).astype(int),
+    ))
+    sf = np.asarray(col('SPECTROFLUX'), dtype=float)          # FITS arrays are big-endian: cast before pandas sees them
+    t['spectroflux_g'] = sf[:, 1] if sf.ndim == 2 else np.nan
+    t['spectroflux_r'] = sf[:, 2] if sf.ndim == 2 else np.nan
+    t['spectroflux_i'] = sf[:, 3] if sf.ndim == 2 else np.nan
     return t
 
 
-def spec_url(version, coadd, field, mjd, catalogid):
-    """spec-lite path conventions of idlspec2d v6_1+ (identical to the public DR19 tree, host and root aside)."""
-    if coadd == 'allepoch':
-        return f'{REDUX}/{version}/spectra/lite/allepoch/{mjd:5d}/spec-allepoch-{mjd:5d}-{catalogid}.fits'
-    sub = 'epoch/spectra' if coadd == 'epoch' else 'spectra'
-    return f'{REDUX}/{version}/{sub}/lite/{field:06d}/{mjd:5d}/spec-{field:06d}-{mjd:5d}-{catalogid}.fits'
+def spec_url(version, coadd, field, mjd, catalogid, spec_file='', public=False):
+    """Where one spec-lite file lives (the spAll row's SPEC_FILE name when present, else the spec-<field>-<mjd>-<catalogid> form).
+    Internal SAS (v6_2+):  <version>/spectra/<coadd>/lite/<field//1000>XXX/<field>/<mjd>/<file>
+                           e.g. v6_2_1/spectra/daily/lite/030XXX/030073/60188/spec-030073-60188-27021599486824279.fits
+    Public DR19 (v6_1_3):  <version>/[epoch/]spectra/lite/<field>/<mjd>/<file>"""
+    name = spec_file or f'spec-{field:06d}-{mjd:5d}-{catalogid}.fits'
+    if public:
+        return f'{REDUX}/{version}/{"epoch/spectra" if coadd == "epoch" else "spectra"}/lite/{field:06d}/{mjd:5d}/{name}'
+    return f'{REDUX}/{version}/spectra/{coadd}/lite/{field // 1000:03d}XXX/{field:06d}/{mjd:5d}/{name}'
 
 
 def main():
@@ -144,14 +307,15 @@ def main():
     if a.dry_run:
         return
 
-    fname = f'spAll-lite-{version}.fits.gz'
-    url = f'{REDUX}/{version}/' + ('epoch/' if a.coadd == 'epoch' else '') + fname
-    path = download(s, url, os.path.join(CACHE, 'public_dr19' if a.public_dr19 else a.coadd, fname))
-    t0 = time.time(); sp = spall_table(path); print(f'spAll rows: {len(sp)}  (read in {time.time()-t0:.0f}s)')
-    sp = sp[np.isfinite(sp.ra) & np.isfinite(sp.dec)]
-
     files = a.targets or [os.path.join(DATA, 'master_list_scored.csv')]
     tg = pd.concat([pd.read_csv(f, low_memory=False, usecols=lambda c: c in ('name', 'ra', 'dec')) for f in files]).drop_duplicates('name')
+    tg = tg[np.isfinite(tg.ra) & np.isfinite(tg.dec)].reset_index(drop=True)
+
+    url = spall_url(version, a.coadd, public=a.public_dr19)
+    path = download(s, url, os.path.join(CACHE, 'public_dr19' if a.public_dr19 else a.coadd, os.path.basename(url)))
+    t0 = time.time(); sp = spall_table(spall_rows_near(path, tg.ra.values, tg.dec.values))
+    print(f'{len(sp)} spAll rows in cells around our {len(tg)} targets  (streamed in {time.time()-t0:.0f}s)')
+
     ct = SkyCoord(tg.ra.values * u.deg, tg.dec.values * u.deg); cs = SkyCoord(sp.ra.values * u.deg, sp.dec.values * u.deg)
     # every target within the radius, not only the nearest: the master list can hold one object under two names
     # (a Zeltyn J-name and a pool P-name), and both inventories must see the epoch
@@ -165,8 +329,11 @@ def main():
     # 04_score_tiers.py schema (+ provenance)
     m['run2d'] = version; m['coadd'] = a.coadd; m['sdss_phase'] = 5; m['source'] = 'SDSS'; m['proprietary'] = True
     m['is_coadd'] = False
-    m['sas_url'] = [spec_url(version, a.coadd, f, j, c) for f, j, c in zip(m.field, m.mjd, m.catalogid)]
+    m['sas_url'] = [spec_url(version, a.coadd, f, j, c, sf, public=a.public_dr19) for f, j, c, sf in zip(m.field, m.mjd, m.catalogid, m.spec_file)]
     m = m.rename(columns={'cls': 'class'}).sort_values(['name', 'mjd'])
+    if len(m):                                       # one HEAD request: catches a changed spec-lite layout before 03d silently skips every file
+        r = s.head(m.sas_url.iloc[0], timeout=60, allow_redirects=True)
+        print(f'spec-lite path check: HTTP {r.status_code} for {m.sas_url.iloc[0]}' + ('' if r.ok else '   <-- LAYOUT CHANGED? fix spec_url()'))
     out04 = os.path.join(DATA, '_sdssv_test_epochs.csv' if a.public_dr19 else 'sdssv_internal_epochs.csv'); m.to_csv(out04, index=False)
     m['proprietary'] = not a.public_dr19
     # 03d_fetch_spectra.py schema (its glob spectra_epochs_*.csv picks this up; file is git-ignored)
