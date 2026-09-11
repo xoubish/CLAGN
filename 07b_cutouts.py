@@ -30,18 +30,23 @@ IBE_DATA = 'https://irsa.ipac.caltech.edu/ibe/data/ztf/products/ref'
 IRSA_FC = 'https://irsa.ipac.caltech.edu/applications/finderchart/servlet/api'
 
 
+_SKY_FAIL = [0]          # circuit breaker: after 2 consecutive SkyServer failures go straight to the IRSA fallback (SkyServer outages cost 90 s per object otherwise)
+
+
 def sdss_jpeg(ra, dec, path):
     """SDSS gri colour JPEG from SkyServer; if SkyServer is down, fall back to IRSA's Finder Chart service (SDSS DR7 r band),
     which also tells us whether SDSS imaging exists there at all ('outside SDSS')."""
     if os.path.exists(path):
         return True
-    try:
-        r = requests.get('https://skyserver.sdss.org/dr18/SkyServerWS/ImgCutout/getjpeg',
-                         params={'ra': ra, 'dec': dec, 'scale': SIZE_ARCSEC / 160.0, 'width': 160, 'height': 160}, timeout=90)
-        if r.ok and r.headers.get('content-type', '').startswith('image'):
-            open(path, 'wb').write(r.content); return True
-    except Exception as e:
-        print(f'   skyserver: {str(e)[:50]}', flush=True)
+    if _SKY_FAIL[0] < 2:                       # circuit breaker: after 2 consecutive SkyServer failures skip straight to IRSA
+        try:
+            r = requests.get('https://skyserver.sdss.org/dr18/SkyServerWS/ImgCutout/getjpeg',
+                             params={'ra': ra, 'dec': dec, 'scale': SIZE_ARCSEC / 160.0, 'width': 160, 'height': 160}, timeout=90)
+            if r.ok and r.headers.get('content-type', '').startswith('image'):
+                open(path, 'wb').write(r.content); _SKY_FAIL[0] = 0; return True
+            _SKY_FAIL[0] += 1
+        except Exception as e:
+            _SKY_FAIL[0] += 1; print(f'   skyserver: {str(e)[:50]} (failure {_SKY_FAIL[0]})', flush=True)
     # IRSA fallback: subsetsize in arcmin; r-band grayscale JPEG (N up, E left)
     q = requests.get(IRSA_FC, params={'mode': 'prog', 'locstr': f'{ra} {dec}', 'subsetsize': SIZE_ARCSEC / 60.0, 'survey': 'sdss'}, timeout=120)
     if not q.ok or '<totalimages>0</totalimages>' in q.text or 'status="ok"' not in q.text:

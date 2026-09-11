@@ -20,6 +20,7 @@ from astropy.coordinates import SkyCoord
 import astropy.units as u
 
 HERE = os.path.dirname(os.path.abspath(__file__)); DATA = os.path.join(HERE, 'data')
+SUFFIX = '_v2' if os.environ.get('CLAGN_SEL', 'v1') == 'v2' else ''; MASTER = 'candidates_v2.csv' if SUFFIX else 'master_list_scored.csv'
 CHANNELS = [('U', 3050, 4430), ('G', 4250, 5960), ('R', 5620, 7950), ('I', 7530, 10400)]
 SLIT, BINSPAT, BINSPEC, AIRMASS_MAX, SNR_TARGET = 1.3, 2, 3, 2.0, 7
 
@@ -45,8 +46,8 @@ def diagnostic(z):
 
 
 def rows_for(night):
-    t = pd.read_csv(os.path.join(DATA, f'targets_{night}.csv'))
-    m = pd.read_csv(os.path.join(DATA, 'master_list_scored.csv'), low_memory=False).set_index('name')
+    t = pd.read_csv(os.path.join(DATA, f'targets_{night}{SUFFIX}.csv'))
+    m = pd.read_csv(os.path.join(DATA, MASTER), low_memory=False).drop_duplicates('name').set_index('name')
     out_fixed, out_snr = [], []
     for r in t.itertuples():
         c = SkyCoord(r.ra * u.deg, r.dec * u.deg)
@@ -62,7 +63,7 @@ def rows_for(night):
         mm = m.loc[r.name] if r.name in m.index else None
         comment = (f'{status}; {r.tier}; z={z:.3f}; r={rmag:.1f}; line {line} at {w:.0f} A ({ch}); trend {getattr(r, "trend", "")}; '
                    f'last spectrum {getattr(r, "years_since_last_spec", np.nan):.1f} yr ago; exposure model {texp:.0f} min; '
-                   f'{str(getattr(r, "notes", ""))[:300]}; WHY: {str(getattr(r, "why_night", getattr(r, "why", "")))[:450]}')[:1024]
+                   f'{str(getattr(r, "notes", ""))[:300]}; WHY: {str(next((w for w in (getattr(r, "why_night", None), getattr(r, "why", None)) if isinstance(w, str) and w and w != "nan"), ""))[:450]}')[:1024]
         base = dict(name=r.name, RA=ra, DECL=dec, slitwidth=f'SET {SLIT}', nexp=nexp, binspect=BINSPEC, binspat=BINSPAT, slitangle='PA',
                     airmass_max=AIRMASS_MAX, mag=round(rmag, 2), magsystem='AB', magfilter='r', channel=ch, wrange=wrange, Note=note, Comment=comment)
         out_fixed.append({**base, 'exptime': f'SET {per}'})
@@ -70,7 +71,7 @@ def rows_for(night):
     cols = ['name', 'RA', 'DECL', 'slitwidth', 'exptime', 'nexp', 'binspect', 'binspat', 'slitangle', 'airmass_max', 'mag', 'magsystem', 'magfilter', 'channel', 'wrange', 'Note', 'Comment']
     fx, sn = pd.DataFrame(out_fixed)[cols], pd.DataFrame(out_snr)[cols]
     # CALSPEC standards chosen by 11_schedule.py open and close the night (the Quicklook DRP only makes sensitivity functions from CALSPEC stars)
-    sp = os.path.join(DATA, f'schedule_{night}.csv')
+    sp = os.path.join(DATA, f'schedule_{night}{SUFFIX}.csv')
     if os.path.exists(sp):
         S = pd.read_csv(sp); S = S[S.kind == 'standard']
         std_rows = []
@@ -91,7 +92,7 @@ if __name__ == '__main__':
     nights = sys.argv[1:] or ['sep23', 'oct26', 'oct27']
     for n in nights:
         fx, sn = rows_for(n)
-        d = os.path.join(HERE, 'finders', n); os.makedirs(d, exist_ok=True)
+        d = os.path.join(HERE, 'finders', n + SUFFIX); os.makedirs(d, exist_ok=True)
         fx.to_csv(os.path.join(d, f'ngps_{n}_fixed.csv'), index=False); sn.to_csv(os.path.join(d, f'ngps_{n}_snr.csv'), index=False)
-        print(f'{n}: {len(fx)} rows -> finders/{n}/ngps_{n}_fixed.csv and ngps_{n}_snr.csv ({int((fx.Note.str.contains("backup")).sum())} backups)')
+        print(f'{n}: {len(fx)} rows -> finders/{n}{SUFFIX}/ngps_{n}_fixed.csv and ngps_{n}_snr.csv ({int((fx.Note.str.contains("backup")).sum())} backups)')
     print(fx.head(3).to_string(index=False))

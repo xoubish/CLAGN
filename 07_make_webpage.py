@@ -17,7 +17,9 @@ import astropy.units as u
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, 'data')
-OUT = os.path.join(HERE, 'web', 'clagn_night_sheet.html')
+V2 = os.environ.get('CLAGN_SEL', 'v1') == 'v2'; SUFFIX = '_v2' if V2 else ''
+OUT = os.path.join(HERE, 'web', f'clagn_night_sheet{SUFFIX}.html')
+MASTER = 'candidates_v2.csv' if V2 else 'master_list_scored.csv'
 NIGHT_META = {
     'sep23': dict(label='Sep 23', date='2026-09-23', part='first half', window='20:05 – 00:39 PDT', lst='19.5h – 0.1h',
                   moon='93 %', moon_pos='RA 22.2h  Dec −12°', moon_note='up all window', slots=14, mjd=61307.2),
@@ -28,6 +30,10 @@ NIGHT_META = {
 }
 TIER_LABEL = {'T1': 'Tier 1 · manifold-selected', 'T2': 'Tier 2 · EVQ completing transition',
               'T3': 'Tier 3 · confirmed CLAGN, revisit', 'T4': 'Tier 4 · control'}
+TIER_COLOR = {'T1': 'var(--t1)', 'T2': 'var(--t2)', 'T3': 'var(--t3)', 'T4': 'var(--t4)'}
+if V2:
+    TIER_LABEL = {'D1': 'D1 · turn-off discovery', 'D2': 'D2 · turn-on discovery', 'K': 'K · known changer, new epoch', 'B': 'B · blind manifold stratum', 'C': 'C · control'}
+    TIER_COLOR = {'D1': 'var(--t1)', 'D2': 'var(--t2)', 'K': 'var(--t3)', 'B': 'var(--accent)', 'C': 'var(--t4)'}
 LINES = [('Mg II', 2798.0), ('Hβ', 4861.0), ('[O III]', 5007.0), ('Hα', 6563.0), ('Ca II', 8600.0), ('[S III]', 9531.0)]
 
 
@@ -38,15 +44,15 @@ def mjd_to_date(mjd):
 def load_targets():
     rows = []
     for night in NIGHT_META:
-        p = os.path.join(DATA, f'targets_{night}.csv')
+        p = os.path.join(DATA, f'targets_{night}{SUFFIX}.csv')
         if os.path.exists(p):
             t = pd.read_csv(p); t['night'] = night; rows.append(t)
     t = pd.concat(rows, ignore_index=True)
-    m = pd.read_csv(os.path.join(DATA, 'master_list_scored.csv'))
+    m = pd.read_csv(os.path.join(DATA, MASTER), low_memory=False).drop_duplicates('name')
     return t, m
 
 
-def ztf_series(name, tags=('zeltyn', 'pool')):
+def ztf_series(name, tags=('zeltyn', 'pool', 'v2', 'calib')):
     for tag in tags:
         p = os.path.join(DATA, 'ztf_cache', tag, f'{name}.csv')
         if os.path.exists(p) and os.path.getsize(p) > 5:
@@ -151,7 +157,7 @@ def main():
     names = t.name.unique().tolist()
     mm = m.set_index('name')
     ep_tables = []
-    for tag in ['zeltyn', 'pool']:
+    for tag in ['zeltyn', 'pool', 'v2']:
         p = os.path.join(DATA, f'spectra_epochs_{tag}.csv')
         if os.path.exists(p):
             ep_tables.append(pd.read_csv(p, low_memory=False))
@@ -161,7 +167,7 @@ def main():
     wise.update(load_wise(os.path.join(DATA, 'wise_cache', 'zeltyn'), {i + 1: n for i, n in enumerate(zc.name)}))
     # NEOWISE-R visits to 2024 (03c_neowise_now.py), converted to mJy so they share the W1 panel
     neo = {}
-    for tag in ['zeltyn', 'pool']:
+    for tag in ['zeltyn', 'pool', 'poolall', 'turnon']:
         p = os.path.join(DATA, f'neowise_visits_{tag}.csv')
         if os.path.exists(p):
             v = pd.read_csv(p)
@@ -237,6 +243,7 @@ def main():
             name=name, jname=jname, tier=r.tier, source=r.source_catalog, ra=round(float(r.ra), 6), dec=round(float(r.dec), 6),
             sex=sc.to_string('hmsdms', sep=':', precision=1), z=z, rmag=f('r_mag', 2), priority=f('priority'),
             M=f('M'), P=f('P'), S=f('S'), B=f('B'), trend=str(r.get('trend', '')), notes=public_note(r.get('notes', '')), why=public_note(r.get('why', '')),
+            p_hb_dim=f('P_hb_dim', 2), p_cont_dim=f('P_cont_dim', 2), p_hb_bright=f('P_hb_bright', 2), p_cont_bright=f('P_cont_bright', 2), p_hb=f('P_hb', 2), d_opt=f('d_opt', 2), dw1_neo=f('dw1_neowise', 2), dcolor=f('dcolor', 2), ledd=f('LOGLEDD_RATIO', 2), stratum=str(r.get('stratum', '')), score=f('score', 2),
             clagn_score=f('clagn_score'), density=f('zeltyn_density_ratio', 2), m_comb=f('M_combined', 2), in_zeltyn=bool(r.get('in_region_zeltyn', False)),
             fracflux=f('fracflux_w1', 2), n_nbr=f('n_ps1_8as', 0), nbr_dz=f('nbr_min_dz', 1), blend=bool(r.get('blend_flag', False)),
             blend_kind=str(r.get('blend_kind', '') if pd.notna(r.get('blend_kind', '')) else ''),
@@ -251,7 +258,7 @@ def main():
     for n, meta in NIGHT_META.items():
         sub = t[(t.night == n) & (t['rank'] > 0)]
         meta['counts'] = sub.tier.value_counts().to_dict(); meta['n_primary'] = int(len(sub)); meta['n_backup'] = int(((t.night == n) & (t['rank'] == 0)).sum())
-        sp = os.path.join(DATA, f'schedule_{n}.csv')
+        sp = os.path.join(DATA, f'schedule_{n}{SUFFIX}.csv')
         if os.path.exists(sp):
             S = pd.read_csv(sp).fillna('')
             meta['schedule'] = [dict(kind=r.kind, name=str(r.name), start=r.start_local, end=r.end_local, minutes=int(r.minutes) if r.minutes != '' else 0,
@@ -268,7 +275,7 @@ def main():
                  n_pool=nrows('parent_pool_dr16qso.csv'), n_pool_projected=int(pool_scored.projected.fillna(False).sum()) if pool_scored is not None else None,
                  n_T1=int((m.tier == 'T1').sum()), n_T4=int((m.tier == 'T4').sum()), n_lit=nrows('literature_clagn.csv'),
                  n_targets=len(targets), n_primary={k: v['n_primary'] for k, v in NIGHT_META.items()})
-    payload = dict(generated=datetime.datetime.now().strftime('%Y-%m-%d %H:%M'), nights=NIGHT_META, tiers=TIER_LABEL,
+    payload = dict(generated=datetime.datetime.now().strftime('%Y-%m-%d %H:%M'), nights=NIGHT_META, tiers=TIER_LABEL, tierc=TIER_COLOR, version=('v2' if V2 else 'v1'),
                    manifold=manifold, targets=targets, stats=stats)
     # public variant of every card first (docs/index.html), then strip the duplicate key from the private (artifact) payload
     pub = []
@@ -278,7 +285,7 @@ def main():
         pub.append(q)
     for tg in targets:
         tg.pop('spec_public', None)
-    html = TEMPLATE.replace('__DATA__', json.dumps(payload, separators=(',', ':'), allow_nan=False))
+    html = template_for_version().replace('__DATA__', json.dumps(payload, separators=(',', ':'), allow_nan=False))
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, 'w') as fh:
         fh.write(html)
@@ -286,15 +293,38 @@ def main():
     # standalone copy for GitHub Pages (docs/index.html): the artifact host wraps the fragment in a document, GitHub does not.
     if n_proprietary:
         print(f'   {n_proprietary} targets have proprietary epochs on disk: withheld from both copies of the page')
-    html = TEMPLATE.replace('__DATA__', json.dumps(dict(payload, targets=pub), separators=(',', ':'), allow_nan=False))
+    html = template_for_version().replace('__DATA__', json.dumps(dict(payload, targets=pub), separators=(',', ':'), allow_nan=False))
     head_end = html.find('<header>')
     standalone = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1">\n'
                   + html[:head_end] + '</head>\n<body>\n' + html[head_end:] + '\n</body>\n</html>\n')
     os.makedirs(os.path.join(HERE, 'docs'), exist_ok=True)
-    with open(os.path.join(HERE, 'docs', 'index.html'), 'w') as fh:
+    with open(os.path.join(HERE, 'docs', f'index{SUFFIX}.html'), 'w') as fh:
         fh.write(standalone)
-    print(f'wrote docs/index.html (standalone, {os.path.getsize(os.path.join(HERE, "docs", "index.html"))/1e6:.1f} MB)')
+    print(f'wrote docs/index{SUFFIX}.html (standalone, {os.path.getsize(os.path.join(HERE, "docs", f"index{SUFFIX}.html"))/1e6:.1f} MB)')
 
+
+def template_for_version():
+    if not V2:
+        return TEMPLATE
+    tpl = TEMPLATE
+    a, b = tpl.index('  const tierRows=['), tpl.index('  return `<section class="about">')
+    tpl = tpl[:a] + V2_ROWS + tpl[b:]
+    a, b = tpl.index('<h3>How targets are ranked</h3>'), tpl.index('<h3>What a card shows</h3>')
+    tpl = tpl[:a] + V2_RANK + tpl[b:]
+    return tpl
+
+
+V2_ROWS = r'''  const tierRows=[
+    ['D1','Turn-off discovery',`DR16 quasars with no known changing-look history and no SDSS spectrum since 2024, ranked by the calibrated probability that broad Hβ has fallen by more than 2× since the archival spectrum. The model is fitted on ~5,600 quasars with a second SDSS epoch: optical change since the spectrum (ZTF against synthetic photometry of the spectrum itself), W1 fade and amplitude, W1−W2 colour trend, Eddington ratio, manifold prior and redshift; cross-validated AUC 0.74 for the line change, 0.82 for a continuum change.`,'var(--t1)'],
+    ['D2','Turn-on discovery',`Two parents: the same quasars ranked by the probability of a broad-Hβ rise (AUC 0.90), and SDSS narrow-line AGN galaxies whose W1 and W2 both brightened by ≥ 0.2 mag at ≥ 3σ since 2014, scored with the success rates of Yang et al. (2025).`,'var(--t2)'],
+    ['K','Known changers, new epoch',`Zeltyn et al. (2024) CL-AGN/EVQs and confirmed CLAGNs from the Camus & Panda (2026) database whose photometry has moved since their last spectrum: recurrence and duty cycles.`,'var(--t3)'],
+    ['B','Blind manifold stratum',`Objects in the literature-CLAGN corner of the Hemmati et al. (2026) manifold with no photometric trigger at all: a direct NGPS test of the manifold prior.`,'var(--accent)'],
+    ['C','Controls',`Quiet region of the manifold, no change in ZTF or WISE, bright.`,'var(--t4)']];
+'''
+V2_RANK = r'''<h3>How targets are ranked</h3>
+    <p>Selection v2. Every candidate carries calibrated probabilities of a broad-line change fitted on the SDSS two-epoch set (see the strata). Within a stratum the ranking is <em>probability per hour of telescope time</em> times a moon-distance weight (1 beyond 60°, 0.7 at 40–60°, 0.4 at 30–40°). Each night gives 55 / 20 / 10 / 8 / 7 % of its time to D1 / D2 / K / B / C, and the time-aware scheduler (11_schedule.py) lays out the sequence with CALSPEC standards at both ends. Cuts are geometric only: ≥ 1.5 h above airmass 2, moon ≥ 30°, z ≤ 0.8. The exposure model scales the proposal's NGPS ETC point (r = 18.5, dark: 9 min at S/N 10) to S/N ≈ 7 on Hα (z ≤ 0.55) or Hβ, with the bright moon adding about 1 mag of sky in the red and 2 in the blue-green.</p>
+    <p>The Hemmati et al. (2026) manifold enters three ways: as a calibrated probability surface (the local rate of confirmed change among the calibration objects at each position, and the literature-CLAGN corner as a 4–5× prior), as the predictor of the direction of change (turn-on versus turn-off, AUC 0.76 on independently confirmed CLAGNs), and as the source of the blind stratum and the controls.</p>
+    '''
 
 TEMPLATE = r'''<title>CLAGN Night Sheet</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -438,8 +468,8 @@ footer{max-width:1500px;margin:20px auto 0;padding:14px 22px;color:var(--ink3);f
 <script type="application/json" id="data">__DATA__</script>
 <script>
 const D = JSON.parse(document.getElementById('data').textContent);
-const TIERC = {T1:'var(--t1)',T2:'var(--t2)',T3:'var(--t3)',T4:'var(--t4)'};
-const state = {night:'sep23', tiers:new Set(['T1','T2','T3','T4']), q:''};
+const TIERC = D.tierc || {T1:'var(--t1)',T2:'var(--t2)',T3:'var(--t3)',T4:'var(--t4)'};
+const state = {night:'sep23', tiers:new Set(Object.keys(D.tiers)), q:''};
 try{ const s=JSON.parse(localStorage.getItem('clagn_ns')||'{}'); if(s.night) state.night=s.night; }catch(e){}
 function save(){ try{ localStorage.setItem('clagn_ns', JSON.stringify({night:state.night})); }catch(e){} }
 
@@ -652,7 +682,7 @@ function card(t, nightKey){
   const epochs = t.epochs;
   const epRows = epochs.map(e=>`<tr><td class="mono">${e.date}</td><td>${esc(e.src)} <span style="color:var(--ink3)">${esc(e.prog)}</span></td><td>${esc(e.cls)}${e.sub?` <span style="color:var(--ink3)">${esc(e.sub)}</span>`:''}</td><td class="n mono">${e.z==null?'—':e.z.toFixed(3)}</td></tr>`);
   const shown = epRows.slice(0,6).join(''), hidden = epRows.slice(6).join('');
-  const change = t.dr_ref!=null ? `Δr since last spectrum ${t.dr_ref>0?'+':''}${fmt(t.dr_ref)} mag` : (t.w1_ratio!=null ? `W1 now / at spectrum = ${fmt(t.w1_ratio)}` : 'no change measure yet');
+  const change = t.d_opt!=null ? `optical change since the archival spectrum ${t.d_opt>0?'+':''}${fmt(t.d_opt)} mag (ZTF vs synthetic)` : t.dr_ref!=null ? `Δr since last spectrum ${t.dr_ref>0?'+':''}${fmt(t.dr_ref)} mag` : (t.w1_ratio!=null ? `W1 now / at spectrum = ${fmt(t.w1_ratio)}` : 'no change measure yet');
   return `<article class="card" id="c-${esc(t.name)}">
     <div class="id">
       <div class="rank">${isBackup?'<small>backup</small>':`${n.rank??'—'}<small>${D.nights[nk]?.label??''}</small>`}</div>
@@ -669,11 +699,21 @@ function card(t, nightKey){
         <b>trend</b><span class="v">${esc(t.trend)}</span>
       </div>
       <div class="meters">
+        ${D.version==='v2' ? `
+        ${meter('P↓',t.p_hb_dim,1,'calibrated probability that broad Hβ fell by more than 2x since the archival spectrum')}
+        ${meter('P↑',t.p_hb_bright,1,'calibrated probability that broad Hβ rose by more than 2x')}
+        ${meter('Pc',t.p_cont_dim,1,'probability of a continuum drop > 0.7 mag')}
+        <div class="meter" title="optical change since the archival spectrum: ZTF median minus synthetic magnitude of the spectrum (+ = fainter now)"><b>Δopt</b><span></span><span class="mono">${t.d_opt==null?'—':(t.d_opt>0?'+':'')+fmt(t.d_opt,2)} mag</span></div>
+        <div class="meter" title="NEOWISE W1 change 2014-2024 (+ = fainter)"><b>ΔW1</b><span></span><span class="mono">${t.dw1_neo==null?'—':(t.dw1_neo>0?'+':'')+fmt(t.dw1_neo,2)} mag</span></div>
+        <div class="meter" title="W1-W2 colour change (+ = redder now)"><b>Δcol</b><span></span><span class="mono">${t.dcolor==null?'—':(t.dcolor>0?'+':'')+fmt(t.dcolor,2)}</span></div>
+        <div class="meter" title="log Eddington ratio (Wu & Shen 2022)"><b>Edd</b><span></span><span class="mono">${t.ledd==null?'—':fmt(t.ledd,2)}</span></div>
+        <div class="meter" title="manifold prior: local rate of Hβ change among calibration objects at this position"><b>map</b><span></span><span class="mono">${fmt(t.p_hb,2)}</span></div>
+        <div class="meter"><b>Σ</b><span></span><span class="mono" style="color:var(--ink)">${fmt(t.score??n.prio??t.priority,2)}</span></div>` : `
         ${meter('M',t.M,2,'manifold CLAGN-likeness (1 = threshold)')}
         ${meter('P',t.P,2,'photometric change since last spectrum (1 = factor 1.5)')}
         ${meter('S',t.S,1,'staleness of last spectrum')}
         ${meter('B',t.B,1,'brightness weight')}
-        <div class="meter"><b>Σ</b><span></span><span class="mono" style="color:var(--ink)">${fmt(n.prio??t.priority,2)}</span></div>
+        <div class="meter"><b>Σ</b><span></span><span class="mono" style="color:var(--ink)">${fmt(n.prio??t.priority,2)}</span></div>`}
       </div>
       <div class="why"><b>Why</b>${esc((n&&n.why)||t.why||'')}</div>
     </div>

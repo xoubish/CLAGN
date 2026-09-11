@@ -34,6 +34,14 @@ PALOMAR, NIGHTS, AIRMASS_MAX = obs.PALOMAR, obs.NIGHTS, obs.AIRMASS_MAX
 STEP_MIN = 5
 OVERHEAD_MIN = getattr(sc, 'OVERHEAD_MIN', 5)      # slew + acquisition (< 2 min) + readout
 QUOTA = getattr(sc, 'QUOTA', {'T3': 3, 'T4': 4})
+# ---- selection v2 (14_select_targets.py): CLAGN_SEL=v2 switches the candidate table, the target files, the tier vocabulary and the caps
+V2 = os.environ.get('CLAGN_SEL', 'v1') == 'v2'
+SUFFIX = '_v2' if V2 else ''
+MASTER = 'candidates_v2.csv' if V2 else 'master_list_scored.csv'
+TIERS = ['D1', 'D2', 'K', 'B', 'C'] if V2 else ['T1', 'T2', 'T3', 'T4']
+EXEMPT_Z = 'K' if V2 else 'T3'
+if V2:   # per-night caps from the v2 time fractions (D2 20 %, K 10 %, B 8 %, C 7 %) at ~13 min per target
+    QUOTA = {'D2': {'sep23': 5, 'oct26': 11, 'oct27': 11}, 'K': {'sep23': 2, 'oct26': 5, 'oct27': 5}, 'B': {'sep23': 2, 'oct26': 4, 'oct27': 4}, 'C': {'sep23': 2, 'oct26': 4, 'oct27': 4}}
 STD_MIN, STD_AIRMASS, STD_VMAX = 10, 1.6, 13.6     # standard: acquisition + 2 short exposures; bright enough for the full moon
 PICK04_BOOST = 2.0
 DEADLINE_MIN = 150.0                               # setting within this many minutes -> urgency grows to 4x
@@ -49,7 +57,7 @@ def local(t):
 def candidates(night, m, picked):
     """Everything observable that night, scored like 04 (priority x moon weight, exposure model), minus earlier nights' picks."""
     hrs, sep = m[f'hrs_{night}'], m[f'moonsep_{night}']
-    elig = (hrs > 0) & (sep >= sc.MIN_MOONSEP) & ((m.z <= sc.ZMAX) | (m.tier == 'T3')) & m.tier.isin(['T1', 'T2', 'T3', 'T4']) \
+    elig = (hrs > 0) & (sep >= sc.MIN_MOONSEP) & ((m.z <= sc.ZMAX) | (m.tier == EXEMPT_Z)) & m.tier.isin(TIERS) \
            & (m.priority > 0) & ~m.name.isin(picked)
     c = m[elig].copy()
     c['priority_night'] = (c.priority * sc.moon_weight(sep[elig].values)).round(3)
@@ -67,16 +75,16 @@ def schedule_night(night, m, picked):
     times = t0 + np.arange(n) * STEP_MIN * u.min
     moon = get_body('moon', times, PALOMAR.location)
 
-    t04 = pd.read_csv(os.path.join(DATA, f'targets_{night}.csv'))
+    t04 = pd.read_csv(os.path.join(DATA, f'targets_{night}{SUFFIX}.csv'))
     if 'origin' in t04:
         t04 = t04[~t04.origin.isin(['schedule-fill', 'pick-other-night'])]   # re-runnable: drop last run's appended rows
     if 'rank04' not in t04:                                          # first run: remember 04's own ranking so reruns see the same picks
         t04['rank04'] = t04['rank']
     t04['rank04'] = t04.rank04.fillna(0).astype(int)
-    pick04 = set(t04[t04.rank04 > 0].name)
+    pick04 = set(t04[t04.rank04 > 0].name) - picked          # a pick already scheduled on an earlier night must not be placed again
     # picks of the other nights that are still unscheduled compete here with the same boost (Oct 26 leftovers -> Oct 27 morning)
     for other in NIGHTS:
-        po = os.path.join(DATA, f'targets_{other}.csv')
+        po = os.path.join(DATA, f'targets_{other}{SUFFIX}.csv')
         if other != night and os.path.exists(po):
             o = pd.read_csv(po, usecols=lambda col: col in ('name', 'rank', 'rank04', 'origin'))
             rk = o['rank04'] if 'rank04' in o else o['rank']
@@ -96,7 +104,12 @@ def schedule_night(night, m, picked):
     last_ok = np.array([np.max(np.where(ok[i])[0]) if ok[i].any() else -1 for i in range(len(c))])
     best_x = np.array([np.min(secz[i]) for i in range(len(c))])
     # 04's picks carry the proposal's tier floors: boost them, the scarce T2/T3/T4 picks more, so they survive the time crunch
-    base = c.priority_night.values / (texp + OVERHEAD_MIN) * np.where(c.pick04.values, np.where(c.tier.values == 'T1', PICK04_BOOST, 2 * PICK04_BOOST), 1.0)
+    if V2:   # v2: the selection's picks are boosted per stratum so the small blind (B) and control (C) strata survive the time crunch; their caps bound them
+        BOOST_V2 = {'D1': PICK04_BOOST, 'D2': PICK04_BOOST, 'K': 2 * PICK04_BOOST, 'B': 5 * PICK04_BOOST, 'C': 5 * PICK04_BOOST}
+        boost = np.where(c.pick04.values, np.array([BOOST_V2.get(str(t), PICK04_BOOST) for t in c.tier.values]), 1.0)
+    else:
+        boost = np.where(c.pick04.values, np.where(c.tier.values.astype(str) == 'T1', PICK04_BOOST, 2 * PICK04_BOOST), 1.0)
+    base = c.priority_night.values / (texp + OVERHEAD_MIN) * boost
 
     std = pd.read_csv(os.path.join(DATA, 'standards_spectrophotometric.csv'))
     scd = SkyCoord(std.ra.values * u.deg, std.dec.values * u.deg)
@@ -122,6 +135,7 @@ def schedule_night(night, m, picked):
     while k < k_end:
         fits = ok[:, k] & ~done & (last_ok >= k + nblk - 1) & (k + nblk <= k_end)
         for tier, cap in QUOTA.items():
+            cap = cap.get(night, 99) if isinstance(cap, dict) else cap
             if counts.get(tier, 0) >= cap:
                 fits &= (c.tier.values != tier)
         if not fits.any():
@@ -146,7 +160,7 @@ def schedule_night(night, m, picked):
           f'tiers {sched.tier.value_counts().to_dict()}')
     if unplaced:
         print(f'   unplaced 04-picks (now backups): {", ".join(unplaced)}')
-    S.to_csv(os.path.join(DATA, f'schedule_{night}.csv'), index=False)
+    S.to_csv(os.path.join(DATA, f'schedule_{night}{SUFFIX}.csv'), index=False)
 
     # ---- update targets_<night>.csv: rank = sequence order; unplaced 04 picks -> backups; fillers appended with 04's columns
     order = {nm: i + 1 for i, nm in enumerate(sched.name)}
@@ -160,12 +174,13 @@ def schedule_night(night, m, picked):
         f = c[c.name.isin(extra.name)].copy(); f['night'] = night
         f['origin'] = f.name.map(dict(zip(extra.name, extra.origin))).replace({'04': 'pick-other-night'})
         f['rank'] = f.name.map(order).astype(int); f['sched_start'] = f.name.map(start); f['rank04'] = 0
-        keep = [x for x in COLS04 + [f'hrs_{night}', f'minX_{night}', f'moonsep_{night}', 'origin', 'sched_start'] if x in f.columns]
+        keep = [x for x in (list(t04.columns) if V2 else COLS04) + [f'hrs_{night}', f'minX_{night}', f'moonsep_{night}', 'origin', 'sched_start'] if x in f.columns]
+        keep = list(dict.fromkeys(keep))
         t04 = pd.concat([t04, f[keep]], ignore_index=True)
     t04 = t04.sort_values(['rank', 'prio_per_hour'], ascending=[True, False], key=lambda s: s.replace(0, 10**6) if s.name == 'rank' else s)
-    t04.to_csv(os.path.join(DATA, f'targets_{night}.csv'), index=False)
+    t04.to_csv(os.path.join(DATA, f'targets_{night}{SUFFIX}.csv'), index=False)
 
-    d = os.path.join(HERE, 'finders', night); os.makedirs(d, exist_ok=True)
+    d = os.path.join(HERE, 'finders', night + SUFFIX); os.makedirs(d, exist_ok=True)
     with open(os.path.join(d, f'schedule_{night}.txt'), 'w') as fh:
         fh.write(f'# NGPS observing sequence {night}: {date_str} ({part} night), local Pacific times; astronomical twilight {local(dusk)} -> {local(dawn)}\n')
         fh.write(f'# window {local(t0)} -> {local(t1)}; airmass < {AIRMASS_MAX}; order = priority per hour with setting targets first; '
@@ -184,7 +199,7 @@ def schedule_night(night, m, picked):
 
 
 if __name__ == '__main__':
-    m = pd.read_csv(os.path.join(DATA, 'master_list_scored.csv'), low_memory=False)
+    m = pd.read_csv(os.path.join(DATA, MASTER), low_memory=False)
     picked = set()
     for night in (sys.argv[1:] or list(NIGHTS)):
         picked |= schedule_night(night, m, picked)
