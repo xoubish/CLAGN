@@ -24,9 +24,9 @@ NIGHT_META = {
     'sep23': dict(label='Sep 23', date='2026-09-23', part='first half', window='20:05 – 00:39 PDT', lst='19.5h – 0.1h',
                   moon='93 %', moon_pos='RA 22.2h  Dec −12°', moon_note='up all window', slots=14, mjd=61307.2),
     'oct26': dict(label='Oct 26', date='2026-10-26', part='full night', window='19:24 – 05:38 PST', lst='21.0h – 7.2h',
-                  moon='98 %', moon_pos='RA 3.0h  Dec +22°', moon_note='rises ~3.5 h after twilight', slots=34, mjd=61340.3),
+                  moon='98 %', moon_pos='RA 3.0h  Dec +22°', moon_note='up all night, low in the east at twilight (alt +13° → +36°)', slots=34, mjd=61340.3),
     'oct27': dict(label='Oct 27', date='2026-10-27', part='full night', window='19:23 – 05:39 PST', lst='21.0h – 7.3h',
-                  moon='94 %', moon_pos='RA 4.1h  Dec +26°', moon_note='rises ~3.5 h after twilight', slots=34, mjd=61341.3),
+                  moon='94 %', moon_pos='RA 4.1h  Dec +26°', moon_note='up all night, on the horizon at twilight (alt +3° → +50°)', slots=34, mjd=61341.3),
 }
 TIER_LABEL = {'T1': 'Tier 1 · manifold-selected', 'T2': 'Tier 2 · EVQ completing transition',
               'T3': 'Tier 3 · confirmed CLAGN, revisit', 'T4': 'Tier 4 · control'}

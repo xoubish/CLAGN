@@ -191,8 +191,8 @@ Exclusions (`exclude_flag`, `exclude_reason`):
 
 - [x] Nights: **P200/NGPS, 2026-09-23 first half** (astro. twilight 20:05, window to 00:39 PDT, LST 19.5h-0.1h,
       moon 93% at RA 22.2h Dec -12, up all window) and **2026-10-26 + 10-27 full nights** (19:24-05:38 PST,
-      LST 21h-7.2h; moon 98%/94% at RA 3-4h Dec +22..+26, rises ~3.5 h after twilight so the first third of
-      each October night is moon-free). All bright time -> bright targets and/or > 40 deg from the moon.
+      LST 21h-7.2h; moon 98%/94% at RA 3-4h Dec +22..+26, up all night: it rises 20-70 min before astronomical twilight and stands low in the east (alt +3 to +13 deg) while the early
+      RA 16-17h targets are in the west, so separations are largest early; corrected 2026-09-13, there is NO moon-free stretch). All bright time -> bright targets and/or > 40 deg from the moon.
       Computed by `05_observability.py` (astroplan); it adds hrs_<night>, minX_<night>, moonsep_<night> columns.
 - [x] RA windows used for the parent pool (`02_parent_pool.py`): 15.5h-24h, 0h-4.5h, 6.5h-11h; Dec > -15.
 - [x] Exposure model (2026-09-03, in `04_score_tiers.py`): t_exp = 9 min * (7/10)^2 * 10^(0.8 (r-18.5)) * 10^(0.4 dsky),
