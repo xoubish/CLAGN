@@ -32,8 +32,8 @@ TIER_LABEL = {'T1': 'Tier 1 · manifold-selected', 'T2': 'Tier 2 · EVQ completi
               'T3': 'Tier 3 · confirmed CLAGN, revisit', 'T4': 'Tier 4 · control'}
 TIER_COLOR = {'T1': 'var(--t1)', 'T2': 'var(--t2)', 'T3': 'var(--t3)', 'T4': 'var(--t4)'}
 if V2:
-    TIER_LABEL = {'D1': 'D1 · turn-off discovery', 'D2': 'D2 · turn-on discovery', 'K': 'K · known changer, new epoch', 'B': 'B · blind manifold stratum', 'C': 'C · control'}
-    TIER_COLOR = {'D1': 'var(--t1)', 'D2': 'var(--t2)', 'K': 'var(--t3)', 'B': 'var(--accent)', 'C': 'var(--t4)'}
+    TIER_LABEL = {'D1': 'D1 · turn-off discovery', 'D2': 'D2 · turn-on discovery', 'K': 'K · known changer, new epoch', 'B': 'B · manifold-selected (blind)'}
+    TIER_COLOR = {'D1': 'var(--t1)', 'D2': 'var(--t2)', 'K': 'var(--t3)', 'B': 'var(--accent)'}
 LINES = [('Mg II', 2798.0), ('Hβ', 4861.0), ('[O III]', 5007.0), ('Hα', 6563.0), ('Ca II', 8600.0), ('[S III]', 9531.0)]
 
 
@@ -157,7 +157,7 @@ def main():
     names = t.name.unique().tolist()
     mm = m.set_index('name')
     ep_tables = []
-    for tag in ['zeltyn', 'pool', 'v2']:
+    for tag in ['zeltyn', 'pool', 'v2', 'v2pub']:
         p = os.path.join(DATA, f'spectra_epochs_{tag}.csv')
         if os.path.exists(p):
             ep_tables.append(pd.read_csv(p, low_memory=False))
@@ -318,11 +318,10 @@ V2_ROWS = r'''  const tierRows=[
     ['D1','Turn-off discovery',`DR16 quasars with no known changing-look history and no SDSS spectrum since 2024, ranked by the calibrated probability that broad Hβ has fallen by more than 2× since the archival spectrum. The model is fitted on ~5,600 quasars with a second SDSS epoch: optical change since the spectrum (ZTF against synthetic photometry of the spectrum itself), W1 fade and amplitude, W1−W2 colour trend, Eddington ratio, manifold prior and redshift; cross-validated AUC 0.74 for the line change, 0.82 for a continuum change.`,'var(--t1)'],
     ['D2','Turn-on discovery',`Two parents: the same quasars ranked by the probability of a broad-Hβ rise (AUC 0.90), and SDSS narrow-line AGN galaxies whose W1 and W2 both brightened by ≥ 0.2 mag at ≥ 3σ since 2014, scored with the success rates of Yang et al. (2025).`,'var(--t2)'],
     ['K','Known changers, new epoch',`Zeltyn et al. (2024) CL-AGN/EVQs and confirmed CLAGNs from the Camus & Panda (2026) database whose photometry has moved since their last spectrum: recurrence and duty cycles.`,'var(--t3)'],
-    ['B','Blind manifold stratum',`Objects in the literature-CLAGN corner of the Hemmati et al. (2026) manifold with no photometric trigger at all: a direct NGPS test of the manifold prior.`,'var(--accent)'],
-    ['C','Controls',`Quiet region of the manifold, no change in ZTF or WISE, bright.`,'var(--t4)']];
+    ['B','Manifold-selected, blind',`The paper's own selection on the W1 manifold of Hemmati et al. (2026): in the literature-CLAGN region and with at least 15 % of the 50 nearest training objects being literature CLAGNs, an archival SDSS spectrum as baseline, and no photometric trigger at all. A direct NGPS test of the manifold on its own; the SDSS two-epoch calibration set (5,578 quasars) serves as the control.`,'var(--accent)']];
 '''
 V2_RANK = r'''<h3>How targets are ranked</h3>
-    <p>Selection v2. Every candidate carries calibrated probabilities of a broad-line change fitted on the SDSS two-epoch set (see the strata). Within a stratum the ranking is <em>probability per hour of telescope time</em> times a moon-distance weight (1 beyond 60°, 0.7 at 40–60°, 0.4 at 30–40°). Each night gives 55 / 20 / 10 / 8 / 7 % of its time to D1 / D2 / K / B / C, and the time-aware scheduler (11_schedule.py) lays out the sequence with CALSPEC standards at both ends. Cuts are geometric only: ≥ 1.5 h above airmass 2, moon ≥ 30°, z ≤ 0.8. The exposure model scales the proposal's NGPS ETC point (r = 18.5, dark: 9 min at S/N 10) to S/N ≈ 7 on Hα (z ≤ 0.55) or Hβ, with the bright moon adding about 1 mag of sky in the red and 2 in the blue-green.</p>
+    <p>Selection v2. Every candidate carries calibrated probabilities of a broad-line change fitted on the SDSS two-epoch set (see the strata). Within a stratum the ranking is <em>probability per hour of telescope time</em> times a moon-distance weight (1 beyond 60°, 0.7 at 40–60°, 0.4 at 30–40°). Each night gives 60 / 22 / 10 / 8 % of its time to D1 / D2 / K / B (controls come from the SDSS two-epoch calibration set instead of telescope time), and the time-aware scheduler (11_schedule.py) lays out the sequence with CALSPEC standards at both ends. Cuts are geometric only: ≥ 1.5 h above airmass 2, moon ≥ 30°, z ≤ 0.8. The exposure model scales the proposal's NGPS ETC point (r = 18.5, dark: 9 min at S/N 10) to S/N ≈ 7 on Hα (z ≤ 0.55) or Hβ, with the bright moon adding about 1 mag of sky in the red and 2 in the blue-green.</p>
     <p>The Hemmati et al. (2026) manifold enters three ways: as a calibrated probability surface (the local rate of confirmed change among the calibration objects at each position, and the literature-CLAGN corner as a 4–5× prior), as the predictor of the direction of change (turn-on versus turn-off, AUC 0.76 on independently confirmed CLAGNs), and as the source of the blind stratum and the controls.</p>
     '''
 

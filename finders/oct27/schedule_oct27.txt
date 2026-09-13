@@ -1,10 +1,10 @@
 # NGPS observing sequence oct27: 2026-10-27 (full night), local Pacific times; astronomical twilight 19:23 -> 05:39
-# window 19:23 -> 05:39; airmass < 2.0; order = priority per hour with setting targets first; 10 min unfilled
+# window 19:23 -> 05:39; airmass < 2.0; order = priority per hour with setting targets first; 5 min unfilled
 start   end kind     name                         RA       Dec    X moon tier   # min  plan
 19:23 19:33 standard BD+28 4211             21:51:11 +28:51:50 1.02   61        0  10  CALSPEC bd_28d4211 · sdO2VIIIHe5 V=10.6 · 2 x 30-120 s start of night
 19:33 19:48 primary  P2987                  16:29:22 +41:33:56 1.74  116 D1     1  15  2 x 5 min 
-19:48 20:03 filler   P3502                  16:54:36 +33:02:51 1.78  119 K      2  13  2 x 4 min 
-20:03 20:18 filler   P3763                  16:32:48 +48:45:44 1.87  110 D1     3  13  2 x 4 min 
+19:48 20:03 primary  P3763                  16:32:48 +48:45:44 1.75  110 D1     2  13  2 x 4 min 
+20:03 20:18 filler   P4673                  17:15:20 +27:48:26 1.81  119 D1     3  14  2 x 4 min 
 20:18 20:33 filler   P3336                  16:54:12 +62:53:44 1.71   98 D1     4  13  2 x 4 min 
 20:33 20:58 filler   P4693                  17:08:46 +59:57:16 1.73   99 D1     5  22  2 x 8 min 
 20:58 21:18 filler   P4360                  17:21:02 +53:44:47 1.86  102 D2     6  16  2 x 6 min 
@@ -25,14 +25,14 @@ start   end kind     name                         RA       Dec    X moon tier   
 01:58 02:13 primary  P15106                 07:47:33 +37:17:23 1.57   78 D2    21  13  2 x 4 min 
 02:13 02:28 primary  P18893                 09:11:19 +62:46:40 1.80   85 D2    22  13  2 x 4 min 
 02:28 02:43 primary  P14415                 07:31:27 +45:22:18 1.32   74 D1    23  13  2 x 4 min 
-02:43 02:58 primary  P17652                 08:56:19 +54:17:56 1.61   86 B     24  14  2 x 4 min 
+02:43 02:58 filler   P8055                  23:54:24 +26:36:38 1.85   34 D1    24  13  2 x 4 min 
 02:58 03:13 primary  P17151                 08:54:00 +21:28:03 1.86   95 K     25  13  2 x 4 min 
 03:13 03:28 primary  P22740                 10:02:56 +47:50:28 1.90   98 K     26  13  2 x 4 min 
-03:28 03:43 primary  P15441                 08:20:45 +24:31:53 1.37   87 B     27  13  2 x 4 min 
-03:43 03:58 primary  P22277                 10:04:03 +28:55:35 1.97  108 C     28  13  2 x 4 min 
-03:58 04:13 primary  J090315.11+010623.1    09:03:15 +01:06:23 1.89  103 K     29  13  2 x 4 min 
-04:13 04:28 primary  P19129                 09:24:00 +02:44:08 1.90  108 C     30  13  2 x 4 min 
-04:28 04:48 primary  P17336                 08:35:15 +15:10:10 1.27   93 D1    31  16  2 x 6 min 
-04:48 05:03 primary  P15681                 08:03:41 +16:07:26 1.13   85 D1    32  13  2 x 4 min 
-05:03 05:18 primary  P20272                 09:05:21 +10:21:51 1.31  101 D1    33  15  2 x 5 min 
+03:28 03:53 primary  P16524                 08:15:00 +57:12:18 1.30   80 D1    27  22  2 x 8 min 
+03:53 04:08 primary  J090315.11+010623.1    09:03:15 +01:06:23 1.94  103 K     28  13  2 x 4 min 
+04:08 04:23 primary  P20040                 09:03:15 +01:06:23 1.79  103 K     29  13  2 x 4 min 
+04:23 04:38 primary  P21833                 09:53:42 +29:31:50 1.52  105 B     30  13  2 x 4 min 
+04:38 04:53 primary  P17694                 08:46:35 +46:50:39 1.17   87 D1    31  15  2 x 5 min 
+04:53 05:08 primary  P19363                 09:00:29 +06:08:43 1.39  101 D1    32  14  2 x 4 min 
+05:08 05:23 primary  P22627                 10:02:36 +40:06:15 1.29  102 D1    33  13  2 x 4 min 
 05:28 05:38 standard G191-B2B               05:05:31 +52:49:52 1.14   53        0  10  CALSPEC g191b2b · DA.8 V=11.7 · 2 x 30-120 s end of night

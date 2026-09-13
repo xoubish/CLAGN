@@ -8,8 +8,9 @@ Strata (time fractions per night in FRAC):
   D2  turn-on / brightening discovery: same pool ranked by P_hb_bright (the galaxy parent joins when its data are in: 14b)
   K   known changers due for a new epoch: Zeltyn+2024 CL-AGN/EVQ and Camus & Panda 2026 CLAGNs whose photometry moved since their
       last spectrum (recurrence science)
-  B   blind manifold stratum: literature-CLAGN corner of the Hemmati+2026 manifold WITHOUT any photometric trigger (tests the prior)
-  C   controls: quiet region of the manifold, no photometric trigger, bright
+  B   blind manifold stratum: literature-CLAGN region of the W1 manifold AND kNN literature-CLAGN fraction >= 0.15, ranked by that
+      fraction, archival spectrum as baseline, WITHOUT any photometric trigger (the paper's selection, tested on its own)
+  (C  controls were dropped on 2026-09-13: the SDSS two-epoch calibration set plays that role)
 Ranking inside a stratum = probability (or manifold prior for B, quietness for C) per hour of telescope time x moon weight, using the
 exposure model and moon weights of 04_score_tiers.py.  Cuts are geometric only (hrs >= 1.5, moon >= 30 deg, z <= 0.8); brightness weights.
 Outputs data/targets_<night>_v2.csv (+ backups) and data/selection_v2_summary.txt.  The v1 lists are untouched.
@@ -18,7 +19,7 @@ import os, importlib.util, numpy as np, pandas as pd, warnings; warnings.filterw
 HERE = os.path.dirname(os.path.abspath(__file__)); DATA = os.path.join(HERE, 'data')
 spec = importlib.util.spec_from_file_location('f04', os.path.join(HERE, '04_score_tiers.py')); f04 = importlib.util.module_from_spec(spec); spec.loader.exec_module(f04)
 NIGHTS, HOURS = ['sep23', 'oct26', 'oct27'], f04.HOURS
-FRAC = {'D1': 0.55, 'D2': 0.20, 'K': 0.10, 'B': 0.08, 'C': 0.07}
+FRAC = {'D1': 0.60, 'D2': 0.22, 'K': 0.10, 'B': 0.08}          # controls dropped 2026-09-13: the 5,578-object SDSS two-epoch set is the control
 MJD_RECENT_SDSSV = 60300.0          # 2024-01: an SDSS-V spectrum after this already tells us the current state
 LIST_LEN = 60
 
@@ -38,6 +39,7 @@ def main():
     sv = pd.read_csv(os.path.join(DATA, 'sdssv_internal_epochs.csv')); last_sv = sv.groupby('name').mjd.max()
     P['mjd_last_sdssv'] = last_sv.reindex(P.index); P['recent_sdssv'] = P.mjd_last_sdssv >= MJD_RECENT_SDSSV
     P['r_now'] = brightness_now(P)
+    P['clagn_score'] = pd.read_csv(os.path.join(DATA, 'manifold_prior_pool.csv')).set_index('name').clagn_score.reindex(P.index)   # kNN fraction of literature CLAGNs (Hemmati+2026)
     trig_off = (P.d_opt > 0.3) | (P.dw1_neowise > 0.3) | ((P.dW1_full > 0.3) & (P.dcolor < -0.1))
     trig_on = (P.d_opt < -0.3) | (P.dw1_neowise < -0.3)
     quiet = (P.d_opt.abs() < 0.2) & (P.dw1_neowise.abs() < 0.15) & (P.ampW1 < 0.4) & (P.dW1_full.abs() < 0.2)
@@ -48,11 +50,14 @@ def main():
     P.loc[d1, 'stratum'] = 'D1'; P.loc[d1, 'score'] = P.P_hb_dim[d1]
     d2 = ~known & ~P.recent_sdssv & P.d_opt.notna() & (P.P_hb_bright >= 0.1) & (P.stratum == '')
     P.loc[d2, 'stratum'] = 'D2'; P.loc[d2, 'score'] = P.P_hb_bright[d2]
-    b = ~known & ~P.recent_sdssv & P.lit_corner.fillna(False).astype(bool) & ~trig_off.fillna(False) & ~trig_on.fillna(False) & P.d_opt.notna() & (P.stratum == '')
-    P.loc[b, 'stratum'] = 'B'; P.loc[b, 'score'] = P.P_hb[b]
+    # blind manifold stratum (user 2026-09-13): the paper's own selection, W1-only manifold, literature-CLAGN region AND kNN literature
+    # fraction >= 0.15 (the old threshold), an archival SDSS spectrum as baseline (every pool quasar has one), no photometric trigger;
+    # ranked by the kNN literature-CLAGN fraction itself
+    b = ~known & ~P.recent_sdssv & P.lit_corner.fillna(False).astype(bool) & (P.clagn_score >= 0.15) & ~trig_off.fillna(False) & ~trig_on.fillna(False) & P.d_opt.notna() & (P.stratum == '')
+    P.loc[b, 'stratum'] = 'B'; P.loc[b, 'score'] = P.clagn_score[b]
     lowq = P.P_dim <= P.P_dim.quantile(0.25)
     c = ~known & ~P.recent_sdssv & quiet.fillna(False) & lowq & ~P.lit_corner.fillna(False).astype(bool) & (P.stratum == '') & (P.d_opt.notna())
-    P.loc[c, 'stratum'] = 'C'; P.loc[c, 'score'] = (0.2 - P.d_opt.abs()[c]).clip(lower=0.01)      # the quieter the better
+    # controls (C) are no longer observed (user decision 2026-09-13); the definition is kept for reference:  P.loc[c, 'stratum'] = 'C'
     kq = known & ((P.dw1_neowise.abs() > 0.3) | (P.w1_slope_2yr.abs() > 0.15) | (P.d_opt.abs() > 0.5))
     P.loc[kq, 'stratum'] = 'K'; P.loc[kq, 'score'] = 0.5 + 0.5 * np.clip(P.dw1_neowise.abs()[kq].fillna(0) / 0.5, 0, 1)
     # plain-language reasons
@@ -66,7 +71,7 @@ def main():
         parts.append(f'manifold prior P_hb {r.P_hb:.2f}' + (' (literature corner)' if r.lit_corner else '') + f', direction {"turn-on-like" if r.dir > 0.03 else ("turn-off-like" if r.dir < -0.03 else "neutral")}')
         if r.stratum == 'D1': head = f'P(broad Hbeta fell > 2x) = {r.P_hb_dim:.2f}, P(continuum dimmed) = {r.P_cont_dim:.2f}'
         elif r.stratum == 'D2': head = f'P(broad Hbeta rose > 2x) = {r.P_hb_bright:.2f}, P(continuum brightened) = {r.P_cont_bright:.2f}'
-        elif r.stratum == 'B': head = 'BLIND manifold stratum: literature-CLAGN corner, no photometric trigger'
+        elif r.stratum == 'B': head = f'BLIND manifold stratum (W1 manifold, Hemmati+2026): literature-CLAGN region, {100*r.clagn_score:.0f}% of the 50 nearest training objects are literature CLAGNs, archival SDSS spectrum as baseline, no photometric trigger'
         elif r.stratum == 'C': head = 'CONTROL: quiet manifold region, no photometric trigger'
         else: head = f'KNOWN changer ({r.known_type}) with recent photometric motion'
         return head + '; ' + '; '.join(parts)

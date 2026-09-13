@@ -41,7 +41,7 @@ MASTER = 'candidates_v2.csv' if V2 else 'master_list_scored.csv'
 TIERS = ['D1', 'D2', 'K', 'B', 'C'] if V2 else ['T1', 'T2', 'T3', 'T4']
 EXEMPT_Z = 'K' if V2 else 'T3'
 if V2:   # per-night caps from the v2 time fractions (D2 20 %, K 10 %, B 8 %, C 7 %) at ~13 min per target
-    QUOTA = {'D2': {'sep23': 5, 'oct26': 11, 'oct27': 11}, 'K': {'sep23': 2, 'oct26': 5, 'oct27': 5}, 'B': {'sep23': 2, 'oct26': 4, 'oct27': 4}, 'C': {'sep23': 2, 'oct26': 4, 'oct27': 4}}
+    QUOTA = {'D2': {'sep23': 5, 'oct26': 11, 'oct27': 11}, 'K': {'sep23': 2, 'oct26': 5, 'oct27': 5}, 'B': {'sep23': 2, 'oct26': 4, 'oct27': 4}}
 STD_MIN, STD_AIRMASS, STD_VMAX = 10, 1.6, 13.6     # standard: acquisition + 2 short exposures; bright enough for the full moon
 PICK04_BOOST = 2.0
 DEADLINE_MIN = 150.0                               # setting within this many minutes -> urgency grows to 4x
