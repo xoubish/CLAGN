@@ -37,10 +37,12 @@ def channel_for(wave):
 
 
 def diagnostic(z):
-    """observed wavelength of the line the exposure is planned on: Hα if it is in range, else Hβ, else Mg II."""
-    for name, w0 in [('Ha', 6563.0), ('Hb', 4861.0), ('MgII', 2798.0)]:
+    """observed wavelength of the line the exposure is planned on.  NGPS ETC runs (2026-09-13, bright moon): Hα beyond 760 nm sits in
+    the red OH airglow and needs 3-10x longer than Hβ in the G/R channels, so use Hα only while it is bluer than 760 nm (z < 0.16),
+    otherwise Hβ (in range to z ~ 0.56), otherwise Mg II."""
+    for name, w0, wmax in [('Ha', 6563.0, 7600.0), ('Hb', 4861.0, 7600.0), ('MgII', 2798.0, 10300.0)]:
         w = w0 * (1 + z)
-        if 3100 <= w <= 10300:
+        if 3100 <= w <= wmax:
             return name, w
     return 'Hb', 4861.0 * (1 + z)
 
