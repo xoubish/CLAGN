@@ -103,7 +103,15 @@ def parse(path):
 
 
 def desi_sparcl(name, ra, dec):
-    """DESI DR1 (and BOSS/SDSS DR17 as a cross-check) spectra from SPARCL, rebinned like the SDSS files."""
+    """DESI DR1 (and BOSS/SDSS DR17 as a cross-check) spectra from SPARCL, rebinned like the SDSS files.
+    Cached per target in data/spectra_cache/<name>/desi_sparcl.json (2026-09-13): SPARCL outages used to wipe the DESI records
+    from a rebuilt spectra_dl JSON; now a successful query is cached and an outage falls back to the cache."""
+    cache_p = os.path.join(CACHE, name, 'desi_sparcl.json')
+    if os.path.exists(cache_p):
+        try:
+            return json.load(open(cache_p))
+        except Exception:
+            pass
     try:
         from sparcl.client import SparclClient
     except Exception:
@@ -129,6 +137,15 @@ def desi_sparcl(name, ra, dec):
                             lines={}, mjd=np.nan, phase=None, program=f'DESI {r.data_release}', coadd=True, url=f'sparcl:{r.sparcl_id}', source='DESI'))
     except Exception as ex:
         print(f'   {name}: SPARCL failed {str(ex)[:60]}', flush=True)
+        # keep whatever an earlier successful run stored in the target's JSON, so an outage never removes DESI epochs from the page
+        old_p = os.path.join(OUT, f'{name}.json')
+        if os.path.exists(old_p):
+            try:
+                return [r for r in json.load(open(old_p)) if r.get('source') == 'DESI']
+            except Exception:
+                return out
+        return out
+    os.makedirs(os.path.join(CACHE, name), exist_ok=True); json.dump(out, open(cache_p, 'w'), separators=(',', ':'))
     return out
 
 
