@@ -85,8 +85,11 @@ def rows_for(night):
                                  channel='R', wrange='6000:7000', Note=f'std {r.label} {r.start_local}'[:24],
                                  Comment=f'spectrophotometric standard, {r.plan}; wide slit, keep counts < 50k and > 1k; same binning as science'[:1024]))
         if std_rows:
+            # the sequencer runs the file in order: opening standard, the night's primaries in observing sequence, the closing standard,
+            # then the backups (used only when a primary fails or time is left over)
             first, last = pd.DataFrame(std_rows[:1])[cols], pd.DataFrame(std_rows[1:])[cols]
-            fx = pd.concat([first, fx, last], ignore_index=True); sn = pd.concat([first, sn, last], ignore_index=True)
+            isb_fx = fx.Note.str.contains('backup'); isb_sn = sn.Note.str.contains('backup')
+            fx = pd.concat([first, fx[~isb_fx], last, fx[isb_fx]], ignore_index=True); sn = pd.concat([first, sn[~isb_sn], last, sn[isb_sn]], ignore_index=True)
     return fx, sn
 
 
