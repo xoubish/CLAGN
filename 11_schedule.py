@@ -44,6 +44,7 @@ if V2:   # per-night caps from the v2 time fractions (D2 20 %, K 10 %, B 8 %, C 
     QUOTA = {'D2': {'sep23': 5, 'oct26': 11, 'oct27': 11}, 'K': {'sep23': 2, 'oct26': 5, 'oct27': 5}, 'B': {'sep23': 2, 'oct26': 4, 'oct27': 4}}
 STD_MIN, STD_AIRMASS, STD_VMAX = 10, 1.6, 13.6     # standard: acquisition + 2 short exposures; bright enough for the full moon
 PICK04_BOOST = 2.0
+BASE_OVH_MIN, SLEW_MIN0, SLEW_DEG_PER_MIN = 3.5, 0.5, 20.0   # v2: acquisition+readout, plus a slew of 0.5 min + 1 min per 20 deg (dome + settle)
 DEADLINE_MIN = 150.0                               # setting within this many minutes -> urgency grows to 4x
 COLS04 = ['rank', 'night', 'tier', 'name', 'ra', 'dec', 'z', 'r_mag', 't_exp_min', 'exp_plan', 'prio_per_hour', 'priority_night', 'priority', 'M', 'P', 'trend',
           'years_since_last_spec', 'n_spec', 'last_class', 'clagn_score', 'zeltyn_density_ratio', 'in_region_zeltyn',
@@ -116,10 +117,11 @@ def schedule_night(night, m, picked):
     ssecz = np.where(PALOMAR.altaz(times[np.newaxis, :], scd[:, np.newaxis]).alt.deg > 5, PALOMAR.altaz(times[np.newaxis, :], scd[:, np.newaxis]).secz.value, np.inf)
 
     rows = []; done = np.zeros(len(c), bool); counts = {k: 0 for k in QUOTA}
-    def block(kind, name, ra, dec, k, nb, minutes, X, msep, plan, label='', tier='', prio=np.nan, z=np.nan, rmag=np.nan, origin=''):
-        rows.append(dict(night=night, kind=kind, name=name, ra=ra, dec=dec, start_ut=times[k].utc.iso[:16], start_local=local(times[k]),
+    def block(kind, name, ra, dec, k, nb, minutes, X, msep, plan, label='', tier='', prio=np.nan, z=np.nan, rmag=np.nan, origin='', slew=np.nan):
+        rows.append(dict(night=night, kind=kind, name=name, ra=ra, dec=dec, slew_deg=(round(float(slew), 1) if np.isfinite(slew) else np.nan), start_ut=times[k].utc.iso[:16], start_local=local(times[k]),
                          end_local=local(times[min(k + nb, n - 1)]), minutes=int(minutes), airmass=(round(float(X), 2) if np.isfinite(X) else np.nan), moonsep=(round(float(msep)) if np.isfinite(msep) else np.nan),
                          plan=plan, label=label, tier=tier, priority=prio, z=z, r_mag=rmag, origin=origin))
+    cur = [None]                                                     # current telescope pointing (SkyCoord), for the slew term
     def add_std(k, label):
         cand = np.where((ssecz[:, k] < STD_AIRMASS) & (std.V.fillna(15).values < STD_VMAX))[0]
         if not len(cand):
@@ -127,13 +129,20 @@ def schedule_night(night, m, picked):
         j = cand[np.argmin(ssecz[cand, k] + 0.05 * std.V.fillna(15).values[cand])]
         nb = int(np.ceil(STD_MIN / STEP_MIN))
         block('standard', std.name[j], std.ra[j], std.dec[j], k, nb, STD_MIN, ssecz[j, k], scd[j].separation(moon[k]).deg,
-              f'CALSPEC {std.calspec[j]} · {std.sptype[j]} V={std.V[j]:.1f} · 2 x 30-120 s', label, rmag=std.V[j])
+              f'CALSPEC {std.calspec[j]} · {std.sptype[j]} V={std.V[j]:.1f} · 2 x 30-120 s', label, rmag=std.V[j], slew=(cur[0].separation(scd[j]).deg if cur[0] is not None else np.nan))
+        cur[0] = scd[j]
         return k + nb
 
     k = add_std(0, 'start of night')
     k_end = n - 1 - int(np.ceil(STD_MIN / STEP_MIN))                  # keep the last STD_MIN for the closing standard
     while k < k_end:
-        fits = ok[:, k] & ~done & (last_ok >= k + nblk - 1) & (k + nblk <= k_end)
+        if V2:   # slew-aware: the time a candidate costs now depends on where the telescope is
+            sep_now = cur[0].separation(coords).deg if cur[0] is not None else np.zeros(len(c))
+            tot_now = texp + BASE_OVH_MIN + SLEW_MIN0 + sep_now / SLEW_DEG_PER_MIN
+            nblk_now = np.ceil(tot_now / STEP_MIN).astype(int); base_now = c.priority_night.values * boost / tot_now
+        else:
+            sep_now = np.full(len(c), np.nan); tot_now = texp + OVERHEAD_MIN; nblk_now = nblk; base_now = base
+        fits = ok[:, k] & ~done & (last_ok >= k + nblk_now - 1) & (k + nblk_now <= k_end)
         for tier, cap in QUOTA.items():
             cap = cap.get(night, 99) if isinstance(cap, dict) else cap
             if counts.get(tier, 0) >= cap:
@@ -144,11 +153,11 @@ def schedule_night(night, m, picked):
         urgency = 1.0 + 3.0 * np.clip(1.0 - ttd / DEADLINE_MIN, 0.0, 1.0)
         patience = np.where((secz[:, k] - best_x > 0.3) & (ttd > DEADLINE_MIN), 0.6, 1.0)
         airm = np.clip(1.3 - 0.3 * secz[:, k], 0.5, 1.0)
-        score = np.where(fits, base * urgency * patience * airm, -1.0)
-        i = int(np.argmax(score)); nb = nblk[i]; r = c.iloc[i]
-        block('primary' if r.pick04 else 'filler', r['name'], r.ra, r.dec, k, nb, texp[i] + OVERHEAD_MIN, secz[i, k], coords[i].separation(moon[k]).deg,
-              r.exp_plan, '', r.tier, float(r.priority_night), r.z, r.r_mag, '04' if r.pick04 else 'schedule-fill')
-        done[i] = True; counts[r.tier] = counts.get(r.tier, 0) + 1; k += nb
+        score = np.where(fits, base_now * urgency * patience * airm, -1.0)
+        i = int(np.argmax(score)); nb = nblk_now[i]; r = c.iloc[i]
+        block('primary' if r.pick04 else 'filler', r['name'], r.ra, r.dec, k, nb, tot_now[i], secz[i, k], coords[i].separation(moon[k]).deg,
+              r.exp_plan, '', r.tier, float(r.priority_night), r.z, r.r_mag, '04' if r.pick04 else 'schedule-fill', slew=sep_now[i])
+        done[i] = True; counts[r.tier] = counts.get(r.tier, 0) + 1; k += nb; cur[0] = coords[i]
     add_std(k_end, 'end of night')
 
     S = pd.DataFrame(rows)
@@ -157,7 +166,7 @@ def schedule_night(night, m, picked):
     unplaced = sorted(set(t04[t04.rank04 > 0].name) - set(sched.name))
     print(f'{night}: {local(t0)}-{local(t1)} local ({(t1 - t0).to(u.hour).value:.1f} h) | {int(sched.name.isin(t04[t04.rank04 > 0].name).sum())} of {int((t04.rank04 > 0).sum())} own 04-picks placed, {int(sched.origin.eq("04").sum() - sched.name.isin(t04[t04.rank04 > 0].name).sum())} picks from other nights, '
           f'{int(sched.origin.eq("schedule-fill").sum())} fillers from the pool, {idle} min idle | standards {", ".join(S[S.kind == "standard"].name)} | '
-          f'tiers {sched.tier.value_counts().to_dict()}')
+          f'tiers {sched.tier.value_counts().to_dict()}' + (f' | slews total {S.slew_deg.sum():.0f} deg, > 30 deg: {int((S.slew_deg > 30).sum())}' if V2 else ''))
     if unplaced:
         print(f'   unplaced 04-picks (now backups): {", ".join(unplaced)}')
     S.to_csv(os.path.join(DATA, f'schedule_{night}{SUFFIX}.csv'), index=False)
