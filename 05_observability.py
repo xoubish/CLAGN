@@ -6,7 +6,7 @@ All bright time -> prefer bright targets and large moon separation.
 
 Usage:  /opt/anaconda3/bin/python 05_observability.py <in.csv> <out.csv> [ra_col dec_col]
 Adds per-night columns:  hrs_<night> (hours inside the window with airmass < AIRMASS_MAX),
-                          minX_<night> (best airmass in window), moonsep_<night> (deg, at window midpoint),
+                          minX_<night> (best airmass in window), moonsep_<night> (apparent deg, at window midpoint),
                           plus hrs_any (max over nights) and moonsep_min.
 Also prints the night summary (twilights, window, moon illumination/position, RA range that is observable).
 """
@@ -42,7 +42,7 @@ def describe_night(label, t0, t1, dusk, dawn):
     times = t0 + np.linspace(0, (t1 - t0).to(u.hour).value, 25) * u.hour
     moon_mid = get_body('moon', t0 + (t1 - t0) / 2, PALOMAR.location)
     illum = moon_illumination(t0 + (t1 - t0) / 2)
-    moon_alt = PALOMAR.altaz(times, moon_mid).alt.deg
+    moon_alt = PALOMAR.altaz(times, get_body('moon', times, PALOMAR.location)).alt.deg
     lst0 = PALOMAR.local_sidereal_time(t0).hour; lst1 = PALOMAR.local_sidereal_time(t1).hour
     to_local = lambda t: pd.Timestamp(t.utc.datetime, tz='UTC').tz_convert('US/Pacific').strftime('%H:%M')
     print(f'\n=== {label}: {t0.utc.datetime:%Y-%m-%d} UTC ===')
@@ -55,22 +55,35 @@ def describe_night(label, t0, t1, dusk, dawn):
     return moon_mid, illum
 
 
+def apparent_moon_separation(coords, times):
+    """Separation in one topocentric frame; never ICRS.separation(GCRS).
+
+    Supports broadcast target/time arrays. No atmospheric refraction is applied.
+    """
+    frame = AltAz(obstime=times, location=PALOMAR.location, pressure=0*u.hPa)
+    target = coords.transform_to(frame)
+    moon = get_body('moon', times, PALOMAR.location).transform_to(frame)
+    return target.separation(moon)
+
+
 def score(df, ra_col='ra', dec_col='dec', step_min=10):
     coords = SkyCoord(df[ra_col].values * u.deg, df[dec_col].values * u.deg)
     out = df.copy()
     for label, (date_str, part) in NIGHTS.items():
         t0, t1, dusk, dawn = night_window(date_str, part)
         moon_mid, illum = describe_night(label, t0, t1, dusk, dawn)
-        n = int((t1 - t0).to(u.min).value // step_min) + 1
-        times = t0 + np.arange(n) * step_min * u.min
+        duration = (t1-t0).to_value(u.min)
+        edges = np.r_[np.arange(0,duration,step_min),duration]
+        widths = np.diff(edges)
+        times = t0 + (edges[:-1]+widths/2)*u.min
         # airmass grid: (ntargets, ntimes)
         altaz = PALOMAR.altaz(times[np.newaxis, :], coords[:, np.newaxis])
         secz = altaz.secz.value
         good = (altaz.alt.deg > 0) & (secz < AIRMASS_MAX) & (secz > 0)
-        out[f'hrs_{label}'] = good.sum(axis=1) * step_min / 60.0
+        out[f'hrs_{label}'] = (good*widths).sum(axis=1)/60.0
         best = np.where(good, secz, np.inf).min(axis=1)
         out[f'minX_{label}'] = np.where(np.isfinite(best), best, np.nan).round(2)
-        out[f'moonsep_{label}'] = coords.separation(moon_mid).deg.round(0)
+        out[f'moonsep_{label}'] = apparent_moon_separation(coords,t0+(t1-t0)/2).deg.round(1)
     hrs_cols = [c for c in out.columns if c.startswith('hrs_')]
     out['hrs_any'] = out[hrs_cols].max(axis=1)
     out['moonsep_min'] = out[[c for c in out.columns if c.startswith('moonsep_')]].min(axis=1)
