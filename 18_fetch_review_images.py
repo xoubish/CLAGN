@@ -10,6 +10,7 @@ import io
 import json
 import threading
 import time
+import argparse
 import pandas as pd
 import requests
 from PIL import Image, ImageStat
@@ -30,16 +31,17 @@ def valid_image(data):
         return False
 
 
-def one(row):
-    path=CACHE/f'{row.name}_sdss.jpg'
+def one(row,field_arcsec=40,pixels=256):
+    kind='sdss_wide' if field_arcsec>40 else 'sdss'
+    path=CACHE/f'{row.name}_{kind}.jpg'
     meta_path=path.with_suffix('.json')
     if path.exists() and meta_path.exists() and valid_image(path.read_bytes()):
         m=json.loads(meta_path.read_text())
-        if m.get('ra')==row.ra and m.get('dec')==row.dec and m.get('source')=='SDSS DR18':return m
+        if m.get('ra')==row.ra and m.get('dec')==row.dec and m.get('source')=='SDSS DR18' and m.get('field_arcsec')==field_arcsec:return m
     if not hasattr(LOCAL,'session'):LOCAL.session=requests.Session()
     result=dict(name=row.name,ra=row.ra,dec=row.dec,status='request failed',source='SDSS DR18',
-                field_arcsec=40,pixels=256,updated_utc=datetime.now(timezone.utc).isoformat())
-    params=dict(ra=row.ra,dec=row.dec,scale=40/256,width=256,height=256)
+                field_arcsec=field_arcsec,pixels=pixels,updated_utc=datetime.now(timezone.utc).isoformat())
+    params=dict(ra=row.ra,dec=row.dec,scale=field_arcsec/pixels,width=pixels,height=pixels)
     for attempt in range(3):
         try:
             r=LOCAL.session.get(URL,params=params,timeout=40)
@@ -57,11 +59,12 @@ def one(row):
 
 
 def main():
+    ap=argparse.ArgumentParser();ap.add_argument('--wide',action='store_true');args=ap.parse_args()
     CACHE.mkdir(parents=True,exist_ok=True)
     targets=pd.read_csv(OUT/'compact_review_objects.csv')
     results=[];start=time.monotonic()
     with ThreadPoolExecutor(max_workers=4) as executor:
-        tasks=[executor.submit(one,row) for row in targets.itertuples()]
+        tasks=[executor.submit(one,row,240 if args.wide else 40,384 if args.wide else 256) for row in targets.itertuples()]
         for i,f in enumerate(as_completed(tasks),1):
             results.append(f.result())
             if i%25==0 or i==len(tasks):

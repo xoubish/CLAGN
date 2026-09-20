@@ -26,6 +26,7 @@ OLD = importlib.import_module('07_make_webpage')
 OBS = importlib.import_module('05_observability')
 iers.conf.auto_download = False
 iers.conf.auto_max_age = None
+SELECTION=json.loads((OUT/'review_selection.json').read_text()) if (OUT/'review_selection.json').exists() else dict(moon_min_deg=60,airmass_max=1.5,minimum_window_minutes=60,version='manifold-review-2026-09-20')
 
 
 def native(value):
@@ -87,6 +88,33 @@ def reconcile_spectral_dates(target):
     target['n_spec_available_dates']=len(plotted)
 
 
+def review_ztf(name):
+    """Use the refreshed curve, with explicit query/coverage status and dates."""
+    tag='review_dr24_20260920'
+    path=DATA/'ztf_cache'/tag/f'{name}.json'
+    info=json.loads(path.read_text()) if path.exists() else {}
+    if info.get('status') in ['available','no usable photometry']:
+        series=OLD.ztf_series(name,tags=(tag,)) if info['status']=='available' else {}
+        meta={key:info.get(key) for key in ['status','collection','queried_utc','n_g','n_r','association_warning']}
+        first,last=info.get('first_mjd'),info.get('last_mjd')
+    else:
+        # An empty cache in one old directory must not hide a valid later cache.
+        options=[(old,OLD.ztf_series(name,tags=(old,))) for old in ['pool','v2','calib','zeltyn']]
+        old,series=max(options,key=lambda item:sum(len(v) for v in item[1].values()))
+        first=last=None
+        if series:
+            cached=pd.read_csv(DATA/'ztf_cache'/old/f'{name}.csv')
+            usable=cached[cached.filtercode.isin(['zg','zr']) & np.isfinite(cached.mag) & np.isfinite(cached.mjd)]
+            first,last=float(usable.mjd.min()),float(usable.mjd.max())
+        meta=dict(status='refresh failed; showing earlier cache' if info.get('status')=='query failed' and series
+                  else 'query failed' if info.get('status')=='query failed'
+                  else 'earlier cache' if series else 'not fetched',
+                  collection=None,attempted_collection=info.get('collection'),queried_utc=info.get('queried_utc'))
+    meta['first_date']=Time(first,format='mjd').strftime('%Y-%m-%d') if first is not None else None
+    meta['last_date']=Time(last,format='mjd').strftime('%Y-%m-%d') if last is not None else None
+    return series,meta
+
+
 def observing_windows(targets):
     coords = SkyCoord(targets.ra.to_numpy()*u.deg,targets.dec.to_numpy()*u.deg)
     windows = {n: [] for n in targets.name}
@@ -101,23 +129,25 @@ def observing_windows(targets):
         altaz = coords[:,None].transform_to(frame)
         x = altaz.secz.value
         sep = altaz.separation(get_body('moon',times,OBS.PALOMAR.location).transform_to(frame)).deg
-        grid = (altaz.alt.deg>0)&(x>0)&(x<=1.5)&(sep>=60)
+        grid = (altaz.alt.deg>0)&(x>0)&(x<=SELECTION['airmass_max'])&(sep>=SELECTION['moon_min_deg'])
         accepted = grid[:,:-1]&grid[:,1:]
         for i,name in enumerate(targets.name):
             changes = np.diff(np.r_[False,accepted[i],False].astype(int))
             runs = list(zip(np.where(changes==1)[0],np.where(changes==-1)[0]))
             longest = max((edges[b]-edges[a] for a,b in runs),default=0)
-            if longest < 60:
+            minimum=120 if targets.iloc[i].get('pool_role')=='reserve' else SELECTION['minimum_window_minutes']
+            if longest < minimum:
                 continue
             ref = expected[(expected.name==name)&(expected.night==key)]
             assert len(ref)==1 and abs(float(ref.iloc[0].preferred_longest_minutes)-longest)<.01
             # Display every qualifying continuous window, never bridge a gap.
-            usable_runs = [(a,b) for a,b in runs if edges[b]-edges[a]>=60]
+            usable_runs = [(a,b) for a,b in runs if edges[b]-edges[a]>=minimum]
             indices = np.concatenate([np.arange(a,b+1) for a,b in usable_runs])
             windows[name].append(dict(night=key,longest_minutes=round(longest,1),
                 ranges=[dict(start=local(times[a]),end=local(times[b]),start_utc=times[a].isot,end_utc=times[b].isot,
                              minutes=round(edges[b]-edges[a],1)) for a,b in usable_runs],
                 min_airmass=round(float(x[i,indices].min()),3),moon_min=round(float(sep[i,indices].min()),1),
+                minutes_airmass_le1p3=round(float(((grid[i,:-1]&grid[i,1:]&(x[i,:-1]<=1.3)&(x[i,1:]<=1.3))*np.diff(edges)).sum()),1),
                 moon_max=round(float(sep[i,indices].max()),1),
                 curve=[[round(float(t.mjd),5),round(float(xx),3) if 0<xx<4 else None,round(float(ss),2)]
                        for t,xx,ss in zip(times,x[i],sep[i])]))
@@ -148,6 +178,8 @@ def main():
         source=('survey_family',lambda v:'/'.join(sorted(set(v)))))
     full_epochs = pd.read_csv(OUT/'compact_spectral_epochs.csv')
     known = pd.read_csv(OUT/'compact_known_state_matches.csv').fillna('')
+    unwise_path=OUT/'neighbour_unwise_manifest.csv'
+    unwise_screen=pd.read_csv(unwise_path).set_index('name').to_dict('index') if unwise_path.exists() else {}
     image_status={}
     manifest=OUT/'image_manifest.csv'
     if manifest.exists():
@@ -190,17 +222,27 @@ def main():
         if internal.exists():records+=json.loads(internal.read_text())
         all_records[name]=records
         cut=None
-        for kind in ['sdss','ps1_r','ps1_g']:
+        for kind in ['sdss_wide','sdss','ps1_r','ps1_g']:
             path=DATA/'cutouts'/f'{name}_{kind}.jpg'
             if path.exists() and path.stat().st_size>100:
                 info={}
                 metadata=path.with_suffix('.json')
                 if metadata.exists():info=json.loads(metadata.read_text())
-                cut=dict(source=info.get('source',{'sdss':'SDSS archival image','ps1_r':'Pan-STARRS r','ps1_g':'Pan-STARRS g'}[kind]),
+                cut=dict(source=info.get('source',{'sdss_wide':'SDSS archival image','sdss':'SDSS archival image','ps1_r':'Pan-STARRS r','ps1_g':'Pan-STARRS g'}[kind]),
                          field_arcsec=info.get('field_arcsec'),
                          image='data:image/jpeg;base64,'+base64.b64encode(path.read_bytes()).decode())
                 break
         matches=known[known.name==name]
+        ztf,ztf_status=review_ztf(name)
+        screen_path=OUT/'neighbour_cache'/f'{name}_screen.json'
+        screen=json.loads(screen_path.read_text()) if screen_path.exists() else dict(status='not checked',flags=[],neighbours=[])
+        uw=unwise_screen.get(name,dict(status='not checked'))
+        screen['unwise']=uw
+        complete=screen.get('sdss_query')=='available' and screen.get('gaia_query')=='available' and uw.get('status')=='matched'
+        wise_flag=uw.get('status')=='matched' and (uw.get('fracflux_w1',0)<.8 or uw.get('flags_unwise_w1',0)!=0)
+        if wise_flag:screen['flags'].append('unWISE deblending/quality needs review; a host contribution is also possible')
+        field_status='review' if screen['flags'] else 'clear' if complete else 'pending'
+        screen['neighbours']=sorted(screen['neighbours'],key=lambda n:(not bool(n.get('review_reasons')),n['sep_arcsec']))[:20]
         status=audit.loc[name,'known_state_status']
         status_key={'catalog-confirmed CLAGN':'confirmed','reported candidate':'candidate',
                     'literature match; confirmation needs audit':'unverified','no match in checked catalogs':'unmatched'}[status]
@@ -209,12 +251,13 @@ def main():
             rmag=round(r.r_planning,2),r_source=r.r_source,region=r.review_region,
             ux=round(r.umap_x,4),uy=round(r.umap_y,4),on_fraction=r.manifold_on_neighbor_fraction,off_fraction=r.manifold_off_neighbor_fraction,
             status=status_key,known=matches[['catalog','catalog_name','status','transition','reference']].to_dict('records'),
-            n_spec=len(histories),epochs=histories,nights=windows[name],ztf=OLD.ztf_series(name),wise=wise.get(name,{}),neo=neo.get(name,[]),
+            n_spec=len(histories),epochs=histories,nights=windows[name],ztf=ztf,ztf_status=ztf_status,wise=wise.get(name,{}),neo=neo.get(name,[]),
+            pool_role=getattr(r,'pool_role','manifold'),field_status=field_status,neighbour_screen=screen,
             spec=spec,cut=cut,image_status=image_status.get(name,{}).get('status','not fetched'),
             lines=[dict(name=n,angstrom=round(w*(1+r.z),1),inrange=bool(3050<=w*(1+r.z)<=10400))
                                  for n,w in [('Hβ',4861.33),('[O III]',5006.84),('Hα',6562.8)] ]))
         reconcile_spectral_dates(items[-1])
-    payload=native(dict(version='manifold-review-2026-09-20',generated=datetime.now(timezone.utc).isoformat(),
+    payload=native(dict(version=SELECTION['version'],selection=SELECTION,generated=datetime.now(timezone.utc).isoformat(),
                        access='public',nights=nights,manifold=manifold,targets=items))
     # Reuse the existing calibrated display units and light-curve/spectrum renderers.
     charts=OLD.TEMPLATE[OLD.TEMPLATE.index('function mjdToYear'):OLD.TEMPLATE.index('/* ---------- manifold thumbnail')]

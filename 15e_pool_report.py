@@ -13,6 +13,11 @@ OUT=ROOT/'data/reselection_2026-09-20'
 
 def compact_review(p, g):
     """Operational review subset; neither a yield model nor a final target list."""
+    config=OUT/'review_selection.json'
+    if config.exists() and json.loads(config.read_text()).get('moon_min_deg')==40:
+        import importlib
+        importlib.import_module('23_operational_review').build_review(p,g)
+        return
     eligible = p[p.has_projection & p.r_planning.le(18.5) &
                  (p.in_region_clagn.eq(True) | p.in_region_zeltyn.eq(True))].copy()
     windows = g[g.preferred_longest_minutes.ge(60)].merge(eligible, on='name')
