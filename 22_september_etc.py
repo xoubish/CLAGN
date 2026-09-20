@@ -17,11 +17,12 @@ sys.path.insert(0,str(OUT/'ngps_etc'))
 ETC=importlib.import_module('ETC_main')
 CFG=importlib.import_module('ETC_config')
 
-def calculate(channel,lo,hi,mag,snr,seeing,sky,airmass=1.3,binspect=2,binspat=2):
+def calculate(channel,lo,hi,mag,snr,seeing,sky,airmass=1.3,binspect=2,binspat=2,noslicer=False):
     def solve(goal):
         cmd=[channel,str(lo),str(hi),'SNR',str(goal),'-slit','SET','1.0',
              '-binspect',str(binspect),'-binspat',str(binspat),'-seeing',str(seeing),'500',
              '-airmass',str(airmass),'-skymag',str(sky),'-mag',str(mag),'-magsystem','AB','-magfilter','match']
+        if noslicer:cmd.append('-noslicer')
         args=ETC.parser.parse_args(cmd);ETC.check_inputs_add_units(args)
         return ETC.main(args,quiet=True)
     first=solve(snr);n=max(1,math.ceil(first['exptime'].to_value(u.s)/900))
