@@ -148,6 +148,10 @@ def main():
         source=('survey_family',lambda v:'/'.join(sorted(set(v)))))
     full_epochs = pd.read_csv(OUT/'compact_spectral_epochs.csv')
     known = pd.read_csv(OUT/'compact_known_state_matches.csv').fillna('')
+    image_status={}
+    manifest=OUT/'image_manifest.csv'
+    if manifest.exists():
+        image_status=pd.read_csv(manifest).set_index('name').to_dict('index')
     wise = OLD.load_wise(str(DATA/'wise_cache/pool'))
     neo = {}
     for tag in ['pool','poolall']:
@@ -189,7 +193,12 @@ def main():
         for kind in ['sdss','ps1_r','ps1_g']:
             path=DATA/'cutouts'/f'{name}_{kind}.jpg'
             if path.exists() and path.stat().st_size>100:
-                cut=dict(source=kind,image='data:image/jpeg;base64,'+base64.b64encode(path.read_bytes()).decode())
+                info={}
+                metadata=path.with_suffix('.json')
+                if metadata.exists():info=json.loads(metadata.read_text())
+                cut=dict(source=info.get('source',{'sdss':'SDSS archival image','ps1_r':'Pan-STARRS r','ps1_g':'Pan-STARRS g'}[kind]),
+                         field_arcsec=info.get('field_arcsec'),
+                         image='data:image/jpeg;base64,'+base64.b64encode(path.read_bytes()).decode())
                 break
         matches=known[known.name==name]
         status=audit.loc[name,'known_state_status']
@@ -201,7 +210,8 @@ def main():
             ux=round(r.umap_x,4),uy=round(r.umap_y,4),on_fraction=r.manifold_on_neighbor_fraction,off_fraction=r.manifold_off_neighbor_fraction,
             status=status_key,known=matches[['catalog','catalog_name','status','transition','reference']].to_dict('records'),
             n_spec=len(histories),epochs=histories,nights=windows[name],ztf=OLD.ztf_series(name),wise=wise.get(name,{}),neo=neo.get(name,[]),
-            spec=spec,cut=cut,lines=[dict(name=n,angstrom=round(w*(1+r.z),1),inrange=bool(3050<=w*(1+r.z)<=10400))
+            spec=spec,cut=cut,image_status=image_status.get(name,{}).get('status','not fetched'),
+            lines=[dict(name=n,angstrom=round(w*(1+r.z),1),inrange=bool(3050<=w*(1+r.z)<=10400))
                                  for n,w in [('Hβ',4861.33),('[O III]',5006.84),('Hα',6562.8)] ]))
         reconcile_spectral_dates(items[-1])
     payload=native(dict(version='manifold-review-2026-09-20',generated=datetime.now(timezone.utc).isoformat(),
