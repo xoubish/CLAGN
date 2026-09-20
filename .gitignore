@@ -93,6 +93,9 @@ data/v2_*.csv
 data/ztf_now_v2.csv
 data/neowise_now_turnon.csv
 data/neowise_visits_turnon.csv
+# Rebuilt pool and joined SDSS-V histories: local research products, may be proprietary.
+data/reselection_2026-09-20/
+review_2026-09-20/
 docs/index_v2.html
 web/clagn_night_sheet_v2.html
 finders/*_v2/

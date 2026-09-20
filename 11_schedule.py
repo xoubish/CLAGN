@@ -100,7 +100,9 @@ def schedule_night(night, m, picked):
     coords = SkyCoord(c.ra.values * u.deg, c.dec.values * u.deg)
     aa = PALOMAR.altaz(times[np.newaxis, :], coords[:, np.newaxis])
     secz = np.where(aa.alt.deg > 5, aa.secz.value, np.inf)
-    ok = secz < AIRMASS_MAX
+    moonsep_grid = obs.apparent_moon_separation(coords[:, np.newaxis], times).deg
+    ok = (secz < AIRMASS_MAX) & (moonsep_grid >= sc.MIN_MOONSEP)
+    invalid_prefix = np.c_[np.zeros(len(c), dtype=int), np.cumsum(~ok, axis=1)]
     texp = c.t_exp_min.values; nblk = np.ceil((texp + OVERHEAD_MIN) / STEP_MIN).astype(int)
     last_ok = np.array([np.max(np.where(ok[i])[0]) if ok[i].any() else -1 for i in range(len(c))])
     best_x = np.array([np.min(secz[i]) for i in range(len(c))])
@@ -128,7 +130,7 @@ def schedule_night(night, m, picked):
             cand = np.where(ssecz[:, k] < 2.0)[0]
         j = cand[np.argmin(ssecz[cand, k] + 0.05 * std.V.fillna(15).values[cand])]
         nb = int(np.ceil(STD_MIN / STEP_MIN))
-        block('standard', std.name[j], std.ra[j], std.dec[j], k, nb, STD_MIN, ssecz[j, k], scd[j].separation(moon[k]).deg,
+        block('standard', std.name[j], std.ra[j], std.dec[j], k, nb, STD_MIN, ssecz[j, k], obs.apparent_moon_separation(scd[j],times[k]).deg,
               f'CALSPEC {std.calspec[j]} · {std.sptype[j]} V={std.V[j]:.1f} · 2 x 30-120 s', label, rmag=std.V[j], slew=(cur[0].separation(scd[j]).deg if cur[0] is not None else np.nan))
         cur[0] = scd[j]
         return k + nb
@@ -142,7 +144,9 @@ def schedule_night(night, m, picked):
             nblk_now = np.ceil(tot_now / STEP_MIN).astype(int); base_now = c.priority_night.values * boost / tot_now
         else:
             sep_now = np.full(len(c), np.nan); tot_now = texp + OVERHEAD_MIN; nblk_now = nblk; base_now = base
-        fits = ok[:, k] & ~done & (last_ok >= k + nblk_now - 1) & (k + nblk_now <= k_end)
+        end_idx = np.minimum(k+nblk_now, n-1)
+        complete_block_ok = (invalid_prefix[np.arange(len(c)),end_idx+1]-invalid_prefix[:,k]) == 0
+        fits = complete_block_ok & ~done & (k + nblk_now <= k_end)
         for tier, cap in QUOTA.items():
             cap = cap.get(night, 99) if isinstance(cap, dict) else cap
             if counts.get(tier, 0) >= cap:
@@ -155,7 +159,7 @@ def schedule_night(night, m, picked):
         airm = np.clip(1.3 - 0.3 * secz[:, k], 0.5, 1.0)
         score = np.where(fits, base_now * urgency * patience * airm, -1.0)
         i = int(np.argmax(score)); nb = nblk_now[i]; r = c.iloc[i]
-        block('primary' if r.pick04 else 'filler', r['name'], r.ra, r.dec, k, nb, tot_now[i], secz[i, k], coords[i].separation(moon[k]).deg,
+        block('primary' if r.pick04 else 'filler', r['name'], r.ra, r.dec, k, nb, tot_now[i], secz[i, k], moonsep_grid[i,k],
               r.exp_plan, '', r.tier, float(r.priority_night), r.z, r.r_mag, '04' if r.pick04 else 'schedule-fill', slew=sep_now[i])
         done[i] = True; counts[r.tier] = counts.get(r.tier, 0) + 1; k += nb; cur[0] = coords[i]
     add_std(k_end, 'end of night')
