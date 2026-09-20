@@ -44,6 +44,49 @@ def local(t):
     return pd.Timestamp(t.utc.datetime, tz='UTC').tz_convert('America/Los_Angeles').strftime('%b %d %H:%M PDT')
 
 
+def spectrum_payload(records):
+    """All available daily epochs, with date-only labels and no hidden epoch cap."""
+    best={}
+    for record in records:
+        if record.get('coadd') and record.get('source','SDSS')!='DESI':
+            continue  # All-epoch stacks reuse daily data and lack a single epoch.
+        wave=record.get('wave',[]);flux=record.get('flux',[])
+        if len(wave)!=len(flux) or sum(v is not None and np.isfinite(v) for v in flux)<20:
+            continue
+        mjd=record.get('mjd')
+        dated=mjd is not None and np.isfinite(mjd) and mjd>40000
+        day=int(np.floor(mjd)) if dated else None
+        key=(record.get('source','SDSS'),day)
+        # Prefer the explicit current reduction when a cached older daily record
+        # represents the same source and night; never count it as a new epoch.
+        def quality(r):
+            sn=r.get('sn_median_all',r.get('meta',{}).get('sn_median_all'))
+            return (r.get('run2d')=='v6_2_1',float(sn) if sn is not None and np.isfinite(sn) else -1)
+        if key not in best or quality(record)>quality(best[key]):best[key]=record
+    epochs=[]
+    for key,r in sorted(best.items(),key=lambda p:(p[0][1] is None,p[0][1] or 0,p[0][0])):
+        day=key[1]
+        date=Time(day,format='mjd').strftime('%Y-%m-%d') if day is not None else 'Date unavailable'
+        flagged=r.get('metadata_quality_ok') is False
+        epochs.append(dict(label=date,date=date,mjd=r.get('mjd'),epoch_day=day,
+            wave=r['wave'],flux=r['flux'],quality_flag=flagged,
+            quality_note='Metadata quality checks failed; inspect before interpreting.' if flagged else '',
+            coadd=bool(r.get('coadd',False))))
+    return native(dict(epochs=epochs)) if epochs else None
+
+
+def reconcile_spectral_dates(target):
+    """Keep inventory dates distinct from available files and active plot traces."""
+    plotted={e['epoch_day'] for e in (target.get('spec') or {}).get('epochs',[]) if e['epoch_day'] is not None}
+    existing={int(e['mjd']) for e in target['epochs']}
+    for day in sorted(plotted-existing):
+        target['epochs'].append(dict(mjd=day,date=Time(day,format='mjd').strftime('%Y-%m-%d'),src='Archive'))
+    target['epochs'].sort(key=lambda e:e['mjd'])
+    for e in target['epochs']:e['file_available']=int(e['mjd']) in plotted
+    target['n_spec']=len(target['epochs'])
+    target['n_spec_available_dates']=len(plotted)
+
+
 def observing_windows(targets):
     coords = SkyCoord(targets.ra.to_numpy()*u.deg,targets.dec.to_numpy()*u.deg)
     windows = {n: [] for n in targets.name}
@@ -126,7 +169,7 @@ def main():
                      for i,j in sorted(set(zip(ix[a[col]],iy[a[col]]))))
     manifold=dict(background=a[['umap_x','umap_y']].round(3).values.tolist(),rects=rects,
                   xlim=[xe[0],xe[-1]],ylim=[ye[0],ye[-1]])
-    items=[]
+    items=[];all_records={}
     for r in targets.itertuples():
         name=r.name
         coord=SkyCoord(r.ra*u.deg,r.dec*u.deg)
@@ -135,13 +178,13 @@ def main():
                    for v in ep.itertuples()]
         spec=None
         path=DATA/'spectra_dl'/f'{name}.json'
+        records=[]
         if path.exists():
-            recs=[v for v in json.loads(path.read_text()) if not v.get('proprietary')]
-            spec=OLD.build_spec(sorted(recs,key=lambda v:v.get('mjd',0)))
-            if spec:
-                # Old EW fields are simple total-line measurements, not broad-only fits.
-                for v in spec['epochs']+spec['history']:
-                    v['ew_hb']=None;v['ew_ha']=None
+            records=json.loads(path.read_text())
+            spec=spectrum_payload([v for v in records if not v.get('proprietary')])
+        internal=OUT/'sdssv_spectra'/f'{name}.json'
+        if internal.exists():records+=json.loads(internal.read_text())
+        all_records[name]=records
         cut=None
         for kind in ['sdss','ps1_r','ps1_g']:
             path=DATA/'cutouts'/f'{name}_{kind}.jpg'
@@ -160,11 +203,12 @@ def main():
             n_spec=len(histories),epochs=histories,nights=windows[name],ztf=OLD.ztf_series(name),wise=wise.get(name,{}),neo=neo.get(name,[]),
             spec=spec,cut=cut,lines=[dict(name=n,angstrom=round(w*(1+r.z),1),inrange=bool(3050<=w*(1+r.z)<=10400))
                                  for n,w in [('Hβ',4861.33),('[O III]',5006.84),('Hα',6562.8)] ]))
+        reconcile_spectral_dates(items[-1])
     payload=native(dict(version='manifold-review-2026-09-20',generated=datetime.now(timezone.utc).isoformat(),
                        access='public',nights=nights,manifold=manifold,targets=items))
     # Reuse the existing calibrated display units and light-curve/spectrum renderers.
     charts=OLD.TEMPLATE[OLD.TEMPLATE.index('function mjdToYear'):OLD.TEMPLATE.index('/* ---------- manifold thumbnail')]
-    charts+=OLD.TEMPLATE[OLD.TEMPLATE.index('function specPanel'):OLD.TEMPLATE.index('/* ---------- NGPS wavelength ruler')]
+    charts+='\n'+(ROOT/'web/candidate_spectra.js').read_text()
     template=(ROOT/'web/candidate_review_template.html').read_text()
     def html_for(value):
         encoded=json.dumps(native(value),separators=(',',':'),allow_nan=False).replace('<','\\u003c')
@@ -182,11 +226,16 @@ def main():
         target['n_spec']=len(e)
         target['sdssv_dates']=int(audit.loc[target['name'],'n_sdssv_dates'])
         target['sdssv_quality_dates']=int(audit.loc[target['name'],'n_sdssv_metadata_quality_dates'])
+        target['spec']=spectrum_payload(all_records[target['name']])
+        reconcile_spectral_dates(target)
     (OUT/'candidate_review_local.html').write_text(html_for(private))
     counts=dict(objects=len(items),public_multiple=sum(t['n_spec']>=2 for t in items),
                 public_spectra_plotted=sum(bool(t['spec']) for t in items),ztf_curves=sum(bool(t['ztf']) for t in items),
                 wise_curves=sum(bool(t['wise']) for t in items),cutouts=sum(bool(t['cut']) for t in items),
-                public_bytes=len(page.encode()),night_counts={n:v['count'] for n,v in nights.items()})
+                public_bytes=len(page.encode()),night_counts={n:v['count'] for n,v in nights.items()},
+                public_spectral_traces=sum(len((t['spec'] or {}).get('epochs',[])) for t in items),
+                local_spectral_traces=sum(len((t['spec'] or {}).get('epochs',[])) for t in private['targets']),
+                local_targets_with_spectra=sum(bool(t['spec']) for t in private['targets']))
     (OUT/'web_build_summary.json').write_text(json.dumps(counts,indent=2))
     print(json.dumps(counts,indent=2),flush=True)
 
