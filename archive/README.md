@@ -12,6 +12,7 @@
 - `before_cleanup/`: original Python sources and affected page/template copies before path edits.
 - `move_manifest.json`: old/new paths and SHA-256 hashes of the moved files.
 - `before_snr5_packet/`: the original eight-primary 2×600-second packet and affected generators/pages, preserved before the S/N=5 expansion. Its packet fixes the original backup promotion pool for `scripts/41_september_snr5_plan.py`.
+- `before_slit15_packet/`: the eleven-primary 1.0-arcsec / 2×2 / 2×300-second packet with 20-minute visits, plus its generators, tests and pages, preserved on 2026-09-21 before the move to a 1.5-arcsec slit, 2×3 binning, 16-minute visits and a geometry-optimised order. Its packet fixes the protected primaries for `scripts/41_september_snr5_plan.py`.
 
 The archive is local and git-ignored because it includes collaboration-derived products. Files were moved, not discarded. Old scripts/reports retain their historical paths and should be treated as snapshots; use `scripts/` for the maintained entry points.
 

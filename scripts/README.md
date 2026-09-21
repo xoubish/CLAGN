@@ -12,10 +12,11 @@ Run scripts from the project root, using `python scripts/<filename>.py`. Numbere
 | `22`, `27`, `30`, `31` | NGPS ETC, Hβ sensitivity, dated evidence, and three-night review. |
 | `16_candidate_webpage.py` | Build public and private candidate explorers. |
 | `40_september_observing_packet.py` | Build the curated September sequence, backups, NGPS CSVs, and dark primary pages. |
-| `41_september_snr5_plan.py` | Screen fixed 2×300 s science exposures for continuum S/N≥5 and schedule 20-minute visits from the archived backup pool; retain the original eight and place P12457 late. |
+| `41_september_snr5_plan.py` | One instrument setting for all science targets (1.5″ slit, 2×3 binning, 2×300 s); ETC screen for continuum S/N≥5 per Å with airmass-scaled seeing and a moonlit-sky model per slot; integer-program order that maximises slot S/N (airmass, Moon distance, visibility); protects the eleven previous primaries and fills 16-minute visits from the reviewed pool. |
 | `42_science_reselection.py` | Separate projected-parent inventory and dated evidence review; no protected primaries and no telescope-packet writes. |
 | `43_public_alert_review.py` | Retrieve/cache public ALeRCE detections; reference-corrected alert photometry remains separate from catalog photometry. |
 | `44_science_discussion.py` | Local diagnostic page, qualitative review notes, and provisional matched-control pairs. |
+| `45_sep23_decision_page.py` | Local decision board for September 23: every candidate with a feasible 16-minute visit, in observability order, with geometry, per-slot S/N, manifold, images, light curves and spectra; reads the plan from `41`. |
 
 Typical commands from the project root:
 
@@ -23,7 +24,7 @@ Typical commands from the project root:
 # Rebuild the explorer from prepared tables.
 /opt/anaconda3/bin/python scripts/16_candidate_webpage.py
 
-# Deliberately recalculate the September S/N=5 schedule and promotions.
+# Deliberately recalculate the September S/N screen, promotions and geometry-optimised order.
 /opt/anaconda3/bin/python scripts/41_september_snr5_plan.py
 
 # Regenerate the packet from that plan, including backup choices.

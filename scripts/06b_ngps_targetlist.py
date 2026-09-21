@@ -9,8 +9,8 @@ Two files per night:
   finders/<night>/ngps_<night>_fixed.csv  exposure times from our model (SET seconds per sub-exposure, nexp >= 2, <= 900 s)
   finders/<night>/ngps_<night>_snr.csv    exptime "SNR 7" so the sequencer/ETC solves the time from the target's magnitude,
                                           the channel and a wavelength window on the diagnostic line (Hα if z <= 0.55, else Hβ)
-Slit 1.3" fixed (the software default; single slice is what the ETC currently models), binning 2x3 (BINSPAT x BINSPEC) per the
-observing page's guidance for a ~1.3" slit, slit angle PA (parallactic, no ADC), airmass_max 2.0.
+Slit 1.5" fixed (decided 2026-09-21 from the ETC slit scan under moonlight; single slice is what the ETC models), binning 2x3 (BINSPAT x BINSPEC) per the
+observing page's guidance for a 1.5" slit, slit angle PA (parallactic, no ADC), airmass_max 2.0.
 Backups are included after the primaries with Note 'backup'.
 """
 import os, sys, glob
@@ -22,7 +22,7 @@ import astropy.units as u
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); DATA = os.path.join(HERE, 'data')
 SUFFIX = '_v2' if os.environ.get('CLAGN_SEL', 'v1') == 'v2' else ''; MASTER = 'candidates_v2.csv' if SUFFIX else 'master_list_scored.csv'
 CHANNELS = [('U', 3050, 4430), ('G', 4250, 5960), ('R', 5620, 7950), ('I', 7530, 10400)]
-SLIT, BINSPAT, BINSPEC, AIRMASS_MAX, SNR_TARGET = 1.3, 2, 3, 2.0, 7
+SLIT, BINSPAT, BINSPEC, AIRMASS_MAX, SNR_TARGET = 1.5, 2, 3, 2.0, 7
 
 
 def channel_for(wave):
