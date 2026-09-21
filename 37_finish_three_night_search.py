@@ -78,6 +78,7 @@ def main():
         run('03c_neowise_now.py',path,tag,'--output-dir',OUT)
     state('Auditing observations, sensitivity and spectral histories')
     run('15f_compact_spectral_audit.py');run('30_three_night_sensitivity.py');run('31_three_night_review.py')
+    run('39_airmass_options.py')
     run('38_three_night_acquisition_audit.py','--require-baselines')
     state('Rebuilding local and public-data review pages')
     config=json.loads((OUT/'review_selection.json').read_text())

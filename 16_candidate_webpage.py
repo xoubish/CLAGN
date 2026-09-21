@@ -124,6 +124,10 @@ def review_ztf(name):
 
 
 def observing_windows(targets):
+    if SELECTION.get('airmass_options'):
+        options=json.loads((OUT/'airmass_options.json').read_text())
+        assert sorted(targets.name)==options['target_names'], 'Refresh the airmass options for this sample.'
+        return options['windows'],options['nights']
     coords = SkyCoord(targets.ra.to_numpy()*u.deg,targets.dec.to_numpy()*u.deg)
     windows = {n: [] for n in targets.name}
     meta = {}
@@ -171,6 +175,12 @@ def observing_windows(targets):
 
 def main():
     targets = pd.read_csv(OUT/'compact_review_objects.csv')
+    options_path=OUT/'airmass_options.json'
+    if options_path.exists():
+        options=json.loads(options_path.read_text())
+        if not SELECTION.get('airmass_options') or options['target_names']!=sorted(targets.name):
+            importlib.import_module('39_airmass_options').main()
+            SELECTION.update(json.loads((OUT/'review_selection.json').read_text()))
     audit = pd.read_csv(OUT/'compact_spectral_audit.csv').set_index('name')
     assert targets.name.is_unique and set(targets.name)==set(audit.index), 'Refresh spectral audit for this compact pool.'
     # Current snapshot has exclusively public DR16 identities and public photometry.
@@ -285,6 +295,9 @@ def main():
     # Objects selected using internal-only identities or brightness remain local.
     public_payload=json.loads(json.dumps(payload))
     public_payload['targets']=[t for t in public_payload['targets'] if t['name'] in public_names]
+    if SELECTION.get('shared_night_backups'):
+        for t in public_payload['targets']:
+            t['prepared_nights']=[w['night'] for w in t['nights']]
     for night in public_payload['nights']:
         public_payload['nights'][night]['count']=sum(any(w['night']==night for w in t['nights']) for t in public_payload['targets'])
     page=html_for(public_payload)
@@ -294,6 +307,11 @@ def main():
     # Complete metadata remains in the ignored local research directory.
     private=json.loads(json.dumps(payload))
     private['access']='collaboration'
+    if SELECTION.get('airmass_options'):
+        options=json.loads((OUT/'airmass_options.json').read_text())
+        for t in private['targets']:
+            t['exposure_plans']=options['plans'][t['name']]
+            t['prepared_nights']=[w['night'] for w in t['nights']]
     science_path=OUT/'three_night_review/science_and_sensitivity.csv'
     science=pd.read_csv(science_path).set_index('name').to_dict('index') if science_path.exists() else {}
     for target in private['targets']:
