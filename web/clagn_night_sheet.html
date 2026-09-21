@@ -184,7 +184,7 @@ document.addEventListener('click',e=>{
 
 $('parent-progress').textContent=D.selection.w1_parent_search_complete?'The W1 expansion for this parent snapshot is complete.':'The broader W1 parent search is still running.';
 const isPrivate=D.access==='collaboration';$('private').classList.toggle('hide',!isPrivate);
-$('primary-sequence-link').href=isPrivate?'sep23_packet/sep23_primaries_local.html':'sep23_primaries.html';
+$('primary-sequence-link').href=isPrivate?'../../observing/sep23/sep23_primaries_local.html':'sep23_primaries.html';
 $('metrics').innerHTML=[['Manifold candidates',D.targets.filter(t=>t.pool_role==='manifold').length],['Prepared quasar reserves',D.targets.filter(t=>t.pool_role==='reserve').length],['Fields without catalogue flags',D.targets.filter(t=>t.field_status==='clear').length]].map(([s,n])=>`<div class="metric"><b>${n}</b><span>${s}</span></div>`).join('');
 $('night-summary').innerHTML=Object.entries(D.nights).map(([key,n])=>`<div class="night-row"><b>${n.label}</b><span>${n.part} · ${D.targets.filter(t=>t.pool_role==='manifold'&&(t.prepared_nights?.includes(key)||!t.prepared_nights?.[0]&&t.nights.some(w=>w.night===key))).length} manifold candidates · Moon ${n.moon_percent}%</span><div class="mono small muted">${n.window}</div></div>`).join('');
 $('night-tabs').innerHTML=`<button data-night="all" aria-pressed="true">All nights · ${D.targets.length}</button>`+Object.entries(D.nights).map(([key,n])=>`<button data-night="${key}" aria-pressed="false">${n.label} · ${n.count}</button>`).join('');

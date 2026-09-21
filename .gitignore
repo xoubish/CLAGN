@@ -99,3 +99,9 @@ review_2026-09-20/
 docs/index_v2.html
 web/clagn_night_sheet_v2.html
 finders/*_v2/
+
+# Local historical snapshots and observing products may contain collaboration data.
+/archive/*
+!/archive/README.md
+/observing/*
+!/observing/README.md
