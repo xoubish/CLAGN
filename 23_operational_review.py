@@ -61,7 +61,7 @@ def build_review(p=None,g=None):
     windows=g.merge(eligible,on='name',validate='many_to_one')
     main=windows[windows.review_region.ne('Other manifold region')].copy()
     # Reserve preparation is driven by coverage in time, never by longest window.
-    reserve=windows[windows.review_region.eq('Other manifold region') & windows.r_planning.lt(18) & windows.origin.isin(['old_DR16_parent','expanded_DR16_QSO','full_DR16Q_catalog'])].copy()
+    reserve=windows[windows.review_region.eq('Other manifold region') & windows.r_planning.lt(19) & windows.origin.isin(['old_DR16_parent','expanded_DR16_QSO','full_DR16Q_catalog'])].copy()
     reserve['catalog_basis']='Public SDSS spectroscopic quasar; reference metadata quality checked during preparation'
     reserve.to_csv(OUT/'bright_quasar_reserve_object_nights.csv',index=False)
     reserve.drop_duplicates('name').to_csv(OUT/'bright_quasar_reserve_objects.csv',index=False)
@@ -75,7 +75,7 @@ def build_review(p=None,g=None):
             # Screen a wider reserve queue to obtain three clean alternatives
             # after neighbour checks. Inspection remains a
             # separate status: this is not a claim that these are clean fields.
-            selected.update(available.sort_values(['r_planning','min_airmass','name']).head(10).name)
+            selected.update(available.sort_values(['r_planning','min_airmass','name']).head(30).name)
     prepared=reserve[reserve.name.isin(selected)].copy()
     prepared.to_csv(OUT/'bright_quasar_standby_screen.csv',index=False)
     main['pool_role']='manifold';prepared['pool_role']='reserve'
@@ -85,7 +85,7 @@ def build_review(p=None,g=None):
     objects['eligible_nights']=objects.name.map(main.groupby('name').night.agg(lambda x:','.join(sorted(set(x)))))
     objects.sort_values(['ra','name']).to_csv(OUT/'compact_review_objects.csv',index=False)
     config=dict(moon_min_deg=40,airmass_max=1.5,minimum_window_minutes=30,preferred_window_minutes=30,
-                historical_r_limit=19,brightness_comparison='strictly less than',reserve_r_limit=18.,
+                historical_r_limit=19,brightness_comparison='strictly less than',reserve_r_limit=19.,
                 reserve_minimum_window_minutes=30,version='three-nights-2x600-review-2026-09-20',
                 default_night='sep23',default_window_minutes=30,exposures=2,exposure_seconds=600,
                 bin_spatial=2,bin_spectral=2,slice_arcsec=1.,planning_block_minutes=30,

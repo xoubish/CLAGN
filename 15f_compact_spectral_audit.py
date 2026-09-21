@@ -28,7 +28,7 @@ def main():
     sv = pd.read_parquet(OUT / 'sdssv_epochs_matched.parquet')
     sv = sv[sv.canonical_name.isin(names)].copy()
     sv['target_name'] = sv.canonical_name
-    sv['survey_family'] = 'SDSS'; sv['inventory'] = 'SDSS-V internal v6_2_1 daily'
+    sv['survey_family'] = 'SDSS'; sv['inventory'] = 'SDSS-V internal tagged/rolling daily'
     pieces.append(sv[['target_name','mjd','survey_family','inventory','metadata_quality_ok']])
     coverage = set()
     for path in sorted(DATA.glob('spectra_epochs_*.csv')):
@@ -37,7 +37,7 @@ def main():
         e = e[e.target_name.isin(names)].copy()
         if e.empty:
             continue
-        if path.name in ['spectra_epochs_pool.csv','spectra_epochs_zeltyn.csv','spectra_epochs_v2pub.csv']:
+        if path.name in ['spectra_epochs_pool.csv','spectra_epochs_zeltyn.csv','spectra_epochs_v2pub.csv','spectra_epochs_three_night_public.csv','spectra_epochs_three_night_public_dr19.csv','spectra_epochs_three_night_public_dr20.csv']:
             coverage.update(e.target_name)
         optical = e.source.eq('DESI')
         if 'instrument' in e:
@@ -141,7 +141,7 @@ candidate region does not itself establish a previous or current state change.
 - {int((result.n_optical_epoch_dates_min.ge(2) & result.known_state_status.eq('no match in checked catalogs')).sum())}
   repeat-spectrum targets have no match in the checked changing-look catalogs.
 
-Counts combine parent reference dates, matched internal SDSS-V v6_2_1 daily rows,
+Counts combine parent reference dates, matched internal SDSS-V tagged/rolling daily rows,
 and cached public optical inventories. Same-day entries are merged across
 reductions and surveys; all-epoch and SDSS-V epoch coadds are excluded to avoid
 double-counting the daily data. APOGEE and MaNGA entries are excluded. Each DESI
@@ -150,9 +150,10 @@ separately usable spectra. Dates are inventory detections, not downloaded or
 visually verified usable spectra.
 
 Only {stats['has_cached_public_inventory']} targets have a matched cached public
-archive inventory. This is therefore a lower-bound count; the other targets need
-full public archive searches, and the newer SDSS-V rolling master still needs
-reconciliation. Literature reports may refer to spectra absent from this cache.
+archive inventory. This remains a lower-bound count; consult the acquisition
+manifests for empty searches, unavailable files, and remaining archive failures.
+The rolling daily metadata have been reconciled where field summaries are
+accessible. Literature reports may refer to spectra absent from this cache.
 Multiple spectra alone do not establish a broad-line transition. No scientific
 weights were assigned by this audit.
 

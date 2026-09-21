@@ -74,7 +74,9 @@ def spectrum_payload(records):
         if r.get('coadd') and r.get('min_mjd') is not None and r.get('max_mjd') is not None:
             lo,hi=(Time(r[k],format='mjd').strftime('%Y-%m-%d') for k in ['min_mjd','max_mjd'])
             if lo!=hi:label=lo+'–'+hi
-        flagged=r.get('metadata_quality_ok') is False
+        warning=r.get('meta',{}).get('zwarning')
+        sn=r.get('sn_median_all',r.get('meta',{}).get('sn_median_all'))
+        flagged=r.get('metadata_quality_ok') is False or (warning is not None and warning!=0) or (sn is not None and (not np.isfinite(sn) or sn<5))
         epochs.append(dict(label=label,date=date,mjd=r.get('mjd'),epoch_day=day,
             wave=r['wave'],flux=r['flux'],quality_flag=flagged,
             quality_note='Metadata quality checks failed; inspect before interpreting.' if flagged else '',
@@ -200,8 +202,8 @@ def main():
             if name in set(targets.name):
                 wise[name]={'W1':g.sort_values('time')[['time','flux','err']].round(4).values.tolist()}
     neo = {}
-    for tag in ['pool','poolall','zeltyn','three_night']:
-        path = DATA/f'neowise_visits_{tag}.csv'
+    for tag in ['pool','poolall','zeltyn','three_night']+sorted(f.stem.removeprefix('neowise_visits_') for f in OUT.glob('neowise_visits_prepared*.csv')):
+        path = (OUT if tag.startswith('prepared') else DATA)/f'neowise_visits_{tag}.csv'
         if path.exists():
             v = pd.read_csv(path)
             for name,g in v[v.name.isin(targets.name)].groupby('name'):
@@ -266,7 +268,7 @@ def main():
             ux=round(r.umap_x,4),uy=round(r.umap_y,4),on_fraction=r.manifold_on_neighbor_fraction,off_fraction=r.manifold_off_neighbor_fraction,
             status=status_key,known=matches[['catalog','catalog_name','status','transition','reference']].to_dict('records'),
             n_spec=len(histories),epochs=histories,nights=windows[name],ztf=ztf,ztf_status=ztf_status,wise=wise.get(name,{}),neo=neo.get(name,[]),
-            pool_role=getattr(r,'pool_role','manifold'),field_status=field_status,neighbour_screen=screen,
+            pool_role=getattr(r,'pool_role','manifold'),prepared_nights=str(getattr(r,'prepared_for_nights','')).split(','),field_status=field_status,neighbour_screen=screen,
             spec=spec,cut=cut,image_status=image_status.get(name,{}).get('status','not fetched'),
             lines=[dict(name=n,angstrom=round(w*(1+r.z),1),inrange=bool(3050<=w*(1+r.z)<=10400))
                                  for n,w in [('Hβ',4861.33),('[O III]',5006.84),('Hα',6562.8)] ]))
@@ -292,6 +294,8 @@ def main():
     # Complete metadata remains in the ignored local research directory.
     private=json.loads(json.dumps(payload))
     private['access']='collaboration'
+    science_path=OUT/'three_night_review/science_and_sensitivity.csv'
+    science=pd.read_csv(science_path).set_index('name').to_dict('index') if science_path.exists() else {}
     for target in private['targets']:
         e=full_epochs[full_epochs.target_name==target['name']].sort_values('epoch_day')
         target['epochs']=[dict(mjd=int(v.epoch_day),date=Time(v.epoch_day,format='mjd').strftime('%Y-%m-%d'),src=v.surveys.replace(';','/')) for v in e.itertuples()]
@@ -299,13 +303,16 @@ def main():
         target['sdssv_dates']=int(audit.loc[target['name'],'n_sdssv_dates'])
         target['sdssv_quality_dates']=int(audit.loc[target['name'],'n_sdssv_metadata_quality_dates'])
         target['spec']=spectrum_payload(all_records[target['name']])
+        if target['name'] in science:
+            target['science']=science[target['name']]
         reconcile_spectral_dates(target)
     (OUT/'candidate_review_local.html').write_text(html_for(private))
-    counts=dict(objects=len(items),public_multiple=sum(t['n_spec']>=2 for t in items),
-                public_spectra_plotted=sum(bool(t['spec']) for t in items),ztf_curves=sum(bool(t['ztf']) for t in items),
+    public_items=public_payload['targets']
+    counts=dict(objects=len(items),public_objects=len(public_items),public_multiple=sum(t['n_spec']>=2 for t in public_items),
+                public_spectra_plotted=sum(bool(t['spec']) for t in public_items),ztf_curves=sum(bool(t['ztf']) for t in items),
                 wise_curves=sum(bool(t['wise']) for t in items),cutouts=sum(bool(t['cut']) for t in items),
                 public_bytes=len(page.encode()),night_counts={n:v['count'] for n,v in nights.items()},
-                public_spectral_traces=sum(len((t['spec'] or {}).get('epochs',[])) for t in items),
+                public_spectral_traces=sum(len((t['spec'] or {}).get('epochs',[])) for t in public_items),
                 local_spectral_traces=sum(len((t['spec'] or {}).get('epochs',[])) for t in private['targets']),
                 local_targets_with_spectra=sum(bool(t['spec']) for t in private['targets']))
     (OUT/'web_build_summary.json').write_text(json.dumps(counts,indent=2))

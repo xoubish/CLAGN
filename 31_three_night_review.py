@@ -101,8 +101,8 @@ def main():
     known=pd.read_csv(OUT/'compact_spectral_audit.csv').set_index('name').known_state_status.to_dict()
     uw=pd.read_csv(OUT/'neighbour_unwise_manifest.csv').set_index('name').to_dict('index')
     frames=[]
-    for tag in ['pool','poolall','zeltyn','three_night']:
-        path=ROOT/'data'/f'neowise_visits_{tag}.csv'
+    for tag in ['pool','poolall','zeltyn','three_night']+sorted(f.stem.removeprefix('neowise_visits_') for f in OUT.glob('neowise_visits_prepared*.csv')):
+        path=(OUT if tag.startswith('prepared') else ROOT/'data')/f'neowise_visits_{tag}.csv'
         if path.exists():
             d=pd.read_csv(path);frames.append(d[d.name.isin(targets.name)])
     neo=pd.concat(frames,ignore_index=True).drop_duplicates(['name','mjd'],keep='last')
@@ -122,7 +122,8 @@ def main():
         for minute in np.arange(0,duration-30+1e-6,30):
             start=(t0+minute*u.min).to_datetime(timezone=timezone.utc);end=(t0+(minute+30)*u.min).to_datetime(timezone=timezone.utc)
             slots.append((start,end))
-        w=windows[windows.night.eq(night)][['name','ranges_json','preferred_longest_minutes','min_airmass','minutes_airmass_le1p3']].merge(evidence,on='name')
+        prepared=set(targets.loc[targets.prepared_for_nights.fillna('').str.split(',').map(lambda ns:night in ns),'name']) if 'prepared_for_nights' in targets else set(targets.name)
+        w=windows[windows.night.eq(night)&windows.name.isin(prepared)][['name','ranges_json','preferred_longest_minutes','min_airmass','minutes_airmass_le1p3']].merge(evidence,on='name')
         w=w.merge(targets[['name','ra','dec']],on='name')
         for start,end in slots:
             available=w[w.ranges_json.map(lambda s:covers(s,start,end))]
@@ -150,16 +151,16 @@ def main():
             if len(selected)>=desired:break
             selected.add(name)
         short=main[main.name.isin(selected)].copy();short['night']=night;shortlists.append(short)
-        plot=short.sort_values(['ranges_json','ra']);height=max(7,.19*len(plot)+2)
+        plot=w.sort_values(['ranges_json','ra']);height=max(7,.19*len(plot)+2)
         fig,ax=plt.subplots(figsize=(13,height));colors={'manifold':'#497b9b','reserve':'#b47c42'}
         for i,r in enumerate(plot.itertuples()):
             for segment in json.loads(r.ranges_json):
                 left,right=mdates.date2num(dt(segment['start_utc'])),mdates.date2num(dt(segment['end_utc']))
                 ax.barh(i,right-left,left=left,height=.68,color=colors[r.pool_role])
-        ax.set_yticks(range(len(plot)),[f'{r.name}  r={r.r_planning:.1f}  S/N~{r.snr_sky18p5_X1p3:.0f}' for r in plot.itertuples()],fontsize=7)
+        ax.set_yticks(range(len(plot)),[f'{r.name}{" [reserve]" if r.pool_role=="reserve" else ""}  r={r.r_planning:.1f}  S/N~{r.snr_sky18p5_X1p3:.0f}' for r in plot.itertuples()],fontsize=7)
         ax.invert_yaxis();ax.set_xlim(mdates.date2num(t0.to_datetime(timezone=timezone.utc)),mdates.date2num(t1.to_datetime(timezone=timezone.utc)))
         ax.xaxis.set_major_locator(mdates.HourLocator(tz=TZ));ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M',tz=TZ));ax.grid(axis='x',alpha=.25)
-        ax.set_xlabel('Palomar local time (PDT)');ax.set_title(f'{date}: screened manifold alternatives\nX ≤ 1.5, Moon ≥ 40°, r < 19; 30-minute minimum window')
+        ax.set_xlabel('Palomar local time (PDT)');ax.set_title(f'{date}: prepared alternatives (blue: manifold; amber: reserves)\nX ≤ 1.5, Moon ≥ 40°, r < 19; 30-minute minimum window')
         fig.text(.01,.012,'Availability, not assigned observations. S/N labels: archival continuum, sky V=18.5, X=1.3; not broad-line significance. Field/slit inspection remains required.',fontsize=8)
         fig.tight_layout(rect=(0,.035,1,1))
         for extension in ['png','pdf']:fig.savefig(DEST/f'{night}_visibility.{extension}',dpi=150)
@@ -168,7 +169,7 @@ def main():
     pd.DataFrame(bundles).to_csv(DEST/'distinct_alternatives_by_slot.csv',index=False)
     pd.concat(shortlists,ignore_index=True).to_csv(DEST/'time_balanced_shortlist.csv',index=False)
     summary=coverage.groupby('night')[['clear_manifold','clear_nominal_snr10','clear_bright_sky_snr10','clear_reserves']].min()
-    (DEST/'REVIEW.md').write_text('# Three-night review\n\nThe full parent is retained separately. These are provisional, time-balanced alternatives from the currently prepared manifold candidates, not a confirmed observing schedule. W1 projection coverage and acquisition manifests must be checked before calling the search complete.\n\n'+summary.to_markdown()+'\n\nTable values are the minimum available counts in any complete 30-minute block. The separate bundle table assigns three distinct alternatives per block without reusing an object across blocks; blank assignments expose shortages. S/N is continuum per binned pixel, not integrated broad-H-beta significance. Sensitivity is reported rather than imposed as an undocumented cut.\n\nReview ordering prioritizes a same-filter optical change of at least 0.3 mag and three robust standard errors after the latest accepted spectral reference; at least three nightly measurements near that reference and three at least 90 days later are required. Consistent g/r directions are required when both trigger, and association flags prevent promotion. This is a screening heuristic, not a CLAGN classification or an extrapolation to September/October 2026. Within that tier, brighter expected continuum S/N is preferred. Spectral count never supplies a scientific reward or penalty. Manifold neighbor fractions are not transition probabilities.\n\nThe field-clear subset has no listed SDSS/Gaia/unWISE catalogue flags; this is not a contamination guarantee. Inspect the cutout and slit PA. The complete pool retains conditional fields and lower-S/N alternatives for review.\n')
+    (DEST/'REVIEW.md').write_text('# Three-night review\n\nThe full parent is retained separately. These are provisional, time-balanced alternatives from the currently prepared manifold candidates, not a confirmed observing schedule. W1 projection coverage and acquisition manifests must be checked before calling the search complete.\n\n'+summary.to_markdown()+'\n\nTable values are the minimum available counts in any complete 30-minute block. The local bundle table assigns manifold-only alternatives without reusing an object across blocks; blank assignments expose shortages. The prepared_distinct_alternatives.csv file one directory above includes the separately labeled reserves. The visibility plots include both pools. S/N is continuum per binned pixel, not integrated broad-H-beta significance. Sensitivity is reported rather than imposed as an undocumented cut.\n\nReview ordering prioritizes a same-filter optical change of at least 0.3 mag and three robust standard errors after the latest accepted spectral reference; at least three nightly measurements near that reference and three at least 90 days later are required. Consistent g/r directions are required when both trigger, and association flags prevent promotion. This is a screening heuristic, not a CLAGN classification or an extrapolation to September/October 2026. Dated IR changes receive a smaller review weight, with dust lag explicitly unresolved; expected continuum S/N breaks ties. Spectral count never supplies a scientific reward or penalty. Manifold neighbor fractions are not transition probabilities.\n\nThe field-clear subset has no listed SDSS/Gaia/unWISE catalogue flags; this is not a contamination guarantee. Inspect the cutout and slit PA. The complete pool retains conditional fields and lower-S/N alternatives for review.\n')
     print(summary.to_string(),flush=True)
 
 

@@ -15,6 +15,7 @@ import astropy.units as u
 ROOT=Path(__file__).resolve().parent;OUT=ROOT/'data/reselection_2026-09-20'
 OPS=importlib.import_module('23_operational_review');REVIEW=importlib.import_module('31_three_night_review')
 OLD=importlib.import_module('07_make_webpage')
+EXPOSURE=importlib.import_module('22_september_etc')
 
 
 def main():
@@ -36,6 +37,28 @@ def main():
     objects['public_baseline_quality']=objects.name.isin(quality)
     objects['baseline_quality']=objects.public_baseline_quality|objects.sdssv_n_quality_epochs.ge(1)
     objects['public_reference_mjd']=objects.name.map(last)
+    # A generic optical spectrum can cover MgII but miss Hbeta at high z.
+    # Keep such objects in the full catalogue, outside the Hbeta primary list.
+    # Before a file is loaded, use conservative wavelength limits for the
+    # identified reference instrument; validate against actual files afterward.
+    public['comparison_red_limit']=np.where(public.plate.lt(3500),9200.,10300.)
+    comparable=public[5140*(1+public.z)<=public.comparison_red_limit]
+    expected=set(comparable.name)
+    objects['hbeta_comparison_possible']=objects.name.isin(expected)|objects.sdssv_n_quality_epochs.ge(1)
+    objects['hbeta_comparison_possible']&=(5140*(1+objects.z)<=10300)
+    checked=[];accepted=[]
+    for target in objects.to_dict('records'):
+        paths=[ROOT/'data/spectra_dl'/f"{target['name']}.json",OUT/'sdssv_spectra'/f"{target['name']}.json"]
+        exists=any(path.exists() for path in paths)
+        # A DESI-only cache does not mean the identified SDSS baseline has
+        # already been retrieved, so don't reject it on that basis alone.
+        daily=any(any(not r.get('coadd') for r in json.loads(path.read_text())) for path in paths if path.exists())
+        checked.append(exists and daily)
+        accepted.append(EXPOSURE.reference(target) is not None if exists and daily else False)
+    objects['hbeta_baseline_file_checked']=checked
+    objects['hbeta_baseline_file_accepted']=accepted
+    mask=objects.hbeta_baseline_file_checked
+    objects.loc[mask,'hbeta_comparison_possible']&=objects.loc[mask,'hbeta_baseline_file_accepted']
     wise=OLD.load_wise(str(ROOT/'data/wise_cache/pool'))
     expansion=OUT/'three_night_w1.parquet'
     if expansion.exists():
@@ -63,7 +86,7 @@ def main():
     objects['balmer_pair_in_range']=objects.Ha_A.le(10350)&objects.Hb_A.ge(3150)
     objects['preparation_score']=20*objects.dated_w1_preparation_flag.astype(int)+2*objects.balmer_pair_in_range.astype(int)+(19-objects.r_planning).clip(0,6)
     objects.to_csv(OUT/'all_three_night_candidates_screened.csv',index=False)
-    usable=objects[objects.field_status.eq('clear')&objects.baseline_quality].copy()
+    usable=objects[objects.field_status.eq('clear')&objects.baseline_quality&objects.hbeta_comparison_possible].copy()
     assigned={};bundle=[];summary=[];used=set()
     for night,(date,part) in OPS.OBS.NIGHTS.items():
         t0,t1,_,_=OPS.OBS.night_window(date,part);duration=(t1-t0).to_value(u.min)
@@ -104,6 +127,7 @@ def main():
     pd.DataFrame(bundle).to_csv(OUT/'prepared_distinct_alternatives.csv',index=False)
     pd.DataFrame(summary).to_csv(OUT/'prepared_night_summary.csv',index=False)
     config.update(selection_phase='prepared',prepared_objects=len(prepared),full_candidate_objects=len(objects),
+                  hbeta_baseline_requirement='An accepted prior spectrum covering Hbeta and both comparison continua (rest 4750-4790 and 5100-5140 Angstrom), with the red continuum inside the planning bandpass. Instrument metadata screen first; loaded-file verification before final review.',
                   preparation_note='Three distinct alternatives per 30-minute block, where feasible; at least 45 manifold candidates per night, or three per block for longer nights. Lists use different objects across nights. Full qualifying catalog retained separately.',
                   priority_note='Preparation heuristic: dated significant W1 change after a public reference, Balmer-pair coverage, then brightness. This does not classify a spectral transition or forecast the present state.')
     (OUT/'review_selection.json').write_text(json.dumps(config,indent=2));print(pd.DataFrame(summary).to_string(index=False),flush=True);print('Prepared distinct objects',len(prepared),flush=True)

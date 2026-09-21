@@ -64,6 +64,23 @@ def fetch(rmax,workers,targets_path=None,batch_name=None,reuse_batch=None):
                 hit=pd.read_parquet(previous);hit=hit[hit.name.isin(sub.name)]
                 hit.to_parquet(path,index=False);return pixel,len(hit)
         filt=(ds.field('primary')==1)&(ds.field('band')==1)
+        # Restrict materialized rows before constructing SkyCoord. Crowded
+        # partitions contain millions of detections although only a few dozen
+        # match these targets. Boxes enclose the exact 1-arcsec spherical cone;
+        # the final angular match below still determines acceptance.
+        spatial=None
+        radius=np.deg2rad(1/3600)
+        for target in sub.itertuples():
+            half=np.rad2deg(np.arcsin(min(1.,np.sin(radius)/max(1e-12,np.cos(np.deg2rad(target.dec))))))*1.000001
+            lo,hi=target.ra-half,target.ra+half
+            dec_filter=(ds.field('dec')>=target.dec-1.000001/3600)&(ds.field('dec')<=target.dec+1.000001/3600)
+            if abs(target.dec)+1/3600>=90:ra_filter=ds.scalar(True)
+            elif lo<0:ra_filter=(ds.field('ra')>=lo+360)|(ds.field('ra')<=hi)
+            elif hi>=360:ra_filter=(ds.field('ra')>=lo)|(ds.field('ra')<=hi-360)
+            else:ra_filter=(ds.field('ra')>=lo)&(ds.field('ra')<=hi)
+            box=ra_filter&dec_filter
+            spatial=box if spatial is None else spatial|box
+        filt=filt&spatial
         err=None
         for attempt in range(3):
             try:

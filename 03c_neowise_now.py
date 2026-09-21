@@ -48,8 +48,14 @@ def gator(pos, tries=3):
 
 
 def main():
-    inp, tag = sys.argv[1], sys.argv[2]
-    ra_col, dec_col, name_col = (sys.argv[3:6] if len(sys.argv) >= 6 else ('ra', 'dec', 'name'))
+    import argparse
+    parser=argparse.ArgumentParser()
+    parser.add_argument('input');parser.add_argument('tag')
+    parser.add_argument('ra_col',nargs='?',default='ra');parser.add_argument('dec_col',nargs='?',default='dec');parser.add_argument('name_col',nargs='?',default='name')
+    parser.add_argument('--output-dir',default=DATA)
+    args=parser.parse_args();inp,tag=args.input,args.tag
+    ra_col,dec_col,name_col=args.ra_col,args.dec_col,args.name_col
+    output_dir=args.output_dir;os.makedirs(output_dir,exist_ok=True)
     t = pd.read_csv(inp).drop_duplicates(name_col)
     pos = pd.DataFrame({'name': t[name_col].astype(str), 'ra': t[ra_col].astype(float), 'dec': t[dec_col].astype(float)}).reset_index(drop=True)
     cache = os.path.join(DATA, 'neowise_cache', tag); os.makedirs(cache, exist_ok=True)
@@ -76,7 +82,7 @@ def main():
     v = fr.groupby(['name', 'visit']).agg(mjd=('mjd', 'median'), w1=('w1mpro', 'median'), w1err=('w1mpro', lambda x: 1.2533 * x.std(ddof=1) / np.sqrt(len(x)) if len(x) > 1 else np.nan),
                                           w2=('w2mpro', 'median'), n=('w1mpro', 'size')).reset_index()
     v = v[v.n >= 3]
-    v.to_csv(os.path.join(DATA, f'neowise_visits_{tag}.csv'), index=False)
+    v.to_csv(os.path.join(output_dir, f'neowise_visits_{tag}.csv'), index=False)
     nfr = fr.name.value_counts()
     rows = []
     for name, g in v.groupby('name'):
@@ -88,7 +94,7 @@ def main():
                          w1_first=first, w1_last=last, dw1_neowise=last - first, w1_slope_2yr=slope, w1_amp_visits=g.w1.max() - g.w1.min(),
                          w1_flux_last_mjy=W1_ZP_JY * 1e3 * 10 ** (-0.4 * last), w2_last=g[g.mjd > g.mjd.max() - 400].w2.median()))
     out = pd.DataFrame(rows)
-    out.to_csv(os.path.join(DATA, f'neowise_now_{tag}.csv'), index=False)
+    out.to_csv(os.path.join(output_dir, f'neowise_now_{tag}.csv'), index=False)
     if out.empty:
         print(f'No usable NEOWISE visits for {len(pos)} queried objects; raw responses retained.');return
     print(f'wrote data/neowise_now_{tag}.csv ({len(out)} of {len(pos)} objects) and data/neowise_visits_{tag}.csv ({len(v)} visits); '

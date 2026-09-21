@@ -5,7 +5,7 @@ inverse variances, masks and resolution matrices in a standalone FITS file.
 """
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor,as_completed
-import argparse,importlib,json,fcntl
+import argparse,importlib,json,fcntl,time
 import numpy as np
 import pandas as pd
 import hpgeom,aiohttp
@@ -18,7 +18,7 @@ DEST=OUT/'desi_direct';DEST.mkdir(exist_ok=True)
 API=importlib.import_module('29_three_night_desi');PARSE=importlib.import_module('03d_fetch_spectra');NATIVE=importlib.import_module('17_fetch_review_spectra').finite
 
 
-def one(item):
+def one(item,attempt=0):
     name,epochs=item;records=[];failed=[]
     for e in epochs.rename(columns={'class':'spectral_class'}).itertuples():
         stem=f'{name}_{e.targetid}_{e.survey}_{e.program}'
@@ -76,7 +76,11 @@ def one(item):
             if not failed:old=[r for r in old if not (r.get('source')=='DESI' and str(r.get('meta',{}).get('specid')) in ids)]
             urls={r.get('url') for r in records};old=[r for r in old if r.get('url') not in urls]
             tmp=path.with_suffix('.desi.tmp');tmp.write_text(json.dumps(NATIVE(old+records),separators=(',',':'),allow_nan=False));tmp.replace(path)
-    result=dict(name=name,records=len(records),failed=failed);(DEST/f'{name}_status.json').write_text(json.dumps(result,indent=2));return result
+    result=dict(name=name,records=len(records),failed=failed);(DEST/f'{name}_status.json').write_text(json.dumps(result,indent=2))
+    if failed and attempt<2:
+        time.sleep(3*(attempt+1))
+        return one(item,attempt+1)
+    return result
 
 
 def main():

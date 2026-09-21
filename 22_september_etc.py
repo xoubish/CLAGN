@@ -42,6 +42,8 @@ def reference(t):
     accepted=[]
     for r in records:
         if r.get('coadd') or r.get('metadata_quality_ok') is False:continue
+        warning=r.get('meta',{}).get('zwarning')
+        if warning is not None and (not np.isfinite(warning) or warning!=0):continue
         sn=r.get('sn_median_all',r.get('meta',{}).get('sn_median_all'))
         if sn is not None and np.isfinite(sn) and sn<5:continue
         w=np.asarray(r['wave'],float);f=np.asarray(r['flux'],float);rest=w/(1+t['z'])

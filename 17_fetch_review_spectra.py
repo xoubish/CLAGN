@@ -104,7 +104,8 @@ def main():
                 print(f'{k}/{len(todo)} attempted; {sum(s["status"]!="available" for s in manifest)} unavailable; {time.monotonic()-start:.0f}s',flush=True)
     pd.DataFrame(manifest).to_csv(DEST/'fetch_manifest.csv',index=False)
     all_records=[r for rows in cache.values() for r in rows]
-    summary=dict(requested_epochs=len(epochs),available_epochs=len(all_records),
+    available_dates={(name,int(r['mjd'])) for name,rows in cache.items() for r in rows}
+    summary=dict(requested_epochs=len(epochs),available_epochs=len(available_dates),cached_reductions=len(all_records),
                  targets_with_spectra=sum(bool(rows) for rows in cache.values()),
                  failed_this_run=[s for s in manifest if s['status']!='available'])
     (DEST/'status.json').write_text(json.dumps(summary,indent=2))
