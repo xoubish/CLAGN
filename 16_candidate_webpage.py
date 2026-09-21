@@ -58,18 +58,24 @@ def spectrum_payload(records):
         dated=mjd is not None and np.isfinite(mjd) and mjd>40000
         day=int(np.floor(mjd)) if dated else None
         key=(record.get('source','SDSS'),day)
+        if record.get('source')=='DESI' and record.get('date_verified'):
+            key+=(str(record.get('meta',{}).get('specid')),record.get('survey'),record.get('program'))
         # Prefer the explicit current reduction when a cached older daily record
         # represents the same source and night; never count it as a new epoch.
         def quality(r):
             sn=r.get('sn_median_all',r.get('meta',{}).get('sn_median_all'))
-            return (r.get('run2d')=='v6_2_1',float(sn) if sn is not None and np.isfinite(sn) else -1)
+            return (r.get('archive_version')=='master',r.get('run2d')=='v6_2_1',r.get('metadata_quality_ok') is not False,float(sn) if sn is not None and np.isfinite(sn) else -1)
         if key not in best or quality(record)>quality(best[key]):best[key]=record
     epochs=[]
     for key,r in sorted(best.items(),key=lambda p:(p[0][1] is None,p[0][1] or 0,p[0][0])):
         day=key[1]
         date=Time(day,format='mjd').strftime('%Y-%m-%d') if day is not None else 'Date unavailable'
+        label=date
+        if r.get('coadd') and r.get('min_mjd') is not None and r.get('max_mjd') is not None:
+            lo,hi=(Time(r[k],format='mjd').strftime('%Y-%m-%d') for k in ['min_mjd','max_mjd'])
+            if lo!=hi:label=lo+'–'+hi
         flagged=r.get('metadata_quality_ok') is False
-        epochs.append(dict(label=date,date=date,mjd=r.get('mjd'),epoch_day=day,
+        epochs.append(dict(label=label,date=date,mjd=r.get('mjd'),epoch_day=day,
             wave=r['wave'],flux=r['flux'],quality_flag=flagged,
             quality_note='Metadata quality checks failed; inspect before interpreting.' if flagged else '',
             coadd=bool(r.get('coadd',False))))

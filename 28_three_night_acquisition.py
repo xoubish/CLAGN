@@ -59,7 +59,7 @@ def public_spectra(row):
             try:
                 if not PARSE.fetch(url,str(path),tries=2):raise ValueError('No FITS returned')
                 rec=PARSE.parse(str(path))
-                rec.update(mjd=float(e.mjd),phase=int(e.sdss_phase),program=str(e.programname),coadd=bool(e.is_coadd),url=url,source='SDSS',proprietary=False)
+                rec.update(mjd=float(e.mjd),phase=int(e.sdss_phase),run2d=str(e.run2d),program=str(e.programname),coadd=bool(e.is_coadd),url=url,source='SDSS',proprietary=False)
                 fetched.append(NATIVE(rec))
             except Exception as exc:fail.append(dict(mjd=float(e.mjd),reason=type(exc).__name__,url=url))
     # Existing records survive any archive failure. Coadds are labeled, not
@@ -96,7 +96,8 @@ def main():
             try:results.append(f.result())
             except Exception as exc:results.append(dict(name=futures[f],status='worker failed',reason=type(exc).__name__))
             if i%20==0 or i==len(futures):
-                (OUT/f'three_night_{args.stage}_acquisition.json').write_text(json.dumps(NATIVE(dict(total=len(targets),attempted=i,results=results)),indent=2))
+                suffix='_'+RELEASE if args.stage=='spectra' else ''
+                (OUT/f'three_night_{args.stage}_acquisition{suffix}.json').write_text(json.dumps(NATIVE(dict(total=len(targets),attempted=i,results=results)),indent=2))
                 print(args.stage,i,'/',len(futures),pd.Series([r['status'] for r in results]).value_counts().to_dict(),round(time.monotonic()-start),'s',flush=True)
     if args.stage=='spectra':
         frames=[pd.read_csv(CACHE/f'{n}_{RELEASE}_sdss.csv',dtype={'specobjid':str,'catalogid':str}) for n in targets.name if (CACHE/f'{n}_{RELEASE}_sdss.csv').exists()]

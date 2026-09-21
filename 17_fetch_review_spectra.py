@@ -39,7 +39,8 @@ def session():
 
 def one(row):
     name=row.canonical_name
-    version=str(row.run2d_row).strip() or 'v6_2_1'
+    archive=getattr(row,'archive_version',None)
+    version=str(archive if pd.notna(archive) else row.run2d_row).strip() or 'v6_2_1'
     url=ARCHIVE.spec_url(version,'daily',int(row.field),int(row.mjd),int(row.catalogid),str(row.spec_file).strip())
     directory=OUT/'spectra_files'/version/name
     directory.mkdir(parents=True,exist_ok=True)
@@ -59,7 +60,7 @@ def one(row):
             if sum(v is not None and np.isfinite(v) for v in rec['flux'])<20:
                 return metadata|{'reason':'too few finite spectral bins'},None
             rec.update(mjd=int(row.mjd),phase=5,program=str(row.programname),coadd=False,
-                       source='SDSS',proprietary=True,run2d=version,
+                       source='SDSS',proprietary=True,run2d=str(row.run2d_row),archive_version=version,
                        metadata_quality_ok=bool(row.metadata_quality_ok),fieldquality=str(row.fieldquality),
                        sn_median_all=float(row.sn_median_all))
             return metadata|{'status':'available','reason':''},finite(rec)
@@ -74,13 +75,21 @@ def main():
     targets=pd.read_csv(OUT/'compact_review_objects.csv')
     epochs=pd.read_parquet(OUT/'sdssv_epochs_matched.parquet')
     epochs=epochs[epochs.canonical_name.isin(targets.name)].copy()
-    epochs=epochs.sort_values(['metadata_quality_ok','sn_median_all'],ascending=False).drop_duplicates(['canonical_name','mjd'])
+    if 'archive_version' not in epochs:epochs['archive_version']=epochs.run2d_row
+    epochs['archive_version']=epochs.archive_version.fillna(epochs.run2d_row)
+    epochs['rolling']=epochs.archive_version.eq('master')
+    epochs=epochs.sort_values(['rolling','metadata_quality_ok','sn_median_all'],ascending=False).drop_duplicates(['canonical_name','mjd'])
     cache={}
     for name in epochs.canonical_name.unique():
         path=DEST/f'{name}.json'
         cache[name]=json.loads(path.read_text()) if path.exists() else []
-    done={(name,int(r['mjd'])) for name,rows in cache.items() for r in rows}
-    todo=[r for r in epochs.itertuples() if (r.canonical_name,int(r.mjd)) not in done]
+        meta=epochs[epochs.canonical_name.eq(name)].set_index('mjd')
+        for record in cache[name]:
+            if int(record['mjd']) in meta.index:
+                record['metadata_quality_ok']=bool(meta.loc[int(record['mjd']),'metadata_quality_ok'])
+        if path.exists():path.write_text(json.dumps(finite(cache[name]),separators=(',',':'),allow_nan=False))
+    done={(name,int(r['mjd']),r.get('archive_version',r.get('run2d','v6_2_1'))) for name,rows in cache.items() for r in rows}
+    todo=[r for r in epochs.itertuples() if (r.canonical_name,int(r.mjd),r.archive_version) not in done]
     manifest=[];start=time.monotonic()
     print(f'{len(epochs)} distinct daily epochs for {epochs.canonical_name.nunique()} targets; {len(todo)} remaining',flush=True)
     with ThreadPoolExecutor(max_workers=8) as executor:
