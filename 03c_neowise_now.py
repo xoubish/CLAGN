@@ -57,7 +57,7 @@ def main():
     for i in range(0, len(pos), BATCH):
         f = os.path.join(cache, f'batch_{i:05d}.csv')
         if os.path.exists(f):
-            frames.append(pd.read_csv(f)); continue
+            frames.append(pd.read_csv(f,dtype={'cc_flags':str})); continue
         sub = pos.iloc[i:i + BATCH]
         g = gator(sub)
         # assign every returned frame to the nearest uploaded position (within 3")
@@ -68,7 +68,10 @@ def main():
         g.to_csv(f, index=False); frames.append(g)
         print(f'[{time.time()-t0:5.0f}s] batch {i//BATCH+1}/{(len(pos)-1)//BATCH+1}: {len(g)} frames', flush=True)
     fr = pd.concat(frames, ignore_index=True)
-    fr = fr[(fr.qual_frame > 0) & fr.cc_flags.astype(str).str[:2].eq('00') & np.isfinite(fr.w1mpro) & np.isfinite(fr.w1sigmpro)]
+    # Preserve the leading zeroes in the four-band artifact flags. Astropy can
+    # also return bytes; str(b'0000') is not the flag value '0000'.
+    flags=fr.cc_flags.map(lambda v:v.decode() if isinstance(v,bytes) else str(v)).str.strip().str.zfill(4)
+    fr = fr[(fr.qual_frame > 0) & flags.str[:2].eq('00') & np.isfinite(fr.w1mpro) & np.isfinite(fr.w1sigmpro)]
     fr['visit'] = np.round(fr.mjd / 180.0)
     v = fr.groupby(['name', 'visit']).agg(mjd=('mjd', 'median'), w1=('w1mpro', 'median'), w1err=('w1mpro', lambda x: 1.2533 * x.std(ddof=1) / np.sqrt(len(x)) if len(x) > 1 else np.nan),
                                           w2=('w2mpro', 'median'), n=('w1mpro', 'size')).reset_index()
@@ -86,6 +89,8 @@ def main():
                          w1_flux_last_mjy=W1_ZP_JY * 1e3 * 10 ** (-0.4 * last), w2_last=g[g.mjd > g.mjd.max() - 400].w2.median()))
     out = pd.DataFrame(rows)
     out.to_csv(os.path.join(DATA, f'neowise_now_{tag}.csv'), index=False)
+    if out.empty:
+        print(f'No usable NEOWISE visits for {len(pos)} queried objects; raw responses retained.');return
     print(f'wrote data/neowise_now_{tag}.csv ({len(out)} of {len(pos)} objects) and data/neowise_visits_{tag}.csv ({len(v)} visits); '
           f'last visit median MJD {out.mjd_last_neo.median():.0f}; faded >0.3 mag since 2014: {(out.dw1_neowise > 0.3).sum()}, brightened >0.3: {(out.dw1_neowise < -0.3).sum()}')
 

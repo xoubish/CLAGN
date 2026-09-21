@@ -4,7 +4,7 @@ Only the public parent-reference spectrum is added to spectra_dl. Internal
 spectra remain in the ignored collaboration directory. No publication occurs.
 """
 from pathlib import Path
-import importlib,json
+import importlib,json,argparse
 from concurrent.futures import ThreadPoolExecutor
 import pandas as pd
 
@@ -34,14 +34,16 @@ def one(row):
     return dict(name=name,status='unavailable',mjd=int(row.mjd))
 
 def main():
+    ap=argparse.ArgumentParser();ap.add_argument('--all-nights',action='store_true');args=ap.parse_args()
     targets=pd.read_csv(OUT/'compact_review_objects.csv')
-    names=set(targets.loc[targets.eligible_nights.str.contains('sep23'),'name'])
+    names=set(targets.name if args.all_nights else targets.loc[targets.eligible_nights.str.contains('sep23'),'name'])
     parent=pd.read_csv(ROOT/'data/parent_pool_scored.csv')
     parent=parent[('P'+parent.poolid.astype(str)).isin(names)]
-    assert len(parent)==len(names), 'Every selected September object needs a public parent reference.'
     with ThreadPoolExecutor(max_workers=4) as executor:
         rows=list(executor.map(one,parent.itertuples(index=False)))
-    pd.DataFrame(rows).to_csv(OUT/'sep23_baseline_manifest.csv',index=False)
+    represented=set('P'+parent.poolid.astype(str))
+    rows.extend(dict(name=name,status='use public archive inventory; not an old DR16 parent identity') for name in sorted(names-represented))
+    pd.DataFrame(rows).to_csv(OUT/('three_night_baseline_manifest.csv' if args.all_nights else 'sep23_baseline_manifest.csv'),index=False)
     print(pd.DataFrame(rows).status.value_counts().to_dict(),flush=True)
 
 if __name__=='__main__':main()

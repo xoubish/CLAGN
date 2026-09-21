@@ -24,10 +24,10 @@ os.environ.setdefault('MPLCONFIGDIR',str(OUT/'matplotlib_cache'))
 os.environ.setdefault('NUMBA_NUM_THREADS','8')
 
 
-def fetch(rmax,workers):
-    todo=pd.read_csv(OUT/'projection_todo.csv')
+def fetch(rmax,workers,targets_path=None,batch_name=None,reuse_batch=None):
+    todo=pd.read_csv(targets_path or OUT/'projection_todo.csv')
     todo=todo[todo.r_planning.le(rmax)].copy().reset_index(drop=True)
-    batch=OUT/f'wise_r{str(rmax).replace(".","p")}'
+    batch=OUT/(batch_name or f'wise_r{str(rmax).replace(".","p")}')
     batch.mkdir(exist_ok=True)
     (batch/'status.json').unlink(missing_ok=True)
     if (batch/'targets.csv').exists():
@@ -41,11 +41,15 @@ def fetch(rmax,workers):
         pixels=hpgeom.query_circle(32,r.ra,r.dec,1/3600,nest=True,lonlat=True,inclusive=True)
         entries.extend((int(p),i) for p in pixels)
     loc=pd.DataFrame(entries,columns=['pixel','idx'])
-    s3=fs.S3FileSystem(region='us-west-2',anonymous=True,request_timeout=120,connect_timeout=30)
+    s3=fs.S3FileSystem(region='us-west-2',anonymous=True,request_timeout=60,connect_timeout=15,
+                       retry_strategy=fs.AwsStandardS3RetryStrategy(max_attempts=2))
     base='nasa-irsa-wise/unwise/neo7/catalogs/time_domain/healpix_k5/unwise-neo7-time_domain-healpix_k5.parquet'
-    print('Loading unWISE metadata once...',flush=True)
-    dataset=ds.parquet_dataset(base+'/_metadata',filesystem=s3,partitioning='hive')
     print('Sky partitions:',loc.pixel.nunique(),flush=True)
+    if reuse_batch:
+        previous=pd.read_csv(OUT/reuse_batch/'targets.csv').set_index('name')
+        assert set(todo.name)<=set(previous.index),'A partition cache cannot cover targets absent from its original queue.'
+        positions=previous.loc[todo.name,['ra','dec']].to_numpy()
+        assert np.allclose(positions,todo[['ra','dec']].to_numpy(),atol=1e-9,rtol=0),'Cache coordinates changed.'
     # Exact linear unit conversion used in the original pipeline (W1 Vega->AB).
     factor=10**(-.4*(22.5+2.699-23.9))/1000
     def one(pixel,ind):
@@ -54,10 +58,18 @@ def fetch(rmax,workers):
             try:return pixel,len(pd.read_parquet(path))
             except Exception:pass  # interrupted writes are fetched again
         sub=todo.iloc[ind]
-        filt=(ds.field('healpix_k5')==pixel)&(ds.field('primary')==1)&(ds.field('band')==1)
+        if reuse_batch:
+            previous=OUT/reuse_batch/path.name
+            if previous.exists():
+                hit=pd.read_parquet(previous);hit=hit[hit.name.isin(sub.name)]
+                hit.to_parquet(path,index=False);return pixel,len(hit)
+        filt=(ds.field('primary')==1)&(ds.field('band')==1)
         err=None
         for attempt in range(3):
             try:
+                # Inspect only this partition instead of downloading the
+                # 140-MB all-sky metadata file before any useful work begins.
+                dataset=ds.dataset(base+f'/healpix_k0={pixel//1024}/healpix_k5={pixel}',filesystem=s3,format='parquet')
                 t=dataset.to_table(filter=filt,columns=['ra','dec','flux','dflux','MJDMEAN'],use_threads=False).to_pandas()
                 coords=SkyCoord(t.ra.to_numpy()*u.deg,t.dec.to_numpy()*u.deg)
                 targets=SkyCoord(sub.ra.to_numpy()*u.deg,sub.dec.to_numpy()*u.deg)
@@ -85,9 +97,9 @@ def fetch(rmax,workers):
     print('Acquisition complete',flush=True)
 
 
-def project(rmax):
+def project(rmax,batch_name=None):
     from AGNzoo_functions import unify_lc_gp,stat_bands,combine_bands,normalize_clipmax_objects,dtw_distance
-    batch=OUT/f'wise_r{str(rmax).replace(".","p")}'
+    batch=OUT/(batch_name or f'wise_r{str(rmax).replace(".","p")}')
     status=json.loads((batch/'status.json').read_text())
     if status['failed']:raise ValueError('Complete acquisition before treating batch as surveyed')
     targets=pd.read_csv(batch/'targets.csv')
@@ -151,12 +163,13 @@ def enable_parallel_exact_dtw():
 
 if __name__=='__main__':
     ap=argparse.ArgumentParser();ap.add_argument('stage',choices=['fetch','project']);ap.add_argument('--rmax',type=float,default=19.5);ap.add_argument('--workers',type=int,default=6)
+    ap.add_argument('--targets');ap.add_argument('--batch');ap.add_argument('--reuse-batch')
     args=ap.parse_args()
     if args.stage=='fetch':
-        try:fetch(args.rmax,args.workers)
+        try:fetch(args.rmax,args.workers,args.targets,args.batch,args.reuse_batch)
         except Exception as exc:
-            batch=OUT/f'wise_r{str(args.rmax).replace(".","p")}'
+            batch=OUT/(args.batch or f'wise_r{str(args.rmax).replace(".","p")}')
             batch.mkdir(parents=True,exist_ok=True)
             (batch/'status.json').write_text(json.dumps({'failed':[{'fatal_error':str(exc)}]},indent=2))
             raise
-    else:project(args.rmax)
+    else:project(args.rmax,args.batch)

@@ -135,7 +135,7 @@ def observing_windows(targets):
             changes = np.diff(np.r_[False,accepted[i],False].astype(int))
             runs = list(zip(np.where(changes==1)[0],np.where(changes==-1)[0]))
             longest = max((edges[b]-edges[a] for a,b in runs),default=0)
-            minimum=120 if targets.iloc[i].get('pool_role')=='reserve' else SELECTION['minimum_window_minutes']
+            minimum=SELECTION.get('reserve_minimum_window_minutes',30) if targets.iloc[i].get('pool_role')=='reserve' else SELECTION['minimum_window_minutes']
             if longest < minimum:
                 continue
             ref = expected[(expected.name==name)&(expected.night==key)]
@@ -167,12 +167,13 @@ def main():
     assert targets.name.is_unique and set(targets.name)==set(audit.index), 'Refresh spectral audit for this compact pool.'
     # Current snapshot has exclusively public DR16 identities and public photometry.
     # Future additions need the same provenance checks before website publication.
-    assert targets.origin.eq('old_DR16_parent').all(), 'Review publication provenance for new parent origins.'
-    assert targets.r_source.isin(['historical SDSS catalog','historical ZTF catalog median']).all()
+    public_names=set(targets.loc[
+        targets.origin.isin(['old_DR16_parent','Zeltyn24','expanded_DR16_QSO','expanded_DR16_GALAXY','full_DR16Q_catalog','old_galaxy_parent']) &
+        targets.r_source.isin(['historical SDSS catalog','historical ZTF catalog median']),'name'])
     windows,nights = observing_windows(targets)
     print('Validated observing windows for',len(targets),'candidates',flush=True)
     inventory = pd.read_csv(OUT/'compact_spectral_inventory_records.csv')
-    allowed = ['parent reference spectra','spectra_epochs_pool.csv','spectra_epochs_zeltyn.csv','spectra_epochs_v2pub.csv']
+    allowed = ['parent reference spectra','spectra_epochs_pool.csv','spectra_epochs_zeltyn.csv','spectra_epochs_v2pub.csv','spectra_epochs_three_night_public.csv','spectra_epochs_three_night_public_dr19.csv','spectra_epochs_three_night_public_dr20.csv','spectra_epochs_three_night_desi.csv']
     public = inventory[inventory.inventory.isin(allowed)].copy()
     public = public.groupby(['target_name','epoch_day'],as_index=False).agg(
         source=('survey_family',lambda v:'/'.join(sorted(set(v)))))
@@ -185,8 +186,15 @@ def main():
     if manifest.exists():
         image_status=pd.read_csv(manifest).set_index('name').to_dict('index')
     wise = OLD.load_wise(str(DATA/'wise_cache/pool'))
+    zcoords=pd.read_csv(DATA/'zeltyn_coords.csv')
+    wise.update(OLD.load_wise(str(DATA/'wise_cache/zeltyn'),{i+1:n for i,n in enumerate(zcoords.name)}))
+    expansion=OUT/'three_night_w1.parquet'
+    if expansion.exists():
+        for name,g in pd.read_parquet(expansion).groupby('name'):
+            if name in set(targets.name):
+                wise[name]={'W1':g.sort_values('time')[['time','flux','err']].round(4).values.tolist()}
     neo = {}
-    for tag in ['pool','poolall']:
+    for tag in ['pool','poolall','zeltyn','three_night']:
         path = DATA/f'neowise_visits_{tag}.csv'
         if path.exists():
             v = pd.read_csv(path)
@@ -266,7 +274,12 @@ def main():
     def html_for(value):
         encoded=json.dumps(native(value),separators=(',',':'),allow_nan=False).replace('<','\\u003c')
         return template.replace('__CHART_FUNCTIONS__',charts).replace('__PAYLOAD__',encoded)
-    page=html_for(payload)
+    # Objects selected using internal-only identities or brightness remain local.
+    public_payload=json.loads(json.dumps(payload))
+    public_payload['targets']=[t for t in public_payload['targets'] if t['name'] in public_names]
+    for night in public_payload['nights']:
+        public_payload['nights'][night]['count']=sum(any(w['night']==night for w in t['nights']) for t in public_payload['targets'])
+    page=html_for(public_payload)
     assert 'proprietary' not in page and 'SDSS-V internal' not in page
     for path in [ROOT/'docs/index.html',ROOT/'web/clagn_night_sheet.html']:
         path.write_text(page)
