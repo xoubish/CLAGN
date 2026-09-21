@@ -12,6 +12,7 @@ Run scripts from the project root, using `python scripts/<filename>.py`. Numbere
 | `22`, `27`, `30`, `31` | NGPS ETC, Hβ sensitivity, dated evidence, and three-night review. |
 | `16_candidate_webpage.py` | Build public and private candidate explorers. |
 | `40_september_observing_packet.py` | Build the curated September sequence, backups, NGPS CSVs, and dark primary pages. |
+| `41_september_snr5_plan.py` | Calculate two-exposure continuum S/N=5 plans and schedule promotions from the archived backup pool, retaining the original eight primaries. |
 
 Typical commands from the project root:
 
@@ -19,7 +20,10 @@ Typical commands from the project root:
 # Rebuild the explorer from prepared tables.
 /opt/anaconda3/bin/python scripts/16_candidate_webpage.py
 
-# Deliberately regenerate the September packet, including backup choices.
+# Deliberately recalculate the September S/N=5 schedule and promotions.
+/opt/anaconda3/bin/python scripts/41_september_snr5_plan.py
+
+# Regenerate the packet from that plan, including backup choices.
 /opt/anaconda3/bin/python scripts/40_september_observing_packet.py
 
 # Regenerate the packet and fetch its SDSS images when needed.

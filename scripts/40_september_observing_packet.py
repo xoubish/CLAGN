@@ -21,7 +21,7 @@ TZ='America/Los_Angeles'
 iers.conf.auto_download=False;iers.conf.auto_max_age=None
 
 # Deliberate science choices, not a spectral-count or brightness ranking.
-PRIMARY=[
+ORIGINAL_PRIMARY=[
  ('P659','2026-09-23 20:16','A single 2013 broad-Hbeta reference and a candidate manifold location; test whether the broad component has weakened or strengthened.','Discovery test; no post-spectrum optical trigger established.'),
  ('P8548','2026-09-23 20:46','Compare the 2014 and 2021 Hbeta/Halpha profiles with the new spectrum; W1 spans about 0.43 mag.','Low-redshift line comparison; the IR amplitude alone does not time a transition.'),
  ('P9227','2026-09-23 21:16','W1 became about 0.35 mag fainter after the 2017 reference; test whether broad Hbeta and Halpha are weaker.','Dated IR trigger; allow for a dust lag and the end of NEOWISE in 2024.'),
@@ -41,6 +41,13 @@ FIELD_NOTES={
  'P11113':'Compact central nucleus; no catalogue neighbour flag. Check the wider field before acquisition.',
  'P10596':'Compact central source; no prominent close companion in the 40arcsec image.',
  'P12457':'Resolved host and narrow-line-dominated reference; center on nucleus and inspect host subtraction.',
+ 'P3642':'Resolved host with a close source south of the nucleus and another source near the west edge of the 40arcsec field; inspect slit PA and sky apertures.',
+ 'P7281':'Compact central source in the 40arcsec image; check the wider field and acquisition centering.',
+ 'P7837':'Central source has visible extended light; center on the nucleus and check host contribution.',
+ 'P11010':'A field source lies north-east of the nucleus; keep it out of the extraction and sky apertures.',
+ 'P11082':'Compact central source in the 40arcsec image; inspect the wider field before acquisition.',
+ 'P10961':'Compact central source in the 40arcsec image; inspect the wider field before acquisition.',
+ 'P10983':'Visible field sources north-west and south-west of the nucleus; verify slit PA and uncontaminated sky apertures.',
 }
 
 def stamp(s):return pd.Timestamp(s,tz=TZ)
@@ -88,7 +95,8 @@ def window_notes(w,plan,tier):
 def make_visit(target,w,plans,start,max_minutes=30):
     for tier,limit,_ in OPTIONS.TIERS:
         if limit>1.8:break
-        plan=plans[tier]
+        plan=plans.get(tier)
+        if plan is None:continue
         if plan['visit_minutes']>max_minutes:continue
         end=start+pd.Timedelta(minutes=plan['visit_minutes'])
         if not any(pd.Timestamp(r['start_utc'],tz='UTC')<=start and pd.Timestamp(r['end_utc'],tz='UTC')>=end for r in w['tier_ranges'][tier]):continue
@@ -102,41 +110,50 @@ def make_visit(target,w,plans,start,max_minutes=30):
 
 def build():
     opts=json.loads((OUT/'airmass_options.json').read_text())
+    revision=json.loads((DEST/'snr5_plan.json').read_text())
+    assert revision['settings']['goal_snr']==5
+    opts['plans']=revision['plans']
     targets=pd.read_csv(OUT/'compact_review_objects.csv').set_index('name',drop=False)
     science=pd.read_csv(OUT/'three_night_review/science_and_sensitivity.csv').set_index('name')
     local_data=payload(OUT/'candidate_review_local.html');public_data=payload(ROOT/'docs/index.html')
     local_targets={t['name']:t for t in local_data['targets']};public_names={t['name'] for t in public_data['targets']}
-    assert all(name in public_names for name,_,_,_ in PRIMARY)
-    names={x[0] for x in PRIMARY};primaries=[];primary_csv=[];backups=[];backup_csv=[];used_backups=set()
-    for index,(name,start,question,caution) in enumerate(PRIMARY,1):
+    public_targets={t['name']:t for t in public_data['targets']}
+    original={v[0]:v for v in ORIGINAL_PRIMARY}
+    sequence_choices=revision['sequence']
+    assert all(v['name'] in public_names for v in sequence_choices)
+    names={v['name'] for v in sequence_choices};primaries=[];primary_csv=[];backups=[];backup_csv=[];used_backups=set()
+    for index,choice in enumerate(sequence_choices,1):
+        name=choice['name'];start=choice['start_pdt']
+        question=original[name][2] if name in original else str(science.loc[name].science_question)+'. Compare the broad Balmer profile and its strength with the dated archival spectra.'
+        caution=original[name][3] if name in original else 'Promoted from the backup list for a complete observing window. No confirmed state change is inferred from the manifold position.'
         t=targets.loc[name].to_dict();w=next(w for w in opts['windows'][name] if w['night']=='sep23')
-        visit=make_visit(t,w,opts['plans'][name],stamp(start));assert visit,(name,'primary does not fit')
-        tag=f'P{index:02}';visit.update(rank=index,role='primary',science_question=question,caution=caution,field_note=FIELD_NOTES[name])
+        visit=make_visit(t,w,{choice['tier']:opts['plans'][name][choice['tier']]},stamp(start),choice['duration']);assert visit,(name,'primary does not fit')
+        tag=f'P{index:02}';visit.update(rank=index,role='primary',science_question=question,caution=caution,field_note=FIELD_NOTES.get(name,str(t['field_notes'])),promoted=name not in original)
         s=science.loc[name];assert pd.isna(s.ztf_r_latest180_mag) or s.ztf_r_latest180_mag<19
-        latest_date=max((e['date'] for e in local_targets[name]['epochs']),default='unknown')
-        ref=str(s.reference_date)
+        latest_date=max((e['date'] for e in public_targets[name]['epochs']),default='unknown')
+        ref=Time(visit['plan']['reference_mjd'],format='mjd').strftime('%Y-%m-%d')
         comment=(f"PRIMARY {tag}; visit {visit['start_pdt']} to {visit['end_pdt']} PDT; UTC {visit['start_utc']} to {visit['end_utc']}; "
                  f"latest visit start {visit['latest_start_pdt']} PDT; X<={visit['plan']['airmass']}; Moon>={visit['moon_min']:.1f}deg during planned visit; "
-                 f"{visit['plan']['exposures']}x{visit['plan']['seconds_each']}s plus 10min overhead; "
+                 f"{visit['plan']['exposures']}x{visit['plan']['seconds_each']}s; combined continuum SNR>=5; sky V=18; 10min overhead plus slot rounding; "
                  f"window "+' / '.join(f"{v['start']} to {v['end']} PDT" for v in visit['windows'])+
-                 f"; archival r={t['r_planning']:.2f}; continuum reference {ref}; latest available spectral date {latest_date}; "
-                 f"{question} {FIELD_NOTES[name]} Sky/brightness may require extra time.")
+                 f"; archival r={t['r_planning']:.2f}; continuum reference {ref}; latest public spectral date {latest_date}; "
+                 f"{question} {visit['field_note']} Weak broad-line nondetection needs deeper data.")
         primary_csv.append(ngps_row(t,visit['plan'],f"{tag} by {visit['latest_start_pdt'][-5:]}",comment))
         choices=[]
         for other in targets.to_dict('records'):
             n=other['name']
-            if n in names or n in used_backups:continue
+            if n in names:continue
             ss=science.loc[n]
             if pd.notna(ss.ztf_r_latest180_mag) and ss.ztf_r_latest180_mag>=19:continue
             other_w=next((v for v in opts['windows'][n] if v['night']=='sep23'),None)
             if not other_w:continue
-            v=make_visit(other,other_w,opts['plans'][n],stamp(start))
+            v=make_visit(other,other_w,opts['plans'].get(n,{}),stamp(start),visit['plan']['visit_minutes'])
             if not v:continue
             score=float(ss.review_order_score)+5*bool(other['balmer_pair_in_range'])+5*float(other['manifold_cl_neighbor_fraction'])
             score-=1000 if other['pool_role']=='reserve' else 0
             score-=3 if v['tier']=='extended' else 0
             choices.append((score,n,v,other,ss))
-        choices.sort(key=lambda x:(-x[0],x[1]));assert len(choices)>=2,(tag,'fewer than two alternatives')
+        choices.sort(key=lambda x:(x[1] in used_backups,-x[0],x[1]));assert len(choices)>=2,(tag,'fewer than two alternatives fitting the full slot')
         chosen=choices[:3]
         visit['backups']=[n for _,n,_,_,_ in chosen]
         for rank,(_,n,v,other,ss) in enumerate(chosen,1):
@@ -146,8 +163,8 @@ def build():
                      f"UTC {v['start_utc']} to {v['end_utc']}; latest visit start {v['latest_start_pdt']} PDT; "
                      f"X<={v['plan']['airmass']}; Moon>={v['moon_min']:.1f}deg during replacement visit; "
                      f"window "+' / '.join(f"{a['start']} to {a['end']} PDT" for a in v['windows'])+
-                     f"; {v['plan']['exposures']}x{v['plan']['seconds_each']}s plus 10min overhead; archival r={other['r_planning']:.2f}; "
-                     f"{ss.science_question}. Replace the primary; do not append to an All-mode run. Inspect field and PA.")
+                     f"; {v['plan']['exposures']}x{v['plan']['seconds_each']}s; continuum SNR>=5; sky V=18; 10min overhead plus rounding; archival r={other['r_planning']:.2f}; "
+                     f"{ss.science_question}. Replace the primary; never run the whole backup list. Names can recur for different slots; skip objects already observed. Inspect field and PA.")
             backup_csv.append(ngps_row(other,v['plan'],f"B{index:02}{rank} for {tag}",comment))
         primaries.append(visit)
     # Two explicit standard visits. Short exposure settings require quicklook
@@ -174,9 +191,8 @@ def build():
         start_utc=v['start_utc'],end_utc=v['end_utc'],exposures=v['plan']['exposures'],seconds_each=v['plan']['seconds_each'],
         airmass_max=v['airmass_max_actual'],moon_min=v['moon_min'],backups=';'.join(v.get('backups',[]))) for v in sequence]).to_csv(DEST/'sep23_sequence.csv',index=False)
     packet=dict(night='2026-09-23',timezone='PDT (UTC-07:00)',primaries=primaries,backups=backups,sequence=sequence,
-        conditional=[dict(name='V116651104',reason='Dated optical fading; latest cached r=19.16 exceeds the brightness criterion. Requires a longer visit and replanning.'),
-                     dict(name='P9595',reason='Dated optical brightening; conservative archival-continuum ETC requires about 128 minutes at X<=1.5. A dedicated long visit would displace several primaries.')],
-        files=files,full_page='candidate_review_local.html',status='Prepared sequence; inspect fields and quicklook data on the night.')
+        conditional=[],settings=revision['settings'],reserved=revision['reserved'],promoted=revision['promoted'],
+        files=files,full_page='candidate_review_local.html',status='Continuum SNR 5 screening sequence; inspect fields and quicklook data on the night.')
     (DEST/'packet.json').write_text(json.dumps(packet,indent=2))
     print(pd.read_csv(DEST/'sep23_sequence.csv').to_string(index=False),flush=True)
     print('Backups',len(backups),'unique',len(used_backups),flush=True)
@@ -198,7 +214,7 @@ def render(packet,source,private):
     assert len(value['targets'])==len(wanted)
     value['targets'].sort(key=lambda t:wanted[t['name']]['rank'])
     for t in value['targets']:
-        v=copy.deepcopy(wanted[t['name']]);v['plan']={k:v['plan'][k] for k in ['exposures','seconds_each','visit_minutes','airmass']}
+        v=copy.deepcopy(wanted[t['name']]);v['plan']={k:v['plan'][k] for k in ['exposures','seconds_each','visit_minutes','airmass','goal_snr'] if k in v['plan']}
         t['visit']=v
         path=ROOT/'data/cutouts'/f"{t['name']}_sdss.jpg"
         metadata=json.loads(path.with_suffix('.json').read_text());assert metadata['field_arcsec']==40
@@ -208,13 +224,13 @@ def render(packet,source,private):
             t['visit']['backups']=[n for n in t['visit']['backups'] if n in public_names]
     value['packet']=copy.deepcopy(packet)
     if not private:
-        # All eight primary identities, brightness selections and continuum
+        # All primary identities, brightness selections and continuum
         # references are public. The backup packet can contain internal data.
         assert all(not wanted[n]['plan'].get('reference_private',False) for n in wanted)
         value['packet']['files']={'sep23_primaries_ngps.csv':packet['files']['sep23_primaries_ngps.csv']}
         value['packet'].pop('backups',None);value['packet'].pop('conditional',None)
         for v in value['packet']['primaries']+value['packet']['sequence']:
-            v['plan']={k:val for k,val in v['plan'].items() if k in ['exposures','seconds_each','visit_minutes','airmass']}
+            v['plan']={k:val for k,val in v['plan'].items() if k in ['exposures','seconds_each','visit_minutes','airmass','goal_snr']}
             if 'backups' in v:v['backups']=[n for n in v['backups'] if n in public_names]
     charts=OLD.TEMPLATE[OLD.TEMPLATE.index('function mjdToYear'):OLD.TEMPLATE.index('/* ---------- manifold thumbnail')]
     charts+='\n'+(ROOT/'web/candidate_spectra.js').read_text()
@@ -231,10 +247,12 @@ def main():
     packet,local_data,public_data=build()
     if args.fetch_images:images(packet)
     render(packet,local_data,True);render(packet,public_data,False)
-    report='# September 23 observing packet\n\nEight science primaries in observing order, each 2x600s, plus two ten-minute standard-star visits. Every science visit includes ten minutes for acquisition/readout/margin. There is a ten-minute contingency interval before P08 and two minutes before the final standard.\n\n'
-    report+='The main CSV contains only the intended sequence. The separate backup CSV contains three unique replacements per primary when available. Substitute a backup; never append the backup list to an automatic run. Times in comments explicitly include local calendar date/PDT and UTC. Latest start refers to beginning the full visit, including the overhead allowance.\n\n'
-    report+='S/N calculations use archival continuum at sky V=18.5 and zenith seeing 1.3 arcsec. They do not establish current brightness or broad-line significance. Standard-star times (2x30s for P330E and 2x5s for BD+28 4211) are initial settings for saturation checks, not ETC-certified values. PA is parallactic and must be checked against the field.\n\n'
-    report+='The W1-manifold selection is a prior, not a forecast. P9227 and P9506 carry dated IR flags. Other primaries test their stated spectral-history/manifold questions. The raw spectral overlays were inspected; no changing-look classification is inferred from uncalibrated flux offsets. No spectra or private metadata are published.\n\n'
+    report=f"# September 23 observing packet\n\n{len(packet['primaries'])} science primaries in observing order, each with two target-specific exposures for combined continuum S/N >=5 per 2-pixel spectral bin near observed Hbeta. Includes two ten-minute standard visits.\n\n"
+    report+='The original eight primaries remain; promoted backups: '+', '.join(packet['promoted'])+'.\n\n'
+    report+='Each visit includes ten minutes for acquisition/readout plus rounding up to five-minute slots. Exposures are rounded up to 30 seconds with a 60-second minimum per exposure. Twenty minutes from Sep24 00:08 to 00:28 PDT are reserved for extra depth or delays, before the final standard. This reserve is not a target row or automatic wait command.\n\n'
+    report+='ETC assumptions: archival local Hbeta continuum brightness; sky V=18 mag/arcsec2; zenith seeing 1.3 arcsec at 500 nm; 1arcsec central slice; 2x2 binning; optimal point-source extraction; airmass evaluated conservatively at the selected 1.5 or 1.8 ceiling. The forward calculation includes both reads. A source 0.5 mag fainter can fall below S/N 5; the scenario is recorded per visit in packet.json. No broad-line detection significance is promised.\n\n'
+    report+='Use the primary CSV in order. Backups are replacement choices that fit their associated primary slot. A target can appear for several slots with different exposure settings; choose the row for the slot being replaced and skip any target already observed. Never append the entire backup list to an automatic run. Standard exposure settings require saturation checks. Inspect the slit field and Quicklook data; deepen ambiguous potential turn-offs before classifying them.\n\n'
+    report+='Public primary exposure references and identities are retained for a consistent shared page. Candidates needing private-only identity or continuum information remain eligible for the complete local backup packet. SDSS-V spectra remain available on the local page. The manifold is a selection prior, not a forecast of the current state.\n\n'
     report+='[Dark primary page](sep23_primaries_local.html) · [NGPS primary sequence](sep23_primaries_ngps.csv) · [NGPS backups](sep23_backups_ngps.csv) · [Detailed timing](sep23_sequence.csv)\n\n'
     report+=pd.read_csv(DEST/'sep23_sequence.csv').to_markdown(index=False)
     report+='\n\nFormat checked against https://caltechopticalobservatories.github.io/NGPS/users-manual/target-lists.html and https://caltechopticalobservatories.github.io/NGPS/users-manual/quick-start.html. CSV imports have not been exercised on the observatory installation.\n'
