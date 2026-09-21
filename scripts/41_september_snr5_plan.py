@@ -1,4 +1,4 @@
-"""Plan September promotions from the frozen backup pool at continuum S/N=5.
+"""Plan September visits with fixed 2x300s science exposures and S/N>=5 screening.
 
 Writes a private, reviewable plan; does not render pages or change telescope CSVs.
 The archived eight-target packet fixes the eligible promotion pool reproducibly.
@@ -8,7 +8,6 @@ from concurrent.futures import ProcessPoolExecutor
 import hashlib
 import importlib
 import json
-import math
 import re
 
 import astropy.units as u
@@ -21,12 +20,11 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'data/reselection_2026-09-20'
 DEST = ROOT / 'observing/sep23'
 SEED = ROOT / 'archive/2026-09-20/before_snr5_packet/sep23/packet.json'
-CACHE = OUT / 'sep23_snr5_etc'
+CACHE = OUT / 'sep23_fixed300_etc'
 TZ = 'America/Los_Angeles'
-SETTINGS = dict(goal_snr=5, exposures=2, sky_V=18., seeing_zenith_500nm=1.3,
-                binspect=2, binspat=2, slit_arcsec=1., minimum_each_seconds=60,
-                round_each_seconds=30, maximum_each_seconds=900,
-                overhead_minutes=10, slot_round_minutes=5,
+SETTINGS = dict(mode='fixed_exposure', goal_snr=5, exposures=2, seconds_each=300,
+                sky_V=18., seeing_zenith_500nm=1.3, binspect=2, binspat=2, slit_arcsec=1.,
+                overhead_minutes=10, visit_minutes=20,
                 normalization='Archival local Hbeta continuum; no brightness forecast',
                 extraction='Central slice only; optimal point-source extraction')
 
@@ -55,16 +53,11 @@ def exposure(target):
     channel = channels[0]
     plans = {}
     for tier, x in [('preferred', 1.5), ('extended', 1.8)]:
-        cmd = [channel, str(wave-4), str(wave+4), 'SNR', str(5/np.sqrt(2)),
+        cmd = [channel, str(wave-4), str(wave+4), 'EXPTIME', '300',
                '-slit', 'SET', '1', '-binspect', '2', '-binspat', '2',
                '-seeing', '1.3', '500', '-airmass', str(x), '-skymag', '18',
                '-mag', str(mag), '-magsystem', 'AB', '-magfilter', 'match', '-noslicer']
-        args = model.ETC.parser.parse_args(cmd)
-        model.ETC.check_inputs_add_units(args)
-        solved = float(model.ETC.main(args, quiet=True)['exptime'].to_value(u.s))
-        each = max(60, math.ceil(solved/30)*30)
-        if each > 900:
-            continue
+        each = SETTINGS['seconds_each']
         def forward(magnitude):
             trial = cmd.copy()
             trial[3:5] = ['EXPTIME', str(each)]
@@ -73,8 +66,9 @@ def exposure(target):
             model.ETC.check_inputs_add_units(args)
             return float(model.ETC.main(args, quiet=True)['SNR'].value)*np.sqrt(2)
         achieved = forward(mag)
-        assert achieved >= 4.99, (target['name'], tier, achieved)
-        duration = 5*math.ceil((2*each/60+10)/5)
+        if achieved < SETTINGS['goal_snr']:
+            continue  # Keep only replacements that reach the nominal floor at fixed exposure.
+        duration = SETTINGS['visit_minutes']
         plans[tier] = dict(exposures=2, seconds_each=each, integration_minutes=2*each/60,
                            visit_minutes=duration, airmass=x, goal_snr=5,
                            predicted_snr=achieved, predicted_snr_fainter0p5=forward(mag+.5),
@@ -100,7 +94,7 @@ def main():
     with ProcessPoolExecutor(max_workers=4) as executor:
         plans = dict(executor.map(exposure, targets.loc[september].to_dict('records')))
     start = pd.Timestamp('2026-09-23 20:16', tz=TZ)
-    end = pd.Timestamp('2026-09-24 00:08', tz=TZ)
+    end = pd.Timestamp('2026-09-24 00:28', tz=TZ)
     minutes = int((end-start).total_seconds()/60)
     admitted = []; excluded = []
     for name in sorted(original | former_backups):
@@ -133,7 +127,9 @@ def main():
             duration = plan['visit_minutes']
             ranges = [(pd.Timestamp(r['start_utc'], tz='UTC'), pd.Timestamp(r['end_utc'], tz='UTC'))
                       for r in window['tier_ranges'][tier]]
-            for offset in range(minutes-duration+1):
+            # Keep ten regular visits, a 32-minute buffer, then the rising turn-on candidate.
+            offsets = [232] if name == 'P12457' else range(0, 200, SETTINGS['visit_minutes'])
+            for offset in offsets:
                 a = start+pd.Timedelta(minutes=offset); b = a+pd.Timedelta(minutes=duration)
                 if not any(lo<=a and b<=hi for lo, hi in ranges):
                     continue
@@ -164,8 +160,8 @@ def main():
                   promoted=[c['name'] for c in selected if c['name'] not in original],
                   admission_notes=excluded,
                   eligible_not_scheduled=sorted(set(admitted)-{c['name'] for c in selected}),
-                  reserved=dict(start_pdt='2026-09-24 00:08', end_pdt='2026-09-24 00:28', minutes=20,
-                                purpose='Deeper exposures or delays; final standard starts at 00:28'),
+                  reserved=dict(start_pdt='2026-09-23 23:36', end_pdt='2026-09-24 00:08', minutes=32,
+                                purpose='Deeper exposures or delays before P12457 at 00:08; final standard at 00:28'),
                   solver=dict(message=result.message, relative_gap=float(result.mip_gap)))
     (DEST/'snr5_plan.json').write_text(json.dumps(output,indent=2))
     pd.DataFrame(selected).to_csv(DEST/'snr5_scheduling_choices.csv', index=False)

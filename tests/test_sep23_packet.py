@@ -41,10 +41,24 @@ class SeptemberPacketTests(unittest.TestCase):
             self.assertLessEqual(pd.Timestamp(a['end_utc']), pd.Timestamp(b['start_utc']))
         science_end = pd.Timestamp(p['primaries'][-1]['end_utc'])
         reserve_start = pd.Timestamp(p['reserved']['start_pdt'],tz='America/Los_Angeles')
-        self.assertLessEqual(science_end,reserve_start)
-        self.assertGreaterEqual((pd.Timestamp(p['sequence'][-1]['start_utc'])-science_end).total_seconds(),1200)
+        reserve_end = pd.Timestamp(p['reserved']['end_pdt'],tz='America/Los_Angeles')
+        self.assertGreaterEqual((reserve_end-reserve_start).total_seconds(),1200)
+        for v in p['sequence']:
+            self.assertTrue(pd.Timestamp(v['end_utc'])<=reserve_start or pd.Timestamp(v['start_utc'])>=reserve_end)
+        late = p['primaries'][-1]
+        self.assertEqual(late['name'],'P12457')
+        self.assertEqual(late['start_pdt'],'2026-09-24 00:08')
+        self.assertLessEqual(late['airmass_max_actual'],1.5)
+        self.assertLessEqual(science_end,pd.Timestamp(p['sequence'][-1]['start_utc']))
+        for v in p['primaries']:
+            if v['name'] in {'P8548','P12457'}:
+                self.assertTrue(v['host_contaminated'])
+                self.assertIn('AGN-only S/N is lower',v['caution'])
+        self.assertEqual([v['plan']['seconds_each'] for v in p['sequence'] if v['role']=='standard'],[30,5])
         for v in p['primaries']+p['backups']:
             self.assertEqual(v['plan']['exposures'],2)
+            self.assertEqual(v['plan']['seconds_each'],300)
+            self.assertEqual(v['plan']['visit_minutes'],20)
             self.assertGreaterEqual(v['plan']['predicted_snr'],4.99)
             self.assertGreaterEqual(v['plan']['visit_minutes'],2*v['plan']['seconds_each']/60+10)
 

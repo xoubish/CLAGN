@@ -12,7 +12,7 @@ Run scripts from the project root, using `python scripts/<filename>.py`. Numbere
 | `22`, `27`, `30`, `31` | NGPS ETC, Hβ sensitivity, dated evidence, and three-night review. |
 | `16_candidate_webpage.py` | Build public and private candidate explorers. |
 | `40_september_observing_packet.py` | Build the curated September sequence, backups, NGPS CSVs, and dark primary pages. |
-| `41_september_snr5_plan.py` | Calculate two-exposure continuum S/N=5 plans and schedule promotions from the archived backup pool, retaining the original eight primaries. |
+| `41_september_snr5_plan.py` | Screen fixed 2×300 s science exposures for continuum S/N≥5 and schedule 20-minute visits from the archived backup pool; retain the original eight and place P12457 late. |
 
 Typical commands from the project root:
 

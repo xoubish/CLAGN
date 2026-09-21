@@ -34,13 +34,13 @@ ORIGINAL_PRIMARY=[
 HEADERS=['name','RA','DECL','slitwidth','exptime','nexp','binspat','binspect','slitangle','airmass_max','Note','Comment']
 FIELD_NOTES={
  'P659':'Faint neighbours at 8.2arcsec PA149deg and 11.9arcsec PA111deg; check slit and sky apertures.',
- 'P8548':'Resolved host; center on the compact nucleus. Archival aperture light includes the host.',
+ 'P8548':'Resolved host; center on the compact nucleus. ETC S/N uses AGN plus host light and overstates AGN-only S/N.',
  'P9227':'Compact central source; no prominent close companion in the 40arcsec image.',
  'P9506':'r=19.35 star at 19.2arcsec PA218deg; verify nuclear centering and sky apertures.',
  'P10381':'r=19.35 extended neighbour at 14.9arcsec PA234deg; inspect slit orientation.',
  'P11113':'Compact central nucleus; no catalogue neighbour flag. Check the wider field before acquisition.',
  'P10596':'Compact central source; no prominent close companion in the 40arcsec image.',
- 'P12457':'Resolved host and narrow-line-dominated reference; center on nucleus and inspect host subtraction.',
+ 'P12457':'Host-dominated narrow-line reference; center on nucleus. ETC S/N uses AGN plus host light and overstates AGN-only S/N.',
  'P3642':'Resolved host with a close source south of the nucleus and another source near the west edge of the 40arcsec field; inspect slit PA and sky apertures.',
  'P7281':'Compact central source in the 40arcsec image; check the wider field and acquisition centering.',
  'P7837':'Central source has visible extended light; center on the nucleus and check host contribution.',
@@ -112,6 +112,7 @@ def build():
     opts=json.loads((OUT/'airmass_options.json').read_text())
     revision=json.loads((DEST/'snr5_plan.json').read_text())
     assert revision['settings']['goal_snr']==5
+    assert revision['settings']['seconds_each']==300 and revision['settings']['visit_minutes']==20
     opts['plans']=revision['plans']
     targets=pd.read_csv(OUT/'compact_review_objects.csv').set_index('name',drop=False)
     science=pd.read_csv(OUT/'three_night_review/science_and_sensitivity.csv').set_index('name')
@@ -128,13 +129,15 @@ def build():
         caution=original[name][3] if name in original else 'Promoted from the backup list for a complete observing window. No confirmed state change is inferred from the manifold position.'
         t=targets.loc[name].to_dict();w=next(w for w in opts['windows'][name] if w['night']=='sep23')
         visit=make_visit(t,w,{choice['tier']:opts['plans'][name][choice['tier']]},stamp(start),choice['duration']);assert visit,(name,'primary does not fit')
-        tag=f'P{index:02}';visit.update(rank=index,role='primary',science_question=question,caution=caution,field_note=FIELD_NOTES.get(name,str(t['field_notes'])),promoted=name not in original)
+        if name in {'P8548','P12457'}:
+            caution+=' ETC continuum includes host light; AGN-only S/N is lower and has not been estimated.'
+        tag=f'P{index:02}';visit.update(rank=index,role='primary',science_question=question,caution=caution,field_note=FIELD_NOTES.get(name,str(t['field_notes'])),promoted=name not in original,host_contaminated=name in {'P8548','P12457'})
         s=science.loc[name];assert pd.isna(s.ztf_r_latest180_mag) or s.ztf_r_latest180_mag<19
         latest_date=max((e['date'] for e in public_targets[name]['epochs']),default='unknown')
         ref=Time(visit['plan']['reference_mjd'],format='mjd').strftime('%Y-%m-%d')
         comment=(f"PRIMARY {tag}; visit {visit['start_pdt']} to {visit['end_pdt']} PDT; UTC {visit['start_utc']} to {visit['end_utc']}; "
                  f"latest visit start {visit['latest_start_pdt']} PDT; X<={visit['plan']['airmass']}; Moon>={visit['moon_min']:.1f}deg during planned visit; "
-                 f"{visit['plan']['exposures']}x{visit['plan']['seconds_each']}s; combined continuum SNR>=5; sky V=18; 10min overhead plus slot rounding; "
+                 f"{visit['plan']['exposures']}x{visit['plan']['seconds_each']}s; fixed pair; model continuum SNR>=5 at sky V=18; 20min visit includes 10min overhead; "
                  f"window "+' / '.join(f"{v['start']} to {v['end']} PDT" for v in visit['windows'])+
                  f"; archival r={t['r_planning']:.2f}; continuum reference {ref}; latest public spectral date {latest_date}; "
                  f"{question} {visit['field_note']} Weak broad-line nondetection needs deeper data.")
@@ -163,7 +166,7 @@ def build():
                      f"UTC {v['start_utc']} to {v['end_utc']}; latest visit start {v['latest_start_pdt']} PDT; "
                      f"X<={v['plan']['airmass']}; Moon>={v['moon_min']:.1f}deg during replacement visit; "
                      f"window "+' / '.join(f"{a['start']} to {a['end']} PDT" for a in v['windows'])+
-                     f"; {v['plan']['exposures']}x{v['plan']['seconds_each']}s; continuum SNR>=5; sky V=18; 10min overhead plus rounding; archival r={other['r_planning']:.2f}; "
+                     f"; {v['plan']['exposures']}x{v['plan']['seconds_each']}s; fixed pair; model continuum SNR>=5 at sky V=18; 20min visit includes 10min overhead; archival r={other['r_planning']:.2f}; "
                      f"{ss.science_question}. Replace the primary; never run the whole backup list. Names can recur for different slots; skip objects already observed. Inspect field and PA.")
             backup_csv.append(ngps_row(other,v['plan'],f"B{index:02}{rank} for {tag}",comment))
         primaries.append(visit)
@@ -176,7 +179,7 @@ def build():
         plan=dict(exposures=2,seconds_each=seconds,airmass=1.8)
         note='STD check saturation'
         comment=(f"CALSPEC {name}; visit {local(a)} to {local(b)} PDT; UTC {utc(a)} to {utc(b)}; "
-                 f"2x{seconds}s INITIAL setting only; inspect peak counts and adjust to avoid saturation; same 1arcsec slit and 2x2 binning as science; "
+                 f"2x{seconds}s INITIAL setting only; inspect first exposure in all arms before repeating and adjust to avoid saturation; same 1arcsec slit and 2x2 binning as science; Quicklook spatial-profile counts at least 1000 and preferably about 10000; stay below about 40000; "
                  f"X<1.8; Moon>={g['moon_min']:.1f}deg; calspec identifier {s.calspec}; allow acquisition and repeat checks within this ten-minute block.")
         row=ngps_row(dict(name=label,ra=s.ra,dec=s.dec),plan,note,comment);std_csv.append(row)
         standards.append(dict(name=name,csv_name=label,role='standard',start_pdt=local(a),end_pdt=local(b),start_utc=utc(a),end_utc=utc(b),plan=plan,**g))
@@ -192,7 +195,7 @@ def build():
         airmass_max=v['airmass_max_actual'],moon_min=v['moon_min'],backups=';'.join(v.get('backups',[]))) for v in sequence]).to_csv(DEST/'sep23_sequence.csv',index=False)
     packet=dict(night='2026-09-23',timezone='PDT (UTC-07:00)',primaries=primaries,backups=backups,sequence=sequence,
         conditional=[],settings=revision['settings'],reserved=revision['reserved'],promoted=revision['promoted'],
-        files=files,full_page='candidate_review_local.html',status='Continuum SNR 5 screening sequence; inspect fields and quicklook data on the night.')
+        files=files,full_page='candidate_review_local.html',status='Fixed 2x300s science sequence; inspect fields and quicklook data on the night.')
     (DEST/'packet.json').write_text(json.dumps(packet,indent=2))
     print(pd.read_csv(DEST/'sep23_sequence.csv').to_string(index=False),flush=True)
     print('Backups',len(backups),'unique',len(used_backups),flush=True)
@@ -247,11 +250,11 @@ def main():
     packet,local_data,public_data=build()
     if args.fetch_images:images(packet)
     render(packet,local_data,True);render(packet,public_data,False)
-    report=f"# September 23 observing packet\n\n{len(packet['primaries'])} science primaries in observing order, each with two target-specific exposures for combined continuum S/N >=5 per 2-pixel spectral bin near observed Hbeta. Includes two ten-minute standard visits.\n\n"
+    report=f"# September 23 observing packet\n\n{len(packet['primaries'])} science primaries in observing order, each with fixed 2x300-second exposures in a 20-minute visit. The ETC checks a nominal combined continuum S/N >=5 per 2-pixel spectral bin near observed Hbeta. Includes two ten-minute standard visits.\n\n"
     report+='The original eight primaries remain; promoted backups: '+', '.join(packet['promoted'])+'.\n\n'
-    report+='Each visit includes ten minutes for acquisition/readout plus rounding up to five-minute slots. Exposures are rounded up to 30 seconds with a 60-second minimum per exposure. Twenty minutes from Sep24 00:08 to 00:28 PDT are reserved for extra depth or delays, before the final standard. This reserve is not a target row or automatic wait command.\n\n'
-    report+='ETC assumptions: archival local Hbeta continuum brightness; sky V=18 mag/arcsec2; zenith seeing 1.3 arcsec at 500 nm; 1arcsec central slice; 2x2 binning; optimal point-source extraction; airmass evaluated conservatively at the selected 1.5 or 1.8 ceiling. The forward calculation includes both reads. A source 0.5 mag fainter can fall below S/N 5; the scenario is recorded per visit in packet.json. No broad-line detection significance is promised.\n\n'
-    report+='Use the primary CSV in order. Backups are replacement choices that fit their associated primary slot. A target can appear for several slots with different exposure settings; choose the row for the slot being replaced and skip any target already observed. Never append the entire backup list to an automatic run. Standard exposure settings require saturation checks. Inspect the slit field and Quicklook data; deepen ambiguous potential turn-offs before classifying them.\n\n'
+    report+='Every science visit has ten minutes of integration plus ten minutes for acquisition/readout. Primaries and backup replacements all use 2x300 seconds, a 1arcsec slit and 2x2 binning. Standards retain short exposures to avoid saturation; matching slit width and binning are the relevant calibration settings. The buffer at Sep23 23:36 to Sep24 00:08 PDT allows extra depth or delays. P12457 occupies 00:08-00:28 at lower airmass before the final standard. This reserve is not a target row or automatic wait command.\n\n'
+    report+='ETC assumptions: archival local Hbeta continuum brightness; sky V=18 mag/arcsec2; zenith seeing 1.3 arcsec at 500 nm; 1arcsec central slice; 2x2 binning; optimal point-source extraction; airmass evaluated conservatively at the selected 1.5 or 1.8 ceiling. The forward calculation includes both reads. A source 0.5 mag fainter can fall below S/N 5; the scenario is recorded per visit in packet.json. P8548 and P12457 include host light: these are total-continuum estimates and overstate AGN-only S/N; no numerical nuclear S/N is available. No broad-line detection significance is promised.\n\n'
+    report+='Use the primary CSV in order. Backups are replacement choices that fit their associated primary slot. A target can appear for several slots with the same 2x300-second setting; choose the row for the slot being replaced and skip any target already observed. Never append the entire backup list to an automatic run. Standard exposure settings require saturation checks. Inspect the slit field and Quicklook data; deepen ambiguous potential turn-offs before classifying them.\n\n'
     report+='Public primary exposure references and identities are retained for a consistent shared page. Candidates needing private-only identity or continuum information remain eligible for the complete local backup packet. SDSS-V spectra remain available on the local page. The manifold is a selection prior, not a forecast of the current state.\n\n'
     report+='[Dark primary page](sep23_primaries_local.html) · [NGPS primary sequence](sep23_primaries_ngps.csv) · [NGPS backups](sep23_backups_ngps.csv) · [Detailed timing](sep23_sequence.csv)\n\n'
     report+=pd.read_csv(DEST/'sep23_sequence.csv').to_markdown(index=False)
