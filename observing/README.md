@@ -1,5 +1,13 @@
 # Observing files
 
+## Science reassessment — discussion, not a replacement queue
+
+- [Local science review](science_review/index.html) — 38 comparison targets with optical/IR light curves and dated Balmer profiles, including available SDSS-V spectra.
+- [Assessment and proposed experiment](science_review/README.md) — findings, selection limits, and provisional allocation of science goals.
+- [Discussion CSV](science_review/proposed_science_discussion.csv) — evidence and flags; not an NGPS upload file.
+
+This review reopens the projected parent without protecting previous primaries. It contains collaboration data and stays local. The September telescope files below remain the operational packet pending a science-driven replacement.
+
 ## September 23, 2026 — first half-night
 
 - **[NGPS primary CSV](sep23_primaries_ngps.csv)** — 11 science targets plus two standards, in observing order.

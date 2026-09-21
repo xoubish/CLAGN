@@ -13,6 +13,9 @@ Run scripts from the project root, using `python scripts/<filename>.py`. Numbere
 | `16_candidate_webpage.py` | Build public and private candidate explorers. |
 | `40_september_observing_packet.py` | Build the curated September sequence, backups, NGPS CSVs, and dark primary pages. |
 | `41_september_snr5_plan.py` | Screen fixed 2×300 s science exposures for continuum S/N≥5 and schedule 20-minute visits from the archived backup pool; retain the original eight and place P12457 late. |
+| `42_science_reselection.py` | Separate projected-parent inventory and dated evidence review; no protected primaries and no telescope-packet writes. |
+| `43_public_alert_review.py` | Retrieve/cache public ALeRCE detections; reference-corrected alert photometry remains separate from catalog photometry. |
+| `44_science_discussion.py` | Local diagnostic page, qualitative review notes, and provisional matched-control pairs. |
 
 Typical commands from the project root:
 
@@ -37,6 +40,8 @@ Typical commands from the project root:
 ```
 
 Packet generation writes to `observing/sep23/`, plus the public primary pages under `docs/` and `web/`. The completion pipeline refreshes the broader candidate explorer; it does not regenerate the frozen September packet. These commands do not commit or push.
+
+The separate science review is rebuilt with `42_science_reselection.py inventory`, then `42_science_reselection.py evidence`, then `44_science_discussion.py`. The inventory stage replaces its parent snapshot; omit it when reproducing evidence against the existing snapshot. Public alerts are optional: run `43_public_alert_review.py <targets.csv>` with columns `name,ra,dec` before building the discussion page. The current discussion builder expects its alert summary. All review products stay under ignored `observing/science_review/`; they may include private spectra and are not publication artifacts. Spectral screening indices are not line fits or CLAGN classifications. Matching calipers are exploratory and still require state/host/cadence review.
 
 ## Earlier work retained for reproducibility
 
