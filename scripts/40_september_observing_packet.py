@@ -9,6 +9,7 @@ from concurrent.futures import ThreadPoolExecutor
 import argparse,base64,copy,importlib,json,re
 import numpy as np
 import pandas as pd
+import sep23_backups as backup_selection
 import astropy.units as u
 from astropy.time import Time
 from astropy.coordinates import SkyCoord,AltAz,get_body
@@ -154,6 +155,10 @@ def build():
     sequence_choices=revision['sequence']
     assert all(v['name'] in public_names for v in sequence_choices)
     names={v['name'] for v in sequence_choices};primaries=[];primary_csv=[];backups=[];backup_csv=[];used_backups=set()
+    backup_candidates=backup_selection.candidates(targets, science, public_names, names)
+    planner=importlib.import_module('41_september_snr5_plan')
+    backup_geometry=planner.night_geometry(targets)
+    backup_indices={name:i for i,name in enumerate(targets.index)}
     setting_text=f"slit {S['slit_arcsec']}arcsec; {S['binspat']}x{S['binspect']} binning"
     for index,choice in enumerate(sequence_choices,1):
         name=choice['name'];start=choice['start_pdt']
@@ -182,30 +187,19 @@ def build():
                  f"{question} {visit['field_note']} Weak broad-line nondetection needs deeper data."
                  +(" SETTING TARGET: if not started by the latest visit start; skip it (the sequencer would wait for an airmass that does not return tonight)." if visit['airmass_end']>visit['airmass_start'] else ''))
         primary_csv.append(ngps_row(t,visit['plan'],S,f"{tag} by {visit['latest_start_pdt'][-5:]}",comment))
-        choices=[]
-        for other in targets.to_dict('records'):
-            n=other['name']
-            if n in names or n not in slots:continue
-            ss=science.loc[n]
-            if pd.notna(ss.ztf_r_latest180_mag) and ss.ztf_r_latest180_mag>=19:continue
-            v=make_visit(other,plans.get(n,{}),slots[n],windows.get(n,{}),start)
-            if not v or v['plan']['visit_minutes'] > visit['plan']['visit_minutes'] or other['field_status'] != 'clear':continue
-            score=float(ss.review_order_score)+5*bool(other['balmer_pair_in_range'])+5*float(other['manifold_cl_neighbor_fraction'])
-            score-=1000 if other['pool_role']=='reserve' else 0
-            score-=3 if v['tier']=='extended' else 0
-            choices.append((score,n,v,other,ss))
-        choices.sort(key=lambda x:(x[3]['pool_role']!='manifold',-x[0],x[1] in used_backups,x[1]));assert len(choices)>=1,(tag,'no alternative fits the slot')
-        chosen=choices[:3]
-        visit['backups']=[n for _,n,_,_,_ in chosen]
-        for rank,(_,n,v,other,ss) in enumerate(chosen,1):
-            used_backups.add(n);v.update(role='backup',replaces=tag,backup_rank=rank,pool_role=other['pool_role'],science_question=ss.science_question)
+        chosen=backup_selection.select(backup_candidates, visit, backup_geometry, backup_indices,
+                                       make_visit, OUT/'sep23_backup_etc')
+        visit['backups']=[v['name'] for v,_ in chosen]
+        for rank,(v,other) in enumerate(chosen,1):
+            n=v['name']
+            used_backups.add(n);v.update(role='backup',replaces=tag,backup_rank=rank,pool_role=other['pool_role'])
             backups.append(v)
             comment=(f"BACKUP ONLY for {tag}; choice {rank}; replacement visit {v['start_pdt']} to {v['end_pdt']} PDT; "
                      f"UTC {v['start_utc']} to {v['end_utc']}; latest visit start {v['latest_start_pdt']} PDT; "
-                     f"X<={v['plan']['airmass']}; Moon>={v['moon_min']:.1f}deg during replacement visit; "
+                     f"X<1.5; Moon>40deg (minimum {v['moon_min']:.1f}deg) during replacement visit; "
                      f"{v['plan']['exposures']}x{v['plan']['seconds_each']}s; {setting_text}; model continuum S/N {v['snr_per_angstrom']:.1f} per Angstrom near Hbeta at X={v['airmass_mean']:.2f} with moonlit sky V={v['sky_V']:.1f}; "
                      f"{v['plan']['visit_minutes']}min visit includes {S['overhead_minutes']}min overhead; archival r={other['r_planning']:.2f}; "
-                     f"{ss.science_question}. Replace the primary; never run the whole backup list. Names can recur for different slots; skip objects already observed. Inspect field and PA.")
+                     f"Quasar; r={v['eligibility']['r_mag']:.2f} ({v['eligibility']['r_source']}); public spectrum MJD {v['eligibility']['reference_mjd']:.0f}; {v['eligibility']['region']}. Replace the primary; never run the whole backup list. Names can recur for different slots; skip objects already observed. Inspect field and PA.")
             backup_csv.append(ngps_row(other,v['plan'],S,f"B{index:02}{rank} for {tag}",comment))
         primaries.append(visit)
     # Two explicit standard visits. Short exposure settings require quicklook
@@ -235,7 +229,7 @@ def build():
     for row in public_csv:
         if row['name'] in private_names:
             row['Comment']=re.sub(r'model continuum S/N .*?; ', 'Continuum estimate available on local page; ', row['Comment'])
-    public_files={'sep23_primaries_ngps.csv':csv_text(public_csv)}
+    public_files={'sep23_primaries_ngps.csv':csv_text(public_csv), 'sep23_backups_ngps.csv':csv_text(backup_csv)}
     for filename,text in files.items():(DEST/filename).write_text(text,encoding='ascii')
     pd.DataFrame([dict(name=v['name'],role=v['role'],start_pdt=v['start_pdt'],end_pdt=v['end_pdt'],
         start_utc=v['start_utc'],end_utc=v['end_utc'],exposures=v['plan']['exposures'],seconds_each=v['plan']['seconds_each'],
@@ -275,7 +269,7 @@ def build():
               'Record start time, seeing, sky and any deviation from the sequence in the observing log; the Comment column is copied into the NGPS log automatically.'])
     # The science text of the observer page lives in web/observer_page_template.html (fillAbout), where it can
     # quote the live pool and sequence counts; the packet carries only the run logistics.
-    packet=dict(night='2026-09-23',timezone='PDT (UTC-07:00)',run=run,primaries=primaries,backups=backups,sequence=sequence,
+    packet=dict(backup_policy=backup_selection.POLICY, night='2026-09-23',timezone='PDT (UTC-07:00)',run=run,primaries=primaries,backups=backups,sequence=sequence,
         conditional=[],settings=S,reserved=revision['reserved'],promoted=revision['promoted'],protected=revision['protected'],
         user_selection=revision.get('user_selection'),demoted=revision.get('demoted',[]),waived_rules=revision.get('waived_rules',{}),
         original_primaries=revision['original_primaries'],files=files,public_files=public_files,full_page='observer_page_local.html',
@@ -316,7 +310,7 @@ def main():
              f"zenith seeing {S['seeing_zenith_500nm']} arcsec at 500 nm scaled by airmass^{S['seeing_airmass_power']} to the target; sky brightness from the Krisciunas and Schaefer (1991) moonlight model at the mid-visit Moon geometry (93 percent illumination). "
              f"The floor is a combined continuum S/N >= {S['goal_snr']} per Angstrom, close to the earlier 2-pixel-bin criterion; both reads are included. "
              "P8548 and P12457 include host light: these are total-continuum estimates and overstate AGN-only S/N; no numerical nuclear S/N is available. No broad-line detection significance is promised.\n\n")
-    report+=('Use the primary CSV in order. Backups are replacement choices that fit their associated primary slot with the same setting. A target can appear for several slots; choose the row for the slot being replaced and skip any target already observed. '
+    report+=('Use the primary CSV in order. Up to two backups per primary: public spectroscopic quasars with r<19 (latest available ZTF median, otherwise archival), Moon separation >40 degrees and airmass <1.5 throughout the full visit at Palomar. Each inherits the exact exposure count and duration of its primary, including overhead. Literature/Zeltyn regions rank first, followed by labelled on/off neighbour fraction, Balmer coverage and brightness. A public spectral reference and predicted S/N >=5 are required. Qualifying backups and their CSV appear on both pages. If fewer than two qualify, show the shortfall without relaxing the constraints. A target can appear for several slots; choose the row for the slot being replaced and skip any target already observed. '
              'Never append the entire backup list to an automatic run. Standard exposure settings require saturation checks. Inspect the slit field and Quicklook data; only add exposures if the remaining schedule permits; ambiguous broad-line states remain unclassified.\n\n')
     report+='Public primary identities and telescope settings are retained, including private-reference primaries. Private-reference S/N and science derivatives are omitted from the public payload and download. Local CSVs retain the complete information. SDSS-V spectra remain available on the local page. The manifold is a selection prior, not a forecast of the current state.\n\n'
     report+='[Observer page](../../data/reselection_2026-09-20/observer_page_local.html) · [NGPS primary sequence](sep23_primaries_ngps.csv) · [NGPS backups](sep23_backups_ngps.csv) · [Detailed timing](sep23_sequence.csv) · [Per-slot S/N table](snr5_slot_table.csv)\n\n'

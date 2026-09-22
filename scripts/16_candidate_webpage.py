@@ -302,11 +302,23 @@ def main():
                         exposures=v['plan']['exposures'],seconds_each=v['plan']['seconds_each'],airmass_max=v['airmass_max_actual'],moon_min=v['moon_min'],
                         snr_per_angstrom=v.get('snr_per_angstrom'),public=(v['role']=='standard' or (v['name'] in public_names and not v['plan'].get('reference_private',False))))
                    for v in (packet or {}).get('sequence',[])]
-    files_public={'sep23_primaries_ngps.csv':(packet or {}).get('public_files',{}).get('sep23_primaries_ngps.csv','')}
+    backup_rows=native([dict(name=b['name'],replaces=b['replaces'],backup_rank=b['backup_rank'],
+                            start_pdt=b['start_pdt'],end_pdt=b['end_pdt'],pool_role=b.get('pool_role'),
+                            exposures=b['plan']['exposures'],seconds_each=b['plan']['seconds_each'],
+                            visit_minutes=b['plan']['visit_minutes'],eligibility=b.get('eligibility',{}),
+                            snr_per_angstrom=b.get('snr_per_angstrom'),airmass_max=b['airmass_max_actual'],
+                            moon_min=b['moon_min'],science_question=b.get('science_question',''))
+                       for b in (packet or {}).get('backups',[])])
+    public_backup_names={b['name'] for b in (packet or {}).get('backups',[])
+                         if b['name'] in public_names and not b['plan'].get('reference_private')}
+    for v in sequence_public.values():
+        v['backups']=[n for n in v['backups'] if n in public_backup_names]
+    files_public=(packet or {}).get('public_files',{})
     public_sequence_rows=[dict(v, snr_per_angstrom=(v['snr_per_angstrom'] if v['public'] else None)) for v in sequence_rows]
     payload=native(dict(version=SELECTION['version'],selection=SELECTION,generated=datetime.now(timezone.utc).isoformat(),
                         sep23_sequence=sequence_public,decisions=decisions,parent_search=parent_search,
-                        run=(packet or {}).get('run',{}),sequence_rows=public_sequence_rows,reserved=(packet or {}).get('reserved',{}),files=files_public,backups=[],
+                        run=(packet or {}).get('run',{}),sequence_rows=public_sequence_rows,reserved=(packet or {}).get('reserved',{}),files=files_public,
+                        backup_policy=(packet or {}).get('backup_policy',{}),backups=[b for b in backup_rows if b['name'] in public_backup_names],
                        access='public',nights=nights,manifold=manifold,targets=items))
     # Reuse the existing calibrated display units and light-curve/spectrum renderers.
     charts=OLD.TEMPLATE[OLD.TEMPLATE.index('function mjdToYear'):OLD.TEMPLATE.index('/* ---------- manifold thumbnail')]
@@ -333,9 +345,7 @@ def main():
     private['sequence_rows']=native(sequence_rows)
     private['sep23_sequence']=native(sequence_all)
     private['files']=native((packet or {}).get('files',{}))
-    private['backups']=native([dict(name=b['name'],replaces=b['replaces'],backup_rank=b['backup_rank'],start_pdt=b['start_pdt'],pool_role=b.get('pool_role'),
-                                    snr_per_angstrom=b.get('snr_per_angstrom'),airmass_max=b['airmass_max_actual'],moon_min=b['moon_min'],science_question=b.get('science_question',''))
-                               for b in (packet or {}).get('backups',[])])
+    private['backups']=backup_rows
     if SELECTION.get('airmass_options'):
         options=json.loads((OUT/'airmass_options.json').read_text())
         for t in private['targets']:

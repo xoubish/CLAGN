@@ -99,14 +99,35 @@ class SeptemberPacketTests(unittest.TestCase):
             p = primaries[v['replaces']]
             self.assertNotIn(v['name'], names)
             self.assertEqual(v['start_utc'], p['start_utc'])
-            self.assertLessEqual(v['end_utc'], p['end_utc'])
+            self.assertEqual(v['end_utc'], p['end_utc'])
+            self.assertEqual(v['plan']['exposures'], p['plan']['exposures'])
+            self.assertLess(v['airmass_max_actual'], 1.5)
+            self.assertGreater(v['moon_min'], 40)
+            self.assertLess(v['eligibility']['r_mag'], 19)
+            self.assertTrue(set(v['eligibility']['quasar_basis'].split(';')) & {'expanded_DR16_QSO', 'full_DR16Q_catalog'})
+            self.assertFalse(v['plan']['reference_private'])
+            self.assertEqual(v['eligibility']['reference_mjd'], v['plan']['reference_mjd'])
             self.assertEqual(row['name'], v['name'])
             self.assertEqual(row['exptime'], f"SET {v['plan']['seconds_each']}")
             self.assertIn(v['replaces'], row['Note'])
         for p in primaries.values():
-            self.assertGreaterEqual(len(p['backups']), 1)
-            self.assertLessEqual(len(p['backups']), 3)
+            self.assertEqual(len(p['backups']), 2)
             self.assertEqual(len(set(p['backups'])), len(p['backups']))
+
+    def test_backups_have_real_public_spectral_references_and_magnitude_provenance(self):
+        import sys
+        sys.path.insert(0, str(ROOT/'scripts'))
+        from spectral_utils import archival_records, accepted_reference
+        targets = pd.read_csv(ROOT/'data/reselection_2026-09-20/compact_review_objects.csv').set_index('name', drop=False)
+        science = pd.read_csv(ROOT/'data/reselection_2026-09-20/three_night_review/science_and_sensitivity.csv').set_index('name')
+        for visit in self.packet['backups']:
+            name = visit['name']
+            ref = accepted_reference(targets.loc[name], [r for r in archival_records(name) if not r.get('proprietary')])
+            self.assertIsNotNone(ref, name)
+            self.assertEqual(ref[0]['mjd'], visit['eligibility']['reference_mjd'])
+            latest = science.loc[name, 'ztf_r_latest180_mag']
+            expected = latest if pd.notna(latest) else targets.loc[name, 'r_planning']
+            self.assertEqual(expected, visit['eligibility']['r_mag'])
 
     def test_geometry_and_setting_from_csv_rows_over_entire_visits(self):
         site = EarthLocation.from_geodetic(-116.865*u.deg, 33.3563*u.deg, 1712*u.m)
@@ -127,6 +148,9 @@ class SeptemberPacketTests(unittest.TestCase):
             self.assertTrue(np.all(coord.alt.deg > 0), v['name'])
             self.assertLessEqual(float(coord.secz.max()), float(row['airmass_max'])+1e-5, v['name'])
             self.assertGreaterEqual(float(coord.separation(moon).deg.min()), 40-1e-5, v['name'])
+            if v['role'] == 'backup':
+                self.assertLess(float(coord.secz.max()), 1.5, v['name'])
+                self.assertGreater(float(coord.separation(moon).deg.min()), 40, v['name'])
 
     def test_single_page_embeds_the_sequence_and_csvs(self):
         def payload(path):
@@ -145,8 +169,10 @@ class SeptemberPacketTests(unittest.TestCase):
                 self.assertEqual(page['files']['sep23_backups_ngps.csv'], (DEST/'sep23_backups_ngps.csv').read_text())
                 self.assertEqual(len(page['backups']), len(self.packet['backups']))
             else:
-                self.assertNotIn('sep23_backups_ngps.csv', page['files'])
-                self.assertEqual(page['backups'], [])
+                self.assertEqual(page['files']['sep23_backups_ngps.csv'], self.packet['public_files']['sep23_backups_ngps.csv'])
+                self.assertEqual(len(page['backups']), 2*len(primaries))
+                self.assertTrue(all(b['name'] in public_names for b in page['backups']))
+                self.assertNotIn('see the local page', path.read_text())
                 self.assertNotIn('proprietary', path.read_text())
                 for t in page['targets']:
                     if any(v.get('reference_private') for v in self.plan['plans'].get(t['name'], {}).values()):

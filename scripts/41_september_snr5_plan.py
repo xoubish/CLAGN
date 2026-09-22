@@ -149,11 +149,13 @@ def candidate_slots(geo, i, visit):
     return slots, windows
 
 
-def evaluate(job):
+def evaluate(job, cache_dir=None):
     """ETC S/N for every candidate slot of one target; cached by settings, reference, exposures and geometry."""
     name, z, ref, nexp, slots = job
     signature = hashlib.sha256(json.dumps([SETTINGS, z, ref, nexp, slots], sort_keys=True).encode()).hexdigest()
-    path = CACHE / f'{name}.json'
+    directory = CACHE if cache_dir is None else cache_dir
+    directory.mkdir(parents=True, exist_ok=True)
+    path = directory / (f'{name}.json' if cache_dir is None else f'{name}-{signature}.json')
     if path.exists():
         cached = json.loads(path.read_text())
         if cached['signature'] == signature:

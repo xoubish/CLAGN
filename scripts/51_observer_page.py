@@ -2,7 +2,7 @@
 
 Reads the candidate payloads written by 16_candidate_webpage.py (which now only supplies data),
 the September plan and packet, and renders one page per access level: the local collaboration
-copy with complete spectra and the backup CSV, and the public copy for GitHub Pages. Sections:
+copy with complete spectra, and the public copy for GitHub Pages. Both carry public backups and their CSV. Sections:
 About this run, the September 23 sequence (timeline, table, backups, CSV downloads), the
 candidate pool for all three nights (visibility chart, summary table) and one card per target
 with geometry, light curves, spectra, image and manifold position. Stable target numbers are
@@ -120,7 +120,8 @@ def main():
         page = template.replace('__PAYLOAD__', encoded).replace('__CHART_FUNCTIONS__', charts).replace('__FIELD_FUNCTIONS__', (ROOT/'web/observer_fields.js').read_text())
         if not private:
             assert 'proprietary' not in page and 'SDSS-V internal' not in page
-            assert not payload['backups'] and 'sep23_backups_ngps.csv' not in payload['files']
+            public_names = {t['name'] for t in payload['targets']}
+            assert all(b['name'] in public_names for b in payload['backups'])
         dest.write_text(page)
         print(f"{dest.relative_to(ROOT)}: {len(payload['targets'])} targets, {len(payload['sep23_sequence'])} sequence entries, {len(page)/1e6:.1f} MB")
 
