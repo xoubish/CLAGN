@@ -10,7 +10,7 @@ assigned once, by right ascension, and hold across nights.
 
 Usage: python scripts/51_observer_page.py
 """
-import base64, json
+import base64, csv, io, json
 from pathlib import Path
 import importlib
 import pandas as pd
@@ -56,6 +56,13 @@ PUBLIC_SCIENCE_IF_PUBLIC_REFERENCE = ['post_spectrum_optical_trigger', 'trigger_
 
 
 def prepare(payload, slots, public_plans=None, public_science=None, slit_previews=None):
+    # Display the exact telescope-list coordinates, including both standards.
+    coordinates = {row['name']: row for row in csv.DictReader(io.StringIO(payload['files'].get('sep23_primaries_ngps.csv', '')))}
+    csv_names = {'BD+28 4211': 'BD284211'}
+    for row in payload.get('sequence_rows', []):
+        coord = coordinates.get(csv_names.get(row['name'], row['name']), {})
+        row['ra_hms'] = coord.get('RA')
+        row['dec_dms'] = coord.get('DECL')
     targets = sorted(payload['targets'], key=lambda t: t['ra'])
     if public_plans is not None:
         # Public copy: predicted S/N per tier and science fields only where the continuum reference is public;
