@@ -58,7 +58,7 @@ class SeptemberPacketTests(unittest.TestCase):
             n = v['plan']['exposures']
             self.assertIn(n, (2, 3, 4))
             self.assertEqual(v['plan']['seconds_each'], S['seconds_each'])
-            self.assertEqual(v['plan']['visit_minutes'], int(n*S['seconds_each']/60+(n-1)*S['readout_minutes']+S['overhead_minutes']))
+            self.assertEqual(v['plan']['visit_minutes'], {2: 16, 3: 22, 4: 28}[n])
             if v['role'] == 'backup' or v['name'] not in self.plan['protected']:
                 self.assertGreaterEqual(v['snr_per_angstrom'], S['goal_snr']-0.01)
             else:
@@ -77,8 +77,19 @@ class SeptemberPacketTests(unittest.TestCase):
             self.assertAlmostEqual(float(row.snr_per_angstrom.iloc[0]), v['snr_per_angstrom'], places=6)
             if v['name'] not in self.plan['protected']:
                 self.assertTrue(bool(row.meets_goal.iloc[0]))
+        locked = self.plan.get('user_selection', {}).get('preserve_sequence', [])
+        if locked:
+            self.assertEqual([(v['name'], v['start_pdt']) for v in self.packet['primaries']], [(v['name'], v['start_pdt']) for v in locked])
         starts = [pd.Timestamp(v['start_pdt']) for v in self.packet['primaries']]
         self.assertEqual(starts, sorted(starts))
+
+    def test_displayed_windows_cover_the_full_primary_visits(self):
+        options = json.loads((ROOT/'data/reselection_2026-09-20/airmass_options.json').read_text())
+        for visit in self.packet['primaries']:
+            night = next(n for n in options['windows'][visit['name']] if n['night'] == 'sep23')
+            self.assertTrue(any(pd.Timestamp(r['start_utc'], tz='UTC') <= pd.Timestamp(visit['start_utc'])
+                                and pd.Timestamp(r['end_utc'], tz='UTC') >= pd.Timestamp(visit['end_utc'])
+                                for r in night['tier_ranges']['extended']), visit['name'])
 
     def test_backup_rows_fit_their_primary_slots_and_are_not_primaries(self):
         primaries = {f"P{v['rank']:02}": v for v in self.packet['primaries']}
@@ -124,12 +135,12 @@ class SeptemberPacketTests(unittest.TestCase):
         for path, private in [(ROOT/'docs/index.html', False), (ROOT/'data/reselection_2026-09-20/observer_page_local.html', True)]:
             page = payload(path)
             public_names = {t['name'] for t in payload(ROOT/'docs/index.html')['targets']}
-            expected = {v['name'] for v in primaries if private or (not v['plan'].get('reference_private') and v['name'] in public_names)}
+            expected = {v['name'] for v in primaries if private or v['name'] in public_names}
             self.assertEqual(set(page['sep23_sequence']), expected)
             for name, s in page['sep23_sequence'].items():
                 v = next(x for x in primaries if x['name'] == name)
                 self.assertEqual((s['rank'], s['start_pdt'], s['exposures']), (v['rank'], v['start_pdt'], v['plan']['exposures']))
-            self.assertEqual(page['files']['sep23_primaries_ngps.csv'], (DEST/'sep23_primaries_ngps.csv').read_text())
+            self.assertEqual(page['files']['sep23_primaries_ngps.csv'], self.packet['files' if private else 'public_files']['sep23_primaries_ngps.csv'])
             if private:
                 self.assertEqual(page['files']['sep23_backups_ngps.csv'], (DEST/'sep23_backups_ngps.csv').read_text())
                 self.assertEqual(len(page['backups']), len(self.packet['backups']))
@@ -137,6 +148,17 @@ class SeptemberPacketTests(unittest.TestCase):
                 self.assertNotIn('sep23_backups_ngps.csv', page['files'])
                 self.assertEqual(page['backups'], [])
                 self.assertNotIn('proprietary', path.read_text())
+                for t in page['targets']:
+                    if any(v.get('reference_private') for v in self.plan['plans'].get(t['name'], {}).values()):
+                        self.assertEqual(t['sep23_slots'], [])
+                    if t.get('science', {}).get('reference_private'):
+                        self.assertNotIn('continuum_AB', t['science'])
+                        self.assertNotIn('post_spectrum_optical_trigger', t['science'])
+                for v in self.packet['primaries']:
+                    if v['plan'].get('reference_private'):
+                        self.assertIsNone(page['sep23_sequence'][v['name']]['snr_per_angstrom'])
+                        row = next(r for r in csv.DictReader(page['files']['sep23_primaries_ngps.csv'].splitlines()) if r['name']==v['name'])
+                        self.assertNotIn('model continuum S/N', row['Comment'])
             self.assertEqual(len(page['sequence_rows']), len(self.packet['sequence']))
             self.assertEqual(page['decisions']['setting']['slit_arcsec'], self.packet['settings']['slit_arcsec'])
             self.assertTrue(page['run']['nights'] and page['run']['calibrations'] and page['run']['procedure'])

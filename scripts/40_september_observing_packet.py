@@ -108,6 +108,40 @@ def make_visit(target,plans,slots,windows,start,require_goal=True):
                 snr_per_angstrom=slot['snr_per_angstrom'],sky_V=slot['sky_V'],seeing_arcsec=slot['seeing_arcsec'],
                 airmass_mean=slot['airmass_mean'],**g)
 
+def standards_comparison(primaries, targets, standards):
+    """Same-band archival flux ratios for the actual primary list, using public spectra."""
+    from spectral_utils import accepted_reference, archival_records
+    from synphot import SourceSpectrum, SpectralElement, Observation, units
+    from synphot.models import Empirical1D
+    band = SpectralElement.from_filter('johnson_v')
+    vega = SourceSpectrum.from_vega()
+    rows = []
+    for visit in primaries:
+        name = visit['name']
+        row = dict(name=name, archival_V=None, reference_mjd=None,
+                   P330E_flux_ratio=None, BD284211_flux_ratio=None,
+                   reference_access='public', status='No accepted public reference')
+        result = accepted_reference(targets.loc[name].to_dict(),
+                                    [r for r in archival_records(name) if not r.get('proprietary')])
+        if result:
+            record, _, _ = result
+            w, f = np.asarray(record['wave'], float), np.asarray(record['flux'], float)
+            good = np.isfinite(w) & np.isfinite(f)
+            support = band.waveset.to_value(u.AA)[band(band.waveset).value > .001]
+            coverage = good & (w >= support.min()) & (w <= support.max())
+            if (coverage.sum() > 20 and w[good].min() <= support.min()
+                    and w[good].max() >= support.max() and np.max(np.diff(w[coverage])) < 13):
+                spectrum = SourceSpectrum(Empirical1D, points=w[good]*u.AA,
+                                          lookup_table=f[good]*1e-17*units.FLAM)
+                value = float(Observation(spectrum, band).effstim(units.VEGAMAG, vegaspec=vega).value)
+                row.update(archival_V=value, reference_mjd=record['mjd'], status='Synthetic Johnson V; archival aperture flux',
+                           P330E_flux_ratio=10**(.4*(value-float(standards.loc['P330E'].V))),
+                           BD284211_flux_ratio=10**(.4*(value-float(standards.loc['BD+28 4211'].V))))
+            else:
+                row['status'] = 'Insufficient V-band coverage'
+        rows.append(row)
+    pd.DataFrame(rows).to_csv(DEST/'standards_comparison.csv', index=False)
+
 def build():
     revision=json.loads((DEST/'snr5_plan.json').read_text());S=revision['settings']
     assert S['exposures']==2 and S['seconds_each']==300 and S['goal_snr']==5
@@ -190,6 +224,7 @@ def build():
         row=ngps_row(dict(name=label,ra=s.ra,dec=s.dec),plan,S,note,comment);std_csv.append(row)
         standards.append(dict(name=name,csv_name=label,role='standard',start_pdt=local(a),end_pdt=local(b),start_utc=utc(a),end_utc=utc(b),plan=plan,**g))
     sequence=[standards[0],*primaries,standards[1]]
+    standards_comparison(primaries, targets, stds)
     for a,b in zip(sequence,sequence[1:]):assert a['end_utc']<=b['start_utc'],(a['name'],b['name'])
     t0,t1,_,_=OBS.night_window('2026-09-23','first')
     assert Time(sequence[0]['start_utc'])>=t0 and Time(sequence[-1]['end_utc'])<=t1
@@ -260,51 +295,12 @@ def images(packet):
     assert all(r['status']=='available' and r['field_arcsec']==40 for r in results),results
     (DEST/'cutout_manifest.json').write_text(json.dumps(results,indent=2))
 
-PLAN_KEYS=['exposures','seconds_each','visit_minutes','overhead_minutes','airmass','goal_snr','goal_unit']
-
-def render(packet,source,private):
-    OLD=importlib.import_module('07_make_webpage')
-    wanted={v['name']:v for v in packet['primaries']};value=copy.deepcopy(source)
-    public_names={t['name'] for t in source['targets']}
-    value['targets']=[t for t in value['targets'] if t['name'] in wanted]
-    assert len(value['targets'])==len(wanted)
-    value['targets'].sort(key=lambda t:wanted[t['name']]['rank'])
-    for t in value['targets']:
-        v=copy.deepcopy(wanted[t['name']]);v['plan']={k:v['plan'][k] for k in PLAN_KEYS if k in v['plan']};v.pop('slot',None)
-        t['visit']=v
-        path=ROOT/'data/cutouts'/f"{t['name']}_sdss.jpg"
-        metadata=json.loads(path.with_suffix('.json').read_text());assert metadata['field_arcsec']==40
-        t['cut40']='data:image/jpeg;base64,'+base64.b64encode(path.read_bytes()).decode()
-        if not private:
-            t.pop('science',None);t.pop('exposure_plans',None)
-            t['visit']['backups']=[n for n in t['visit']['backups'] if n in public_names]
-    value['packet']=copy.deepcopy(packet)
-    if not private:
-        # The public page carries cards only for primaries whose identity and continuum
-        # reference are public; private-reference primaries keep their sequence row without a card.
-        hidden={n for n in wanted if wanted[n]['plan'].get('reference_private',False) or n not in public_names}
-        value['targets']=[t for t in value['targets'] if t['name'] not in hidden]
-        value['packet']['files']={'sep23_primaries_ngps.csv':packet['files']['sep23_primaries_ngps.csv']}
-        value['packet'].pop('backups',None);value['packet'].pop('conditional',None)
-    for v in value['packet']['primaries']+value['packet']['sequence']:
-        v['plan']={k:val for k,val in v['plan'].items() if k in PLAN_KEYS};v.pop('slot',None)
-        if 'backups' in v and not private:v['backups']=[n for n in v['backups'] if n in public_names]
-    charts=OLD.TEMPLATE[OLD.TEMPLATE.index('function mjdToYear'):OLD.TEMPLATE.index('/* ---------- manifold thumbnail')]
-    charts+='\n'+(ROOT/'web/candidate_spectra.js').read_text()
-    template=(ROOT/'web/sep23_primaries_template.html').read_text()
-    encoded=json.dumps(value,separators=(',',':'),allow_nan=False).replace('<','\\u003c')
-    page=template.replace('__PAYLOAD__',encoded).replace('__CHART_FUNCTIONS__',charts)
-    if private:(DEST/'sep23_primaries_local.html').write_text(page)
-    else:
-        (ROOT/'docs/sep23_primaries.html').write_text(page)
-        (ROOT/'web/sep23_primaries.html').write_text(page.replace("'index.html'","'clagn_night_sheet.html'"))
-
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--fetch-images',action='store_true');args=ap.parse_args()
     packet,local_data,public_data=build()
     if args.fetch_images:images(packet)
-    # Pages retired on 2026-09-21: the candidate explorer (16_candidate_webpage.py) is the single
-    # observer page and embeds this packet. Run it after this script.
+    # Pages retired on 2026-09-21: 16 builds the payloads and 51 renders the single
+    # observer page. Run both after this script.
     S=packet['settings'];gaps=packet['reserved']['gaps'];revision_demoted=packet.get('demoted',[])
     gap_text=', '.join(f"{g['start_pdt'][11:]}-{g['end_pdt'][11:]} PDT ({g['minutes']} min)" for g in gaps) or 'none'
     added=', '.join(packet['promoted']) or 'none'
@@ -312,20 +308,20 @@ def main():
     deeper_text=('; '+', '.join(f"{v['name']} {v['plan']['exposures']}x{S['seconds_each']} s ({v['plan']['visit_minutes']} min)" for v in deeper)+' for depth') if deeper else ''
     report=(f"# September 23 observing packet\n\n{len(packet['primaries'])} science primaries in observing order, all with one instrument setting: "
             f"{S['slit_arcsec']}arcsec slit, {S['binspat']}x{S['binspect']} binning (spatial x spectral), {S['exposures']}x{S['seconds_each']}-second exposures{deeper_text}. "
-            f"A standard visit is {S['visit_minutes']} minutes: {S['exposures']*S['seconds_each']//60} minutes of integration plus {S['overhead_minutes']} minutes for slew, acquisition and the readout between exposures. "
+            f"A standard visit is {S['visit_minutes']} minutes: {S['exposures']*S['seconds_each']//60} minutes of integration plus {S['overhead_minutes']} minutes including slew, acquisition and normal two-exposure readouts. Extra exposures add 0.6 minute readout each; visits round up. "
             f"Two ten-minute standard visits bookend the sequence. Unscheduled time inside the science block: {gap_text}; total {packet['reserved']['minutes']} minutes. It absorbs delays or takes a backup and is not a target row.\n\n")
     chosen_text=(f"Primaries chosen by the PI from the decision board on 2026-09-21: {', '.join(packet['protected'])}. Filled automatically: {added}. Demoted to backups from the previous packet: {', '.join(revision_demoted) or 'none'}. " if packet.get('user_selection') else f"Protected from the previous packet: {', '.join(packet['protected'])}. Added on 2026-09-21 to use the shorter visits: {added}. ")
     report+=(chosen_text+
-             "The order comes from an integer program that maximises each target's predicted continuum S/N per Angstrom near observed Hbeta in its slot, so airmass, Moon distance and visibility enter through one physical quantity. "
+             "All 14 prior primaries and their start times are retained under user_selection.json preserve_sequence; geometry is revalidated before writing. The original order came from an integer program. "
              "Every eligible target's S/N in every candidate slot is in snr5_slot_table.csv.\n\n")
     report+=(f"ETC assumptions: official NGPS ETC, single slit, optimal point-source extraction, May 2026 read noise and plate scales; archival local Hbeta continuum brightness; "
              f"zenith seeing {S['seeing_zenith_500nm']} arcsec at 500 nm scaled by airmass^{S['seeing_airmass_power']} to the target; sky brightness from the Krisciunas and Schaefer (1991) moonlight model at the mid-visit Moon geometry (93 percent illumination). "
              f"The floor is a combined continuum S/N >= {S['goal_snr']} per Angstrom, close to the earlier 2-pixel-bin criterion; both reads are included. "
              "P8548 and P12457 include host light: these are total-continuum estimates and overstate AGN-only S/N; no numerical nuclear S/N is available. No broad-line detection significance is promised.\n\n")
     report+=('Use the primary CSV in order. Backups are replacement choices that fit their associated primary slot with the same setting. A target can appear for several slots; choose the row for the slot being replaced and skip any target already observed. '
-             'Never append the entire backup list to an automatic run. Standard exposure settings require saturation checks. Inspect the slit field and Quicklook data; deepen ambiguous potential turn-offs with a third 300-second exposure before classifying them.\n\n')
-    report+='Public primary exposure references and identities are retained for a consistent shared page. Candidates needing private-only identity or continuum information remain eligible for the complete local backup packet. SDSS-V spectra remain available on the local page. The manifold is a selection prior, not a forecast of the current state.\n\n'
-    report+='[Observer page (candidate explorer)](../../data/reselection_2026-09-20/candidate_review_local.html) · [NGPS primary sequence](sep23_primaries_ngps.csv) · [NGPS backups](sep23_backups_ngps.csv) · [Detailed timing](sep23_sequence.csv) · [Per-slot S/N table](snr5_slot_table.csv)\n\n'
+             'Never append the entire backup list to an automatic run. Standard exposure settings require saturation checks. Inspect the slit field and Quicklook data; only add exposures if the remaining schedule permits; ambiguous broad-line states remain unclassified.\n\n')
+    report+='Public primary identities and telescope settings are retained, including private-reference primaries. Private-reference S/N and science derivatives are omitted from the public payload and download. Local CSVs retain the complete information. SDSS-V spectra remain available on the local page. The manifold is a selection prior, not a forecast of the current state.\n\n'
+    report+='[Observer page](../../data/reselection_2026-09-20/observer_page_local.html) · [NGPS primary sequence](sep23_primaries_ngps.csv) · [NGPS backups](sep23_backups_ngps.csv) · [Detailed timing](sep23_sequence.csv) · [Per-slot S/N table](snr5_slot_table.csv)\n\n'
     report+=pd.read_csv(DEST/'sep23_sequence.csv').to_markdown(index=False)
     report+='\n\nFormat checked against https://caltechopticalobservatories.github.io/NGPS/users-manual/target-lists.html and https://caltechopticalobservatories.github.io/NGPS/users-manual/quick-start.html. CSV imports have not been exercised on the observatory installation.\n'
     (DEST/'README.md').write_text(report)

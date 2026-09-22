@@ -1,9 +1,9 @@
-from spectral_utils import bin_indices
 """Retrieve individual DESI DR1 coadds directly when SPARCL is unavailable.
 
 HTTP range access reads only the target's rows. Preserve native band spectra,
 inverse variances, masks and resolution matrices in a standalone FITS file.
 """
+from spectral_utils import bin_indices
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor,as_completed
 import argparse,importlib,json,fcntl,time

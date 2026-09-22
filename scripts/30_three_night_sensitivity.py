@@ -1,7 +1,7 @@
 """H-beta continuum sensitivity for the review tables; local research only.
 
 Two sets of columns from the official NGPS ETC. The legacy 2x600 s, 1.0 arcsec, 2x2 columns
-(snr_sky*) feed the frozen review_order_score and are kept unchanged. The adopted-setting
+(snr_sky*) retain the original instrument scenario used by review_order_score. The adopted-setting
 columns (snr300_*) give S/N per Angstrom for 2x300 s with the 1.5 arcsec slit, 2x3 binning and
 seeing 1.3 arcsec at zenith scaled by airmass^0.6. Archival continuum normalization and explicit
 sky scenarios are not a 2026 forecast.
@@ -63,7 +63,7 @@ def main():
             if i%40==0 or i==len(futures):
                 pd.DataFrame(rows).to_csv(OUT/'three_night_2x600_sensitivity.csv',index=False);print('ETC',i,'/',len(futures),flush=True)
     (OUT/'three_night_2x600_assumptions.json').write_text(json.dumps(dict(
-        legacy_columns='snr_sky*: 2x600 s, 1.0 arcsec slice, 2x2, zenith seeing passed unscaled; kept only because review_order_score is frozen on snr_sky18p5_X1p3',
+        legacy_columns='snr_sky*: 2x600 s, 1.0 arcsec slice, 2x2, zenith seeing passed unscaled; review_order_score uses snr_sky18p5_X1p3; reference normalization follows the shared accepted-reduction rule',
         adopted_columns='snr300_*: S/N per Angstrom for 2x300 s, 1.5 arcsec slit, 2x3 binning, seeing 1.3 arcsec x airmass^0.6, sky V 18.5 at X 1.3 or 18.0 at X 1.5/1.8 (adopted 2026-09-21)',
         exposures=2,seconds_each=600,binspect=2,binspat=2,slice_arcsec=1,extraction='central slice only; optimal point-source extraction',
         quantity='Continuum S/N per 2-pixel spectral bin, averaged over +/-40 observed Angstrom around vacuum H-beta; not integrated broad-line significance.',

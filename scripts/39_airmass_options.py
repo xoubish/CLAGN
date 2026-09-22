@@ -97,7 +97,9 @@ def main():
     windows={n:[] for n in targets.name};meta={};coverage=[]
     for night,(date,part) in OBS.NIGHTS.items():
         t0,t1,_,_=OBS.night_window(date,part);duration=(t1-t0).to_value(u.min)
-        edges=np.r_[np.arange(0,duration,1),duration];times=t0+edges*u.min
+        # Ten-second edges keep the displayed setting windows consistent with
+        # the full-visit packet checks near a tight airmass boundary.
+        edges=np.r_[np.arange(0,duration,1/6),duration];times=t0+edges*u.min
         frame=AltAz(obstime=times,location=OBS.PALOMAR.location,pressure=0*u.hPa)
         aa=coords[:,None].transform_to(frame);x=aa.secz.value
         sep=aa.separation(get_body('moon',times,OBS.PALOMAR.location).transform_to(frame)).deg
@@ -114,8 +116,8 @@ def main():
                    longest_minutes=max((v['minutes'] for v in usable),default=0),
                    fallback_longest_minutes=max(v['minutes'] for v in fallback),
                    min_airmass=float(x[i,q].min()),moon_min=float(sep[i,q].min()),moon_max=float(sep[i,q].max()),
-                   minutes_airmass_le1p3=float(((x[i,:-1]<=1.3)&(x[i,:-1]>=1)&good[:-1]&good[1:]).sum()),
-                   curve=[[float(times[j].mjd),float(x[i,j]) if 0<x[i,j]<4 else None,float(sep[i,j])] for j in range(0,len(times),5)])
+                   minutes_airmass_le1p3=float((((x[i,:-1]<=1.3)&(x[i,:-1]>=1)&good[:-1]&good[1:])*np.diff(edges)).sum()),
+                   curve=[[float(times[j].mjd),float(x[i,j]) if 0<x[i,j]<4 else None,float(sep[i,j])] for j in range(0,len(times),30)])
             windows[r.name].append(w);nightrows.append((r,w))
         from astroplan import moon_illumination
         meta[night]=dict(label={'sep23':'Sep 23','oct26':'Oct 26','oct27':'Oct 27'}[night],date=date,

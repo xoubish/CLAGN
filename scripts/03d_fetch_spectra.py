@@ -1,4 +1,3 @@
-from spectral_utils import bin_indices
 """
 03d_fetch_spectra.py  --  download the archival SDSS spectra (all epochs, SDSS-I..V) for the listed targets and extract
 a compact spectral history.
@@ -16,6 +15,7 @@ Outputs
                                    area (1e-17 erg/s/cm2), EW (Å), sigma (km/s), continuum; plus ratios useful for CLAGN:
                                    Hb_area/OIII_area, Ha_area/OIII_area
 """
+from spectral_utils import bin_indices
 import io, os, sys, glob, json, time
 import numpy as np
 import pandas as pd

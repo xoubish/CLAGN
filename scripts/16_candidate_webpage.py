@@ -1,6 +1,6 @@
 """Build the provisional manifold candidate explorer, with explicit public fields.
 
-Public output: docs/index.html and web/clagn_night_sheet.html.
+Writes public/local candidate payloads; 51_observer_page.py renders the observer pages.
 Collaboration review: git-ignored reselection directory only. Never publish it.
 Input tables must describe the same snapshot; this does not run the old scheduler.
 """
@@ -291,7 +291,7 @@ def main():
         if v['private_reference']:
             v['snr_per_angstrom']=None
             v['science_question']='Compare the new spectrum with the archival epochs; reference assessment is on the local page.'
-            v['caution']='Private-reference sensitivity is available on the local page. A weak broad-line non-detection remains unclassified.' 
+            v['caution']='Private-reference sensitivity is available on the local page. A weak broad-line non-detection remains unclassified.'
     status_path=OUT/'completion_pipeline_status.json'
     pipeline=json.loads(status_path.read_text()) if status_path.exists() else {}
     parent_search=dict(stage=pipeline.get('stage',''),updated_utc=pipeline.get('updated_utc',''),detail=pipeline.get('detail',''))

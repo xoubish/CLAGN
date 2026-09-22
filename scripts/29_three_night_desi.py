@@ -1,9 +1,9 @@
-from spectral_utils import bin_indices
 """Query DESI DR1 coadds and retrieve every matched SPARCL spectrum.
 
 DESI coadds retain their individual mean/min/max dates and target IDs. They are
 not treated as individual exposures or assigned another coadd's median date.
 """
+from spectral_utils import bin_indices
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor,as_completed
 import hashlib,io,json,time,importlib,fcntl,re,threading,argparse

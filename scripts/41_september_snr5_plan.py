@@ -7,7 +7,8 @@ through one physical quantity: the predicted continuum S/N per Angstrom near obs
 H-beta. Primaries come from observing/sep23/user_selection.json when it exists (the user's
 choice from the decision board, with optional per-target exposure counts); otherwise the
 primaries of the archived packet are protected. Remaining time is filled from the admitted
-pool by the existing review score. Writes a private plan; does not render pages or change
+pool by the existing review score. An explicit preserve_sequence in the selection record
+locks all listed targets and start times and fails if they no longer fit. Writes a private plan; does not render pages or change
 telescope CSVs.
 """
 from pathlib import Path
