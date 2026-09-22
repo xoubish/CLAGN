@@ -159,7 +159,6 @@ def build():
     planner=importlib.import_module('41_september_snr5_plan')
     backup_geometry=planner.night_geometry(targets)
     backup_indices={name:i for i,name in enumerate(targets.index)}
-    setting_text=f"slit {S['slit_arcsec']}arcsec; {S['binspat']}x{S['binspect']} binning"
     for index,choice in enumerate(sequence_choices,1):
         name=choice['name'];start=choice['start_pdt']
         if name in original:question,caution=original[name][2],original[name][3]
@@ -179,13 +178,13 @@ def build():
         s=science.loc[name];assert pd.isna(s.ztf_r_latest180_mag) or s.ztf_r_latest180_mag<19
         latest_date=max((e['date'] for e in public_targets[name]['epochs']),default='unknown')
         ref='collaboration data' if visit['plan'].get('reference_private') else Time(visit['plan']['reference_mjd'],format='mjd').strftime('%Y-%m-%d')
-        comment=(f"PRIMARY {tag}; visit {visit['start_pdt']} to {visit['end_pdt']} PDT; UTC {visit['start_utc']} to {visit['end_utc']}; "
-                 f"latest visit start {visit['latest_start_pdt']} PDT; X<={visit['plan']['airmass']}; Moon>={visit['moon_min']:.1f}deg during planned visit; "
-                 f"{visit['plan']['exposures']}x{visit['plan']['seconds_each']}s; {setting_text}; model continuum S/N {visit['snr_per_angstrom']:.1f} per Angstrom near Hbeta at X={visit['airmass_mean']:.2f} with moonlit sky V={visit['sky_V']:.1f} and seeing {visit['seeing_arcsec']:.1f}arcsec; "
-                 f"{visit['plan']['visit_minutes']}min visit includes {S['overhead_minutes']}min overhead; "
-                 f"archival r={t['r_planning']:.2f}; continuum reference {ref}; latest public spectral date {latest_date}; "
-                 f"{question} {visit['field_note']} Weak broad-line nondetection needs deeper data."
-                 +(" SETTING TARGET: if not started by the latest visit start; skip it (the sequencer would wait for an airmass that does not return tonight)." if visit['airmass_end']>visit['airmass_start'] else ''))
+        csv_question=original[name][2] if name in original else str(s.science_question).rstrip('.')+'.'
+        comment=(f"Visit {visit['start_pdt']} to {visit['end_pdt'][-5:]} PDT; Moon min {visit['moon_min']:.1f}deg; "
+                 f"model continuum S/N {visit['snr_per_angstrom']:.1f}/A near Hbeta; "
+                 f"archival r={t['r_planning']:.2f}; continuum ref {ref}; latest public spectrum {latest_date}; "
+                 f"{csv_question} {visit['field_note'].rstrip('.')}."
+                 +(" Below S/N floor: weak broad lines unconstrained." if visit['snr_per_angstrom']<S['goal_snr'] else '')
+                 +(" Setting target: skip after deadline in Note." if visit['airmass_end']>visit['airmass_start'] else ''))
         primary_csv.append(ngps_row(t,visit['plan'],S,f"{tag} by {visit['latest_start_pdt'][-5:]}",comment))
         chosen=backup_selection.select(backup_candidates, visit, backup_geometry, backup_indices,
                                        make_visit, OUT/'sep23_backup_etc')
@@ -194,12 +193,13 @@ def build():
             n=v['name']
             used_backups.add(n);v.update(role='backup',replaces=tag,backup_rank=rank,pool_role=other['pool_role'])
             backups.append(v)
-            comment=(f"BACKUP ONLY for {tag}; choice {rank}; replacement visit {v['start_pdt']} to {v['end_pdt']} PDT; "
-                     f"UTC {v['start_utc']} to {v['end_utc']}; latest visit start {v['latest_start_pdt']} PDT; "
-                     f"X<1.5; Moon>40deg (minimum {v['moon_min']:.1f}deg) during replacement visit; "
-                     f"{v['plan']['exposures']}x{v['plan']['seconds_each']}s; {setting_text}; model continuum S/N {v['snr_per_angstrom']:.1f} per Angstrom near Hbeta at X={v['airmass_mean']:.2f} with moonlit sky V={v['sky_V']:.1f}; "
-                     f"{v['plan']['visit_minutes']}min visit includes {S['overhead_minutes']}min overhead; archival r={other['r_planning']:.2f}; "
-                     f"Quasar; r={v['eligibility']['r_mag']:.2f} ({v['eligibility']['r_source']}); public spectrum MJD {v['eligibility']['reference_mjd']:.0f}; {v['eligibility']['region']}. Replace the primary; never run the whole backup list. Names can recur for different slots; skip objects already observed. Inspect field and PA.")
+            r_source='ZTF 180-day median' if v['eligibility']['r_source'].startswith('ZTF') else 'archival'
+            field=FIELD_NOTES.get(n,str(other['field_notes'])).rstrip('.')
+            comment=(f"Replacement visit {v['start_pdt']} to {v['end_pdt'][-5:]} PDT; "
+                     f"latest start {v['latest_start_pdt']} PDT; Moon min {v['moon_min']:.1f}deg; "
+                     f"model continuum S/N {v['snr_per_angstrom']:.1f}/A near Hbeta; "
+                     f"r={v['eligibility']['r_mag']:.2f} ({r_source}); public ref MJD {v['eligibility']['reference_mjd']:.0f}; "
+                     f"{v['eligibility']['region']}. {field}. Replace only the slot in Note; skip if already observed.")
             backup_csv.append(ngps_row(other,v['plan'],S,f"B{index:02}{rank} for {tag}",comment))
         primaries.append(visit)
     # Two explicit standard visits. Short exposure settings require quicklook
@@ -212,9 +212,9 @@ def build():
         assert g['airmass_max_actual']<1.8 and g['moon_min']>=40
         plan=dict(exposures=2,seconds_each=seconds,airmass=1.8)
         note='STD check saturation'
-        comment=(f"CALSPEC {name}; visit {local(a)} to {local(b)} PDT; UTC {utc(a)} to {utc(b)}; "
-                 f"2x{seconds}s INITIAL setting only; inspect first exposure in all arms before repeating and adjust to avoid saturation; same {S['slit_arcsec']}arcsec slit and {S['binspat']}x{S['binspect']} binning as science; Quicklook spatial-profile counts at least 1000 and preferably about 10000; stay below about 40000; "
-                 f"X<1.8; Moon>={g['moon_min']:.1f}deg; calspec identifier {s.calspec}; allow acquisition and repeat checks within this ten-minute block.")
+        comment=(f"CALSPEC {s.calspec}; visit {local(a)} to {local(b)[-5:]} PDT incl. acquisition/checks. "
+                 "Initial exposure: inspect all arms before repeating; adjust to avoid saturation. "
+                 "Quicklook spatial-profile counts: >=1000; aim ~10000; keep <40000.")
         row=ngps_row(dict(name=label,ra=s.ra,dec=s.dec),plan,S,note,comment);std_csv.append(row)
         standards.append(dict(name=name,csv_name=label,role='standard',start_pdt=local(a),end_pdt=local(b),start_utc=utc(a),end_utc=utc(b),plan=plan,**g))
     sequence=[standards[0],*primaries,standards[1]]
@@ -229,6 +229,7 @@ def build():
     for row in public_csv:
         if row['name'] in private_names:
             row['Comment']=re.sub(r'model continuum S/N .*?; ', 'Continuum estimate available on local page; ', row['Comment'])
+            row['Comment']=row['Comment'].replace(' Below S/N floor: weak broad lines unconstrained.', '')
     public_files={'sep23_primaries_ngps.csv':csv_text(public_csv), 'sep23_backups_ngps.csv':csv_text(backup_csv)}
     for filename,text in files.items():(DEST/filename).write_text(text,encoding='ascii')
     pd.DataFrame([dict(name=v['name'],role=v['role'],start_pdt=v['start_pdt'],end_pdt=v['end_pdt'],
