@@ -53,7 +53,7 @@ class SeptemberPacketTests(unittest.TestCase):
             if v['name'] in {'P8548', 'P12457'}:
                 self.assertTrue(v['host_contaminated'])
                 self.assertIn('AGN-only S/N is lower', v['caution'])
-        self.assertEqual([v['plan']['seconds_each'] for v in p['sequence'] if v['role'] == 'standard'], [30, 5])
+        self.assertEqual([v['plan']['seconds_each'] for v in p['sequence'] if v['role'] == 'standard'], [60, 10])
         for v in p['primaries']+p['backups']:
             n = v['plan']['exposures']
             self.assertIn(n, (2, 3, 4))

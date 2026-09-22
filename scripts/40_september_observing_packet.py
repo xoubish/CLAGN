@@ -145,7 +145,8 @@ def build():
                  f"{visit['plan']['exposures']}x{visit['plan']['seconds_each']}s; {setting_text}; model continuum S/N {visit['snr_per_angstrom']:.1f} per Angstrom near Hbeta at X={visit['airmass_mean']:.2f} with moonlit sky V={visit['sky_V']:.1f} and seeing {visit['seeing_arcsec']:.1f}arcsec; "
                  f"{visit['plan']['visit_minutes']}min visit includes {S['overhead_minutes']}min overhead; "
                  f"archival r={t['r_planning']:.2f}; continuum reference {ref}; latest public spectral date {latest_date}; "
-                 f"{question} {visit['field_note']} Weak broad-line nondetection needs deeper data.")
+                 f"{question} {visit['field_note']} Weak broad-line nondetection needs deeper data."
+                 +(" SETTING TARGET: if not started by the latest visit start; skip it (the sequencer would wait for an airmass that does not return tonight)." if visit['airmass_end']>visit['airmass_start'] else ''))
         primary_csv.append(ngps_row(t,visit['plan'],S,f"{tag} by {visit['latest_start_pdt'][-5:]}",comment))
         choices=[]
         for other in targets.to_dict('records'):
@@ -176,7 +177,9 @@ def build():
     # Two explicit standard visits. Short exposure settings require quicklook
     # saturation checks; the ten-minute blocks include acquisition and repeats.
     stds=pd.read_csv(ROOT/'data/standards_spectrophotometric.csv').set_index('name');standards=[];std_csv=[]
-    for name,label,start,seconds in [('P330E','P330E','2026-09-23 20:06',30),('BD+28 4211','BD284211','2026-09-24 00:28',5)]:
+    # Exposure times sized for the 1.5arcsec slit and 2x3 binning: roughly 5,000-8,000 peak counts per binned pixel,
+    # inside the manual's 1,000 to 40,000 range and near its preferred 10,000. Still initial values: inspect the first frame.
+    for name,label,start,seconds in [('P330E','P330E','2026-09-23 20:06',60),('BD+28 4211','BD284211','2026-09-24 00:28',10)]:
         s=stds.loc[name];a=stamp(start);b=a+pd.Timedelta(minutes=10);g=geometry(s.ra,s.dec,a,b)
         assert g['airmass_max_actual']<1.8 and g['moon_min']>=40
         plan=dict(exposures=2,seconds_each=seconds,airmass=1.8)

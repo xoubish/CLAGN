@@ -32,7 +32,7 @@ def exposure(target):
     ref=model.reference(target)
     if ref is None: return target['name'], {}
     mjd,mag,private,flux=ref
-    signature=hashlib.sha256(json.dumps([target['z'],ref,'airmass-v1-sky18.5-min1200']).encode()).hexdigest()
+    signature=hashlib.sha256(json.dumps([target['z'],ref,'adopted-2x300-slit1.5-2x3-seeingX0.6-sky18.5-v1']).encode()).hexdigest()
     cache=OUT/'airmass_exposure_cache';cache.mkdir(exist_ok=True)
     path=cache/f"{target['name']}.json"
     if path.exists():
@@ -47,26 +47,21 @@ def exposure(target):
     channels=[ch for ch in ['R','I','G','U'] if model.CFG.channelRange[ch][0].to_value(u.nm)<=wave-4 and model.CFG.channelRange[ch][1].to_value(u.nm)>=wave+4]
     if not channels:return target['name'],{}
     ch=channels[0];plans={}
+    bin_A=float((model.CFG.dLambda[ch]*3).to_value(u.AA))
     for tier,x,_ in TIERS:
-        # Solve for a coadded continuum S/N of ten with >=2 exposures,
-        # <=900 seconds each, and at least the agreed 1200 seconds total.
-        n=2
-        while True:
-            cmd=[ch,str(wave-4),str(wave+4),'SNR',str(10/np.sqrt(n)),
-                 '-slit','SET','1','-binspect','2','-binspat','2','-seeing','1.3','500',
-                 '-airmass',str(x),'-skymag','18.5','-mag',str(mag),
-                 '-magsystem','AB','-magfilter','match','-noslicer']
-            args=model.ETC.parser.parse_args(cmd);model.ETC.check_inputs_add_units(args)
-            result=model.ETC.main(args,quiet=True)
-            seconds=max(1200/n,float(result['exptime'].to_value(u.s)))
-            if seconds<=900:break
-            n=max(n+1,math.ceil(n*seconds/900))
-            if n>100:break
-        each=math.ceil(seconds/10)*10
-        plans[tier]=dict(exposures=n,seconds_each=each,integration_minutes=n*each/60,
-                         visit_minutes=math.ceil(n*each/60+10),airmass=x,
-                         reference_mjd=mjd,reference_private=private,continuum_AB=mag,
-                         status='too faint for an allocated-night visit' if n>100 else 'scenario')
+        # Adopted setting (2026-09-21): 2x300 s, 1.5 arcsec slit, 2x3 binning, 16-minute visit.
+        # Report the predicted continuum S/N per Angstrom at the tier's airmass ceiling with
+        # seeing 1.3 arcsec at zenith scaled by airmass^0.6 and sky V=18.5.
+        cmd=[ch,str(wave-4),str(wave+4),'EXPTIME','300',
+             '-slit','SET','1.5','-binspect','3','-binspat','2','-seeing',f'{1.3*x**0.6:.3f}','500',
+             '-airmass',str(x),'-skymag','18.5','-mag',str(mag),
+             '-magsystem','AB','-magfilter','match','-noslicer']
+        args=model.ETC.parser.parse_args(cmd);model.ETC.check_inputs_add_units(args)
+        snr=float(model.ETC.main(args,quiet=True)['SNR'].value)*np.sqrt(2)/np.sqrt(bin_A)
+        plans[tier]=dict(exposures=2,seconds_each=300,integration_minutes=10.,visit_minutes=16,airmass=x,
+                         slit_arcsec=1.5,binspat=2,binspect=3,predicted_snr_per_angstrom=snr,goal_snr=5,
+                         reference_mjd=mjd,reference_private=private,continuum_AB=mag,channel=ch,
+                         status='scenario' if snr>=5 else 'below the S/N floor at 2x300 s')
     path.write_text(json.dumps(dict(signature=signature,plans=plans),indent=2))
     return target['name'],plans
 
@@ -166,7 +161,7 @@ def plot_night(night,date,t0,t1,rows,plans,coverage):
     top.set_title(f'{date}: preferred, extended, and fallback airmass windows\nMoon ≥ 40° throughout; historical r < 19; backups shared between nights')
     ax.set_xlim(mdates.date2num(t0.to_datetime(timezone=timezone.utc)),mdates.date2num(t1.to_datetime(timezone=timezone.utc)))
     fig.legend(handles=[Patch(color=COLORS[t],label=f'{t}: X ≤ {x}') for t,x,_ in TIERS]+[Patch(color='#cda370',label='amber shades: reserves')],loc='lower center',ncol=4,fontsize=9,bbox_to_anchor=(.5,.025))
-    fig.text(.02,.009,'Bars: visibility, not a schedule. Top: complete visits using archival-continuum ETC S/N 10, ≥20 min integration + 10 min overhead. Sky V=18.5; no broad-line guarantee.',fontsize=8)
+    fig.text(.02,.009,'Bars: visibility, not a schedule. Top: complete 16-minute visits (2×300 s, 1.5″ slit, 2×3 binning). S/N in the plans is per Å at sky V=18.5 with seeing scaled to airmass; no broad-line guarantee.',fontsize=8)
     fig.tight_layout(rect=(0,.045,1,1))
     for ext in ['png','pdf']:fig.savefig(OUT/'three_night_review'/f'{night}_visibility.{ext}',dpi=150)
     plt.close(fig)

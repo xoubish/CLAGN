@@ -7,9 +7,9 @@ Run scripts from the project root, using `python scripts/<filename>.py`. Numbere
 | Scripts | Purpose |
 | --- | --- |
 | `15a`–`15c`, `32`, `34`, `36`, `37` | Broad parent, W1 acquisition/projection, rolling spectral identities, and completion pipeline. |
-| `05`, `23`, `24`, `33`, `39` | Geometry, neighbour screening, prepared lists, and airmass/exposure alternatives. |
+| `05`, `23`, `24`, `33`, `39` | Geometry, neighbour screening, prepared lists, and airmass windows with per-tier S/N for the adopted 16-minute visit (`39`). |
 | `15f`, `17`–`19`, `28`, `29`, `35`, `38` | Spectral inventories, archive retrieval, imaging, ZTF, and acquisition audits. |
-| `22`, `27`, `30`, `31` | NGPS ETC, Hβ sensitivity, dated evidence, and three-night review. |
+| `22`, `27`, `30`, `31` | NGPS ETC, Hβ sensitivity (legacy 2×600 s columns feed the frozen review score; `snr300_*` columns give S/N per Å for the adopted 1.5″ / 2×3 / 2×300 s setting), dated evidence, and three-night review. |
 | `16_candidate_webpage.py` | Build public and private candidate explorers. |
 | `40_september_observing_packet.py` | Build the curated September sequence, backups, NGPS CSVs, and dark primary pages. |
 | `41_september_snr5_plan.py` | One instrument setting for all science targets (1.5″ slit, 2×3 binning, 2×300 s); ETC screen for continuum S/N≥5 per Å with airmass-scaled seeing and a moonlit-sky model per slot; integer-program order that maximises slot S/N (airmass, Moon distance, visibility); protects the eleven previous primaries and fills 16-minute visits from the reviewed pool. |
