@@ -201,7 +201,42 @@ def build():
         airmass_max=round(v['airmass_max_actual'],3),moon_min=round(v['moon_min'],1),
         snr_per_angstrom=round(v['snr_per_angstrom'],1) if 'snr_per_angstrom' in v else np.nan,
         sky_V=round(v['sky_V'],2) if 'sky_V' in v else np.nan,backups=';'.join(v.get('backups',[]))) for v in sequence]).to_csv(DEST/'sep23_sequence.csv',index=False)
-    packet=dict(night='2026-09-23',timezone='PDT (UTC-07:00)',primaries=primaries,backups=backups,sequence=sequence,
+    # Run-level information for the observer's page: nights, calibrations, standards, procedure, science aim.
+    from astroplan import moon_illumination
+    nights=[]
+    for key,(date,part) in OBS.NIGHTS.items():
+        a,b,dusk,dawn=OBS.night_window(date,part)
+        mid=a+(b-a)/2
+        nights.append(dict(key=key,date=date,part='first half' if part=='first' else 'full night',
+            window_pdt=f"{pd.Timestamp(a.utc.iso,tz='UTC').tz_convert(TZ):%H:%M} to {pd.Timestamp(b.utc.iso,tz='UTC').tz_convert(TZ):%H:%M}",
+            twilight_pdt=f"{pd.Timestamp(dusk.utc.iso,tz='UTC').tz_convert(TZ):%H:%M} to {pd.Timestamp(dawn.utc.iso,tz='UTC').tz_convert(TZ):%H:%M} (18 deg)",
+            moon_percent=int(round(100*float(moon_illumination(mid)))),
+            status=('Sequence set: this page.' if key=='sep23' else 'Sequence not chosen yet; use the candidate explorer with this night selected.')))
+    run=dict(nights=nights,
+        setting=dict(text=f"{S['slit_arcsec']} arcsec slit, {S['binspat']}x{S['binspect']} binning (spatial x spectral), {S['seconds_each']} s sub-exposures, {S['exposures']} per target unless noted, slit angle at the parallactic angle, single slit (no slicer).",
+                     why=[f"Under the 93 to 99 percent Moon and the 1.5 to 1.8 arcsec seeing expected at the slit, the ETC slit scan gives 1.0 arcsec 77 to 82 percent of the best S/N, 1.5 arcsec 89 to 94 percent, 2.0 arcsec 96 to 99 percent; 1.5 arcsec keeps R about 1650 and half the wavelength zero-point sensitivity of 2.0 arcsec.",
+                          "2x3 is the documented binning for a 1.5 arcsec slit; it gains 23 to 25 percent S/N per Angstrom in the G channel (read noise 7.8 e) and keeps 2.3 bins per resolution element. Quicklook cosmic-ray defaults are tuned for 2x3.",
+                          f"{S['exposures']}x{S['seconds_each']} s reaches continuum S/N 5 per Angstrom at Hbeta to about AB 18.6 to 19.1 depending on Moon distance; faint favourites get a third or fourth exposure instead of a different setting."]),
+        calibrations=['Afternoon, at 2x3 binning: 3 ThAr and 3 FeAr arcs per channel (slit 1.5 arcsec is within the 2 arcsec limit for arcs), 7 biases per channel.',
+                      'Dome flats at 1.5 arcsec slit + 2x3 binning: at least 5 per channel, 7 to 10 for U and G.',
+                      'One configuration is used for science and standards, so no other slit or binning needs calibrating.',
+                      'Internal arcs can be repeated between targets without moving the telescope if the wavelength solution drifts.'],
+        standards=[dict(name=v['name'],calspec=stds.loc[v['name']].calspec,exposures=v['plan']['exposures'],seconds_each=v['plan']['seconds_each'],start_pdt=v['start_pdt'],
+                        note='HST CALSPEC; Quicklook builds the sensitivity function only from CALSPEC stars and uses the standard closest in time.') for v in sequence if v['role']=='standard'],
+        procedure=['Load the primary CSV through the GUI target-list import. The sequencer runs rows in stored order; rows with nexp above 1 expand into that many exposures; slitangle PA is recomputed per exposure.',
+                   'The Note column gives the latest start for each primary. The sequencer waits for a target to drop below airmass_max, so a SETTING target that is late never runs: skip it and continue.',
+                   'Acquisition is automatic on the ACAM (about 90 s). Check the slit view, then guiding, before the first exposure; inspect the wide field for the neighbours listed on each card.',
+                   'Standards: take the first exposure, check counts in the Quicklook spatial-profile display in all four channels (at least about 1,000, preferably about 10,000, below about 40,000), then repeat or adjust.',
+                   'Behind schedule: drop the last automatic fill first (P9506, then P9227), never a PI choice; the packed sequence has an 8-minute buffer before the closing standard at 00:28.',
+                   'Ahead of schedule or a target fails acquisition: take the backup listed for that slot from the backup CSV (same setting, same start time); skip names already observed.',
+                   'Quicklook writes spec1d and spec2d under the reduced-data directory within tens of seconds; look at Hbeta (and Halpha where in range) against the archival spectrum on the card before moving on. An ambiguous faint broad line earns a third 300 s exposure, not a new setting.'],
+        data=['Save Quicklook spec1d CSVs per target as data/ngps_spectra/<name>.csv (wave_A, flux); scripts/12_ngps_ingest.py compares them with the archival epochs and prints a turn-on/off verdict.',
+              'Record start time, seeing, sky and any deviation from the sequence in the observing log; the Comment column is copied into the NGPS log automatically.'],
+        science=['Goal: test whether quasars selected by their WISE W1 light-curve shape on the manifold of Hemmati et al. (2026) are changing-look candidates, by comparing a new Palomar spectrum with the dated archival SDSS and DESI spectra on each card.',
+                 'What a spectrum tells us: whether broad Hbeta (and Halpha where in range) has weakened, vanished or appeared relative to the archival epochs, and whether the continuum has changed. Equivalent width is the calibration-robust quantity; absolute flux depends on aperture and night.',
+                 'Primaries were chosen by the PI from all 85 observable candidates on 2026-09-21; three are bright comparison reserves outside the selected manifold regions, observed as controls. Everything else observable is a backup.',
+                 'A non-detection of a faint broad line at S/N 5 per Angstrom is not a turn-off; count inadequate spectra as unclassified.'])
+    packet=dict(night='2026-09-23',timezone='PDT (UTC-07:00)',run=run,primaries=primaries,backups=backups,sequence=sequence,
         conditional=[],settings=S,reserved=revision['reserved'],promoted=revision['promoted'],protected=revision['protected'],
         user_selection=revision.get('user_selection'),demoted=revision.get('demoted',[]),waived_rules=revision.get('waived_rules',{}),
         original_primaries=revision['original_primaries'],files=files,full_page='candidate_review_local.html',
@@ -262,7 +297,8 @@ def main():
     ap=argparse.ArgumentParser();ap.add_argument('--fetch-images',action='store_true');args=ap.parse_args()
     packet,local_data,public_data=build()
     if args.fetch_images:images(packet)
-    render(packet,local_data,True);render(packet,public_data,False)
+    # Pages retired on 2026-09-21: the candidate explorer (16_candidate_webpage.py) is the single
+    # observer page and embeds this packet. Run it after this script.
     S=packet['settings'];gaps=packet['reserved']['gaps'];revision_demoted=packet.get('demoted',[])
     gap_text=', '.join(f"{g['start_pdt'][11:]}-{g['end_pdt'][11:]} PDT ({g['minutes']} min)" for g in gaps) or 'none'
     added=', '.join(packet['promoted']) or 'none'
@@ -283,7 +319,7 @@ def main():
     report+=('Use the primary CSV in order. Backups are replacement choices that fit their associated primary slot with the same setting. A target can appear for several slots; choose the row for the slot being replaced and skip any target already observed. '
              'Never append the entire backup list to an automatic run. Standard exposure settings require saturation checks. Inspect the slit field and Quicklook data; deepen ambiguous potential turn-offs with a third 300-second exposure before classifying them.\n\n')
     report+='Public primary exposure references and identities are retained for a consistent shared page. Candidates needing private-only identity or continuum information remain eligible for the complete local backup packet. SDSS-V spectra remain available on the local page. The manifold is a selection prior, not a forecast of the current state.\n\n'
-    report+='[Dark primary page](sep23_primaries_local.html) · [NGPS primary sequence](sep23_primaries_ngps.csv) · [NGPS backups](sep23_backups_ngps.csv) · [Detailed timing](sep23_sequence.csv) · [Per-slot S/N table](snr5_slot_table.csv)\n\n'
+    report+='[Observer page (candidate explorer)](../../data/reselection_2026-09-20/candidate_review_local.html) · [NGPS primary sequence](sep23_primaries_ngps.csv) · [NGPS backups](sep23_backups_ngps.csv) · [Detailed timing](sep23_sequence.csv) · [Per-slot S/N table](snr5_slot_table.csv)\n\n'
     report+=pd.read_csv(DEST/'sep23_sequence.csv').to_markdown(index=False)
     report+='\n\nFormat checked against https://caltechopticalobservatories.github.io/NGPS/users-manual/target-lists.html and https://caltechopticalobservatories.github.io/NGPS/users-manual/quick-start.html. CSV imports have not been exercised on the observatory installation.\n'
     (DEST/'README.md').write_text(report)

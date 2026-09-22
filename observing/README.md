@@ -10,13 +10,11 @@ This review reopens the projected parent without protecting previous primaries. 
 
 ## September 23, 2026 — first half-night
 
-- **[Decision board](sep23/sep23_decision_local.html)** — all 85 candidates that fit a full 16-minute visit on the night, numbered P01–P85 in observability order, with the visibility chart, a comparison table, and per-target airmass, Moon, brightness, per-slot S/N, manifold, image, light curves and spectra. Companion tables: [summary CSV](sep23/sep23_decision_table.csv), [per-slot S/N CSV](sep23/snr5_slot_table.csv). Local only; it contains collaboration spectra.
+- **[Observer page](../data/reselection_2026-09-20/candidate_review_local.html)** — the single page for the run: About this run (setting, calibrations, standards, procedure, science aim), the September 23 sequence with timeline, table, per-slot backups and CSV downloads, and the candidate pool for all three nights with light curves, spectra, geometry and images. Local copy with complete spectra; the public copy is `docs/index.html`.
 - **[NGPS primary CSV](sep23_primaries_ngps.csv)** — 14 science targets plus two standards, in observing order.
 - **[NGPS backup CSV](sep23_backups_ngps.csv)** — up to three replacement choices per primary slot. Names can recur for different slots; use the matching row and skip objects already observed. Do not run the whole backup list.
-- [Detailed timing CSV](sep23/sep23_sequence.csv) · [Per-slot S/N table](sep23/snr5_slot_table.csv)
-- [Dark primary page](sep23/sep23_primaries_local.html) — ordered targets, 40″ images, light curves, and all available spectral dates.
-- [Packet notes](sep23/README.md) — windows, settings, caveats, and checks.
-- [Full local candidate explorer](../data/reselection_2026-09-20/candidate_review_local.html)
+- [Detailed timing CSV](sep23/sep23_sequence.csv) · [Per-slot S/N table](sep23/snr5_slot_table.csv) · [Packet notes](sep23/README.md) · [Selection record](sep23/user_selection.json)
+- Working tools, not observer pages: `scripts/45_sep23_decision_page.py` rebuilds the decision board used to choose the primaries on 2026-09-21 (its earlier output is archived); `sep23/sep23_decision_table.csv` keeps the board's comparison table.
 
 One instrument setting for every science target and both standards: **1.5″ slit, 2×3 binning (spatial × spectral), 300 s sub-exposures**, 2 per target except the two faint favourites P1823 (4×300 s) and P8544 (3×300 s). Decided on 2026-09-21 from an ETC slit scan under the 93 % Moon: at the 1.5–1.8″ seeing expected at the slit, 1.5″ recovers 30–37 % of exposure time relative to the earlier 1.0″ slit, R≈1,650 is ample for Balmer-line work, and 2×3 is the documented binning for that slit. A standard visit is 16 minutes (10 min integration plus 6 min for slew, acquisition and the readout between exposures); the deeper visits are 27 and 22 minutes. Unscheduled time inside the science block is 11 minutes in total, 8 of them before the closing standard (00:20–00:28 PDT); the sequence is packed, so any delay beyond that eats into the second half-night.
 

@@ -10,13 +10,13 @@ Run scripts from the project root, using `python scripts/<filename>.py`. Numbere
 | `05`, `23`, `24`, `33`, `39` | Geometry, neighbour screening, prepared lists, and airmass windows with per-tier S/N for the adopted 16-minute visit (`39`). |
 | `15f`, `17`–`19`, `28`, `29`, `35`, `38` | Spectral inventories, archive retrieval, imaging, ZTF, and acquisition audits. |
 | `22`, `27`, `30`, `31` | NGPS ETC, Hβ sensitivity (legacy 2×600 s columns feed the frozen review score; `snr300_*` columns give S/N per Å for the adopted 1.5″ / 2×3 / 2×300 s setting), dated evidence, and three-night review. |
-| `16_candidate_webpage.py` | Build public and private candidate explorers. |
-| `40_september_observing_packet.py` | Build the curated September sequence, backups, NGPS CSVs, and dark primary pages. |
+| `16_candidate_webpage.py` | Build the single observer page (public `docs/index.html` and the local collaboration copy): candidate pool, September sequence, run information; embeds the packet from `40`. |
+| `40_september_observing_packet.py` | Build the September sequence packet: NGPS CSVs, backups, timing, README and run information (pages retired 2026-09-21; run `16` afterwards). |
 | `41_september_snr5_plan.py` | One instrument setting for all science targets (1.5″ slit, 2×3 binning, 2×300 s); ETC screen for continuum S/N≥5 per Å with airmass-scaled seeing and a moonlit-sky model per slot; integer-program order that maximises slot S/N (airmass, Moon distance, visibility); protects the eleven previous primaries and fills 16-minute visits from the reviewed pool. |
 | `42_science_reselection.py` | Separate projected-parent inventory and dated evidence review; no protected primaries and no telescope-packet writes. |
 | `43_public_alert_review.py` | Retrieve/cache public ALeRCE detections; reference-corrected alert photometry remains separate from catalog photometry. |
 | `44_science_discussion.py` | Local diagnostic page, qualitative review notes, and provisional matched-control pairs. |
-| `45_sep23_decision_page.py` | Local decision board for September 23: every candidate with a feasible 16-minute visit, in observability order, with geometry, per-slot S/N, manifold, images, light curves and spectra; reads the plan from `41`. |
+| `45_sep23_decision_page.py` | On-demand decision board (not an observer page): every candidate with a feasible visit in observability order, with geometry, per-slot S/N, manifold, images, light curves and spectra; used to choose the September primaries. |
 
 Typical commands from the project root:
 

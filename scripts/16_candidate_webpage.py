@@ -283,7 +283,35 @@ def main():
             lines=[dict(name=n,angstrom=round(w*(1+r.z),1),inrange=bool(3050<=w*(1+r.z)<=10400))
                                  for n,w in [('Hβ',4861.33),('[O III]',5006.84),('Hα',6562.8)] ]))
         reconcile_spectral_dates(items[-1])
+    # Current observing decisions shown on the page: the chosen September sequence, the parent-search state.
+    packet_path=ROOT/'observing/sep23/packet.json'
+    packet=json.loads(packet_path.read_text()) if packet_path.exists() else None
+    def cut40(name):
+        path=ROOT/'data/cutouts'/f'{name}_sdss.jpg'
+        return 'data:image/jpeg;base64,'+base64.b64encode(path.read_bytes()).decode() if path.exists() else None
+    sequence_all={v['name']:dict(rank=v['rank'],start_pdt=v['start_pdt'],end_pdt=v['end_pdt'],start_utc=v['start_utc'],end_utc=v['end_utc'],
+                                 exposures=v['plan']['exposures'],seconds_each=v['plan']['seconds_each'],visit_minutes=v['plan']['visit_minutes'],
+                                 airmass_limit=v['plan']['airmass'],tier=v['tier'],airmass_start=v['airmass_start'],airmass_end=v['airmass_end'],airmass_max=v['airmass_max_actual'],
+                                 moon_min=v['moon_min'],snr_per_angstrom=v['snr_per_angstrom'],sky_V=v['sky_V'],seeing_arcsec=v['seeing_arcsec'],latest_start_pdt=v['latest_start_pdt'],
+                                 science_question=v['science_question'],caution=v['caution'],field_note=v['field_note'],backups=v.get('backups',[]),
+                                 host_contaminated=v.get('host_contaminated',False),private_reference=bool(v['plan'].get('reference_private',False)),
+                                 role=('PI choice' if v.get('protected') else 'auto fill'),cut40=cut40(v['name']))
+                  for v in (packet or {}).get('primaries',[])}
+    sequence_public={n:v for n,v in sequence_all.items() if not v['private_reference'] and n in public_names}
+    status_path=OUT/'completion_pipeline_status.json'
+    pipeline=json.loads(status_path.read_text()) if status_path.exists() else {}
+    parent_search=dict(stage=pipeline.get('stage',''),updated_utc=pipeline.get('updated_utc',''),detail=pipeline.get('detail',''))
+    decisions=dict(setting=(packet or {}).get('settings',{}),night='2026-09-23',n_primaries=len(sequence_all),
+                   chosen_by_pi=bool((packet or {}).get('user_selection')),decided='2026-09-21',
+                   standards=[dict(name=v['name'],exposures=v['plan']['exposures'],seconds_each=v['plan']['seconds_each']) for v in (packet or {}).get('sequence',[]) if v.get('role')=='standard'])
+    sequence_rows=[dict(name=v['name'],role=v['role'],rank=v.get('rank'),start_pdt=v['start_pdt'],end_pdt=v['end_pdt'],start_utc=v['start_utc'],end_utc=v['end_utc'],
+                        exposures=v['plan']['exposures'],seconds_each=v['plan']['seconds_each'],airmass_max=v['airmass_max_actual'],moon_min=v['moon_min'],
+                        snr_per_angstrom=v.get('snr_per_angstrom'),public=(v['role']=='standard' or (v['name'] in public_names and not v['plan'].get('reference_private',False))))
+                   for v in (packet or {}).get('sequence',[])]
+    files_public={'sep23_primaries_ngps.csv':(packet or {}).get('files',{}).get('sep23_primaries_ngps.csv','')}
     payload=native(dict(version=SELECTION['version'],selection=SELECTION,generated=datetime.now(timezone.utc).isoformat(),
+                        sep23_sequence=sequence_public,decisions=decisions,parent_search=parent_search,
+                        run=(packet or {}).get('run',{}),sequence_rows=sequence_rows,reserved=(packet or {}).get('reserved',{}),files=files_public,backups=[],
                        access='public',nights=nights,manifold=manifold,targets=items))
     # Reuse the existing calibrated display units and light-curve/spectrum renderers.
     charts=OLD.TEMPLATE[OLD.TEMPLATE.index('function mjdToYear'):OLD.TEMPLATE.index('/* ---------- manifold thumbnail')]
@@ -307,6 +335,11 @@ def main():
     # Complete metadata remains in the ignored local research directory.
     private=json.loads(json.dumps(payload))
     private['access']='collaboration'
+    private['sep23_sequence']=native(sequence_all)
+    private['files']=native((packet or {}).get('files',{}))
+    private['backups']=native([dict(name=b['name'],replaces=b['replaces'],backup_rank=b['backup_rank'],start_pdt=b['start_pdt'],pool_role=b.get('pool_role'),
+                                    snr_per_angstrom=b.get('snr_per_angstrom'),airmass_max=b['airmass_max_actual'],moon_min=b['moon_min'],science_question=b.get('science_question',''))
+                               for b in (packet or {}).get('backups',[])])
     if SELECTION.get('airmass_options'):
         options=json.loads((OUT/'airmass_options.json').read_text())
         for t in private['targets']:
@@ -325,6 +358,8 @@ def main():
             target['science']=science[target['name']]
         reconcile_spectral_dates(target)
     (OUT/'candidate_review_local.html').write_text(html_for(private))
+    (OUT/'candidate_payload_local.json').write_text(json.dumps(native(private),separators=(',',':'),allow_nan=False))
+    (OUT/'candidate_payload_public.json').write_text(json.dumps(native(public_payload),separators=(',',':'),allow_nan=False))
     public_items=public_payload['targets']
     counts=dict(objects=len(items),public_objects=len(public_items),public_multiple=sum(t['n_spec']>=2 for t in public_items),
                 public_spectra_plotted=sum(bool(t['spec']) for t in public_items),ztf_curves=sum(bool(t['ztf']) for t in items),

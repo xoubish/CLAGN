@@ -117,29 +117,31 @@ class SeptemberPacketTests(unittest.TestCase):
             self.assertLessEqual(float(coord.secz.max()), float(row['airmass_max'])+1e-5, v['name'])
             self.assertGreaterEqual(float(coord.separation(moon).deg.min()), 40-1e-5, v['name'])
 
-    def test_page_downloads_and_public_spectra_match_authoritative_files(self):
-        def payload(path, kind):
-            return json.loads(re.search(r'<script id="'+kind+r'" type="application/json">(.*?)</script>', path.read_text(), re.S).group(1))
-        public_source = payload(ROOT/'docs/index.html', 'candidate-data')
-        public_targets = {t['name']: t for t in public_source['targets']}
-        for path, private in [(ROOT/'docs/sep23_primaries.html', False), (DEST/'sep23_primaries_local.html', True)]:
-            page = payload(path, 'primary-data')
-            expected_names = [v['name'] for v in self.packet['primaries'] if private or (not v['plan'].get('reference_private') and v['name'] in public_targets)]
-            self.assertEqual([t['name'] for t in page['targets']], expected_names)
-            self.assertEqual(page['packet']['settings']['slit_arcsec'], self.packet['settings']['slit_arcsec'])
-            expected = ['sep23_primaries_ngps.csv']+(['sep23_backups_ngps.csv'] if private else [])
-            self.assertEqual(set(page['packet']['files']), set(expected))
-            for name in expected:
-                self.assertEqual(page['packet']['files'][name], (DEST/name).read_text())
-            if not private:
-                self.assertNotIn('backups', page['packet'])
-                for target in page['targets']:
-                    self.assertNotIn('science', target)
-                    self.assertNotIn('exposure_plans', target)
-                    self.assertEqual(target['spec'], public_targets[target['name']]['spec'])
+    def test_single_page_embeds_the_sequence_and_csvs(self):
+        def payload(path):
+            return json.loads(re.search(r'<script id="candidate-data" type="application/json">(.*?)</script>', path.read_text(), re.S).group(1))
+        primaries = self.packet['primaries']
+        for path, private in [(ROOT/'docs/index.html', False), (ROOT/'data/reselection_2026-09-20/candidate_review_local.html', True)]:
+            page = payload(path)
+            public_names = {t['name'] for t in payload(ROOT/'docs/index.html')['targets']}
+            expected = {v['name'] for v in primaries if private or (not v['plan'].get('reference_private') and v['name'] in public_names)}
+            self.assertEqual(set(page['sep23_sequence']), expected)
+            for name, s in page['sep23_sequence'].items():
+                v = next(x for x in primaries if x['name'] == name)
+                self.assertEqual((s['rank'], s['start_pdt'], s['exposures']), (v['rank'], v['start_pdt'], v['plan']['exposures']))
+            self.assertEqual(page['files']['sep23_primaries_ngps.csv'], (DEST/'sep23_primaries_ngps.csv').read_text())
+            if private:
+                self.assertEqual(page['files']['sep23_backups_ngps.csv'], (DEST/'sep23_backups_ngps.csv').read_text())
+                self.assertEqual(len(page['backups']), len(self.packet['backups']))
+            else:
+                self.assertNotIn('sep23_backups_ngps.csv', page['files'])
+                self.assertEqual(page['backups'], [])
+                self.assertNotIn('proprietary', path.read_text())
+            self.assertEqual(len(page['sequence_rows']), len(self.packet['sequence']))
+            self.assertEqual(page['decisions']['setting']['slit_arcsec'], self.packet['settings']['slit_arcsec'])
+            self.assertTrue(page['run']['nights'] and page['run']['calibrations'] and page['run']['procedure'])
         for name in ['sep23_primaries_ngps.csv', 'sep23_backups_ngps.csv']:
             self.assertEqual((ROOT/'observing'/name).resolve(), (DEST/name).resolve())
-
 
 if __name__ == '__main__':
     unittest.main()
