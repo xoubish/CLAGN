@@ -75,7 +75,16 @@ def csv_text(rows):
         lines.append(','.join(values))
     return '\n'.join(lines)+'\n'
 
+ASCII={'\u03b2':'beta','\u03b1':'alpha','\u03b3':'gamma','\u2013':'-','\u2014':'-','\u2033':'arcsec','\u2032':'arcmin','\u00c5':'A','\u2248':'~','\u2265':'>=','\u2264':'<=','\u00b0':'deg','\u00b1':'+/-','\u2026':'...','\u2019':"'",'\u201c':'"','\u201d':'"','\u00d7':'x','\u03bc':'u'}
+def ascii_field(text,limit):
+    """The documented NGPS CSV parser takes plain ASCII without commas or quotes."""
+    text=str(text)
+    for k,v in ASCII.items():text=text.replace(k,v)
+    text=text.encode('ascii','ignore').decode().replace(',',';').replace('"',"'").replace('\n',' ').replace('\r',' ')
+    return text[:limit].rstrip()
+
 def ngps_row(target,plan,settings,note,comment):
+    note=ascii_field(note,24);comment=ascii_field(comment,1024)
     c=SkyCoord(target['ra']*u.deg,target['dec']*u.deg)
     return dict(name=target['name'],RA=c.ra.to_string(unit=u.hourangle,sep=':',precision=3,pad=True),
         DECL=c.dec.to_string(unit=u.deg,sep=':',precision=2,pad=True,alwayssign=True),
@@ -83,10 +92,10 @@ def ngps_row(target,plan,settings,note,comment):
         binspat=settings['binspat'],binspect=settings['binspect'],slitangle=settings.get('slitangle','PA'),
         airmass_max=plan['airmass'],Note=note,Comment=comment)
 
-def make_visit(target,plans,slots,windows,start):
-    """A visit at a planned start when that slot meets the S/N floor; geometry re-checked from coordinates."""
+def make_visit(target,plans,slots,windows,start,require_goal=True):
+    """A visit at a planned start; backups must meet the S/N floor, chosen primaries need only a feasible slot."""
     slot=slots.get(start)
-    if not slot or not slot['meets_goal']:return None
+    if not slot or (require_goal and not slot['meets_goal']):return None
     plan=plans.get(slot['tier'])
     if plan is None:return None
     a=stamp(start);b=a+pd.Timedelta(minutes=plan['visit_minutes'])
@@ -107,7 +116,7 @@ def build():
     science=pd.read_csv(OUT/'three_night_review/science_and_sensitivity.csv').set_index('name')
     local_data=payload(OUT/'candidate_review_local.html');public_data=payload(ROOT/'docs/index.html')
     public_names={t['name'] for t in public_data['targets']};public_targets={t['name']:t for t in public_data['targets']}
-    original={v[0]:v for v in ORIGINAL_PRIMARY};protected=set(revision['protected']);added=set(revision['promoted'])
+    original={v[0]:v for v in ORIGINAL_PRIMARY};protected=set(revision['protected']);added=set(revision['promoted']);user_pick=bool(revision.get('user_selection'))
     sequence_choices=revision['sequence']
     assert all(v['name'] in public_names for v in sequence_choices)
     names={v['name'] for v in sequence_choices};primaries=[];primary_csv=[];backups=[];backup_csv=[];used_backups=set()
@@ -117,18 +126,20 @@ def build():
         if name in original:question,caution=original[name][2],original[name][3]
         else:
             question=str(science.loc[name].science_question)+'. Compare the broad Balmer profile and its strength with the dated archival spectra.'
-            caution=('Promoted from the backup list for a complete observing window.' if name in protected else
-                     'Added on 2026-09-21 from the reviewed September pool when shorter visits freed time.')+' No confirmed state change is inferred from the manifold position.'
+            caution=(('Chosen by visual inspection of the decision board on 2026-09-21.' if user_pick else 'Promoted from the backup list for a complete observing window.') if name in protected else
+                     'Filled automatically from the reviewed September pool by review score and slot S/N.')+' No confirmed state change is inferred from the manifold position.'
         t=targets.loc[name].to_dict()
-        visit=make_visit(t,plans[name],slots[name],windows[name],start);assert visit,(name,'primary does not fit')
+        visit=make_visit(t,plans[name],slots[name],windows[name],start,require_goal=False);assert visit,(name,'primary does not fit')
         if name in HOST_CONTAMINATED:caution+=' ETC continuum includes host light; AGN-only S/N is lower and has not been estimated.'
+        if visit['plan'].get('below_floor') or not visit['slot'].get('meets_goal',True):caution+=f" Predicted continuum S/N {visit['snr_per_angstrom']:.1f} per Angstrom is below the floor of 5 even with {visit['plan']['exposures']} exposures; a weak broad line will not be constrained."
+        if t['pool_role']=='reserve':caution+=' Comparison reserve: a bright quasar outside the selected manifold regions, observed as a control.'
         tag=f'P{index:02}'
         visit.update(rank=index,role='primary',science_question=question,caution=caution,field_note=FIELD_NOTES.get(name,str(t['field_notes'])),
                      promoted=name not in original,added=name in added,protected=name in protected,host_contaminated=name in HOST_CONTAMINATED,
                      science_value=choice['science_value'],slot_quality=choice['slot_quality'])
         s=science.loc[name];assert pd.isna(s.ztf_r_latest180_mag) or s.ztf_r_latest180_mag<19
         latest_date=max((e['date'] for e in public_targets[name]['epochs']),default='unknown')
-        ref=Time(visit['plan']['reference_mjd'],format='mjd').strftime('%Y-%m-%d')
+        ref='collaboration data' if visit['plan'].get('reference_private') else Time(visit['plan']['reference_mjd'],format='mjd').strftime('%Y-%m-%d')
         comment=(f"PRIMARY {tag}; visit {visit['start_pdt']} to {visit['end_pdt']} PDT; UTC {visit['start_utc']} to {visit['end_utc']}; "
                  f"latest visit start {visit['latest_start_pdt']} PDT; X<={visit['plan']['airmass']}; Moon>={visit['moon_min']:.1f}deg during planned visit; "
                  f"{visit['plan']['exposures']}x{visit['plan']['seconds_each']}s; {setting_text}; model continuum S/N {visit['snr_per_angstrom']:.1f} per Angstrom near Hbeta at X={visit['airmass_mean']:.2f} with moonlit sky V={visit['sky_V']:.1f} and seeing {visit['seeing_arcsec']:.1f}arcsec; "
@@ -189,6 +200,7 @@ def build():
         sky_V=round(v['sky_V'],2) if 'sky_V' in v else np.nan,backups=';'.join(v.get('backups',[]))) for v in sequence]).to_csv(DEST/'sep23_sequence.csv',index=False)
     packet=dict(night='2026-09-23',timezone='PDT (UTC-07:00)',primaries=primaries,backups=backups,sequence=sequence,
         conditional=[],settings=S,reserved=revision['reserved'],promoted=revision['promoted'],protected=revision['protected'],
+        user_selection=revision.get('user_selection'),demoted=revision.get('demoted',[]),waived_rules=revision.get('waived_rules',{}),
         original_primaries=revision['original_primaries'],files=files,full_page='candidate_review_local.html',
         status=f"Fixed {S['exposures']}x{S['seconds_each']}s science sequence with a {S['slit_arcsec']}arcsec slit and {S['binspat']}x{S['binspect']} binning; order set by predicted slot S/N; inspect fields and quicklook data on the night.")
     (DEST/'packet.json').write_text(json.dumps(packet,indent=2))
@@ -224,9 +236,10 @@ def render(packet,source,private):
             t['visit']['backups']=[n for n in t['visit']['backups'] if n in public_names]
     value['packet']=copy.deepcopy(packet)
     if not private:
-        # All primary identities, brightness selections and continuum
-        # references are public. The backup packet can contain internal data.
-        assert all(not wanted[n]['plan'].get('reference_private',False) for n in wanted)
+        # The public page carries cards only for primaries whose identity and continuum
+        # reference are public; private-reference primaries keep their sequence row without a card.
+        hidden={n for n in wanted if wanted[n]['plan'].get('reference_private',False) or n not in public_names}
+        value['targets']=[t for t in value['targets'] if t['name'] not in hidden]
         value['packet']['files']={'sep23_primaries_ngps.csv':packet['files']['sep23_primaries_ngps.csv']}
         value['packet'].pop('backups',None);value['packet'].pop('conditional',None)
     for v in value['packet']['primaries']+value['packet']['sequence']:
@@ -247,14 +260,17 @@ def main():
     packet,local_data,public_data=build()
     if args.fetch_images:images(packet)
     render(packet,local_data,True);render(packet,public_data,False)
-    S=packet['settings'];gaps=packet['reserved']['gaps']
+    S=packet['settings'];gaps=packet['reserved']['gaps'];revision_demoted=packet.get('demoted',[])
     gap_text=', '.join(f"{g['start_pdt'][11:]}-{g['end_pdt'][11:]} PDT ({g['minutes']} min)" for g in gaps) or 'none'
     added=', '.join(packet['promoted']) or 'none'
+    deeper=[v for v in packet['primaries'] if v['plan']['exposures']!=S['exposures']]
+    deeper_text=('; '+', '.join(f"{v['name']} {v['plan']['exposures']}x{S['seconds_each']} s ({v['plan']['visit_minutes']} min)" for v in deeper)+' for depth') if deeper else ''
     report=(f"# September 23 observing packet\n\n{len(packet['primaries'])} science primaries in observing order, all with one instrument setting: "
-            f"{S['slit_arcsec']}arcsec slit, {S['binspat']}x{S['binspect']} binning (spatial x spectral), {S['exposures']}x{S['seconds_each']}-second exposures. "
-            f"Each visit is {S['visit_minutes']} minutes: {S['exposures']*S['seconds_each']//60} minutes of integration plus {S['overhead_minutes']} minutes for slew, acquisition and the readout between exposures. "
+            f"{S['slit_arcsec']}arcsec slit, {S['binspat']}x{S['binspect']} binning (spatial x spectral), {S['exposures']}x{S['seconds_each']}-second exposures{deeper_text}. "
+            f"A standard visit is {S['visit_minutes']} minutes: {S['exposures']*S['seconds_each']//60} minutes of integration plus {S['overhead_minutes']} minutes for slew, acquisition and the readout between exposures. "
             f"Two ten-minute standard visits bookend the sequence. Unscheduled time inside the science block: {gap_text}; total {packet['reserved']['minutes']} minutes. It absorbs delays or takes a backup and is not a target row.\n\n")
-    report+=(f"Protected from the previous packet: {', '.join(packet['protected'])}. Added on 2026-09-21 to use the shorter visits: {added}. "
+    chosen_text=(f"Primaries chosen by the PI from the decision board on 2026-09-21: {', '.join(packet['protected'])}. Filled automatically: {added}. Demoted to backups from the previous packet: {', '.join(revision_demoted) or 'none'}. " if packet.get('user_selection') else f"Protected from the previous packet: {', '.join(packet['protected'])}. Added on 2026-09-21 to use the shorter visits: {added}. ")
+    report+=(chosen_text+
              "The order comes from an integer program that maximises each target's predicted continuum S/N per Angstrom near observed Hbeta in its slot, so airmass, Moon distance and visibility enter through one physical quantity. "
              "Every eligible target's S/N in every candidate slot is in snr5_slot_table.csv.\n\n")
     report+=(f"ETC assumptions: official NGPS ETC, single slit, optimal point-source extraction, May 2026 read noise and plate scales; archival local Hbeta continuum brightness; "

@@ -35,7 +35,8 @@ class SeptemberPacketTests(unittest.TestCase):
         self.assertEqual(len(names), len(set(names)))
         self.assertGreaterEqual(len(names), len(self.plan['protected']))
         self.assertTrue(set(self.plan['protected']) <= set(names))
-        self.assertTrue(set(self.plan['original_primaries']) <= set(self.plan['protected']))
+        if not self.plan.get('user_selection'):
+            self.assertTrue(set(self.plan['original_primaries']) <= set(self.plan['protected']))
         self.assertEqual(set(names)-set(self.plan['protected']), set(p['promoted']))
         self.assertEqual(S['goal_snr'], 5)
         self.assertEqual((S['slit_arcsec'], S['binspat'], S['binspect']), (1.5, 2, 3))
@@ -54,13 +55,17 @@ class SeptemberPacketTests(unittest.TestCase):
                 self.assertIn('AGN-only S/N is lower', v['caution'])
         self.assertEqual([v['plan']['seconds_each'] for v in p['sequence'] if v['role'] == 'standard'], [30, 5])
         for v in p['primaries']+p['backups']:
-            self.assertEqual(v['plan']['exposures'], S['exposures'])
+            n = v['plan']['exposures']
+            self.assertIn(n, (2, 3, 4))
             self.assertEqual(v['plan']['seconds_each'], S['seconds_each'])
-            self.assertEqual(v['plan']['visit_minutes'], S['visit_minutes'])
-            self.assertGreaterEqual(v['snr_per_angstrom'], S['goal_snr']-0.01)
+            self.assertEqual(v['plan']['visit_minutes'], int(n*S['seconds_each']/60+(n-1)*S['readout_minutes']+S['overhead_minutes']))
+            if v['role'] == 'backup' or v['name'] not in self.plan['protected']:
+                self.assertGreaterEqual(v['snr_per_angstrom'], S['goal_snr']-0.01)
+            else:
+                self.assertIn('S/N', v['caution']) if v['snr_per_angstrom'] < S['goal_snr'] else None
             self.assertLessEqual(v['airmass_max_actual'], v['plan']['airmass']+1e-6)
             self.assertGreaterEqual(v['moon_min'], S['moon_min_deg']-1e-6)
-            self.assertGreaterEqual(v['plan']['visit_minutes'], S['exposures']*S['seconds_each']/60+S['overhead_minutes'])
+            self.assertGreaterEqual(v['plan']['visit_minutes'], n*S['seconds_each']/60+S['overhead_minutes'])
 
     def test_order_matches_the_plan_and_slot_table(self):
         table = pd.read_csv(DEST/'snr5_slot_table.csv')
@@ -70,7 +75,8 @@ class SeptemberPacketTests(unittest.TestCase):
             row = table[(table.name == v['name']) & (table.start_pdt == v['start_pdt'])]
             self.assertEqual(len(row), 1)
             self.assertAlmostEqual(float(row.snr_per_angstrom.iloc[0]), v['snr_per_angstrom'], places=6)
-            self.assertTrue(bool(row.meets_goal.iloc[0]))
+            if v['name'] not in self.plan['protected']:
+                self.assertTrue(bool(row.meets_goal.iloc[0]))
         starts = [pd.Timestamp(v['start_pdt']) for v in self.packet['primaries']]
         self.assertEqual(starts, sorted(starts))
 
@@ -118,7 +124,8 @@ class SeptemberPacketTests(unittest.TestCase):
         public_targets = {t['name']: t for t in public_source['targets']}
         for path, private in [(ROOT/'docs/sep23_primaries.html', False), (DEST/'sep23_primaries_local.html', True)]:
             page = payload(path, 'primary-data')
-            self.assertEqual([t['name'] for t in page['targets']], [v['name'] for v in self.packet['primaries']])
+            expected_names = [v['name'] for v in self.packet['primaries'] if private or (not v['plan'].get('reference_private') and v['name'] in public_targets)]
+            self.assertEqual([t['name'] for t in page['targets']], expected_names)
             self.assertEqual(page['packet']['settings']['slit_arcsec'], self.packet['settings']['slit_arcsec'])
             expected = ['sep23_primaries_ngps.csv']+(['sep23_backups_ngps.csv'] if private else [])
             self.assertEqual(set(page['packet']['files']), set(expected))
