@@ -1,5 +1,5 @@
 # Public observing website
 
-- [Observer page](index.html) — the single page: candidate pool for all three nights, the September 23 sequence with timeline, table and CSV download, and how the run is observed.
+- [Observer page](index.html) — the single page for the run, public copy: About this run (setting, calibrations, standards, procedure, science aim), the September 23 sequence with timeline, table and primary CSV, and the candidate pool for all three nights with visibility charts, summary table and one card per target (geometry, light curves, public spectra, image, manifold position).
 
-This directory remains the GitHub Pages publishing source. The generator is `scripts/16_candidate_webpage.py`; the template is `web/candidate_review_template.html`. The local collaboration copy with complete spectra and the backup CSV is `data/reselection_2026-09-20/candidate_review_local.html`. Regenerating does not commit or push.
+Generator: `scripts/51_observer_page.py`, template `web/observer_page_template.html`, data from `scripts/16_candidate_webpage.py` (payload JSON) and the September packet from `scripts/40_september_observing_packet.py`. The local collaboration copy with complete spectra and the backup CSV is `data/reselection_2026-09-20/observer_page_local.html`. Regenerating does not commit or push.

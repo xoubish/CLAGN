@@ -330,8 +330,8 @@ def main():
         public_payload['nights'][night]['count']=sum(any(w['night']==night for w in t['nights']) for t in public_payload['targets'])
     page=html_for(public_payload)
     assert 'proprietary' not in page and 'SDSS-V internal' not in page
-    for path in [ROOT/'docs/index.html',ROOT/'web/clagn_night_sheet.html']:
-        path.write_text(page)
+    # Pages retired 2026-09-21: this script now supplies data; 51_observer_page.py renders the single page.
+    (OUT/'candidate_review_public_legacy.html').write_text(page)
     # Complete metadata remains in the ignored local research directory.
     private=json.loads(json.dumps(payload))
     private['access']='collaboration'
@@ -357,7 +357,7 @@ def main():
         if target['name'] in science:
             target['science']=science[target['name']]
         reconcile_spectral_dates(target)
-    (OUT/'candidate_review_local.html').write_text(html_for(private))
+    (OUT/'candidate_review_local.html').write_text(html_for(private))  # legacy light explorer, kept for the science-review links
     (OUT/'candidate_payload_local.json').write_text(json.dumps(native(private),separators=(',',':'),allow_nan=False))
     (OUT/'candidate_payload_public.json').write_text(json.dumps(native(public_payload),separators=(',',':'),allow_nan=False))
     public_items=public_payload['targets']

@@ -10,7 +10,8 @@ Run scripts from the project root, using `python scripts/<filename>.py`. Numbere
 | `05`, `23`, `24`, `33`, `39` | Geometry, neighbour screening, prepared lists, and airmass windows with per-tier S/N for the adopted 16-minute visit (`39`). |
 | `15f`, `17`–`19`, `28`, `29`, `35`, `38` | Spectral inventories, archive retrieval, imaging, ZTF, and acquisition audits. |
 | `22`, `27`, `30`, `31` | NGPS ETC, Hβ sensitivity (legacy 2×600 s columns feed the frozen review score; `snr300_*` columns give S/N per Å for the adopted 1.5″ / 2×3 / 2×300 s setting), dated evidence, and three-night review. |
-| `16_candidate_webpage.py` | Build the single observer page (public `docs/index.html` and the local collaboration copy): candidate pool, September sequence, run information; embeds the packet from `40`. |
+| `16_candidate_webpage.py` | Assemble the candidate data payloads (`candidate_payload_local.json`, `candidate_payload_public.json`) with spectra, light curves, geometry, plans and the September packet; also writes the legacy light explorer locally. |
+| `51_observer_page.py` | Render the single observer page from those payloads in the dark night-sheet template: `docs/index.html` (public) and `data/reselection_2026-09-20/observer_page_local.html` (local). |
 | `40_september_observing_packet.py` | Build the September sequence packet: NGPS CSVs, backups, timing, README and run information (pages retired 2026-09-21; run `16` afterwards). |
 | `41_september_snr5_plan.py` | One instrument setting for all science targets (1.5″ slit, 2×3 binning, 2×300 s); ETC screen for continuum S/N≥5 per Å with airmass-scaled seeing and a moonlit-sky model per slot; integer-program order that maximises slot S/N (airmass, Moon distance, visibility); protects the eleven previous primaries and fills 16-minute visits from the reviewed pool. |
 | `42_science_reselection.py` | Separate projected-parent inventory and dated evidence review; no protected primaries and no telescope-packet writes. |
@@ -21,8 +22,8 @@ Run scripts from the project root, using `python scripts/<filename>.py`. Numbere
 Typical commands from the project root:
 
 ```sh
-# Rebuild the explorer from prepared tables.
-/opt/anaconda3/bin/python scripts/16_candidate_webpage.py
+# Rebuild the observer page from prepared tables and the current packet.
+/opt/anaconda3/bin/python scripts/16_candidate_webpage.py && /opt/anaconda3/bin/python scripts/51_observer_page.py
 
 # Deliberately recalculate the September S/N screen, promotions and geometry-optimised order.
 /opt/anaconda3/bin/python scripts/41_september_snr5_plan.py

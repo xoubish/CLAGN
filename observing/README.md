@@ -10,7 +10,7 @@ This review reopens the projected parent without protecting previous primaries. 
 
 ## September 23, 2026 — first half-night
 
-- **[Observer page](../data/reselection_2026-09-20/candidate_review_local.html)** — the single page for the run: About this run (setting, calibrations, standards, procedure, science aim), the September 23 sequence with timeline, table, per-slot backups and CSV downloads, and the candidate pool for all three nights with light curves, spectra, geometry and images. Local copy with complete spectra; the public copy is `docs/index.html`.
+- **[Observer page](../data/reselection_2026-09-20/observer_page_local.html)** — the single page for the run (dark night-sheet style): About this run, the September 23 sequence with timeline, table, per-slot backups and CSV downloads, and the candidate pool for all three nights with visibility charts, summary table and one card per target (geometry per night, light curves, complete spectra, 40″ image, manifold). Local copy with collaboration data; the public copy is `docs/index.html`. Rebuild: `40` → `16` → `51`.
 - **[NGPS primary CSV](sep23_primaries_ngps.csv)** — 14 science targets plus two standards, in observing order.
 - **[NGPS backup CSV](sep23_backups_ngps.csv)** — up to three replacement choices per primary slot. Names can recur for different slots; use the matching row and skip objects already observed. Do not run the whole backup list.
 - [Detailed timing CSV](sep23/sep23_sequence.csv) · [Per-slot S/N table](sep23/snr5_slot_table.csv) · [Packet notes](sep23/README.md) · [Selection record](sep23/user_selection.json)

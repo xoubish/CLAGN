@@ -121,7 +121,7 @@ class SeptemberPacketTests(unittest.TestCase):
         def payload(path):
             return json.loads(re.search(r'<script id="candidate-data" type="application/json">(.*?)</script>', path.read_text(), re.S).group(1))
         primaries = self.packet['primaries']
-        for path, private in [(ROOT/'docs/index.html', False), (ROOT/'data/reselection_2026-09-20/candidate_review_local.html', True)]:
+        for path, private in [(ROOT/'docs/index.html', False), (ROOT/'data/reselection_2026-09-20/observer_page_local.html', True)]:
             page = payload(path)
             public_names = {t['name'] for t in payload(ROOT/'docs/index.html')['targets']}
             expected = {v['name'] for v in primaries if private or (not v['plan'].get('reference_private') and v['name'] in public_names)}
@@ -140,6 +140,7 @@ class SeptemberPacketTests(unittest.TestCase):
             self.assertEqual(len(page['sequence_rows']), len(self.packet['sequence']))
             self.assertEqual(page['decisions']['setting']['slit_arcsec'], self.packet['settings']['slit_arcsec'])
             self.assertTrue(page['run']['nights'] and page['run']['calibrations'] and page['run']['procedure'])
+            self.assertEqual([t['code'] for t in page['targets']], [f'{i:03d}' for i in range(1, len(page['targets'])+1)])
         for name in ['sep23_primaries_ngps.csv', 'sep23_backups_ngps.csv']:
             self.assertEqual((ROOT/'observing'/name).resolve(), (DEST/name).resolve())
 
