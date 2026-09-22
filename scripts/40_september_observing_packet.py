@@ -272,11 +272,9 @@ def build():
                    'Ahead of schedule or a target fails acquisition: take the backup listed for that slot from the backup CSV (same setting, same start time); skip names already observed.',
                    'Quicklook writes spec1d and spec2d under the reduced-data directory within tens of seconds; look at Hbeta (and Halpha where in range) against the archival spectrum on the card before moving on. An ambiguous faint broad line needs deeper data; only add an exposure after checking the remaining schedule and acquisition/readout time.'],
         data=['Import Quicklook CSVs with scripts/12_ngps_ingest.py and supply --mjd for the exposure epoch. It screens EW changes; it cannot classify a broad-line transition. Run scripts/16_candidate_webpage.py then scripts/51_observer_page.py to show new spectra on the local page.',
-              'Record start time, seeing, sky and any deviation from the sequence in the observing log; the Comment column is copied into the NGPS log automatically.'],
-        science=['Goal: test whether quasars selected by their WISE W1 light-curve shape on the manifold of Hemmati et al. (2026) are changing-look candidates, by comparing a new Palomar spectrum with the dated archival SDSS and DESI spectra on each card.',
-                 'What a spectrum tells us: whether broad Hbeta (and Halpha where in range) has weakened, vanished or appeared relative to the archival epochs, and whether the continuum has changed. Equivalent width is the calibration-robust quantity; absolute flux depends on aperture and night.',
-                 f"The sequence retains {len(protected)} PI choices and {len(added)} automatic fills from {revision['pool']['september_eligible']} prepared September candidates ({revision['pool']['with_slots']} with full planner slots); three primaries are comparison controls. Other candidates require a feasible slot and sensitivity review before observation.",
-                 'A non-detection of a faint broad line at S/N 5 per Angstrom is not a turn-off; count inadequate spectra as unclassified.'])
+              'Record start time, seeing, sky and any deviation from the sequence in the observing log; the Comment column is copied into the NGPS log automatically.'])
+    # The science text of the observer page lives in web/observer_page_template.html (fillAbout), where it can
+    # quote the live pool and sequence counts; the packet carries only the run logistics.
     packet=dict(night='2026-09-23',timezone='PDT (UTC-07:00)',run=run,primaries=primaries,backups=backups,sequence=sequence,
         conditional=[],settings=S,reserved=revision['reserved'],promoted=revision['promoted'],protected=revision['protected'],
         user_selection=revision.get('user_selection'),demoted=revision.get('demoted',[]),waived_rules=revision.get('waived_rules',{}),
