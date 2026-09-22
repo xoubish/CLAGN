@@ -102,6 +102,10 @@ def main():
         public_science[t['name']] = {k: (None if isinstance(v, float) and v != v else v) for k, v in keep.items()}
     for source, dest, private in [(OUT/'candidate_payload_local.json', DEST_LOCAL, True), (OUT/'candidate_payload_public.json', DEST_PUBLIC, False)]:
         payload = prepare(json.loads(source.read_text()), slots if private else public_slots, None if private else public_plans, None if private else public_science)
+        if private:
+            # Full-pool lists (52_pool_csv.py) as extra downloads on the local copy only: they include private-identity targets.
+            for pool in sorted((ROOT/'observing/pool').glob('ngps_pool_*.csv')):
+                payload['files'][pool.name] = pool.read_text()
         encoded = json.dumps(payload, separators=(',', ':'), allow_nan=False).replace('<', '\\u003c')
         page = template.replace('__PAYLOAD__', encoded).replace('__CHART_FUNCTIONS__', charts)
         if not private:
