@@ -155,12 +155,12 @@ def build():
             ss=science.loc[n]
             if pd.notna(ss.ztf_r_latest180_mag) and ss.ztf_r_latest180_mag>=19:continue
             v=make_visit(other,plans.get(n,{}),slots[n],windows.get(n,{}),start)
-            if not v:continue
+            if not v or v['plan']['visit_minutes'] > visit['plan']['visit_minutes'] or other['field_status'] != 'clear':continue
             score=float(ss.review_order_score)+5*bool(other['balmer_pair_in_range'])+5*float(other['manifold_cl_neighbor_fraction'])
             score-=1000 if other['pool_role']=='reserve' else 0
             score-=3 if v['tier']=='extended' else 0
             choices.append((score,n,v,other,ss))
-        choices.sort(key=lambda x:(x[1] in used_backups,-x[0],x[1]));assert len(choices)>=1,(tag,'no alternative fits the slot')
+        choices.sort(key=lambda x:(x[3]['pool_role']!='manifold',-x[0],x[1] in used_backups,x[1]));assert len(choices)>=1,(tag,'no alternative fits the slot')
         chosen=choices[:3]
         visit['backups']=[n for _,n,_,_,_ in chosen]
         for rank,(_,n,v,other,ss) in enumerate(chosen,1):
@@ -195,6 +195,12 @@ def build():
     assert Time(sequence[0]['start_utc'])>=t0 and Time(sequence[-1]['end_utc'])<=t1
     all_csv=[std_csv[0],*primary_csv,std_csv[1]]
     files={'sep23_primaries_ngps.csv':csv_text(all_csv),'sep23_backups_ngps.csv':csv_text(backup_csv)}
+    public_csv=copy.deepcopy(all_csv)
+    private_names={v['name'] for v in primaries if v['plan'].get('reference_private')}
+    for row in public_csv:
+        if row['name'] in private_names:
+            row['Comment']=re.sub(r'model continuum S/N .*?; ', 'Continuum estimate available on local page; ', row['Comment'])
+    public_files={'sep23_primaries_ngps.csv':csv_text(public_csv)}
     for filename,text in files.items():(DEST/filename).write_text(text,encoding='ascii')
     pd.DataFrame([dict(name=v['name'],role=v['role'],start_pdt=v['start_pdt'],end_pdt=v['end_pdt'],
         start_utc=v['start_utc'],end_utc=v['end_utc'],exposures=v['plan']['exposures'],seconds_each=v['plan']['seconds_each'],
@@ -229,18 +235,18 @@ def build():
                    'Standards: take the first exposure, check counts in the Quicklook spatial-profile display in all four channels (at least about 1,000, preferably about 10,000, below about 40,000), then repeat or adjust.',
                    'Behind schedule: drop the last automatic fill first (P9506, then P9227), never a PI choice; the packed sequence has an 8-minute buffer before the closing standard at 00:28.',
                    'Ahead of schedule or a target fails acquisition: take the backup listed for that slot from the backup CSV (same setting, same start time); skip names already observed.',
-                   'Quicklook writes spec1d and spec2d under the reduced-data directory within tens of seconds; look at Hbeta (and Halpha where in range) against the archival spectrum on the card before moving on. An ambiguous faint broad line earns a third 300 s exposure, not a new setting.'],
-        data=['Save Quicklook spec1d CSVs per target as data/ngps_spectra/<name>.csv (wave_A, flux); scripts/12_ngps_ingest.py compares them with the archival epochs and prints a turn-on/off verdict.',
+                   'Quicklook writes spec1d and spec2d under the reduced-data directory within tens of seconds; look at Hbeta (and Halpha where in range) against the archival spectrum on the card before moving on. An ambiguous faint broad line needs deeper data; only add an exposure after checking the remaining schedule and acquisition/readout time.'],
+        data=['Import Quicklook CSVs with scripts/12_ngps_ingest.py and supply --mjd for the exposure epoch. It screens EW changes; it cannot classify a broad-line transition. Run scripts/16_candidate_webpage.py then scripts/51_observer_page.py to show new spectra on the local page.',
               'Record start time, seeing, sky and any deviation from the sequence in the observing log; the Comment column is copied into the NGPS log automatically.'],
         science=['Goal: test whether quasars selected by their WISE W1 light-curve shape on the manifold of Hemmati et al. (2026) are changing-look candidates, by comparing a new Palomar spectrum with the dated archival SDSS and DESI spectra on each card.',
                  'What a spectrum tells us: whether broad Hbeta (and Halpha where in range) has weakened, vanished or appeared relative to the archival epochs, and whether the continuum has changed. Equivalent width is the calibration-robust quantity; absolute flux depends on aperture and night.',
-                 'Primaries were chosen by the PI from all 85 observable candidates on 2026-09-21; three are bright comparison reserves outside the selected manifold regions, observed as controls. Everything else observable is a backup.',
+                 f"The sequence retains {len(protected)} PI choices and {len(added)} automatic fills from {revision['pool']['september_eligible']} prepared September candidates ({revision['pool']['with_slots']} with full planner slots); three primaries are comparison controls. Other candidates require a feasible slot and sensitivity review before observation.",
                  'A non-detection of a faint broad line at S/N 5 per Angstrom is not a turn-off; count inadequate spectra as unclassified.'])
     packet=dict(night='2026-09-23',timezone='PDT (UTC-07:00)',run=run,primaries=primaries,backups=backups,sequence=sequence,
         conditional=[],settings=S,reserved=revision['reserved'],promoted=revision['promoted'],protected=revision['protected'],
         user_selection=revision.get('user_selection'),demoted=revision.get('demoted',[]),waived_rules=revision.get('waived_rules',{}),
-        original_primaries=revision['original_primaries'],files=files,full_page='candidate_review_local.html',
-        status=f"Fixed {S['exposures']}x{S['seconds_each']}s science sequence with a {S['slit_arcsec']}arcsec slit and {S['binspat']}x{S['binspect']} binning; order set by predicted slot S/N; inspect fields and quicklook data on the night.")
+        original_primaries=revision['original_primaries'],files=files,public_files=public_files,full_page='observer_page_local.html',
+        status=f"Fixed {S['exposures']}x{S['seconds_each']}s science sequence with a {S['slit_arcsec']}arcsec slit and {S['binspat']}x{S['binspect']} binning; existing order preserved and revalidated with corrected slot S/N; inspect fields and quicklook data on the night.")
     (DEST/'packet.json').write_text(json.dumps(packet,indent=2))
     print(pd.read_csv(DEST/'sep23_sequence.csv').to_string(index=False),flush=True)
     print('Backups',len(backups),'unique',len(used_backups),flush=True)

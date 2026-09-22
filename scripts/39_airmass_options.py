@@ -32,7 +32,7 @@ def exposure(target):
     ref=model.reference(target)
     if ref is None: return target['name'], {}
     mjd,mag,private,flux=ref
-    signature=hashlib.sha256(json.dumps([target['z'],ref,'adopted-2x300-slit1.5-2x3-seeingX0.6-sky18.5-v1']).encode()).hexdigest()
+    signature=hashlib.sha256(json.dumps([target['z'],ref,'adopted-2x300-slit1.5-2x3-zenith-seeing-sky18.5-v2']).encode()).hexdigest()
     cache=OUT/'airmass_exposure_cache';cache.mkdir(exist_ok=True)
     path=cache/f"{target['name']}.json"
     if path.exists():
@@ -53,7 +53,7 @@ def exposure(target):
         # Report the predicted continuum S/N per Angstrom at the tier's airmass ceiling with
         # seeing 1.3 arcsec at zenith scaled by airmass^0.6 and sky V=18.5.
         cmd=[ch,str(wave-4),str(wave+4),'EXPTIME','300',
-             '-slit','SET','1.5','-binspect','3','-binspat','2','-seeing',f'{1.3*x**0.6:.3f}','500',
+             '-slit','SET','1.5','-binspect','3','-binspat','2','-seeing','1.3','500',
              '-airmass',str(x),'-skymag','18.5','-mag',str(mag),
              '-magsystem','AB','-magfilter','match','-noslicer']
         args=model.ETC.parser.parse_args(cmd);model.ETC.check_inputs_add_units(args)

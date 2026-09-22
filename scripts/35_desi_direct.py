@@ -1,3 +1,4 @@
+from spectral_utils import bin_indices
 """Retrieve individual DESI DR1 coadds directly when SPARCL is unavailable.
 
 HTTP range access reads only the target's rows. Preserve native band spectra,
@@ -55,11 +56,11 @@ def one(item,attempt=0):
                     ivar=np.asarray(h[band+'_IVAR'].data[0],float);mask=np.asarray(h[band+'_MASK'].data[0])
                     waves.append(wave);fluxes.append(flux);weights.append(np.where((mask==0)&np.isfinite(flux),ivar,0))
             wave=np.concatenate(waves);flux=np.concatenate(fluxes);weight=np.concatenate(weights)
-            idx=np.searchsorted(PARSE.GRID,wave)-1;rebinned=np.full(len(PARSE.GRID),np.nan)
+            idx=bin_indices(PARSE.GRID,wave);rebinned=np.full(len(PARSE.GRID),np.nan)
             for i in np.unique(idx[(idx>=0)&(idx<len(rebinned))]):
                 valid=(idx==i)&(weight>0)
                 if valid.any():rebinned[i]=np.average(flux[valid],weights=weight[valid])
-            record=NATIVE(dict(wave=PARSE.GRID.tolist(),flux=rebinned.tolist(),source='DESI',coadd=True,proprietary=False,
+            record=NATIVE(dict(grid_version=2, wave=PARSE.GRID.tolist(),flux=rebinned.tolist(),source='DESI',coadd=True,proprietary=False,
                 mjd=float(e.mjd),min_mjd=float(e.min_mjd),max_mjd=float(e.max_mjd),coadd_numnight=int(e.coadd_numnight),survey=str(e.survey),program=str(e.program),
                 url=url,archive_file=url,date_verified=True,metadata_quality_ok=bool(e.zwarning==0),lines={},ew={},
                 meta={'class':str(e.spectral_class),'z':float(e.z),'specid':str(e.targetid),'zwarning':int(e.zwarning)}))

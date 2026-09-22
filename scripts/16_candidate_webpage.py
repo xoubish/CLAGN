@@ -47,30 +47,13 @@ def local(t):
 
 def spectrum_payload(records):
     """All available daily epochs, with date-only labels and no hidden epoch cap."""
-    best={}
-    for record in records:
-        if record.get('coadd') and record.get('source','SDSS')!='DESI':
-            continue  # All-epoch stacks reuse daily data and lack a single epoch.
-        wave=record.get('wave',[]);flux=record.get('flux',[])
-        if len(wave)!=len(flux) or sum(v is not None and np.isfinite(v) for v in flux)<20:
-            continue
-        mjd=record.get('mjd')
-        dated=mjd is not None and np.isfinite(mjd) and mjd>40000
-        day=int(np.floor(mjd)) if dated else None
-        key=(record.get('source','SDSS'),day)
-        if record.get('source')=='DESI' and record.get('date_verified'):
-            key+=(str(record.get('meta',{}).get('specid')),record.get('survey'),record.get('program'))
-        # Prefer the explicit current reduction when a cached older daily record
-        # represents the same source and night; never count it as a new epoch.
-        def quality(r):
-            sn=r.get('sn_median_all',r.get('meta',{}).get('sn_median_all'))
-            return (r.get('archive_version')=='master',r.get('run2d')=='v6_2_1',r.get('metadata_quality_ok') is not False,float(sn) if sn is not None and np.isfinite(sn) else -1)
-        if key not in best or quality(record)>quality(best[key]):best[key]=record
+    from spectral_utils import selected_records
     epochs=[]
-    for key,r in sorted(best.items(),key=lambda p:(p[0][1] is None,p[0][1] or 0,p[0][0])):
-        day=key[1]
+    for r in selected_records(records):
+        mjd=r.get('mjd')
+        day=int(np.floor(mjd)) if mjd is not None and np.isfinite(mjd) and mjd>40000 else None
         date=Time(day,format='mjd').strftime('%Y-%m-%d') if day is not None else 'Date unavailable'
-        label=date
+        label=('NGPS · ' if r.get('source')=='NGPS' else '')+date
         if r.get('coadd') and r.get('min_mjd') is not None and r.get('max_mjd') is not None:
             lo,hi=(Time(r[k],format='mjd').strftime('%Y-%m-%d') for k in ['min_mjd','max_mjd'])
             if lo!=hi:label=lo+'–'+hi
@@ -96,18 +79,18 @@ def reconcile_spectral_dates(target):
     target['n_spec_available_dates']=len(plotted)
 
 
-def review_ztf(name):
+def review_ztf(name, bin_days=7):
     """Use the refreshed curve, with explicit query/coverage status and dates."""
     tag='review_dr24_20260920'
     path=DATA/'ztf_cache'/tag/f'{name}.json'
     info=json.loads(path.read_text()) if path.exists() else {}
     if info.get('status') in ['available','no usable photometry']:
-        series=OLD.ztf_series(name,tags=(tag,)) if info['status']=='available' else {}
+        series=OLD.ztf_series(name,tags=(tag,),bin_days=bin_days) if info['status']=='available' else {}
         meta={key:info.get(key) for key in ['status','collection','queried_utc','n_g','n_r','association_warning']}
         first,last=info.get('first_mjd'),info.get('last_mjd')
     else:
         # An empty cache in one old directory must not hide a valid later cache.
-        options=[(old,OLD.ztf_series(name,tags=(old,))) for old in ['pool','v2','calib','zeltyn']]
+        options=[(old,OLD.ztf_series(name,tags=(old,),bin_days=bin_days)) for old in ['pool','v2','calib','zeltyn']]
         old,series=max(options,key=lambda item:sum(len(v) for v in item[1].values()))
         first=last=None
         if series:
@@ -246,6 +229,12 @@ def main():
             spec=spectrum_payload([v for v in records if not v.get('proprietary')])
         internal=OUT/'sdssv_spectra'/f'{name}.json'
         if internal.exists():records+=json.loads(internal.read_text())
+        ngps=DATA/'ngps_spectra'/f'{name}.csv'
+        if ngps.exists():
+            frame=pd.read_csv(ngps)
+            metadata=json.loads(ngps.with_suffix('.json').read_text()) if ngps.with_suffix('.json').exists() else {}
+            records.append(dict(source='NGPS', mjd=metadata.get('mjd'), grid_version=metadata.get('grid_version'),
+                                wave=frame.wave_A.tolist(), flux=frame.flux.tolist()))
         all_records[name]=records
         cut=None
         for kind in ['sdss_wide','sdss','ps1_r','ps1_g']:
@@ -281,7 +270,7 @@ def main():
             pool_role=getattr(r,'pool_role','manifold'),prepared_nights=str(getattr(r,'prepared_for_nights','')).split(','),field_status=field_status,neighbour_screen=screen,
             spec=spec,cut=cut,image_status=image_status.get(name,{}).get('status','not fetched'),
             lines=[dict(name=n,angstrom=round(w*(1+r.z),1),inrange=bool(3050<=w*(1+r.z)<=10400))
-                                 for n,w in [('Hβ',4861.33),('[O III]',5006.84),('Hα',6562.8)] ]))
+                                 for n,w in [('Hβ',4862.68),('[O III]',5008.24),('Hα',6564.61)] ]))
         reconcile_spectral_dates(items[-1])
     # Current observing decisions shown on the page: the chosen September sequence, the parent-search state.
     packet_path=ROOT/'observing/sep23/packet.json'
@@ -297,7 +286,12 @@ def main():
                                  host_contaminated=v.get('host_contaminated',False),private_reference=bool(v['plan'].get('reference_private',False)),
                                  role=('PI choice' if v.get('protected') else 'auto fill'),cut40=cut40(v['name']))
                   for v in (packet or {}).get('primaries',[])}
-    sequence_public={n:v for n,v in sequence_all.items() if not v['private_reference'] and n in public_names}
+    sequence_public={n:dict(v) for n,v in sequence_all.items() if n in public_names}
+    for v in sequence_public.values():
+        if v['private_reference']:
+            v['snr_per_angstrom']=None
+            v['science_question']='Compare the new spectrum with the archival epochs; reference assessment is on the local page.'
+            v['caution']='Private-reference sensitivity is available on the local page. A weak broad-line non-detection remains unclassified.' 
     status_path=OUT/'completion_pipeline_status.json'
     pipeline=json.loads(status_path.read_text()) if status_path.exists() else {}
     parent_search=dict(stage=pipeline.get('stage',''),updated_utc=pipeline.get('updated_utc',''),detail=pipeline.get('detail',''))
@@ -308,10 +302,11 @@ def main():
                         exposures=v['plan']['exposures'],seconds_each=v['plan']['seconds_each'],airmass_max=v['airmass_max_actual'],moon_min=v['moon_min'],
                         snr_per_angstrom=v.get('snr_per_angstrom'),public=(v['role']=='standard' or (v['name'] in public_names and not v['plan'].get('reference_private',False))))
                    for v in (packet or {}).get('sequence',[])]
-    files_public={'sep23_primaries_ngps.csv':(packet or {}).get('files',{}).get('sep23_primaries_ngps.csv','')}
+    files_public={'sep23_primaries_ngps.csv':(packet or {}).get('public_files',{}).get('sep23_primaries_ngps.csv','')}
+    public_sequence_rows=[dict(v, snr_per_angstrom=(v['snr_per_angstrom'] if v['public'] else None)) for v in sequence_rows]
     payload=native(dict(version=SELECTION['version'],selection=SELECTION,generated=datetime.now(timezone.utc).isoformat(),
                         sep23_sequence=sequence_public,decisions=decisions,parent_search=parent_search,
-                        run=(packet or {}).get('run',{}),sequence_rows=sequence_rows,reserved=(packet or {}).get('reserved',{}),files=files_public,backups=[],
+                        run=(packet or {}).get('run',{}),sequence_rows=public_sequence_rows,reserved=(packet or {}).get('reserved',{}),files=files_public,backups=[],
                        access='public',nights=nights,manifold=manifold,targets=items))
     # Reuse the existing calibrated display units and light-curve/spectrum renderers.
     charts=OLD.TEMPLATE[OLD.TEMPLATE.index('function mjdToYear'):OLD.TEMPLATE.index('/* ---------- manifold thumbnail')]
@@ -335,6 +330,7 @@ def main():
     # Complete metadata remains in the ignored local research directory.
     private=json.loads(json.dumps(payload))
     private['access']='collaboration'
+    private['sequence_rows']=native(sequence_rows)
     private['sep23_sequence']=native(sequence_all)
     private['files']=native((packet or {}).get('files',{}))
     private['backups']=native([dict(name=b['name'],replaces=b['replaces'],backup_rank=b['backup_rank'],start_pdt=b['start_pdt'],pool_role=b.get('pool_role'),

@@ -1,3 +1,4 @@
+from spectral_utils import bin_indices
 """
 03d_fetch_spectra.py  --  download the archival SDSS spectra (all epochs, SDSS-I..V) for the listed targets and extract
 a compact spectral history.
@@ -57,7 +58,7 @@ def parse(path):
     lam = 10 ** d['loglam']; flux = d['flux'].astype(float); ivar = d['ivar'].astype(float)
     good = ivar > 0
     # median-rebin onto a fixed 6 Å grid (compact, enough for broad lines)
-    idx = np.searchsorted(GRID, lam) - 1
+    idx = bin_indices(GRID, lam)
     fb = np.full(len(GRID), np.nan); ok = np.zeros(len(GRID))
     for i in np.unique(idx[(idx >= 0) & (idx < len(GRID))]):
         m = (idx == i) & good
@@ -98,7 +99,7 @@ def parse(path):
             if abs(zl['LINEWAVE'][j] - w0) < 3:
                 lines[nm] = dict(area=col('LINEAREA', j), area_err=col('LINEAREA_ERR', j), ew=col('LINEEW', j), ew_err=col('LINEEW_ERR', j),
                                  sigma=col('LINESIGMA', j), cont=col('LINECONTLEVEL', j), npix=int(col('LINENPIX', j, 0)))
-    return dict(wave=[round(float(x), 1) for x in GRID], flux=[None if np.isnan(v) else round(float(v), 3) for v in fb],
+    return dict(grid_version=2, wave=[round(float(x), 1) for x in GRID], flux=[None if np.isnan(v) else round(float(v), 3) for v in fb],
                 ok=[round(float(v), 2) for v in ok], meta=meta, lines=lines, ew=ew)
 
 
@@ -126,13 +127,13 @@ def desi_sparcl(name, ra, dec):
         got = c.retrieve(uuid_list=found.ids, include=['sparcl_id', 'specid', 'data_release', 'redshift', 'spectype', 'flux', 'wavelength', 'ivar', 'ra', 'dec'])
         for r in got.records:
             lam = np.asarray(r.wavelength); flux = np.asarray(r.flux, float); ivar = np.asarray(r.ivar, float); good = ivar > 0
-            idx = np.searchsorted(GRID, lam) - 1
+            idx = bin_indices(GRID, lam)
             fb = np.full(len(GRID), np.nan); ok = np.zeros(len(GRID))
             for i in np.unique(idx[(idx >= 0) & (idx < len(GRID))]):
                 m = (idx == i) & good
                 if m.sum():
                     fb[i] = np.median(flux[m]); ok[i] = m.mean()
-            out.append(dict(wave=[round(float(x), 1) for x in GRID], flux=[None if np.isnan(v) else round(float(v), 3) for v in fb],
+            out.append(dict(grid_version=2, wave=[round(float(x), 1) for x in GRID], flux=[None if np.isnan(v) else round(float(v), 3) for v in fb],
                             ok=[round(float(v), 2) for v in ok], meta=dict(**{'class': str(r.spectype), 'z': float(r.redshift), 'specid': str(r.specid)}),
                             lines={}, mjd=np.nan, phase=None, program=f'DESI {r.data_release}', coadd=True, url=f'sparcl:{r.sparcl_id}', source='DESI'))
     except Exception as ex:

@@ -1,3 +1,4 @@
+from spectral_utils import bin_indices
 """Query DESI DR1 coadds and retrieve every matched SPARCL spectrum.
 
 DESI coadds retain their individual mean/min/max dates and target IDs. They are
@@ -78,11 +79,11 @@ def fetch(item):
                 sep=SkyCoord(float(r.ra)*u.deg,float(r.dec)*u.deg).separation(SkyCoord(e.ra*u.deg,e.dec*u.deg)).arcsec
                 if sep>2:raise ValueError('Spectrum position mismatch')
                 lam=np.asarray(r.wavelength);flux=np.asarray(r.flux,float);iv=np.asarray(r.ivar,float);good=(iv>0)&np.isfinite(flux)
-                idx=np.searchsorted(PARSE.GRID,lam)-1;fb=np.full(len(PARSE.GRID),np.nan)
+                idx=bin_indices(PARSE.GRID,lam);fb=np.full(len(PARSE.GRID),np.nan)
                 for i in np.unique(idx[(idx>=0)&(idx<len(fb))]):
                     valid=(idx==i)&good
                     if valid.any():fb[i]=np.median(flux[valid])
-                current.append(NATIVE(dict(wave=PARSE.GRID.tolist(),flux=fb.tolist(),meta={'class':str(r.spectype),'z':float(r.redshift),'specid':str(r.specid),'zwarning':int(e.zwarning)},
+                current.append(NATIVE(dict(grid_version=2, wave=PARSE.GRID.tolist(),flux=fb.tolist(),meta={'class':str(r.spectype),'z':float(r.redshift),'specid':str(r.specid),'zwarning':int(e.zwarning)},
                     source='DESI',coadd=True,proprietary=False,mjd=float(r.mean_mjd),min_mjd=float(e.min_mjd),max_mjd=float(e.max_mjd),coadd_numnight=int(e.coadd_numnight),survey=str(r.survey),program=str(r.program),archive_file=str(r.file),date_verified=True,
                     metadata_quality_ok=bool(e.zwarning==0),url=f'sparcl:{r.sparcl_id}',lines={},ew={})))
             if not current:raise ValueError('No SPARCL record matching this survey/program coadd')

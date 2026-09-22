@@ -33,8 +33,8 @@ ZTF_G_PIVOT = 4770.  # Angstrom; ZTF g effective wavelength
 ZTF_R_PIVOT = 6400.  # Angstrom; ZTF r effective wavelength; spectroscopic continuum taken as the median in 6350-6450 A
 # rest wavelength, fit window, continuum side windows (rest Angstrom)
 LINES = {
-    'MgII': dict(rest=2798.75, window=(2650, 2950), sides=[(2650, 2720), (2900, 2960)], label='Mg II 2798'),
-    'Hbeta': dict(rest=4862.68, window=(4700, 5050), sides=[(4700, 4760), (5080, 5130)], label='Hβ 4861'),
+    'MgII': dict(rest=2798.75, window=(2650, 2960), sides=[(2650, 2720), (2900, 2960)], label='Mg II 2798'),
+    'Hbeta': dict(rest=4862.68, window=(4700, 5130), sides=[(4700, 4760), (5080, 5130)], label='Hβ 4861'),
     'Halpha': dict(rest=6564.61, window=(6350, 6800), sides=[(6350, 6450), (6720, 6800)], label='Hα 6563'),
 }
 APERTURE = {'legacy': 'SDSS 3" fibre', 'eboss': 'eBOSS 2" fibre', 'AQMES-Medium': 'SDSS-V 2" fibre', 'bhm_aqmes': 'SDSS-V 2" fibre', 'dark': 'DESI 1.5" fibre', 'bright': 'DESI 1.5" fibre'}
@@ -46,17 +46,12 @@ def load_epochs(name):
     internal_path = OUT/'sdssv_spectra'/f'{name}.json'
     internal = json.loads(internal_path.read_text()) if internal_path.exists() else []
     quality = {int(round(r['mjd'])): r.get('fieldquality') for r in internal}
-    chosen = {}
-    for r in public+internal:
-        source = r.get('source')
-        if source == 'SDSS' and r.get('coadd'):
-            continue  # multi-night coadds duplicate the per-night spectra
-        key = int(round(r['mjd']))
-        rank = (source == 'DESI', r.get('run2d') == 'v6_2_1', not r.get('proprietary'), float(r.get('sn_median_all') or 0))
-        if key not in chosen or rank > chosen[key][0]:
-            chosen[key] = (rank, r)
+    from spectral_utils import selected_records
     epochs = []
-    for key, (rank, r) in sorted(chosen.items()):
+    for r in selected_records(public+internal):
+        if r.get('mjd') is None:
+            continue
+        key = int(np.floor(r['mjd']))
         meta = r.get('meta', {})
         program = r.get('program') or meta.get('programname') or ''
         epochs.append(dict(mjd=float(r['mjd']), night=key, source=r.get('source'), program=program, aperture=APERTURE.get(program, 'unknown'),
@@ -71,10 +66,13 @@ def model(w, a, b, amp, mu, sigma):
 
 
 def fit_line(w, f, z, line):
-    """Continuum + Gaussian in the observed frame; returns parameters, errors and per-pixel noise."""
+    """Single-Gaussian diagnostic, not a broad/narrow decomposition or state classification."""
     L = LINES[line]
     lo, hi = [v*(1+z) for v in L['window']]
     sel = (w >= lo) & (w <= hi) & np.isfinite(f)
+    if line == 'Hbeta':
+        for a, b in [(4945, 4973), (4995, 5022)]:
+            sel &= ~((w >= a*(1+z)) & (w <= b*(1+z)))
     x, y = w[sel], f[sel]
     if sel.sum() < 15:
         return None
@@ -82,7 +80,9 @@ def fit_line(w, f, z, line):
     side = np.zeros_like(x, bool)
     for a, b in L['sides']:
         side |= (x >= a*(1+z)) & (x <= b*(1+z))
-    cont = np.polyfit(x[side]-mu0, y[side], 1) if side.sum() >= 4 else np.array([0., np.median(y)])
+    if any(((x >= a*(1+z)) & (x <= b*(1+z))).sum() < 3 for a, b in L['sides']):
+        return None
+    cont = np.polyfit(x[side]-mu0, y[side], 1)
     resid = y-np.polyval(cont, x-mu0)
     amp0 = max(resid[np.abs(x-mu0) < 40*(1+z)].max(), 1e-3)
     p0 = [cont[1], cont[0], amp0, mu0, 25*(1+z)]
@@ -97,10 +97,13 @@ def fit_line(w, f, z, line):
     err = np.sqrt(np.diag(cov))
     a, b, amp, mu, sigma = p
     flux = amp*sigma*np.sqrt(2*np.pi)
-    flux_err = flux*np.sqrt((err[2]/amp)**2+(err[4]/sigma)**2) if amp > 0 else np.nan
+    flux_gradient = np.array([0., 0., sigma*np.sqrt(2*np.pi), 0., amp*np.sqrt(2*np.pi)])
+    flux_err = np.sqrt(max(0., flux_gradient @ cov @ flux_gradient))
+    width_gradient = np.array([0., 0., 0., -2.3548*sigma/mu**2*C_KMS, 2.3548/mu*C_KMS])
+    width_err = np.sqrt(max(0., width_gradient @ cov @ width_gradient))
     cont_at_line = a
     return dict(flux=flux, flux_err=flux_err, ew_rest=flux/cont_at_line/(1+z) if cont_at_line > 0 else np.nan,
-                fwhm_kms=2.3548*sigma/mu*C_KMS, fwhm_err_kms=2.3548*err[4]/mu*C_KMS, centre_kms=(mu/mu0-1)*C_KMS,
+                fwhm_kms=2.3548*sigma/mu*C_KMS, fwhm_err_kms=width_err, centre_kms=(mu/mu0-1)*C_KMS,
                 cont_at_line=cont_at_line, noise=noise, chi2_red=float(np.sum(((y-model(x, *p))/noise)**2)/(len(y)-5)),
                 params=p, x=x, y=y, mask_lo=mu-3*sigma, mask_hi=mu+3*sigma)
 

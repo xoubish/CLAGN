@@ -52,7 +52,7 @@ def load_targets():
     return t, m
 
 
-def ztf_series(name, tags=('zeltyn', 'pool', 'v2', 'calib')):
+def ztf_series(name, tags=('zeltyn', 'pool', 'v2', 'calib'), bin_days=7):
     for tag in tags:
         p = os.path.join(DATA, 'ztf_cache', tag, f'{name}.csv')
         if os.path.exists(p) and os.path.getsize(p) > 5:
@@ -64,7 +64,7 @@ def ztf_series(name, tags=('zeltyn', 'pool', 'v2', 'calib')):
                 b = df[(df.filtercode == fc) & np.isfinite(df.mag)].copy()
                 if not len(b):
                     continue
-                b['night'] = np.floor(b.mjd / 7.0)      # weekly medians: the card shows years-long trends, and 300 cards must stay under the 16 MB artifact limit
+                b['night'] = np.floor(b.mjd / bin_days)      # weekly medians: the card shows years-long trends, and 300 cards must stay under the 16 MB artifact limit
                 g = b.groupby('night').agg(mjd=('mjd', 'median'), mag=('mag', 'median'), err=('magerr', 'median'), n=('mag', 'size'))
                 out[key] = [[round(r.mjd, 1), round(r.mag, 3), round(float(r.err), 2)] for r in g.itertuples()]
             return out

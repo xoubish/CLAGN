@@ -102,6 +102,7 @@ def main():
     (OUT/'ztf_refresh_status.json').write_text(json.dumps(summary,indent=2))
     print(json.dumps(summary,indent=2),flush=True)
     subprocess.run([sys.executable,str(ROOT/'scripts/16_candidate_webpage.py')],cwd=ROOT,check=True)
+    subprocess.run([sys.executable,str(ROOT/'scripts/51_observer_page.py')],cwd=ROOT,check=True)
 
 
 if __name__=='__main__':main()

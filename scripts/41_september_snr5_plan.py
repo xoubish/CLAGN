@@ -13,6 +13,8 @@ telescope CSVs.
 from pathlib import Path
 from concurrent.futures import ProcessPoolExecutor
 import hashlib
+import math
+from types import SimpleNamespace
 import importlib
 import json
 import re
@@ -40,6 +42,7 @@ iers.conf.auto_max_age = None
 OBS = importlib.import_module('05_observability')
 
 SETTINGS = dict(
+    model_version='zenith-seeing-v2', overhead_convention='Six minutes includes normal two-exposure readouts; add 0.6 minute per extra exposure and round up.',
     mode='fixed_exposure', goal='combined continuum S/N >= 5 per Angstrom near observed H-beta',
     goal_snr=5, goal_unit='per Angstrom', exposures=2, seconds_each=300, readout_minutes=0.6,
     slit_arcsec=1.5, binspat=2, binspect=3, slitangle='PA',
@@ -55,8 +58,15 @@ TIERS = [('preferred', SETTINGS['airmass_preferred']), ('extended', SETTINGS['ai
 
 
 def visit_minutes(nexp):
-    """Whole minutes for nexp sub-exposures: integration, readouts between them, and the overhead."""
-    return int(nexp * SETTINGS['seconds_each'] / 60 + (nexp - 1) * SETTINGS['readout_minutes'] + SETTINGS['overhead_minutes'])
+    """Conservative whole-minute visits under the documented inclusive overhead allowance.
+
+    The normal two-exposure visit already includes readout in its six minutes.
+    Each additional exposure adds integration plus a readout. This is a planning
+    allowance, not a measured guarantee of acquisition/slew time.
+    """
+    if nexp < 1:
+        raise ValueError('Exposure count must be positive')
+    return math.ceil(nexp * SETTINGS['seconds_each'] / 60 + max(0, nexp - 2) * SETTINGS['readout_minutes'] + SETTINGS['overhead_minutes'])
 
 
 def sky_v(alpha_deg, rho_deg, moon_alt_deg, target_alt_deg, k=0.17, vdark=21.5):
@@ -165,7 +175,7 @@ def evaluate(job):
     for s in slots:
         cmd = [channel, str(wave - 4), str(wave + 4), 'EXPTIME', str(SETTINGS['seconds_each']),
                '-slit', 'SET', str(SETTINGS['slit_arcsec']), '-binspect', str(SETTINGS['binspect']),
-               '-binspat', str(SETTINGS['binspat']), '-seeing', f"{s['seeing_arcsec']:.3f}", '500',
+               '-binspat', str(SETTINGS['binspat']), '-seeing', str(SETTINGS['seeing_zenith_500nm']), '500',
                '-airmass', f"{s['airmass_mean']:.3f}", '-skymag', f"{s['sky_V']:.2f}", '-mag', f'{mag:.4f}',
                '-magsystem', 'AB', '-magfilter', 'match', '-noslicer']
         args = model.ETC.parser.parse_args(cmd)
@@ -200,6 +210,8 @@ def main():
     original = [v['name'] for v in json.loads(ORIGINAL_SEED.read_text())['primaries']]
     selection = json.loads(SELECTION.read_text()) if SELECTION.exists() else None
     forced = [p['name'] for p in selection['primaries']] if selection else previous
+    locked = (selection or {}).get('preserve_sequence', [])
+    retained = set(forced) | {v['name'] for v in locked}
     nexp_override = {k: int(v) for k, v in (selection or {}).get('nexp', {}).items()}
     targets = pd.read_csv(OUT / 'compact_review_objects.csv').set_index('name', drop=False)
     science = pd.read_csv(OUT / 'three_night_review/science_and_sensitivity.csv').set_index('name')
@@ -251,7 +263,7 @@ def main():
             why.append('Latest cached r does not meet brightness criterion')
         if name in slots and not any(v['meets_goal'] for v in slots[name].values()):
             why.append(f"No slot reaches continuum S/N {SETTINGS['goal_snr']} per Angstrom at {exposures.get(name, SETTINGS['exposures'])}x{SETTINGS['seconds_each']} s")
-        if name in forced:
+        if name in retained:
             assert name in slots, f'Chosen primary {name} has no feasible visit: {why}'
             if why:
                 waived[name] = why
@@ -270,7 +282,7 @@ def main():
         # Scheduling utility: the review score decides which fill targets; slot quality (S/N relative to
         # the target's own best slot) decides where. Chosen primaries are forced in regardless of value.
         value = 20 + float(s.review_order_score) + 5 * bool(t.balmer_pair_in_range) + 5 * float(t.manifold_cl_neighbor_fraction)
-        usable = list(slots[name].values()) if name in forced else [v for v in slots[name].values() if v['meets_goal']]
+        usable = list(slots[name].values()) if name in retained else [v for v in slots[name].values() if v['meets_goal']]
         best = max(v['snr_per_angstrom'] for v in usable)
         # Faint chosen targets (best slot below the floor) get triple weight on slot quality: their S/N is the scarce resource.
         weight = SETTINGS['geometry_weight'] * (3.0 if (name in forced and best < SETTINGS['goal_snr']) else 1.0)
@@ -300,11 +312,21 @@ def main():
     upper[budget_row] = budget
     for name in forced:
         lower[name_index[name]] = 1
-    result = milp(-np.array([c['utility'] for c in choices]), integrality=np.ones(len(choices)),
-                  bounds=Bounds(0, 1), constraints=LinearConstraint(matrix, lower, upper),
-                  options=dict(time_limit=90, mip_rel_gap=.001))
-    assert result.x is not None, f'No feasible sequence for the chosen primaries: {result.message}'
-    selected = sorted((choices[i] for i in np.flatnonzero(result.x > .5)), key=lambda c: c['offset'])
+    if locked:
+        # Fail closed rather than silently replace a retained primary or change its start.
+        selected = []
+        for v in locked:
+            matching = [c for c in choices if c['name'] == v['name'] and c['start_pdt'] == v['start_pdt']]
+            assert len(matching) == 1, f"Retained primary needs a revised schedule: {v}"
+            selected.append(matching[0])
+        selected.sort(key=lambda c: c['offset'])
+        result = SimpleNamespace(message='Validated preserved sequence; no membership or start-time changes', mip_gap=0.)
+    else:
+        result = milp(-np.array([c['utility'] for c in choices]), integrality=np.ones(len(choices)),
+                      bounds=Bounds(0, 1), constraints=LinearConstraint(matrix, lower, upper),
+                      options=dict(time_limit=90, mip_rel_gap=.001))
+        assert result.x is not None, f'No feasible sequence for the chosen primaries: {result.message}'
+        selected = sorted((choices[i] for i in np.flatnonzero(result.x > .5)), key=lambda c: c['offset'])
     names = [c['name'] for c in selected]
     assert set(forced) <= set(names) and len(set(names)) == len(names)
     assert sum(c['duration'] for c in selected) <= budget

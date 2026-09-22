@@ -85,6 +85,7 @@ def main():
     config['w1_parent_search_complete']=True
     (OUT/'review_selection.json').write_text(json.dumps(config,indent=2))
     run('16_candidate_webpage.py')
+    run('51_observer_page.py')
     summary=pd.read_csv(OUT/'prepared_night_summary.csv')
     audit=json.loads((OUT/'prepared_acquisition_audit.json').read_text())
     report='# Completed-parent prepared review\n\n'+datetime.now(timezone.utc).isoformat()+'\n\n'

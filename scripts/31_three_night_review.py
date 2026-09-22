@@ -39,7 +39,7 @@ def science(target,sensitivity,known,neowise):
     ref=sensitivity.get(name,{})
     mjd=ref.get('reference_mjd',np.nan);row['reference_mjd']=mjd
     row['reference_date']=Time(mjd,format='mjd').strftime('%Y-%m-%d') if pd.notna(mjd) else ''
-    ztf,info=WEB.review_ztf(name);changes=[]
+    ztf,info=WEB.review_ztf(name, bin_days=1);changes=[]
     row['ztf_status']=info.get('status');row['ztf_last_date']=info.get('last_date')
     for band in ['g','r']:
         a=np.asarray(ztf.get(band,[]),float)

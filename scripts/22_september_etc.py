@@ -36,25 +36,12 @@ def calculate(channel,lo,hi,mag,snr,seeing,sky,airmass=1.3,binspect=2,binspat=2,
                 bin_angstrom=float((CFG.dLambda[channel]*binspect).to_value(u.AA)))
 
 def reference(t):
-    records=[]
-    for path in [ROOT/'data/spectra_dl'/f"{t['name']}.json",OUT/'sdssv_spectra'/f"{t['name']}.json"]:
-        if path.exists():records+=json.loads(path.read_text())
-    accepted=[]
-    for r in records:
-        if r.get('coadd') or r.get('metadata_quality_ok') is False:continue
-        warning=r.get('meta',{}).get('zwarning')
-        if warning is not None and (not np.isfinite(warning) or warning!=0):continue
-        sn=r.get('sn_median_all',r.get('meta',{}).get('sn_median_all'))
-        if sn is not None and np.isfinite(sn) and sn<5:continue
-        w=np.asarray(r['wave'],float);f=np.asarray(r['flux'],float);rest=w/(1+t['z'])
-        a=f[(rest>=4750)&(rest<=4790)&np.isfinite(f)];b=f[(rest>=5100)&(rest<=5140)&np.isfinite(f)]
-        if len(a)<4 or len(b)<4:continue
-        continuum=np.interp(4862.7,[4770,5120],[np.median(a),np.median(b)])
-        if continuum<=0:continue
-        lam=4862.7*(1+t['z']);fnu=continuum*1e-17*lam**2/2.99792458e18
-        mag=-2.5*np.log10(fnu)-48.6
-        accepted.append((r.get('mjd',0),float(mag),r.get('proprietary',False),float(continuum)))
-    return max(accepted,key=lambda x:x[0]) if accepted else None
+    from spectral_utils import accepted_reference
+    result = accepted_reference(t)
+    if result is None:
+        return None
+    r, mag, continuum = result
+    return r['mjd'], mag, bool(r.get('proprietary')), continuum
 
 def main():
     objects=json.loads((OUT/'sep23_evidence_objects.json').read_text())

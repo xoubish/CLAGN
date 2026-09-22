@@ -26,7 +26,7 @@ def one(target):
     mjd,mag,private,continuum=reference
     wave=4862.7*(1+target['z']);lo,hi=wave/10-4,wave/10+4
     base.update(reference_mjd=mjd,continuum_AB=mag,reference_private=private,continuum_flux_1e17=continuum,hbeta_A=wave)
-    signature=hashlib.sha256(json.dumps(base,sort_keys=True).encode()+b'central-2x600-v1+adopted-2x300-1p5-2x3-v1').hexdigest()
+    signature=hashlib.sha256(json.dumps(base,sort_keys=True).encode()+b'central-2x600-v1+adopted-2x300-1p5-2x3-zenith-v2').hexdigest()
     path=CACHE/f"{target['name']}.json"
     if path.exists():
         saved=json.loads(path.read_text())
@@ -40,7 +40,7 @@ def one(target):
         args=model.ETC.parser.parse_args(cmd);model.ETC.check_inputs_add_units(args)
         return float(model.ETC.main(args,quiet=True)['SNR'].value)*np.sqrt(2)
     def adopted(ch,sky,airmass,extra=0.):
-        seeing=1.3*airmass**0.6
+        seeing=1.3  # Official ETC applies airmass scaling internally.
         cmd=[ch,str(lo),str(hi),'EXPTIME','300','-slit','SET','1.5','-binspect','3','-binspat','2','-seeing',f'{seeing:.3f}','500','-airmass',str(airmass),'-skymag',str(sky),'-mag',str(mag+extra),'-magsystem','AB','-magfilter','match','-noslicer']
         args=model.ETC.parser.parse_args(cmd);model.ETC.check_inputs_add_units(args)
         bin_A=float((model.CFG.dLambda[ch]*3).to_value(u.AA))

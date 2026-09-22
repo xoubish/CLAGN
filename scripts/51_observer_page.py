@@ -29,7 +29,7 @@ def cut40(name):
     return None
 
 
-def sep23_slots():
+def sep23_slots(public=False):
     """Per-slot predicted S/N from the September planner, as minutes from the half-night start."""
     plan_path = ROOT/'observing/sep23/snr5_plan.json'
     if not plan_path.exists():
@@ -39,17 +39,18 @@ def sep23_slots():
     start = pd.Timestamp((nights['sep23']['start_mjd']-40587)*86400, unit='s', tz='UTC').tz_convert('America/Los_Angeles')
     out = {}
     for name, table in plan['slots'].items():
+        if public and (not plan['plans'].get(name) or any(p.get('reference_private') for p in plan['plans'][name].values())):
+            continue
         rows = []
         for v in table.values():
             m = (pd.Timestamp(v['start_pdt'], tz='America/Los_Angeles')-start).total_seconds()/60
-            rows.append([round(m, 1), round(v['snr_per_angstrom'], 2), 1 if v['tier'] == 'preferred' else 2, bool(v['meets_goal'])])
+            rows.append([round(m, 1), round(v['snr_per_angstrom'], 2), 1 if v['tier'] == 'preferred' else 2, bool(v['meets_goal']), v['duration'], v['exposures']])
         out[name] = sorted(rows)
     return out
 
 
-PUBLIC_SCIENCE = ['ztf_g_latest180_mag', 'ztf_r_latest180_mag', 'ztf_last_date', 'post_spectrum_optical_trigger', 'trigger_direction',
-                  'post_spectrum_ir_flag', 'ztf_r_change_after_reference', 'neowise_change_after_reference_mag', 'state_classification', 'field_notes']
-PUBLIC_SCIENCE_IF_PUBLIC_REFERENCE = ['continuum_AB', 'reference_date', 'review_order_score', 'hbeta_A', 'channel', 'science_question',
+PUBLIC_SCIENCE = ['ztf_g_latest180_mag', 'ztf_r_latest180_mag', 'ztf_last_date', 'state_classification', 'field_notes']
+PUBLIC_SCIENCE_IF_PUBLIC_REFERENCE = ['post_spectrum_optical_trigger', 'trigger_direction', 'post_spectrum_ir_flag', 'ztf_r_change_after_reference', 'neowise_change_after_reference_mag', 'continuum_AB', 'reference_date', 'review_order_score', 'hbeta_A', 'channel', 'science_question',
                                       'snr300_x1p3_sky18p5', 'snr300_x1p5_sky18', 'snr300_x1p8_sky18']
 
 
@@ -81,6 +82,7 @@ def main():
     charts += '\n'+(ROOT/'web/candidate_spectra.js').read_text()
     template = (ROOT/'web/observer_page_template.html').read_text()
     slots = sep23_slots()
+    public_slots = sep23_slots(public=True)
     local = json.loads((OUT/'candidate_payload_local.json').read_text())
     public_plans = {}
     for t in local['targets']:
@@ -99,7 +101,7 @@ def main():
         keep['reference_private'] = bool(sci.get('reference_private'))
         public_science[t['name']] = {k: (None if isinstance(v, float) and v != v else v) for k, v in keep.items()}
     for source, dest, private in [(OUT/'candidate_payload_local.json', DEST_LOCAL, True), (OUT/'candidate_payload_public.json', DEST_PUBLIC, False)]:
-        payload = prepare(json.loads(source.read_text()), slots, None if private else public_plans, None if private else public_science)
+        payload = prepare(json.loads(source.read_text()), slots if private else public_slots, None if private else public_plans, None if private else public_science)
         encoded = json.dumps(payload, separators=(',', ':'), allow_nan=False).replace('<', '\\u003c')
         page = template.replace('__PAYLOAD__', encoded).replace('__CHART_FUNCTIONS__', charts)
         if not private:
