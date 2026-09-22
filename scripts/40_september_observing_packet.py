@@ -160,7 +160,7 @@ def build():
         if name in original:question,caution=original[name][2],original[name][3]
         else:
             question=str(science.loc[name].science_question)+'. Compare the broad Balmer profile and its strength with the dated archival spectra.'
-            caution=(('Chosen by visual inspection of the decision board on 2026-09-21.' if user_pick else 'Promoted from the backup list for a complete observing window.') if name in protected else
+            caution=((f"PI-selected primary; selection record updated {revision['user_selection'].get('decided', 'date unavailable')}." if user_pick else 'Promoted from the backup list for a complete observing window.') if name in protected else
                      'Filled automatically from the reviewed September pool by review score and slot S/N.')+' No confirmed state change is inferred from the manifold position.'
         t=targets.loc[name].to_dict()
         visit=make_visit(t,plans[name],slots[name],windows[name],start,require_goal=False);assert visit,(name,'primary does not fit')
@@ -308,9 +308,9 @@ def main():
             f"{S['slit_arcsec']}arcsec slit, {S['binspat']}x{S['binspect']} binning (spatial x spectral), {S['exposures']}x{S['seconds_each']}-second exposures{deeper_text}. "
             f"A standard visit is {S['visit_minutes']} minutes: {S['exposures']*S['seconds_each']//60} minutes of integration plus {S['overhead_minutes']} minutes including slew, acquisition and normal two-exposure readouts. Extra exposures add 0.6 minute readout each; visits round up. "
             f"Two ten-minute standard visits bookend the sequence. Unscheduled time inside the science block: {gap_text}; total {packet['reserved']['minutes']} minutes. It absorbs delays or takes a backup and is not a target row.\n\n")
-    chosen_text=(f"Primaries chosen by the PI from the decision board on 2026-09-21: {', '.join(packet['protected'])}. Filled automatically: {added}. Demoted to backups from the previous packet: {', '.join(revision_demoted) or 'none'}. " if packet.get('user_selection') else f"Protected from the previous packet: {', '.join(packet['protected'])}. Added on 2026-09-21 to use the shorter visits: {added}. ")
+    chosen_text=(f"Current PI choices (selection updated {packet['user_selection'].get('decided', 'date unavailable')}): {', '.join(packet['protected'])}. Filled automatically: {added}. Demoted to backups from the previous packet: {', '.join(revision_demoted) or 'none'}. " if packet.get('user_selection') else f"Protected from the previous packet: {', '.join(packet['protected'])}. Added on 2026-09-21 to use the shorter visits: {added}. ")
     report+=(chosen_text+
-             "All 14 prior primaries and their start times are retained under user_selection.json preserve_sequence; geometry is revalidated before writing. The original order came from an integer program. "
+             "The current primaries and their start times are locked under user_selection.json preserve_sequence; approved replacements are recorded in its revisions and geometry is revalidated before writing. The original order came from an integer program. "
              "Every eligible target's S/N in every candidate slot is in snr5_slot_table.csv.\n\n")
     report+=(f"ETC assumptions: official NGPS ETC, single slit, optimal point-source extraction, May 2026 read noise and plate scales; archival local Hbeta continuum brightness; "
              f"zenith seeing {S['seeing_zenith_500nm']} arcsec at 500 nm scaled by airmass^{S['seeing_airmass_power']} to the target; sky brightness from the Krisciunas and Schaefer (1991) moonlight model at the mid-visit Moon geometry (93 percent illumination). "

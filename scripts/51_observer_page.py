@@ -14,6 +14,7 @@ import base64, json
 from pathlib import Path
 import importlib
 import pandas as pd
+from slit_preview import previews
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT/'data/reselection_2026-09-20'
@@ -54,7 +55,7 @@ PUBLIC_SCIENCE_IF_PUBLIC_REFERENCE = ['post_spectrum_optical_trigger', 'trigger_
                                       'snr300_x1p3_sky18p5', 'snr300_x1p5_sky18', 'snr300_x1p8_sky18']
 
 
-def prepare(payload, slots, public_plans=None, public_science=None):
+def prepare(payload, slots, public_plans=None, public_science=None, slit_previews=None):
     targets = sorted(payload['targets'], key=lambda t: t['ra'])
     if public_plans is not None:
         # Public copy: predicted S/N per tier and science fields only where the continuum reference is public;
@@ -69,6 +70,7 @@ def prepare(payload, slots, public_plans=None, public_science=None):
     for i, t in enumerate(targets, 1):
         t['code'] = f'{i:03d}'
         t['cut40'] = cut40(t['name'])
+        t['slit_preview'] = (slit_previews or {}).get(t['name'], {})
         t['sep23_slots'] = slots.get(t['name'], [])
         screen = t.get('neighbour_screen') or {}
         t['neighbour_screen'] = dict(status=screen.get('status'), flags=screen.get('flags', []), unwise=screen.get('unwise'))
@@ -84,6 +86,7 @@ def main():
     slots = sep23_slots()
     public_slots = sep23_slots(public=True)
     local = json.loads((OUT/'candidate_payload_local.json').read_text())
+    slit_previews = {t['name']: previews(t, local['sep23_sequence']) for t in local['targets']}
     public_plans = {}
     for t in local['targets']:
         plans = t.get('exposure_plans') or {}
@@ -101,13 +104,13 @@ def main():
         keep['reference_private'] = bool(sci.get('reference_private'))
         public_science[t['name']] = {k: (None if isinstance(v, float) and v != v else v) for k, v in keep.items()}
     for source, dest, private in [(OUT/'candidate_payload_local.json', DEST_LOCAL, True), (OUT/'candidate_payload_public.json', DEST_PUBLIC, False)]:
-        payload = prepare(json.loads(source.read_text()), slots if private else public_slots, None if private else public_plans, None if private else public_science)
+        payload = prepare(json.loads(source.read_text()), slots if private else public_slots, None if private else public_plans, None if private else public_science, slit_previews)
         if private:
             # Full-pool lists (52_pool_csv.py) as extra downloads on the local copy only: they include private-identity targets.
             for pool in sorted((ROOT/'observing/pool').glob('ngps_pool_*.csv')):
                 payload['files'][pool.name] = pool.read_text()
         encoded = json.dumps(payload, separators=(',', ':'), allow_nan=False).replace('<', '\\u003c')
-        page = template.replace('__PAYLOAD__', encoded).replace('__CHART_FUNCTIONS__', charts)
+        page = template.replace('__PAYLOAD__', encoded).replace('__CHART_FUNCTIONS__', charts).replace('__FIELD_FUNCTIONS__', (ROOT/'web/observer_fields.js').read_text())
         if not private:
             assert 'proprietary' not in page and 'SDSS-V internal' not in page
             assert not payload['backups'] and 'sep23_backups_ngps.csv' not in payload['files']
