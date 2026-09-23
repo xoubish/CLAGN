@@ -107,9 +107,9 @@ class SeptemberPacketTests(unittest.TestCase):
             self.assertTrue(set(v['eligibility']['quasar_basis'].split(';')) & {'expanded_DR16_QSO', 'full_DR16Q_catalog'})
             self.assertFalse(v['plan']['reference_private'])
             self.assertEqual(v['eligibility']['reference_mjd'], v['plan']['reference_mjd'])
-            self.assertEqual(row['name'], v['name'])
-            self.assertEqual(row['exptime'], f"SET {v['plan']['seconds_each']}")
-            self.assertIn(v['replaces'], row['Note'])
+            self.assertEqual(row['NAME'], v['name'])
+            self.assertEqual(row['EXPTIME'], f"SET {v['plan']['seconds_each']}")
+            self.assertIn(v['replaces'], row['NOTE'])
         for p in primaries.values():
             self.assertEqual(len(p['backups']), 2)
             self.assertEqual(len(set(p['backups'])), len(p['backups']))
@@ -134,11 +134,11 @@ class SeptemberPacketTests(unittest.TestCase):
         S = self.packet['settings']
         pairs = list(zip(self.packet['sequence'], self.rows))+list(zip(self.packet['backups'], self.backup_rows))
         for v, row in pairs:
-            self.assertLessEqual(len(row['Note']), 24)
-            self.assertLessEqual(len(row['Comment']), 1024)
+            self.assertLessEqual(len(row['NOTE']), 24)
+            self.assertLessEqual(len(row['COMMENT']), 1024)
             self.assertEqual(len(row), 12)
-            self.assertEqual(row['slitwidth'], f"SET {S['slit_arcsec']}")
-            self.assertEqual((row['binspat'], row['binspect'], row['slitangle']), (str(S['binspat']), str(S['binspect']), 'PA'))
+            self.assertEqual(row['SLITWIDTH'], f"SET {S['slit_arcsec']}")
+            self.assertEqual((row['BINSPAT'], row['BINSPECT'], row['SLITANGLE']), (str(S['binspat']), str(S['binspect']), 'PA'))
             times = Time(pd.date_range(v['start_utc'], v['end_utc'], freq='10s').to_pydatetime())
             with warnings.catch_warnings():
                 warnings.filterwarnings('ignore', message='Tried to get polar motions')
@@ -146,7 +146,7 @@ class SeptemberPacketTests(unittest.TestCase):
                 coord = SkyCoord(row['RA'], row['DECL'], unit=(u.hourangle, u.deg)).transform_to(frame)
                 moon = get_body('moon', times, site).transform_to(frame)
             self.assertTrue(np.all(coord.alt.deg > 0), v['name'])
-            self.assertLessEqual(float(coord.secz.max()), float(row['airmass_max'])+1e-5, v['name'])
+            self.assertLessEqual(float(coord.secz.max()), float(row['AIRMASS_MAX'])+1e-5, v['name'])
             self.assertGreaterEqual(float(coord.separation(moon).deg.min()), 40-1e-5, v['name'])
             if v['role'] == 'backup':
                 self.assertLess(float(coord.secz.max()), 1.5, v['name'])
@@ -183,8 +183,8 @@ class SeptemberPacketTests(unittest.TestCase):
                 for v in self.packet['primaries']:
                     if v['plan'].get('reference_private'):
                         self.assertIsNone(page['sep23_sequence'][v['name']]['snr_per_angstrom'])
-                        row = next(r for r in csv.DictReader(page['files']['sep23_primaries_ngps.csv'].splitlines()) if r['name']==v['name'])
-                        self.assertNotIn('model continuum S/N', row['Comment'])
+                        row = next(r for r in csv.DictReader(page['files']['sep23_primaries_ngps.csv'].splitlines()) if r['NAME']==v['name'])
+                        self.assertNotIn('model continuum S/N', row['COMMENT'])
             self.assertEqual(len(page['sequence_rows']), len(self.packet['sequence']))
             self.assertEqual(page['decisions']['setting']['slit_arcsec'], self.packet['settings']['slit_arcsec'])
             self.assertTrue(page['run']['nights'] and page['run']['calibrations'] and page['run']['procedure'])

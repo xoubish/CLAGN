@@ -68,7 +68,7 @@ def geometry(ra,dec,start,end):
 
 def csv_text(rows):
     # The documented NGPS parser does not interpret quoted CSV fields.
-    lines=[','.join(HEADERS)]
+    lines=[','.join(h.upper() for h in HEADERS)]
     for row in rows:
         values=[str(row[h]) for h in HEADERS]
         assert len(row['Note'])<=24 and len(row['Comment'])<=1024,(row['name'],len(row['Comment']))

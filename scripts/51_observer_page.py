@@ -57,7 +57,7 @@ PUBLIC_SCIENCE_IF_PUBLIC_REFERENCE = ['post_spectrum_optical_trigger', 'trigger_
 
 def prepare(payload, slots, public_plans=None, public_science=None, slit_previews=None):
     # Display the exact telescope-list coordinates, including both standards.
-    coordinates = {row['name']: row for row in csv.DictReader(io.StringIO(payload['files'].get('sep23_primaries_ngps.csv', '')))}
+    coordinates = {row['NAME']: row for row in csv.DictReader(io.StringIO(payload['files'].get('sep23_primaries_ngps.csv', '')))}
     csv_names = {'BD+28 4211': 'BD284211'}
     for row in payload.get('sequence_rows', []):
         coord = coordinates.get(csv_names.get(row['name'], row['name']), {})
