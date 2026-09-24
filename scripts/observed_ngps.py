@@ -64,6 +64,9 @@ def build_observed():
 
 def add_observed(payload,visits,dest):
     by_name={t['name']:t for t in payload['targets']}
+    photo=ROOT/'docs/observed/palomar-sep23.jpg'
+    if photo.exists():
+        payload['observed_photo']=Path(os.path.relpath(photo,dest.parent)).as_posix()
     payload['observed']=[]
     for visit in visits:
         assert visit['name'] in by_name,visit['name']
