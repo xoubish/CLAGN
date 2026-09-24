@@ -15,6 +15,7 @@ from pathlib import Path
 import importlib
 import pandas as pd
 from slit_preview import previews
+from observed_ngps import build_observed, add_observed
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT/'data/reselection_2026-09-20'
@@ -89,10 +90,12 @@ def main():
     OLD = importlib.import_module('07_make_webpage')
     charts = OLD.TEMPLATE[OLD.TEMPLATE.index('function mjdToYear'):OLD.TEMPLATE.index('/* ---------- manifold thumbnail')]
     charts += '\n'+(ROOT/'web/candidate_spectra.js').read_text()
+    charts=charts.replace("e.src==='DESI'?'var(--desi)':'var(--sdss)'", "e.src==='NGPS'?'#ff9b54':e.src==='DESI'?'var(--desi)':'var(--sdss)'")
     template = (ROOT/'web/observer_page_template.html').read_text()
     slots = sep23_slots()
     public_slots = sep23_slots(public=True)
     local = json.loads((OUT/'candidate_payload_local.json').read_text())
+    observed=build_observed()
     slit_previews = {t['name']: previews(t, local['sep23_sequence']) for t in local['targets']}
     public_plans = {}
     for t in local['targets']:
@@ -112,6 +115,7 @@ def main():
         public_science[t['name']] = {k: (None if isinstance(v, float) and v != v else v) for k, v in keep.items()}
     for source, dest, private in [(OUT/'candidate_payload_local.json', DEST_LOCAL, True), (OUT/'candidate_payload_public.json', DEST_PUBLIC, False)]:
         payload = prepare(json.loads(source.read_text()), slots if private else public_slots, None if private else public_plans, None if private else public_science, slit_previews)
+        add_observed(payload,observed,dest)
         if private:
             # Full-pool lists (52_pool_csv.py) as extra downloads on the local copy only: they include private-identity targets.
             for pool in sorted((ROOT/'observing/pool').glob('ngps_pool_*.csv')):

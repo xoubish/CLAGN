@@ -94,6 +94,7 @@ def main():
         rows.sort(key=lambda x: (x[0], x[1]['name']))
         text = PACK.csv_text([r for _, r in rows])
         (DEST/f'ngps_pool_{night}.csv').write_text(text, encoding='ascii')
+        (DEST/f'ngps_pool_{night}_coordinates.csv').write_text(PACK.csv_text([r for _, r in rows], coordinates_only=True), encoding='ascii')
         print(f"{night}: {len(rows)} rows -> observing/pool/ngps_pool_{night}.csv")
     pd.DataFrame(summary).to_csv(DEST/'pool_summary.csv', index=False)
     (DEST/'README.md').write_text(
@@ -101,7 +102,7 @@ def main():
         "all with the adopted setting (1.5 arcsec slit, 2x3 binning, 2x300 s, slit angle PA). The Note gives the stable page number, the role (PRIMARY Pxx, BACKUP, RESERVE, POOL) and the first start; "
         "the Comment gives windows, predicted continuum S/N per Angstrom at the airmass ceilings, latest ZTF brightness (archival if unavailable), redshift, Hbeta channel, active triggers, the science question and field/privacy flags. Instrument settings and Note fields are not repeated.\n\n"
         "These are reserves beyond the curated primaries and backups in `observing/sep23/`. Load rows deliberately and skip anything already observed; never append a whole file to an automatic run. "
-        "October rows are observability lists, not sequences. `pool_summary.csv` holds the same information as a table.\n")
+        "October rows are observability lists, not sequences. Files ending in `_coordinates.csv` contain only name, RA and DEC, with no header. `pool_summary.csv` holds the same information as a table.\n")
 
 
 if __name__ == '__main__':

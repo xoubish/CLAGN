@@ -28,6 +28,11 @@ data/literature_clagn_ned_retry*.csv
 data/*.log
 data/*.pdf
 
+# Raw NGPS observations and local reductions: keep off Git.
+# Includes sep23_data/shemmati/ and sep23_data/reduction_20260924/.
+# Curated webpage spectra in docs/observed/ remain eligible for Git.
+/sep23_data/
+
 # keep the small inputs the pipeline needs
 !data/zeltyn2024_table5.csv
 

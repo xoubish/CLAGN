@@ -66,15 +66,17 @@ def geometry(ra,dec,start,end):
     return dict(airmass_start=float(aa.secz.value[0]),airmass_end=float(aa.secz.value[-1]),
                 airmass_max_actual=float(aa.secz.value.max()),moon_min=float(aa.separation(moon).deg.min()))
 
-def csv_text(rows):
+def csv_text(rows, coordinates_only=False):
     # The documented NGPS parser does not interpret quoted CSV fields.
-    lines=[','.join(h.upper() for h in HEADERS)]
+    columns=['name','RA','DECL'] if coordinates_only else HEADERS
+    lines=[] if coordinates_only else [','.join(h.upper() for h in columns)]
     for row in rows:
-        values=[str(row[h]) for h in HEADERS]
-        assert len(row['Note'])<=24 and len(row['Comment'])<=1024,(row['name'],len(row['Comment']))
+        values=[str(row[h]) for h in columns]
+        if not coordinates_only:
+            assert len(row['Note'])<=24 and len(row['Comment'])<=1024,(row['name'],len(row['Comment']))
         assert all(not any(c in v for c in [',','\n','\r','"']) and v.isascii() for v in values)
         lines.append(','.join(values))
-    return '\n'.join(lines)+'\n'
+    return ''.join(line+'\n' for line in lines)
 
 ASCII={'\u03b2':'beta','\u03b1':'alpha','\u03b3':'gamma','\u2013':'-','\u2014':'-','\u2033':'arcsec','\u2032':'arcmin','\u00c5':'A','\u2248':'~','\u2265':'>=','\u2264':'<=','\u00b0':'deg','\u00b1':'+/-','\u2026':'...','\u2019':"'",'\u201c':'"','\u201d':'"','\u00d7':'x','\u03bc':'u'}
 def ascii_field(text,limit):
@@ -231,6 +233,10 @@ def build():
             row['Comment']=re.sub(r'model continuum S/N .*?; ', 'Continuum estimate available on local page; ', row['Comment'])
             row['Comment']=row['Comment'].replace(' Below S/N floor: weak broad lines unconstrained.', '')
     public_files={'sep23_primaries_ngps.csv':csv_text(public_csv), 'sep23_backups_ngps.csv':csv_text(backup_csv)}
+    for exports, primary_rows in [(files, all_csv), (public_files, public_csv)]:
+        science_rows=[row for row in primary_rows if row['name'] in {v['name'] for v in primaries}]
+        exports['sep23_primaries_ngps_coordinates.csv']=csv_text(science_rows, coordinates_only=True)
+        exports['sep23_backups_ngps_coordinates.csv']=csv_text(backup_csv, coordinates_only=True)
     for filename,text in files.items():(DEST/filename).write_text(text,encoding='ascii')
     pd.DataFrame([dict(name=v['name'],role=v['role'],start_pdt=v['start_pdt'],end_pdt=v['end_pdt'],
         start_utc=v['start_utc'],end_utc=v['end_utc'],exposures=v['plan']['exposures'],seconds_each=v['plan']['seconds_each'],
