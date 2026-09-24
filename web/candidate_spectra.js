@@ -1,5 +1,38 @@
 /* Every available epoch is selectable. Labels include dates; the new NGPS visit is identified explicitly. */
 const spectralSelection = new Map();
+const ngpsSmoothing = new Map(), smoothedEpochs = new WeakMap();
+// Display-only Gaussian convolution in wavelength, within each unmasked arm
+// segment. Pixel-width weights account for the nonuniform wavelength grid.
+function smoothNgpsEpoch(epoch,fwhm) {
+  if(!fwhm)return epoch;
+  let cache=smoothedEpochs.get(epoch);
+  if(!cache){cache=new Map();smoothedEpochs.set(epoch,cache);}
+  if(cache.has(fwhm))return cache.get(fwhm);
+  const {wave,flux}=epoch, result=flux.slice(),sigma=fwhm/2.354820045,radius=3*sigma;
+  const breaks=new Set(epoch.arm_breaks||[]);
+  const valid=i=>Number.isFinite(wave[i])&&Number.isFinite(flux[i]);
+  for(let start=0;start<flux.length;){
+    if(!valid(start)){start++;continue;}
+    let end=start+1;
+    while(end<flux.length&&valid(end)&&!breaks.has(end))end++;
+    for(let i=start;i<end;i++){
+      let total=0,weight=0;
+      for(let j=i;j>=start&&wave[i]-wave[j]<=radius;j--){
+        const dw=end-start===1?1:j===start?wave[j+1]-wave[j]:j===end-1?wave[j]-wave[j-1]:(wave[j+1]-wave[j-1])/2;
+        const w=Math.exp(-.5*((wave[j]-wave[i])/sigma)**2)*dw;
+        total+=w*flux[j];weight+=w;
+      }
+      for(let j=i+1;j<end&&wave[j]-wave[i]<=radius;j++){
+        const dw=j===end-1?wave[j]-wave[j-1]:(wave[j+1]-wave[j-1])/2;
+        const w=Math.exp(-.5*((wave[j]-wave[i])/sigma)**2)*dw;
+        total+=w*flux[j];weight+=w;
+      }
+      result[i]=weight?total/weight:flux[i];
+    }
+    start=end;
+  }
+  const smoothed={...epoch,flux:result};cache.set(fwhm,smoothed);return smoothed;
+}
 function spectralColor(i) { return `hsl(${(210+i*137.508)%360} 58% ${document.documentElement.dataset.theme==='dark'?65:40}%)`; }
 function epochColor(t,i) { return t.spec.epochs[i].instrument==='NGPS'?'#ff9b54':spectralColor(i); }
 function selectedSpectra(t) {
@@ -8,6 +41,8 @@ function selectedSpectra(t) {
 }
 function specPanel(t) {
   const epochs=t.spec?.epochs||[], selected=selectedSpectra(t);
+  const hasNgps=epochs.some(e=>e.instrument==='NGPS'),fwhm=ngpsSmoothing.get(t.name)??6;
+  const comparing=selected.some(i=>epochs[i].instrument==='NGPS')&&selected.some(i=>epochs[i].instrument!=='NGPS');
   const dates=new Set(epochs.map(e=>e.epoch_day).filter(d=>d!=null));
   const missing=t.epochs.filter(e=>!e.file_available).length;
   let summary=`<p class="small spectrum-count"><b>${selected.length} of ${epochs.length} available spectra shown</b> · ${dates.size} dates with files · ${t.n_spec} dates identified.</p>`;
@@ -15,8 +50,9 @@ function specPanel(t) {
   if(!epochs.length)return summary+'<div class="empty">No spectrum files loaded for this source yet.</div>';
   let controls=`<div class="spectrum-actions"><button data-spec-action="all">Show all</button><button data-spec-action="ends">First &amp; last</button><button data-spec-action="none">Clear</button>${epochs.some(e=>e.instrument==='NGPS')?'<button data-spec-action="ngps">NGPS only</button>':''}</div><div class="spectrum-choices">`;
   controls+=epochs.map((e,i)=>`<label title="${esc([e.quality_note,e.coadd?'Combined spectrum; date may represent an observing interval.':''].filter(Boolean).join(' '))}"><input type="checkbox" data-spectrum-index="${i}" ${selected.includes(i)?'checked':''}><i style="background:${epochColor(t,i)}"></i><span>${esc(e.label)}</span>${e.quality_flag?'<span class="quality-flag">check quality</span>':''}</label>`).join('')+'</div>';
+  if(hasNgps)controls+=`<div class="controls"><label>NGPS overlay smoothing <select data-ngps-smoothing>${[[0,'Off · native'],[3,'Light · 3 Å'],[6,'Moderate · 6 Å'],[10,'Stronger · 10 Å']].map(([v,label])=>`<option value="${v}" ${v===fwhm?'selected':''}>${label}</option>`).join('')}</select></label><span class="plot-note">${comparing&&fwhm?`Gaussian FWHM ${fwhm} Å · display only; not an exact resolution match.`:'Native NGPS spectrum; smoothing applies only when overlaid with archival spectra.'}</span></div>`;
   if(!selected.length)return summary+controls+'<div class="empty">Select a date to plot its spectrum.</div>';
-  const traces=selected.map(i=>({i,e:epochs[i]}));
+  const traces=selected.map(i=>({i,e:comparing&&epochs[i].instrument==='NGPS'?smoothNgpsEpoch(epochs[i],fwhm):epochs[i]}));
   const values=traces.flatMap(({e})=>e.flux.filter(Number.isFinite)).sort((a,b)=>a-b);
   const waves=traces.flatMap(({e})=>[e.wave[0],e.wave[e.wave.length-1]]);
   if(!values.length)return summary+controls+'<div class="empty">The selected spectra have no finite flux values.</div>';
@@ -44,6 +80,12 @@ function redrawSpectra(name=state.selected) {
   if(t&&panel)panel.innerHTML=specPanel(t);
 }
 document.addEventListener('change',e=>{
+  const smoothing=e.target.closest('[data-ngps-smoothing]');
+  if(smoothing){
+    const name=smoothing.closest('[data-spectrum-target]')?.dataset.spectrumTarget||state.selected;
+    const value=Number(smoothing.value);if(![0,3,6,10].includes(value))return;
+    ngpsSmoothing.set(name,value);redrawSpectra(name);return;
+  }
   const box=e.target.closest('[data-spectrum-index]');if(!box)return;
   const name=box.closest('[data-spectrum-target]')?.dataset.spectrumTarget||state.selected;
   const t=D.targets.find(t=>t.name===name);if(!t)return;

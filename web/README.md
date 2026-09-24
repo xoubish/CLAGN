@@ -17,5 +17,12 @@ PI's request. `scripts/observed_ngps.py` packages them from
 `docs/observed/sep23_p330e`; its manifest also permits rebuilding without the raw
 data. Open either page with `#observed` to go directly to this view.
 
+NGPS traces in archival overlays default to a display-only Gaussian smoothing
+with 6 Å FWHM (selectable: off, 3, 6 or 10 Å). Smoothing uses native wavelength
+spacing and stops at masked gaps and arm boundaries. It is applied only while
+an archival trace is also selected; it is not an instrumental resolution match.
+Standalone plots, the embedded native flux arrays and downloadable files retain
+their original resolution.
+
 `candidate_review_template.html` is retained for the local legacy explorer and
 upstream packet input. The separate primary-page templates and copies are retired.

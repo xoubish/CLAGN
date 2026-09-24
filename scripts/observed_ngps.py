@@ -49,7 +49,8 @@ def build_observed():
             epoch=dict(label=f'{first.date()} · NGPS · P330E',date=str(first.date()),mjd=start,
                 epoch_day=math.floor(start),instrument='NGPS',coadd=True,
                 quality_note='P330E flux calibration; central slice; vacuum heliocentric wavelengths. Masked pixels omitted. Absolute slit losses are not included in statistical errors.',
-                wave=wave,flux=flux))
+                wave=wave,flux=flux,
+                arm_breaks=[i for i in range(1,len(data)) if data[i]['CHANNEL']!=data[i-1]['CHANNEL']]))
         visits.append(record)
         ASSETS.mkdir(parents=True,exist_ok=True)
         for folder,extension in [('plots','png'),('spectra','csv'),('spectra','fits')]:
