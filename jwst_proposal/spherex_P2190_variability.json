@@ -1,0 +1,2001 @@
+{
+  "input": "spaxel_scryer_P2190_ra240p2575_dec36p9388_cleaned.csv",
+  "sha256": "30ff18654b40d9a01594994b971b97e53ae3ef72b8d181c61fa10dc76daae05f",
+  "epochs": [
+    "Jun\u2013Aug 2025",
+    "Jan\u2013Feb 2026",
+    "Jul\u2013Aug 2026"
+  ],
+  "method": "Independent polynomial per epoch; uniform wavelength average of F_nu over common observed intervals. Quadratic adopted, linear/cubic sensitivity checks.",
+  "calibration_fraction_in_csv": 0.020000018468765493,
+  "covariance_scenario": "Independent measurement variances plus a 2% multiplicative term fully correlated within each epoch and independent between epochs; replaces the original diagonal calibration variance.",
+  "limitations": [
+    "Exploratory, uncorrected local significances; aggregate 4-5 um overlaps two narrower windows and is not independent of them.",
+    "Smooth fits use wavelength centres, not full spectral response curves. Band means are model estimates, not direct synthetic photometry.",
+    "CSV does not specify cross-measurement or cross-epoch calibration covariance; the correlated scenario is illustrative, not established.",
+    "Background, aperture, processing-version and other systematics have not been independently validated with control sources.",
+    "Nominal significances assume the fitted smooth continuum is adequate; inspect fit chi-square and degree sensitivity."
+  ],
+  "results": [
+    {
+      "observed_window_um": [
+        2.6,
+        3.5
+      ],
+      "degree": 1,
+      "counts": [
+        13,
+        18,
+        12
+      ],
+      "independent_errors": {
+        "mean_flux_mjy": [
+          0.5581620904583254,
+          0.5654954470837257,
+          0.5802265383905798
+        ],
+        "covariance_mjy2": [
+          [
+            8.889244098731814e-05,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            7.082601548848796e-05,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            8.618857647581493e-05
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": 0.007333356625400245,
+            "error_mjy": 0.012637976755628492,
+            "change_percent": 1.3138399670566272,
+            "signed_sigma": 0.5802635000206212
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.022064447932254372,
+            "error_mjy": 0.013231818373267262,
+            "change_percent": 3.9530538367692656,
+            "signed_sigma": 1.6675295344766825
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.014731091306854127,
+            "error_mjy": 0.012530546355379039,
+            "change_percent": 2.6049884897964675,
+            "signed_sigma": 1.1756144456167668
+          }
+        ],
+        "constant_flux_chi2": 2.9113082988099577,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.23324773511843983,
+        "fit_chi2": 61.07795639981527,
+        "fit_dof": 37
+      },
+      "epoch_correlated_calibration": {
+        "mean_flux_mjy": [
+          0.5586907975382541,
+          0.5657606222364713,
+          0.5809290222997195
+        ],
+        "covariance_mjy2": [
+          [
+            0.00020200778595127645,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.00019003389350671858,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0002090707587851165
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": 0.007069824698217153,
+            "error_mjy": 0.019800042410510012,
+            "change_percent": 1.2654270894327868,
+            "signed_sigma": 0.3570610886401151
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.02223822476146542,
+            "error_mjy": 0.020275072003235722,
+            "change_percent": 3.980417228895335,
+            "signed_sigma": 1.096825932747188
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.015168400063248266,
+            "error_mjy": 0.01997760376751514,
+            "change_percent": 2.681063238952025,
+            "signed_sigma": 0.7592702428062497
+          }
+        ],
+        "constant_flux_chi2": 1.2538721038158887,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.5342261371213815
+      }
+    },
+    {
+      "observed_window_um": [
+        2.6,
+        3.5
+      ],
+      "degree": 2,
+      "counts": [
+        13,
+        18,
+        12
+      ],
+      "independent_errors": {
+        "mean_flux_mjy": [
+          0.557830103619119,
+          0.5629336014210062,
+          0.5807426272692324
+        ],
+        "covariance_mjy2": [
+          [
+            8.892342302570301e-05,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            7.267942225815131e-05,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            8.796651778755805e-05
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": 0.005103497801887236,
+            "error_mjy": 0.012712310776717752,
+            "change_percent": 0.9148838990180879,
+            "signed_sigma": 0.40146106333666354
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.022912523650113426,
+            "error_mjy": 0.01329999777493444,
+            "change_percent": 4.107437641220932,
+            "signed_sigma": 1.7227464273185842
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.01780902584822619,
+            "error_mjy": 0.012674617944763043,
+            "change_percent": 3.163610380206669,
+            "signed_sigma": 1.4050937019040173
+          }
+        ],
+        "constant_flux_chi2": 3.3198539401151548,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.19015286644734297,
+        "fit_chi2": 53.82968194701013,
+        "fit_dof": 34
+      },
+      "epoch_correlated_calibration": {
+        "mean_flux_mjy": [
+          0.5583117604754212,
+          0.563387971910677,
+          0.5813618408981513
+        ],
+        "covariance_mjy2": [
+          [
+            0.00020189384460122807,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.00019028987834228788,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.00021081517866714073
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": 0.0050762114352558285,
+            "error_mjy": 0.019803629034687454,
+            "change_percent": 0.9092073272705673,
+            "signed_sigma": 0.25632733406409935
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.023050080422730157,
+            "error_mjy": 0.02031524115703205,
+            "change_percent": 4.128532131062802,
+            "signed_sigma": 1.1346200738922292
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.01797386898747433,
+            "error_mjy": 0.02002760737106229,
+            "change_percent": 3.1903181969820285,
+            "signed_sigma": 0.8974546312229292
+          }
+        ],
+        "constant_flux_chi2": 1.4183571570487488,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.49204821047289204
+      }
+    },
+    {
+      "observed_window_um": [
+        2.6,
+        3.5
+      ],
+      "degree": 3,
+      "counts": [
+        13,
+        18,
+        12
+      ],
+      "independent_errors": {
+        "mean_flux_mjy": [
+          0.5590542812881202,
+          0.5627892146741172,
+          0.5819367697358088
+        ],
+        "covariance_mjy2": [
+          [
+            8.974645348305523e-05,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            7.284581833250939e-05,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            8.91545076784853e-05
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": 0.0037349333859970635,
+            "error_mjy": 0.012751167468728682,
+            "change_percent": 0.668080633850327,
+            "signed_sigma": 0.2929091312741926
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.022882488447688587,
+            "error_mjy": 0.013375386392980972,
+            "change_percent": 4.093070961725741,
+            "signed_sigma": 1.7107908344013654
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.019147555061691524,
+            "error_mjy": 0.012727934868272808,
+            "change_percent": 3.4022604844655566,
+            "signed_sigma": 1.5043724893204033
+          }
+        ],
+        "constant_flux_chi2": 3.4369000338933104,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.1793439126158665,
+        "fit_chi2": 50.683221344173134,
+        "fit_dof": 31
+      },
+      "epoch_correlated_calibration": {
+        "mean_flux_mjy": [
+          0.5594125340981017,
+          0.5632837703936956,
+          0.5826058668540925
+        ],
+        "covariance_mjy2": [
+          [
+            0.00020302315526370666,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.00019040796400986152,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0002123166268439812
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": 0.0038712362955939383,
+            "error_mjy": 0.01983509816647168,
+            "change_percent": 0.6920181546942344,
+            "signed_sigma": 0.19517101771332268
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.023193332755990892,
+            "error_mjy": 0.020379886704976743,
+            "change_percent": 4.146015926043513,
+            "signed_sigma": 1.1380501320611909
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.019322096460396954,
+            "error_mjy": 0.020067999174153927,
+            "change_percent": 3.43025975111837,
+            "signed_sigma": 0.9628312365730192
+          }
+        ],
+        "constant_flux_chi2": 1.4846281823299483,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.47601110691639525
+      }
+    },
+    {
+      "observed_window_um": [
+        3.5,
+        4.0
+      ],
+      "degree": 1,
+      "counts": [
+        9,
+        8,
+        8
+      ],
+      "independent_errors": {
+        "mean_flux_mjy": [
+          0.7404220789467293,
+          0.7318123530708237,
+          0.751662434074087
+        ],
+        "covariance_mjy2": [
+          [
+            0.0002886637110295766,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.00041036361612929506,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.00032385417600220716
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": -0.008609725875905583,
+            "error_mjy": 0.026439124931791364,
+            "change_percent": -1.1628132278487906,
+            "signed_sigma": -0.3256433750404854
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.01124035512735766,
+            "error_mjy": 0.0247490987115043,
+            "change_percent": 1.5181010192655753,
+            "signed_sigma": 0.45417230172235423
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.019850081003263242,
+            "error_mjy": 0.02709645349730297,
+            "change_percent": 2.7124550330379815,
+            "signed_sigma": 0.7325711833557483
+          }
+        ],
+        "constant_flux_chi2": 0.5498057518734141,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.7596458995386098,
+        "fit_chi2": 31.558333773825083,
+        "fit_dof": 19
+      },
+      "epoch_correlated_calibration": {
+        "mean_flux_mjy": [
+          0.7397490424184276,
+          0.7323485324786959,
+          0.7558659897415481
+        ],
+        "covariance_mjy2": [
+          [
+            0.00046900412904601506,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0005878866629419271,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0005116680394354268
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": -0.007400509939731736,
+            "error_mjy": 0.03250985684354735,
+            "change_percent": -1.0004081810687566,
+            "signed_sigma": -0.22763895809650764
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.016116947323120412,
+            "error_mjy": 0.03131568566200398,
+            "change_percent": 2.1787047226759517,
+            "signed_sigma": 0.5146605281798272
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.02351745726285215,
+            "error_mjy": 0.03315953410977533,
+            "change_percent": 3.2112383953655663,
+            "signed_sigma": 0.7092215826976674
+          }
+        ],
+        "constant_flux_chi2": 0.5390363448469565,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.7637474002550667
+      }
+    },
+    {
+      "observed_window_um": [
+        3.5,
+        4.0
+      ],
+      "degree": 2,
+      "counts": [
+        9,
+        8,
+        8
+      ],
+      "independent_errors": {
+        "mean_flux_mjy": [
+          0.7526500208487996,
+          0.7334761520144689,
+          0.7459753093864541
+        ],
+        "covariance_mjy2": [
+          [
+            0.0003435688417223356,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.00041686478750233664,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.00032810125545004715
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": -0.0191738688343307,
+            "error_mjy": 0.02757596107526757,
+            "change_percent": -2.54751455566392,
+            "signed_sigma": -0.6953109914101028
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": -0.006674711462345551,
+            "error_mjy": 0.025916598873547872,
+            "change_percent": -0.8868280445695275,
+            "signed_sigma": -0.2575458105020943
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.012499157371985148,
+            "error_mjy": 0.02729406607584117,
+            "change_percent": 1.70409867282755,
+            "signed_sigma": 0.45794413105230014
+          }
+        ],
+        "constant_flux_chi2": 0.4911112753656469,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.782269758906981,
+        "fit_chi2": 20.793797991348146,
+        "fit_dof": 16
+      },
+      "epoch_correlated_calibration": {
+        "mean_flux_mjy": [
+          0.7525717287120862,
+          0.7340575992767595,
+          0.7472306705119807
+        ],
+        "covariance_mjy2": [
+          [
+            0.0005291645326624002,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0005959562888337001,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0005162219489079109
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": -0.01851412943532671,
+            "error_mjy": 0.03354282071466412,
+            "change_percent": -2.4601149271194216,
+            "signed_sigma": -0.5519550544904762
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": -0.005341058200105553,
+            "error_mjy": 0.03233243698780392,
+            "change_percent": -0.7097075263836942,
+            "signed_sigma": -0.1651919464691216
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.013173071235221157,
+            "error_mjy": 0.033349336391322856,
+            "change_percent": 1.7945555291846456,
+            "signed_sigma": 0.3950024996194122
+          }
+        ],
+        "constant_flux_chi2": 0.31888283345303114,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.8526199151990265
+      }
+    },
+    {
+      "observed_window_um": [
+        3.5,
+        4.0
+      ],
+      "degree": 3,
+      "counts": [
+        9,
+        8,
+        8
+      ],
+      "independent_errors": {
+        "mean_flux_mjy": [
+          0.7529287390259465,
+          0.7229611538495009,
+          0.7458688595165027
+        ],
+        "covariance_mjy2": [
+          [
+            0.00043205893068799415,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.00047471404556441953,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.00032836693068418274
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": -0.0299675851764456,
+            "error_mjy": 0.03011267135696223,
+            "change_percent": -3.980135652042483,
+            "signed_sigma": -0.9951818894180211
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": -0.007059879509443756,
+            "error_mjy": 0.027575820230270158,
+            "change_percent": -0.937655735996613,
+            "signed_sigma": -0.2560170268913372
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.022907705667001843,
+            "error_mjy": 0.028338683389469634,
+            "change_percent": 3.168594266099469,
+            "signed_sigma": 0.808354620861254
+          }
+        ],
+        "constant_flux_chi2": 1.0843625138867545,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.5814785140184988,
+        "fit_chi2": 18.83900443989745,
+        "fit_dof": 13
+      },
+      "epoch_correlated_calibration": {
+        "mean_flux_mjy": [
+          0.7520984749982444,
+          0.7230861076370718,
+          0.7471725270691899
+        ],
+        "covariance_mjy2": [
+          [
+            0.0006071928785487576,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0006491419970591322,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.000516563744867382
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": -0.02901236736117263,
+            "error_mjy": 0.035444814509429864,
+            "change_percent": -3.8575224289931382,
+            "signed_sigma": -0.818522194648644
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": -0.004925947929054542,
+            "error_mjy": 0.03352247937453522,
+            "change_percent": -0.6549604995630446,
+            "signed_sigma": -0.1469446180880181
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.02408641943211809,
+            "error_mjy": 0.03414243315767806,
+            "change_percent": 3.3310582484883584,
+            "signed_sigma": 0.7054687438613747
+          }
+        ],
+        "constant_flux_chi2": 0.7696235045834964,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.6805787415348208
+      }
+    },
+    {
+      "observed_window_um": [
+        4.0,
+        4.5
+      ],
+      "degree": 1,
+      "counts": [
+        14,
+        15,
+        12
+      ],
+      "independent_errors": {
+        "mean_flux_mjy": [
+          0.8546550631755113,
+          0.9257162761440872,
+          0.9342703245569525
+        ],
+        "covariance_mjy2": [
+          [
+            0.0005506113414175703,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0006670684201407787,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0006672382569199994
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": 0.07106121296857593,
+            "error_mjy": 0.034895268469498114,
+            "change_percent": 8.314607381432298,
+            "signed_sigma": 2.0364139920771893
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.07961526138144115,
+            "error_mjy": 0.034897701906251216,
+            "change_percent": 9.315484668823803,
+            "signed_sigma": 2.2813898059911986
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.008554048412865223,
+            "error_mjy": 0.03652816279339515,
+            "change_percent": 0.9240464528176654,
+            "signed_sigma": 0.23417680383345
+          }
+        ],
+        "constant_flux_chi2": 6.4740255534235756,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.039281061312176443,
+        "fit_chi2": 49.14441645857604,
+        "fit_dof": 35
+      },
+      "epoch_correlated_calibration": {
+        "mean_flux_mjy": [
+          0.8548742765141832,
+          0.9262507064341925,
+          0.9358532328629252
+        ],
+        "covariance_mjy2": [
+          [
+            0.0008211364122924721,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0009863558835235757,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.000986172079776011
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": 0.07137642992000925,
+            "error_mjy": 0.04251461273275399,
+            "change_percent": 8.34934818849062,
+            "signed_sigma": 1.6788681663097833
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.08097895634874197,
+            "error_mjy": 0.0425124510240057,
+            "change_percent": 9.472615865684952,
+            "signed_sigma": 1.9048291594153255
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.009602526428732716,
+            "error_mjy": 0.0444131507923001,
+            "change_percent": 1.0367092151216566,
+            "signed_sigma": 0.2162090790099383
+          }
+        ],
+        "constant_flux_chi2": 4.462213631864021,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.10740948179527884
+      }
+    },
+    {
+      "observed_window_um": [
+        4.0,
+        4.5
+      ],
+      "degree": 2,
+      "counts": [
+        14,
+        15,
+        12
+      ],
+      "independent_errors": {
+        "mean_flux_mjy": [
+          0.8562210215368529,
+          0.9253117868173101,
+          0.9343591963510611
+        ],
+        "covariance_mjy2": [
+          [
+            0.0005586922262251524,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0006672260221138731,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0006717183142194853
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": 0.06909076528045721,
+            "error_mjy": 0.03501311537608479,
+            "change_percent": 8.069267577248272,
+            "signed_sigma": 1.9732824268373637
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.07813817481420826,
+            "error_mjy": 0.03507720827609628,
+            "change_percent": 9.125935108899343,
+            "signed_sigma": 2.227605292849269
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.00904740953375105,
+            "error_mjy": 0.03659158832755635,
+            "change_percent": 0.9777687545589793,
+            "signed_sigma": 0.2472538074259443
+          }
+        ],
+        "constant_flux_chi2": 6.12416003924972,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.04679026925285425,
+        "fit_chi2": 47.80106168440679,
+        "fit_dof": 32
+      },
+      "epoch_correlated_calibration": {
+        "mean_flux_mjy": [
+          0.8563854762313746,
+          0.9258554884902812,
+          0.9360313969183145
+        ],
+        "covariance_mjy2": [
+          [
+            0.0008294758959803447,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.000986202830637982,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0009902448065382782
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": 0.06947001225890659,
+            "error_mjy": 0.04261078181186455,
+            "change_percent": 8.112002618799373,
+            "signed_sigma": 1.6303388322146053
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.07964592068693988,
+            "error_mjy": 0.04265818447283737,
+            "change_percent": 9.30024187675755,
+            "signed_sigma": 1.8670724427490457
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.010175908428033287,
+            "error_mjy": 0.044457256293840945,
+            "change_percent": 1.0990817200453529,
+            "signed_sigma": 0.22889195772171494
+          }
+        ],
+        "constant_flux_chi2": 4.251091109981154,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.11936782878504257
+      }
+    },
+    {
+      "observed_window_um": [
+        4.0,
+        4.5
+      ],
+      "degree": 3,
+      "counts": [
+        14,
+        15,
+        12
+      ],
+      "independent_errors": {
+        "mean_flux_mjy": [
+          0.8565159801074389,
+          0.9253209818579842,
+          0.9372726885103804
+        ],
+        "covariance_mjy2": [
+          [
+            0.0005651123960069148,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0006766279998755745,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0007420394205849963
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": 0.06880500175054527,
+            "error_mjy": 0.03523833701925347,
+            "change_percent": 8.033125282953222,
+            "signed_sigma": 1.9525609767836576
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.08075670840294147,
+            "error_mjy": 0.036154554576040776,
+            "change_percent": 9.42851158396503,
+            "signed_sigma": 2.2336524222167586
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.011951706652396199,
+            "error_mjy": 0.03766520171803904,
+            "change_percent": 1.2916281902954314,
+            "signed_sigma": 0.3173142876511439
+          }
+        ],
+        "constant_flux_chi2": 6.140830374577389,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.04640188538450486,
+        "fit_chi2": 47.66679190522726,
+        "fit_dof": 29
+      },
+      "epoch_correlated_calibration": {
+        "mean_flux_mjy": [
+          0.8566754149883083,
+          0.9258961689420079,
+          0.9391439997716641
+        ],
+        "covariance_mjy2": [
+          [
+            0.0008355858113774863,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.000995298670655018,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0010599739424772576
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": 0.06922075395369953,
+            "error_mjy": 0.042788835950893826,
+            "change_percent": 8.080161137184524,
+            "signed_sigma": 1.617729307549755
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.08246858478335573,
+            "error_mjy": 0.04353802652687354,
+            "change_percent": 9.626584741489427,
+            "signed_sigma": 1.8941736996841732
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.013247830829656193,
+            "error_mjy": 0.0453351145706314,
+            "change_percent": 1.430811712375273,
+            "signed_sigma": 0.29222008050771064
+          }
+        ],
+        "constant_flux_chi2": 4.32652202603107,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.1149496568468766
+      }
+    },
+    {
+      "observed_window_um": [
+        4.5,
+        5.0
+      ],
+      "degree": 1,
+      "counts": [
+        27,
+        14,
+        17
+      ],
+      "independent_errors": {
+        "mean_flux_mjy": [
+          0.9232900665388816,
+          1.0200157311043838,
+          1.028440300381977
+        ],
+        "covariance_mjy2": [
+          [
+            0.0005987278229230114,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.001359045362154978,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0008991120165157484
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": 0.09672566456550225,
+            "error_mjy": 0.044246730784070244,
+            "change_percent": 10.476194651166967,
+            "signed_sigma": 2.186052231463969
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.10515023384309552,
+            "error_mjy": 0.0387019358616434,
+            "change_percent": 11.388645633031668,
+            "signed_sigma": 2.716924399311702
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.008424569277593275,
+            "error_mjy": 0.047520073428717745,
+            "change_percent": 0.8259254265100292,
+            "signed_sigma": 0.17728443307711864
+          }
+        ],
+        "constant_flux_chi2": 9.122471459373319,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.010449138651245266,
+        "fit_chi2": 48.30362276805918,
+        "fit_dof": 52
+      },
+      "epoch_correlated_calibration": {
+        "mean_flux_mjy": [
+          0.9240327616359703,
+          1.0203937174028024,
+          1.0289837916651863
+        ],
+        "covariance_mjy2": [
+          [
+            0.0009256120836789146,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0017449385734100552,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.001296882349193181
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": 0.09636095576683212,
+            "error_mjy": 0.05167737084149086,
+            "change_percent": 10.428305117258846,
+            "signed_sigma": 1.8646644401163224
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.10495103002921602,
+            "error_mjy": 0.04714333922063747,
+            "change_percent": 11.357933872756158,
+            "signed_sigma": 2.2262112053206584
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.008590074262383895,
+            "error_mjy": 0.055152705487611725,
+            "change_percent": 0.8418391955850261,
+            "signed_sigma": 0.1557507321977773
+          }
+        ],
+        "constant_flux_chi2": 6.169195865687578,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.04574842414171025
+      }
+    },
+    {
+      "observed_window_um": [
+        4.5,
+        5.0
+      ],
+      "degree": 2,
+      "counts": [
+        27,
+        14,
+        17
+      ],
+      "independent_errors": {
+        "mean_flux_mjy": [
+          0.9155906137729679,
+          1.0144292589839594,
+          1.0311851150355082
+        ],
+        "covariance_mjy2": [
+          [
+            0.0006291808675980492,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0013820195207385215,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.000969237209601299
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": 0.0988386452109915,
+            "error_mjy": 0.044846408867785285,
+            "change_percent": 10.795069731405064,
+            "signed_sigma": 2.203936674224783
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.11559450126254034,
+            "error_mjy": 0.03998022107491839,
+            "change_percent": 12.62512956376849,
+            "signed_sigma": 2.8912921978577706
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.016755856051548834,
+            "error_mjy": 0.04848975902538411,
+            "change_percent": 1.6517520470901348,
+            "signed_sigma": 0.345554533335116
+          }
+        ],
+        "constant_flux_chi2": 9.972742352689043,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.006830405912506462,
+        "fit_chi2": 44.891106224273884,
+        "fit_dof": 49
+      },
+      "epoch_correlated_calibration": {
+        "mean_flux_mjy": [
+          0.916239985550903,
+          1.0146781783106376,
+          1.0317365651792136
+        ],
+        "covariance_mjy2": [
+          [
+            0.0009501535683669202,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.001763878012251682,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0013680184045132774
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": 0.09843819275973453,
+            "error_mjy": 0.052096368209488486,
+            "change_percent": 10.743712816740594,
+            "signed_sigma": 1.8895404064232957
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.11549657962831061,
+            "error_mjy": 0.04814739840199258,
+            "change_percent": 12.605494351882772,
+            "signed_sigma": 2.398812468827616
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.01705838686857608,
+            "error_mjy": 0.05596334887017538,
+            "change_percent": 1.6811622870393257,
+            "signed_sigma": 0.3048135469546039
+          }
+        ],
+        "constant_flux_chi2": 6.8775734194987255,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.03210361270828906
+      }
+    },
+    {
+      "observed_window_um": [
+        4.5,
+        5.0
+      ],
+      "degree": 3,
+      "counts": [
+        27,
+        14,
+        17
+      ],
+      "independent_errors": {
+        "mean_flux_mjy": [
+          0.9140748207805314,
+          1.0143745610269432,
+          1.033770861254614
+        ],
+        "covariance_mjy2": [
+          [
+            0.0006350061838896738,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0013820449606071676,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.001018035625622987
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": 0.10029974024641186,
+            "error_mjy": 0.04491159254019881,
+            "change_percent": 10.972815131344019,
+            "signed_sigma": 2.2332706228717463
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.11969604047408255,
+            "error_mjy": 0.040657616869568994,
+            "change_percent": 13.094774930117179,
+            "signed_sigma": 2.9440004036161658
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.019396300227670693,
+            "error_mjy": 0.048990617328526845,
+            "change_percent": 1.9121437950922253,
+            "signed_sigma": 0.39591867352070254
+          }
+        ],
+        "constant_flux_chi2": 10.331200557530398,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.005709634437797302,
+        "fit_chi2": 44.24206522004128,
+        "fit_dof": 46
+      },
+      "epoch_correlated_calibration": {
+        "mean_flux_mjy": [
+          0.9147128113086868,
+          1.0146114712179963,
+          1.0342556827083624
+        ],
+        "covariance_mjy2": [
+          [
+            0.0009548098442622656,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0017638692828670108,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0014167392243991286
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": 0.09989865990930957,
+            "error_mjy": 0.05214095441329471,
+            "change_percent": 10.921314173613002,
+            "signed_sigma": 1.9159346243926403
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.11954287139967568,
+            "error_mjy": 0.048698553044843065,
+            "change_percent": 13.068896589372653,
+            "signed_sigma": 2.454752018804277
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.019644211490366104,
+            "error_mjy": 0.05639688384357898,
+            "change_percent": 1.9361314205115476,
+            "signed_sigma": 0.34832086724597777
+          }
+        ],
+        "constant_flux_chi2": 7.17395538270728,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.027681867269390873
+      }
+    },
+    {
+      "observed_window_um": [
+        4.0,
+        5.0
+      ],
+      "degree": 1,
+      "counts": [
+        41,
+        29,
+        29
+      ],
+      "independent_errors": {
+        "mean_flux_mjy": [
+          0.8902549413099159,
+          0.9734965962204204,
+          0.9787265722389648
+        ],
+        "covariance_mjy2": [
+          [
+            0.00027951653662650923,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0005053398315246166,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0003884790756431686
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": 0.0832416549105045,
+            "error_mjy": 0.02801528811472632,
+            "change_percent": 9.350316527086413,
+            "signed_sigma": 2.971293908155393
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.08847163092904886,
+            "error_mjy": 0.02584561108330925,
+            "change_percent": 9.937786000813679,
+            "signed_sigma": 3.423081413856864
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.005229976018544358,
+            "error_mjy": 0.029896804296910818,
+            "change_percent": 0.5372361895100226,
+            "signed_sigma": 0.17493428282850826
+          }
+        ],
+        "constant_flux_chi2": 14.916235490548969,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.000576740723417625,
+        "fit_chi2": 104.63295598856192,
+        "fit_dof": 93
+      },
+      "epoch_correlated_calibration": {
+        "mean_flux_mjy": [
+          0.8907356873099096,
+          0.9740717905142827,
+          0.9797649975646917
+        ],
+        "covariance_mjy2": [
+          [
+            0.0005879686424941306,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0008708783518413703,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0007578353761394394
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": 0.08333610320437312,
+            "error_mjy": 0.03819485560040123,
+            "change_percent": 9.355873396748544,
+            "signed_sigma": 2.1818672146910196
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.08902931025478211,
+            "error_mjy": 0.03668520162999748,
+            "change_percent": 9.995031244752019,
+            "signed_sigma": 2.4268453299704063
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.005693207050408988,
+            "error_mjy": 0.04035732558013241,
+            "change_percent": 0.584475097816264,
+            "signed_sigma": 0.14106997846288677
+          }
+        ],
+        "constant_flux_chi2": 7.532648182214139,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.023136956505940384
+      }
+    },
+    {
+      "observed_window_um": [
+        4.0,
+        5.0
+      ],
+      "degree": 2,
+      "counts": [
+        41,
+        29,
+        29
+      ],
+      "independent_errors": {
+        "mean_flux_mjy": [
+          0.8895799794190153,
+          0.972037959597896,
+          0.9815881175741488
+        ],
+        "covariance_mjy2": [
+          [
+            0.00028553454922445546,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0005069447330863404,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.000392825791215209
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": 0.08245798017888062,
+            "error_mjy": 0.028151008548732242,
+            "change_percent": 9.269316091481052,
+            "signed_sigma": 2.929130586427748
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.09200813815513342,
+            "error_mjy": 0.02604535160906192,
+            "change_percent": 10.34287419723901,
+            "signed_sigma": 3.532612634153158
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.009550157976252804,
+            "error_mjy": 0.029996175161202624,
+            "change_percent": 0.9824881715734053,
+            "signed_sigma": 0.31837919084447414
+          }
+        ],
+        "constant_flux_chi2": 15.323822359100953,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.00047040751791261514,
+        "fit_chi2": 101.34772982924301,
+        "fit_dof": 90
+      },
+      "epoch_correlated_calibration": {
+        "mean_flux_mjy": [
+          0.8900819449028514,
+          0.9725073034131139,
+          0.9826455852581744
+        ],
+        "covariance_mjy2": [
+          [
+            0.0005931907950705851,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0008714906585970203,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0007643632390148499
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": 0.08242535851026245,
+            "error_mjy": 0.038271156941848586,
+            "change_percent": 9.260423602824437,
+            "signed_sigma": 2.1537200622260864
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.09256364035532294,
+            "error_mjy": 0.03684500012329264,
+            "change_percent": 10.399451520772715,
+            "signed_sigma": 2.5122442677590366
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.010138281845060493,
+            "error_mjy": 0.04044569071745308,
+            "change_percent": 1.0424890187949392,
+            "signed_sigma": 0.25066407978750704
+          }
+        ],
+        "constant_flux_chi2": 7.773232834363691,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.020514641727242974
+      }
+    },
+    {
+      "observed_window_um": [
+        4.0,
+        5.0
+      ],
+      "degree": 3,
+      "counts": [
+        41,
+        29,
+        29
+      ],
+      "independent_errors": {
+        "mean_flux_mjy": [
+          0.8897402058994233,
+          0.9717325728363297,
+          0.9836893208854235
+        ],
+        "covariance_mjy2": [
+          [
+            0.00029094569775739546,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0005089003519894099,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.00040194091034075725
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": 0.08199236693690648,
+            "error_mjy": 0.028281549634820317,
+            "change_percent": 9.215315481222047,
+            "signed_sigma": 2.899146899502185
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.09394911498600023,
+            "error_mjy": 0.0263227393729861,
+            "change_percent": 10.559162591852152,
+            "signed_sigma": 3.569123777535714
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.011956748049093746,
+            "error_mjy": 0.03018014682419831,
+            "change_percent": 1.2304566486017792,
+            "signed_sigma": 0.3961792538234731
+          }
+        ],
+        "constant_flux_chi2": 15.409368906893368,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.0004507108957235198,
+        "fit_chi2": 100.8109305040335,
+        "fit_dof": 87
+      },
+      "epoch_correlated_calibration": {
+        "mean_flux_mjy": [
+          0.8902422042384359,
+          0.9722021116150222,
+          0.9848478602779267
+        ],
+        "covariance_mjy2": [
+          [
+            0.0005983734345332201,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0008732144832194517,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0007747715378100024
+          ]
+        ],
+        "contrasts": [
+          {
+            "epochs": [
+              0,
+              1
+            ],
+            "change_mjy": 0.08195990737658632,
+            "error_mjy": 0.038361281492576234,
+            "change_percent": 9.206472911121924,
+            "signed_sigma": 2.136526836113319
+          },
+          {
+            "epochs": [
+              0,
+              2
+            ],
+            "change_mjy": 0.09460565603949078,
+            "error_mjy": 0.03705597080556955,
+            "change_percent": 10.62695697744659,
+            "signed_sigma": 2.553047565151672
+          },
+          {
+            "epochs": [
+              1,
+              2
+            ],
+            "change_mjy": 0.012645748662904466,
+            "error_mjy": 0.040595394086391796,
+            "change_percent": 1.3007324826622055,
+            "signed_sigma": 0.3115069812105486
+          }
+        ],
+        "constant_flux_chi2": 7.8883759666293445,
+        "constant_flux_dof": 2,
+        "constant_flux_p": 0.01936693626179474
+      }
+    }
+  ]
+}

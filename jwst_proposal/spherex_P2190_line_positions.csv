@@ -1,0 +1,14 @@
+line,rest_vacuum_um,redshift,observed_um,within_nominal_0p75_5um,interpretation,rest_wavelength_source
+Hβ,0.4862680,0.739785,0.846002,True,expected position; not a measured detection,SDSS
+[O III] 4959,0.4960295,0.739785,0.862985,True,expected position; not a measured detection,SDSS
+[O III] 5007,0.5008240,0.739785,0.871326,True,expected position; not a measured detection,SDSS
+Hα,0.6564610,0.739785,1.142101,True,expected position; not a measured detection,SDSS
+Paδ,1.0052000,0.739785,1.748832,True,expected position; not a measured detection,STScI NICMOS
+He I,1.0833000,0.739785,1.884709,True,expected position; not a measured detection,STScI NICMOS
+Paγ,1.0941000,0.739785,1.903499,True,expected position; not a measured detection,STScI NICMOS
+Paβ,1.2822000,0.739785,2.230752,True,expected position; not a measured detection,STScI NICMOS
+Paα,1.8756000,0.739785,3.263141,True,expected position; not a measured detection,STScI NICMOS
+Brδ,1.9451000,0.739785,3.384056,True,expected position; not a measured detection,STScI NICMOS
+Brγ,2.1661000,0.739785,3.768548,True,expected position; not a measured detection,STScI NICMOS
+Brβ,2.6259000,0.739785,4.568501,True,expected position; not a measured detection,STScI NICMOS
+Brα,4.0522497,0.739785,7.050043,False,expected position; not a measured detection,STScI NICMOS vacuum wavenumber
