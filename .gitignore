@@ -41,6 +41,8 @@ finders/**/*.png
 
 # PDFs (papers)
 *.pdf
+# The editable JWST proposal and its figures travel with the repository.
+!/jwst_proposal/*.pdf
 
 # Python
 __pycache__/

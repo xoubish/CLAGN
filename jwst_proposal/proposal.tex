@@ -1,0 +1,113 @@
+% Science draft v0.3, 2026-09-25. Revised from v0.2 (archived in previous_v0.2/).
+% Official Cycle 6 style unchanged. Title/abstract go in APT (apt_title_abstract.txt).
+% Numbers marked "% VERIFY" are pre-ETC/APT estimates from documented sensitivities and
+% overheads; replace with ETC 6.0 / APT 2026.5.1 output before submission.
+\documentclass[12pt]{article}
+\usepackage{jwstproposaltemplate_v6}
+\usepackage{graphicx}
+\begin{document}
+\scientificjustification
+
+\noindent\textbf{Does circumnuclear dust remember an AGN's accretion history?}
+Changing-look active galactic nuclei (CLAGN) change their accretion luminosity by factors of several within a few years, and their broad emission lines appear or vanish in response [1]. The surrounding dust must respond too, because the sublimation radius scales as $r_{\rm sub}\propto L^{1/2}$ [2,3,4], but two very different responses are possible. If the dust distribution is fixed, only its temperature re-adjusts to the changed, light-travel-delayed illumination: the infrared spectrum keeps a \emph{thermal memory} of the past luminosity and nothing else changes. If the structure evolves, inner grains are destroyed when the luminosity rises and re-condense inward when it falls, as the dust reverberation lags of Mrk~590 suggest happened within four years of its decline [5]. A third possibility, a change in line-of-sight obscuration rather than in accretion [1], leaves a different signature again. Which of these happens decides whether an infrared spectrum measures the current luminosity and covering factor of a nucleus or its recent history, and how the infrared luminosities of variable AGN should be read.
+
+\noindent\textbf{Why this is open.}
+Mid-infrared light curves show that the dust of many CLAGN responds to intrinsic luminosity changes with delays of months to years, and that most transitions are not obscuration events [6,7,8,9]. But two photometric bands cannot separate a temperature change from a change in emitting mass, inner radius or host contribution, and no mid-infrared spectrum of a changing-look nucleus with a dated history exists. It is urgent: NEOWISE ended survey operations in 2024 [10], so no mid-infrared monitoring of these nuclei continues, and MIRI/MRS is the only instrument that can measure their 5--28~$\mu$m dust spectra and silicate features in 2027 [11,12].
+
+\noindent\textbf{A sample with measured histories.}
+The targets come from a variability-selected parent sample of 24{,}000 AGN with archival optical spectra, organised by WISE light-curve morphology [13]. Each of the six (Table~1) has one to fifteen archival optical spectra from 2014--2025 plus a September 2026 Palomar/NGPS epoch, an eight-year ZTF light curve [14], a fourteen-year WISE 3.4~$\mu$m history [15], and 2010 WISE 12 and 22~$\mu$m photometry from before its transition. Figure~1 shows the three anchors. A1 peaked in 2019 and its nucleus faded by a factor of 5--10 by 2021; its optical continuum and broad H$\beta$ have stayed low through 2026 while its 3.4~$\mu$m flux partly rebounded. A2 is a published changing-state quasar that faded between 2014 and 2018 [16] and has brightened by 0.8~mag in $g$ since. A3 has brightened by a factor of two since 2021 with a 35\% stronger broad H$\beta$. The comparisons C1--C3 have steady optical light curves at similar luminosity and redshift.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{fig1_histories.pdf}
+\caption{\textbf{The three anchors have dated, large luminosity changes.} Top: every archival optical spectrum (blue, light to dark with date) and the September 2026 NGPS spectrum (orange), in $10^{-17}$~erg\,s$^{-1}$\,cm$^{-2}$\,\AA$^{-1}$, not host-subtracted. Middle: ZTF $g$ and $r$, with archival spectral dates ticked. Bottom: WISE 3.4~$\mu$m (filled: unWISE 2010--2020; open: NEOWISE). Dashed line: the 2026 spectrum; grey band: Cycle~6.}
+\end{figure}
+
+\noindent\textbf{The experiment.}
+We forward-model each measured illumination history with light-travel delays and radiative equilibrium and ask whether a fixed dust distribution reproduces the 2027 spectrum. Figure~2 shows the prediction for A1. Because its luminosity fell by a factor of about six, a fixed inner edge cools from 1500~K to about 1070~K, whereas dust that re-condenses at the new sublimation radius sits at 1500~K. Re-formed dust therefore produces a hotter near-infrared bump: brighter than the fixed-dust prediction by a factor of 1.5--3.6 at 2--3~$\mu$m and by 9--26\% at 5~$\mu$m, the range spanning plausible radial density laws, while beyond 10~$\mu$m the two predictions agree to within 4\%. The discriminant is the \emph{shape} of the 2--8~$\mu$m continuum relative to 10--15~$\mu$m, independent of absolute calibration. MRS measures the 5--8~$\mu$m part to 1--2\% per $R=100$ bin together with the 10--15~$\mu$m reference, and SPHEREx has measured every target at 0.75--5~$\mu$m twice a year since 2025 [17], anchoring the near-infrared bump into 2027. The 12--25~$\mu$m continuum, which the fixed model predicts to stay within 15\% of its pre-fade level because most of the emitting dust has not yet seen the fade, is compared with the 2010 WISE 12 and 22~$\mu$m fluxes to fix the radial extent of the dust. The silicate features settle the obscuration alternative: a change in line-of-sight extinction drives the 9.7~$\mu$m feature into absorption [18,19], whereas an intrinsic luminosity change leaves the emission profile of unobscured AGN. A2 and A3 test the mirror cases of a recovering and a rising luminosity, where a fixed model would place inner dust above its sublimation temperature. The comparisons calibrate the intrinsic spread of silicate strength and 5--15~$\mu$m colour among AGN at the same luminosity [19,20].
+
+\noindent\textbf{What is learned either way.}
+If a fixed structure reproduces all six spectra, the result is a quantitative limit on how much inner dust can be destroyed or formed within five to ten years of a large accretion change, and infrared luminosities of variable AGN can be corrected for thermal memory. If it fails in the anchors but not in the comparisons, the residuals measure the mass and temperature of newly formed or destroyed dust and give the first empirical grain-formation timescale in an AGN beyond Mrk~590. Both outcomes bear on time-dependent unification and on the infrared variability that Rubin, SPHEREx and Roman will detect in thousands of AGN.
+
+\clearpage
+\descriptionofobservations
+
+\noindent\textbf{Targets.}
+Table~1 lists the six targets. Selection required (i) a dated luminosity change of a factor of two or more, or a steady history for the comparisons, established from ZTF and WISE; (ii) at least two optical spectra bracketing the change, including the 2026 epoch that establishes the current broad-line state; (iii) $z<0.3$ so that the 9.7 and 18~$\mu$m features and their wings fall inside 4.9--27.9~$\mu$m; and (iv) a 2010 WISE 22~$\mu$m flux above 5~mJy. The comparisons match the anchors in redshift, 2010 mid-infrared flux and optical luminosity. Coordinates are entered in APT.
+
+\begin{table}[h]
+\centering
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llllllll}
+\hline
+ID & Name & $z$ & History & W3/W4 (mJy) & Si obs.\ ($\mu$m) & Bkg & Time (h)\\
+\hline
+A1 & J0125+1518 & 0.112 & faded $\times$6, 2019--21 & 4.8 / 8.0 & 10.8 / 20.0 & yes & 2.7\\
+A2 & J0053+2232 & 0.149 & faded 2014--19, rising & 13.6 / 19.3 & 11.1 / 20.7 & yes & 2.7\\
+A3 & J0046+0907 & 0.238 & brightening $\times$2 & 23.5 / 74.8 & 12.0 / 22.3 & no & 2.0\\
+C1 & J0044+1921 & 0.179 & steady & 31.3 / 91.5 & 11.4 / 21.2 & no & 2.0\\
+C2 & J2349+3029 & 0.279 & steady; slow IR rise & 9.2 / 27.6 & 12.4 / 23.0 & no & 2.0\\
+C3 & J2344+2600 & 0.163 & steady; IR down 30\% & 6.5 / 18.1 & 11.3 / 20.9 & yes & 2.7\\
+\hline
+\end{tabular}
+\caption{Targets. W3/W4: AllWISE 2010 fluxes at 12 and 22~$\mu$m. Si obs.: observed wavelengths of the 9.7 and 18~$\mu$m features. Bkg: dedicated background observation. Time: charged, including overheads; total 14.1~h.}
+\end{table}
+
+\noindent\textbf{MIRI/MRS configuration.}
+Each target is observed once with MIRI/MRS in all three grating settings, for continuous 4.9--27.9~$\mu$m coverage at $R\approx1500$--3500 [11]. We use the 4-point point-source dither, target acquisition on the nucleus, and FASTR1 with 60 groups in one integration per dither position (166~s), for 33~min on source per target. % VERIFY with ETC 6.0
+Three targets with 22~$\mu$m fluxes below 20~mJy and hosts that fill the 6.6$''\times$7.7$''$ channel-4 field receive a dedicated background observation with the same readout, as recommended for point sources embedded in extended emission [12]; the brighter three use the annulus in the dithered cubes. No target approaches the MRS saturation limits, and all have two visibility windows per year. There are no timing constraints. % VERIFY bright limits and GTVT windows
+
+\noindent\textbf{Sensitivity.}
+Expected fluxes are the 2010 AllWISE values halved, to allow for fading and for the nuclear fraction. Against the ETC~6.0 MRS sensitivity curve, 33~min on source gives a signal-to-noise ratio per $R=100$ continuum bin above 90 at the 9.7~$\mu$m feature for every target, and 34 (A1) to 99 (C1) at the 18~$\mu$m feature, where channel~4 sensitivity and thermal background set the limit. % VERIFY with ETC 6.0
+The 5--8~$\mu$m continuum is measured to 1--2\% per bin, well below the 5--26\% excess that re-formed dust predicts, so the test is limited by model degeneracies and the 5.6\% MRS spectrophotometric accuracy [21], not by photons; the exposure is set by the recommended ramp length for robust calibration.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{fig2_model.pdf}
+\caption{\textbf{Fixed dust and re-formed dust predict different spectra for the measured history of A1.} (a) Illumination history from ZTF $g$ (host subtracted) and WISE, relative to the 2019 peak; the dashed line is the JWST epoch. (b) Optically thin dust shells in radiative equilibrium with the light-travel-delayed history, for a fixed inner edge set at the 2019 peak (blue) and for an inner edge that re-formed at the present sublimation radius (orange); the dotted line is the same fixed structure near the peak. Shading marks the SPHEREx and MRS ranges. (c) Ratio of the two predictions for two radial density laws (orange) against the MRS statistical precision per $R=100$ bin in 33~min (blue) and the absolute calibration accuracy (dashed). Full torus radiative-transfer models replace this schematic in the analysis.}
+\end{figure}
+
+\noindent\textbf{Charged time.}
+The charged time per target is dominated by fixed overheads: the initial slew, guide-star acquisition, target acquisition, grating-wheel moves at each dither position, and the observatory overhead, with the 33~min science exposure the smaller part. A science visit is 2.0~h and a dedicated background adds 0.7~h. % VERIFY with APT 2026.5.1 and Smart Accounting
+The total is 14.1~h for six targets. No repeat visits are requested: the 10--25~$\mu$m continuum responds on light-travel times of years to decades and will not change measurably within Cycle~6, and the hot-dust response to the ongoing optical variability is followed by SPHEREx and ground-based near-infrared photometry.
+
+\noindent\textbf{Analysis.}
+The MRS cubes are modelled as a point source plus a wavelength-dependent extended component, with background, channel matching, residual fringes and correlated calibration errors propagated [21]; the native resolution separates lines and aromatic bands from the dust continuum, which is then binned to $R=100$. The optical spectra are decomposed into host starlight, power-law continuum, Fe\,\textsc{ii}, and broad and narrow lines, and the photometry sets their flux scales, so that each history is a nuclear luminosity with dated uncertainties; the unobserved years and the conversion from optical to heating luminosity are marginalised rather than filled in. The null model is a family of clumpy-torus radiative-transfer models [22,23] illuminated with retarded time, with geometry, inclination and grain properties free but constant. The alternative allows the inner radius, emitting mass and grain population to change on a parameterised timescale. Both are fitted jointly to the MRS spectrum, the SPHEREx 0.75--5~$\mu$m epochs and the 2010 WISE fluxes, and compared by evidence; the comparisons set the prior width of the static parameters. Optical spectroscopy within one month of each JWST visit is available through an existing program on a 5-m telescope; details are given in the Team Expertise section.
+
+\clearpage
+\supplementalinformation
+% No special requirements, coordinated parallels, coordinated observations, or duplications.
+% Run the APT duplication check on the final target list; a MAST search on 2026-09-25 found no JWST observations of any target.
+
+\clearpage
+\references
+\noindent [1] Ricci, C., \& Trakhtenbrot, B. 2023, Nature Astronomy, 7, 1282.\par
+\noindent [2] Barvainis, R. 1987, ApJ, 320, 537.\par
+\noindent [3] Kishimoto, M., et al. 2007, A\&A, 476, 713.\par
+\noindent [4] Koshida, S., et al. 2014, ApJ, 788, 159.\par
+\noindent [5] Kokubo, M., \& Minezaki, T. 2020, MNRAS, 491, 4615.\par
+\noindent [6] Sheng, Z., et al. 2017, ApJL, 846, L7.\par
+\noindent [7] Stern, D., et al. 2018, ApJ, 864, 27.\par
+\noindent [8] Yang, Q., et al. 2018, ApJ, 862, 109.\par
+\noindent [9] Lyu, J., Rieke, G. H., \& Smith, P. S. 2019, ApJ, 886, 33.\par
+\noindent [10] NASA/IPAC, NEOWISE mission and final data release, irsa.ipac.caltech.edu/Missions/wise.html, accessed 2026 September 25.\par
+\noindent [11] STScI, JWST User Documentation, ``MIRI Medium Resolution Spectroscopy'' and ``MIRI Sensitivity'' (ETC 6.0), jwst-docs.stsci.edu, accessed 2026 September 25.\par
+\noindent [12] STScI, JWST User Documentation, ``MIRI MRS Dedicated Sky Observations'' and ``MIRI MRS Recommended Strategies'', accessed 2026 September 25.\par
+\noindent [13] Hemmati, S., et al. 2026, ApJ, 998, 130.\par
+\noindent [14] Bellm, E. C., et al. 2019, PASP, 131, 018002.\par
+\noindent [15] Wright, E. L., et al. 2010, AJ, 140, 1868; Mainzer, A., et al. 2014, ApJ, 792, 30.\par
+\noindent [16] Graham, M. J., et al. 2020, MNRAS, 491, 4925.\par
+\noindent [17] IRSA, SPHEREx Quick Release data products, irsa.ipac.caltech.edu/Missions/spherex.html, accessed 2026 September 25.\par
+\noindent [18] Shi, Y., et al. 2006, ApJ, 653, 127.\par
+\noindent [19] Hatziminaoglou, E., et al. 2015, ApJ, 803, 110.\par
+\noindent [20] Gonz\'alez-Mart\'in, O., et al. 2025, arXiv:2504.01103.\par
+\noindent [21] Argyriou, I., et al. 2023, A\&A, 675, A111.\par
+\noindent [22] Nenkova, M., et al. 2008, ApJ, 685, 160.\par
+\noindent [23] H\"onig, S. F., \& Kishimoto, M. 2017, ApJL, 838, L20.\par
+\noindent Related: Zeltyn, G., et al. 2024, ApJ, 966, 85; Guo, W.-J., et al. 2025, ApJS, 278, 28; MacLeod, C. L., et al. 2019, ApJ, 874, 8; Masterson, M., et al. 2025, arXiv:2503.08647.\par
+
+\noindent\textbf{Generative AI disclosure.}
+Two assistants were used on 2026 September 25. OpenAI Codex (GPT-6; build identifier not exposed), approximately 15:39--16:06 UTC, reviewed supplied project material, located literature and proposal rules, organised the scientific argument, and drafted the v0.1--v0.2 text and figure code. Claude Fable 5.1 (Anthropic), approximately 16:10--17:30 UTC, reviewed the v0.2 draft against the Cycle 6 documentation, retrieved the AllWISE fluxes and the MRS sensitivity and overhead figures, computed the signal-to-noise and charged-time estimates, wrote the schematic dust model and both figures, and drafted the v0.3 text. The proposers verified the scientific claims, data and references and take full responsibility for the content.
+
+\noindent\templateversion
+\end{document}

@@ -1,0 +1,13 @@
+# Local LaTeX/Python build products. Keep the proposal and figure PDFs in Git.
+*.aux
+*.log
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.out
+*.toc
+*.bbl
+*.blg
+*.zip
+__pycache__/
+.DS_Store

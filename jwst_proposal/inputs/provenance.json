@@ -1,0 +1,12 @@
+{
+  "source": "data/reselection_2026-09-20/observer_page_local.html",
+  "source_sha256": "5ecc55ac7ef28b71cca8bc81d5a68efd06fb582d62bbc07d9f7281b1403a9bdb",
+  "snapshot_date": "2026-09-25",
+  "targets": [
+    "P11530",
+    "P10381",
+    "P9694"
+  ],
+  "scope": "Only fields consumed by the current two figure generators; reproduces the current v0.3 figures, including collaboration archival epochs already used in Figure 1.",
+  "data_sha256": "8e1cdb902b24ed1e2428eaac111e8f0c73e1d96ae5f6ced88c9cdfbec927b2ff"
+}

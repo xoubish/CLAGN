@@ -4,6 +4,7 @@ Start with **[Observing files](observing/README.md)** for the September 23 seque
 
 | Folder | Contents |
 | --- | --- |
+| [jwst_proposal/](jwst_proposal/README.md) | Editable JWST Cycle 6 proposal, compiled PDF, figures, and portable figure inputs. |
 | [observing/](observing/README.md) | Current September primary/backup packet and links to the three visibility plots. Local observing products are git-ignored. |
 | [scripts/](scripts/README.md) | Selection, acquisition, geometry, sensitivity, and page-building code. |
 | [data/](data/README.md) | Catalogues, manifold model, spectra, light curves, imaging caches, and private working tables. |
