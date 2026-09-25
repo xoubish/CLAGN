@@ -44,6 +44,31 @@ def summarize(flux, covariance):
                 constant_flux_dof=2, constant_flux_p=float(chi2.sf(statistic, 2)))
 
 
+def joint_constant_test(results, key, calibration_fraction):
+    """Seven disjoint continuum intervals; exclude the overlapping 4-5 aggregate."""
+    bands = [r for r in results if r['degree'] == 2
+             and r['observed_window_um'] != [4., 5.]]
+    flux = np.concatenate([r[key]['mean_flux_mjy'] for r in bands])
+    covariance = np.zeros((len(flux), len(flux)))
+    for b, r in enumerate(bands):
+        covariance[3*b:3*b+3, 3*b:3*b+3] = r[key]['covariance_mjy2']
+    if key != 'independent_errors':
+        # The same epoch scale is shared across wavelength intervals too.
+        for b in range(len(bands)):
+            for other in range(b):
+                for epoch in range(3):
+                    i, j = 3*b+epoch, 3*other+epoch
+                    covariance[i, j] = covariance[j, i] = calibration_fraction**2 * flux[i] * flux[j]
+    design = np.repeat(np.eye(len(bands)), 3, axis=0)
+    beta, _ = solve(design, flux, covariance)
+    residual = flux - design @ beta
+    statistic = float(residual @ cho_solve(cho_factor(covariance), residual))
+    dof = len(flux) - len(bands)
+    return dict(chi2=statistic, dof=dof, p=float(chi2.sf(statistic, dof)),
+                windows_um=[r['observed_window_um'] for r in bands],
+                covariance_assumption='Measurement errors independent across disjoint intervals; shared-calibration cases correlate the same epoch scale across intervals.')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--target', choices=['A3', 'P2190', 'P1823'], default='A3')
@@ -115,6 +140,7 @@ def main():
         input=source.name, sha256=hashlib.sha256(source.read_bytes()).hexdigest(),
         epochs=[g['label'] for g in groups],
         excluded_csv_row_indices=np.flatnonzero(~retained).tolist(),
+        exclusion_reason=('User-requested removal of isolated P1823 point at 4.06996 um, MJD 61075.067882; full CSV retained and sensitivity run available.' if prefix == 'P1823' else None),
         method='Independent polynomial per epoch; uniform wavelength average of F_nu over common observed intervals. Quadratic adopted, linear/cubic sensitivity checks.',
         calibration_fraction_in_csv=float(cal_fraction),
         covariance_scenario='Independent measurement variances plus a 2% multiplicative term fully correlated within each epoch and independent between epochs; replaces the original diagonal calibration variance.',
@@ -125,10 +151,15 @@ def main():
             'Background, aperture, processing-version and other systematics have not been independently validated with control sources.',
             'Nominal significances assume the fitted smooth continuum is adequate; inspect fit chi-square and degree sensitivity.',
         ], results=results)
+    if prefix == 'P1823':
+        summary['joint_constant_spectrum_tests'] = {
+            key: joint_constant_test(results, key, float(cal_fraction)) for key in
+            ['independent_errors', 'epoch_correlated_calibration', 'excess_scatter_and_correlated_calibration']}
     (HERE / f'spherex_{output_name}_variability.json').write_text(json.dumps(summary, indent=2) + '\n')
     lines = [
         f'# {prefix} SPHEREx continuum variability check', '',
-        f'Regenerate with `python check_a3_spherex_variability.py --target {prefix}`.', '',
+        f'Regenerate with `python check_a3_spherex_variability.py --target {prefix}'
+        + (' --include-excluded' if args.include_excluded else '') + '`.', '',
         'The three epochs are ' + ', '.join(g['label'] for g in groups) + '. ' +
         'Fit an independent quadratic continuum to each epoch at its actual wavelengths, '
         'then average the fitted F_nu over identical wavelength intervals. '
@@ -150,10 +181,12 @@ def main():
     broad_results = [r for r in results if r['observed_window_um'] == [4.0, 5.0]]
     changes = [r['independent_errors']['contrasts'][1]['change_percent'] for r in broad_results]
     interpretation = (
-        'P1823 interpretations must use the global constant-flux tests, all epoch pairs, '
-        'continuum-model checks and fit residuals recorded in the JSON. The isolated '
-        '4.06996 micron point is excluded in the primary calculation and restored '
-        'with --include-excluded for sensitivity analysis.'
+        'The P1823 data do not provide a robust detection of continuum variability. '
+        'The shorter 1.15–1.5 micron interval has a possible increase, but its significance '
+        'also falls when excess residual scatter is allowed. The isolated 4.06996 micron '
+        'point is excluded in the primary calculation and restored with --include-excluded '
+        'for sensitivity analysis; the first-to-last comparison is unaffected because '
+        'the point belongs to the middle epoch.'
         if prefix == 'P1823' else
         'P2190 shows a candidate long-wavelength brightening concentrated between '
         'summer 2025 and early 2026; the last two epochs are consistent with each other. '
@@ -173,10 +206,27 @@ def main():
         'each epoch, independently between epochs, while retaining the supplied measurement '
         'variance; it is not added twice. A scale error common to all epochs would instead '
         'largely cancel. The CSV alone cannot determine the correct covariance.', '',
+        'The final column additionally inflates measurement variances by max(1, reduced '
+        'chi-square of the epoch-specific continuum fits), keeping the shared calibration '
+        'term fixed. This is a residual-scatter sensitivity check, not a measured noise model.', '',
         f'Linear, quadratic and cubic fits give first-to-last changes of '
         f'{min(changes):.1f}–{max(changes):.1f}% for 4–5 µm. ' + interpretation, '',
         '## Limits', '',
     ] + ['- ' + s for s in summary['limitations']]
+    if prefix == 'P1823':
+        lines += ['', '## Joint test of a constant continuum spectrum', '',
+            'Use the seven non-overlapping intervals and all three epochs, with one constant '
+            'mean per interval (14 degrees of freedom). The overlapping 4–5 micron '
+            'aggregate is omitted to avoid double counting. The shared 2% scenario '
+            'correlates the epoch scale across wavelengths as well as within each interval.', '']
+        for key, value in summary['joint_constant_spectrum_tests'].items():
+            lines.append(f'- {key}: chi-square = {value["chi2"]:.2f}, '
+                         f'dof = {value["dof"]}, p = {value["p"]:.4f}.')
+        lines += ['', 'The nominal result is marginal and does not survive the shared-calibration '
+            'or excess-scatter checks. Individual-window results are exploratory and are '
+            'not corrected for the multiple windows/epoch pairs inspected. The nominal '
+            'smallest window p-value (about 0.03) also does not survive an eight-window '
+            'Bonferroni correction.', '']
     lines += ['',
         'Instrument context: [IRSA spectral calibration products](https://irsa.ipac.caltech.edu/data/SPHEREx/docs/spherex_spectral_calibrations.html) '
         'provide the spectral response curves needed for a full response-based comparison. '

@@ -7,6 +7,7 @@
     "Jul\u2013Aug 2026"
   ],
   "excluded_csv_row_indices": [],
+  "exclusion_reason": "User-requested removal of isolated P1823 point at 4.06996 um, MJD 61075.067882; full CSV retained and sensitivity run available.",
   "method": "Independent polynomial per epoch; uniform wavelength average of F_nu over common observed intervals. Quadratic adopted, linear/cubic sensitivity checks.",
   "calibration_fraction_in_csv": 0.019999941596123134,
   "covariance_scenario": "Independent measurement variances plus a 2% multiplicative term fully correlated within each epoch and independent between epochs; replaces the original diagonal calibration variance.",
@@ -4698,5 +4699,115 @@
         "measurement_variance_inflation": 3.6346371828747563
       }
     }
-  ]
+  ],
+  "joint_constant_spectrum_tests": {
+    "independent_errors": {
+      "chi2": 24.050811668257673,
+      "dof": 14,
+      "p": 0.045179031059146765,
+      "windows_um": [
+        [
+          0.85,
+          1.0
+        ],
+        [
+          1.15,
+          1.5
+        ],
+        [
+          2.2,
+          2.6
+        ],
+        [
+          2.6,
+          3.5
+        ],
+        [
+          3.5,
+          4.0
+        ],
+        [
+          4.0,
+          4.5
+        ],
+        [
+          4.5,
+          5.0
+        ]
+      ],
+      "covariance_assumption": "Measurement errors independent across disjoint intervals; shared-calibration cases correlate the same epoch scale across intervals."
+    },
+    "epoch_correlated_calibration": {
+      "chi2": 19.682258929353104,
+      "dof": 14,
+      "p": 0.14048155548780417,
+      "windows_um": [
+        [
+          0.85,
+          1.0
+        ],
+        [
+          1.15,
+          1.5
+        ],
+        [
+          2.2,
+          2.6
+        ],
+        [
+          2.6,
+          3.5
+        ],
+        [
+          3.5,
+          4.0
+        ],
+        [
+          4.0,
+          4.5
+        ],
+        [
+          4.5,
+          5.0
+        ]
+      ],
+      "covariance_assumption": "Measurement errors independent across disjoint intervals; shared-calibration cases correlate the same epoch scale across intervals."
+    },
+    "excess_scatter_and_correlated_calibration": {
+      "chi2": 11.214232497713201,
+      "dof": 14,
+      "p": 0.6691303217968277,
+      "windows_um": [
+        [
+          0.85,
+          1.0
+        ],
+        [
+          1.15,
+          1.5
+        ],
+        [
+          2.2,
+          2.6
+        ],
+        [
+          2.6,
+          3.5
+        ],
+        [
+          3.5,
+          4.0
+        ],
+        [
+          4.0,
+          4.5
+        ],
+        [
+          4.5,
+          5.0
+        ]
+      ],
+      "covariance_assumption": "Measurement errors independent across disjoint intervals; shared-calibration cases correlate the same epoch scale across intervals."
+    }
+  }
 }
