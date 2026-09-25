@@ -1,6 +1,6 @@
 """SPHEREx spectra with expected redshifted line positions.
 
-Both targets use their supplied cleaned numerical CSVs.
+All three targets use their supplied cleaned numerical CSVs.
 Rest wavelengths are vacuum values in microns. References and qualifications
 are recorded in spherex_line_identifications.md.
 """
@@ -16,8 +16,21 @@ from astropy.time import Time
 HERE = Path(__file__).resolve().parent
 A3_CSV = HERE / 'spaxel_scryer_P9694_ra11p5333_dec9p1225_cleaned.csv'
 CSV_PATHS = {'A3': A3_CSV,
-             'P2190': HERE / 'spaxel_scryer_P2190_ra240p2575_dec36p9388_cleaned.csv'}
+             'P2190': HERE / 'spaxel_scryer_P2190_ra240p2575_dec36p9388_cleaned.csv',
+             'P1823': HERE / 'spaxel_scryer_Shooby_AGN_ra245p1631_dec43p1373_cleaned.csv'}
 PASS_COLORS = ['#2878a5', '#a14c7d', '#27836c']
+
+
+def retained_measurements(prefix, data):
+    """Exclude only the explicitly identified P1823 point; keep CSV unchanged."""
+    keep = np.ones(len(data['flux_mjy']), dtype=bool)
+    if prefix == 'P1823':
+        rejected = (np.isclose(data['wavelength_um'], 4.06996, rtol=0, atol=1e-6)
+                    & np.isclose(data['mjds'], 61075.067882, rtol=0, atol=1e-6))
+        if rejected.sum() != 1:
+            raise ValueError('Expected exactly one explicitly excluded P1823 point.')
+        keep &= ~rejected
+    return keep
 
 
 @lru_cache(maxsize=1)
@@ -25,9 +38,9 @@ def load_spherex(prefix='A3'):
     """Preserve every supplied row; group observations only by gaps >45 days."""
     with CSV_PATHS[prefix].open(newline='') as handle:
         rows = list(csv.DictReader(handle))
-    name = 'P9694' if prefix == 'A3' else prefix
+    name = {'A3': 'P9694', 'P1823': 'Shooby_AGN'}.get(prefix, prefix)
     if not rows or any(r['object_name'] != name or r['spectrum_type'] != 'cleaned'
-                       or r['spectrum_role'] != 'source' for r in rows):
+                       or r.get('spectrum_role', 'source') != 'source' for r in rows):
         raise ValueError(f'Expected the cleaned source spectrum of {name}.')
     data = {key: np.array([float(r[key]) for r in rows]) for key in
             ['wavelength_um', 'wavelength_half_width_um', 'flux_mjy', 'flux_err_mjy', 'mjds']}
@@ -35,8 +48,13 @@ def load_spherex(prefix='A3'):
         raise ValueError('Non-finite SPHEREx data require explicit review.')
     if np.any(data['flux_err_mjy'] <= 0) or np.any(data['wavelength_half_width_um'] < 0):
         raise ValueError('Invalid supplied uncertainty or spectral width.')
-    if any(r['is_binned'] != 'false' or r['n_images'] != '1' for r in rows):
-        raise ValueError('Grouping assumes individual, unbinned measurements.')
+    if 'is_binned' in rows[0]:
+        if any(r['is_binned'] != 'false' or r['n_images'] != '1' for r in rows):
+            raise ValueError('Grouping assumes individual, unbinned measurements.')
+    elif any(r['measurement_method'] != 'native_raw_mef_batch_exact_fractional'
+             or not r['image_names'].endswith('.fits')
+             or ';' in r['image_names'] or ',' in r['image_names'] for r in rows):
+        raise ValueError('Expected one native image per exported measurement.')
     order = np.argsort(data['mjds'])
     cuts = np.flatnonzero(np.diff(data['mjds'][order]) > 45) + 1
     groups = []
@@ -61,12 +79,17 @@ def load_a3_spherex():
 
 def write_data_summary(prefix='A3'):
     data, groups, rows = load_spherex(prefix)
+    keep = retained_measurements(prefix, data)
     source = CSV_PATHS[prefix]
     flags = ['incomplete_aperture', 'incomplete_annulus', 'asymmetric_annulus',
              'saturated_or_nonlinear']
     summary = dict(
         source_file=source.name, source_sha256=hashlib.sha256(source.read_bytes()).hexdigest(),
-        target=rows[0]['object_name'], rows_supplied=len(rows), rows_plotted=len(rows),
+        target=rows[0]['object_name'], rows_supplied=len(rows), rows_plotted=int(keep.sum()),
+        excluded_measurements=[dict(csv_row_index=int(i), wavelength_um=float(data['wavelength_um'][i]),
+            mjd=float(data['mjds'][i]), flux_mjy=float(data['flux_mjy'][i]),
+            reason='User-requested exclusion of isolated high point; input CSV preserved')
+            for i in np.flatnonzero(~keep)],
         flux_column='flux_mjy', error_column='flux_err_mjy',
         horizontal_bars='wavelength_half_width_um: exported spectral half-widths, not wavelength errors',
         grouping='Chronological groups separated by gaps >45 days; no smoothing, rebinning or epoch averaging',
@@ -75,13 +98,15 @@ def write_data_summary(prefix='A3'):
             end_utc=Time(g['end_mjd'], format='mjd').isot,
             wavelength_min_um=float(data['wavelength_um'][g['indices']].min()),
             wavelength_max_um=float(data['wavelength_um'][g['indices']].max())) for g in groups],
-        flags_true={flag: sum(r[flag].lower() == 'true' for r in rows) for flag in flags},
+        flags_true={flag: sum(r[flag].lower() == 'true' for r in rows)
+                    for flag in flags if flag in rows[0]},
+        raw_flag_names=sorted({r.get('flag_names', '') for r in rows}),
         extraction_methods=sorted({r['measurement_method'] for r in rows}),
-        uncertainty_methods=sorted({r['uncertainty_method'] for r in rows}),
-        local_background_values=sorted({r['local_background'] for r in rows}),
+        uncertainty_methods=sorted({r.get('uncertainty_method', 'exported variance_total_mjy2') for r in rows}),
+        local_background_values=sorted({r.get('local_background', r.get('background_mode', '')) for r in rows}),
         aperture_radius_arcsec=[min(float(r['aperture_radius_arcsec']) for r in rows),
                                 max(float(r['aperture_radius_arcsec']) for r in rows)],
-        interpretation=f'Expected line markers are not fitted detections. Exploratory variability calculations are documented separately in spherex_{prefix}_variability.md; no secure variability detection is claimed.')
+        interpretation='Expected line markers are not fitted detections. Epochs are plotted separately; this figure does not establish significant variability.')
     (HERE / f'inputs/{prefix}_spherex_csv_provenance.json').write_text(json.dumps(summary, indent=2) + '\n')
 
 
@@ -100,27 +125,37 @@ def line_groups(z):
 
 def draw_csv(ax, prefix, z, fontsize):
     data, groups, _ = load_spherex(prefix)
+    keep = retained_measurements(prefix, data)
     compact = fontsize < 8
     for group in groups:
-        idx = group['indices']
+        idx = group['indices'][keep[group['indices']]]
         ax.errorbar(data['wavelength_um'][idx], data['flux_mjy'][idx],
                     xerr=data['wavelength_half_width_um'][idx], yerr=data['flux_err_mjy'][idx],
                     fmt='o', ms=1.8 if compact else 3.2, color=group['color'],
                     ecolor=group['color'], elinewidth=.35 if compact else .65,
                     markeredgewidth=0, capsize=0, alpha=.85, label=group['label'], zorder=3)
     ymax = (18 if compact else 16) if prefix == 'A3' else (1.9 if compact else 1.8)
+    if prefix == 'P1823':
+        ymax = 2.2
     ax.set(xlim=(.70, 5.06), ylim=(0, ymax),
            xlabel='Observed wavelength (µm)', ylabel=r'$F_\nu$ (mJy)')
     ax.set_xticks(np.arange(1, 5.1, .5))
     ax.set_yticks([0, 5, 10, 15] if prefix == 'A3' else [0, .5, 1, 1.5])
+    if prefix == 'P1823':
+        ax.set_yticks([0, .5, 1, 1.5, 2])
     ax.grid(axis='y', color='#e3e7eb', lw=.5)
     ax.set_axisbelow(True)
     ax.tick_params(length=2.5, pad=2, labelsize=7 if compact else 9)
     ax.set_xlabel('Observed wavelength (µm)', fontsize=8 if compact else 10, labelpad=2)
     ax.set_ylabel(r'$F_\nu$ (mJy)', fontsize=8 if compact else 10, labelpad=3)
-    ax.legend(loc='upper right', frameon=False, fontsize=6.1 if compact else 8.5,
+    legend_options = (dict(loc='lower right', bbox_to_anchor=(1, 1.035), ncol=3)
+                      if prefix == 'P1823' and compact else
+                      dict(loc='upper left', bbox_to_anchor=(.18, .67))
+                      if prefix == 'P1823' else
+                      dict(loc='upper right', bbox_to_anchor=(.88, 1) if prefix == 'P2190' else (1, 1)))
+    ax.legend(frameon=False, fontsize=6.1 if compact else 8.5,
               handletextpad=.4, borderaxespad=.25, labelspacing=.3,
-              bbox_to_anchor=(.88, 1) if prefix == 'P2190' else (1, 1))
+              **legend_options)
     for label, members in line_groups(z):
         waves = [REST[name] * (1 + z) for name in members]
         if not all(.75 <= wave <= 5 for wave in waves):

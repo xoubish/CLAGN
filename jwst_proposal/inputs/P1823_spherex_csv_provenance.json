@@ -1,0 +1,74 @@
+{
+  "source_file": "spaxel_scryer_Shooby_AGN_ra245p1631_dec43p1373_cleaned.csv",
+  "source_sha256": "826d4928774d509427e702a1fbcd0afdb88cb5acdf6981a4978136335a9bfaba",
+  "target": "Shooby_AGN",
+  "rows_supplied": 373,
+  "rows_plotted": 372,
+  "excluded_measurements": [
+    {
+      "csv_row_index": 263,
+      "wavelength_um": 4.06996,
+      "mjd": 61075.067882,
+      "flux_mjy": 3.0462,
+      "reason": "User-requested exclusion of isolated high point; input CSV preserved"
+    }
+  ],
+  "flux_column": "flux_mjy",
+  "error_column": "flux_err_mjy",
+  "horizontal_bars": "wavelength_half_width_um: exported spectral half-widths, not wavelength errors",
+  "grouping": "Chronological groups separated by gaps >45 days; no smoothing, rebinning or epoch averaging",
+  "observation_intervals": [
+    {
+      "label": "Jul\u2013Aug 2025",
+      "count": 142,
+      "start_utc": "2025-07-02T07:07:51.254",
+      "end_utc": "2025-08-17T07:02:14.986",
+      "wavelength_min_um": 0.75193,
+      "wavelength_max_um": 5.0048
+    },
+    {
+      "label": "Jan\u2013Feb 2026",
+      "count": 135,
+      "start_utc": "2026-01-18T03:53:26.304",
+      "end_utc": "2026-02-17T12:15:06.077",
+      "wavelength_min_um": 0.75819,
+      "wavelength_max_um": 4.99022
+    },
+    {
+      "label": "Jul\u2013Aug 2026",
+      "count": 96,
+      "start_utc": "2026-07-04T19:00:34.157",
+      "end_utc": "2026-08-06T12:21:12.413",
+      "wavelength_min_um": 0.74534,
+      "wavelength_max_um": 5.00693
+    }
+  ],
+  "flags_true": {},
+  "raw_flag_names": [
+    "",
+    "SOURCE:10",
+    "SOURCE:12",
+    "SOURCE:13",
+    "SOURCE:15",
+    "SOURCE:16",
+    "SOURCE:17",
+    "SOURCE:18",
+    "SOURCE:19",
+    "SOURCE:20",
+    "SOURCE:21"
+  ],
+  "extraction_methods": [
+    "native_raw_mef_batch_exact_fractional"
+  ],
+  "uncertainty_methods": [
+    "exported variance_total_mjy2"
+  ],
+  "local_background_values": [
+    "local"
+  ],
+  "aperture_radius_arcsec": [
+    10.67,
+    10.68
+  ],
+  "interpretation": "Expected line markers are not fitted detections. Epochs are plotted separately; this figure does not establish significant variability."
+}

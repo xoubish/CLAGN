@@ -1,9 +1,9 @@
-"""Single-target Figure 1 layout previews: A3 / P9694 and P2190.
+"""Single-target Figure 1 layouts: A3 / P9694, P2190 and P1823.
 
 Archival optical/WISE data are the bundled proposal snapshot. Both NGPS epochs use
 the saved P330E calibration in the bundled FITS file. The SDSS JPEG
 has its retrieval provenance alongside it. SPHEREx data use the supplied
-cleaned CSVs, with per-measurement dates and uncertainties. This preview does not replace the active proposal figure.
+cleaned CSVs, with per-measurement dates and uncertainties. A3 is the active proposal Figure 1; the legacy preview filename is retained.
 """
 from pathlib import Path
 import json
@@ -20,17 +20,18 @@ from astropy.time import Time
 from astropy.io import fits
 from scipy.ndimage import gaussian_filter1d
 from spherex_line_labels import (draw_spherex_panel, write_line_table,
-                                load_spherex, write_data_summary, line_groups, REST)
+                                load_spherex, write_data_summary, line_groups, REST,
+                                retained_measurements)
 
 HERE = Path(__file__).resolve().parent
 INPUTS = HERE / 'inputs'
 parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument('--target', choices=['A3', 'P2190'], default='A3')
+parser.add_argument('--target', choices=['A3', 'P2190', 'P1823'], default='A3')
 args = parser.parse_args()
 prefix = args.target
 target = (next(t for t in json.loads((INPUTS / 'figure_targets.json').read_text())['targets']
                if t['name'] == 'P9694') if prefix == 'A3'
-          else json.loads((INPUTS / 'P2190_figure_target.json').read_text()))
+          else json.loads((INPUTS / f'{prefix}_figure_target.json').read_text()))
 epochs = sorted(target['spec']['epochs'], key=lambda e: e['mjd'])
 with fits.open(INPUTS / f'{prefix}_ngps_flux_standards.fits') as hdus:
     data, header = hdus[1].data, hdus[1].header
@@ -45,6 +46,15 @@ with fits.open(INPUTS / f'{prefix}_ngps_flux_standards.fits') as hdus:
             epoch['flux_standard'] = 'P330E'
 z = target['z']
 COLORS = ['#75a6c9', '#244c78', '#d25a2f']
+if prefix == 'P1823':
+    archival = [e for e in epochs if e.get('instrument') != 'NGPS']
+    shades = iter(plt.cm.Blues(np.linspace(.32, .88, len(archival))))
+    COLORS = ['#d25a2f' if e.get('instrument') == 'NGPS' else next(shades) for e in epochs]
+    seen_years = set()
+    for e in archival:
+        yr = e['date'][:4]
+        e['figure_label'] = yr if yr not in seen_years else '_nolegend_'
+        seen_years.add(yr)
 GREEN, PINK, PURPLE = '#178169', '#b44675', '#725397'
 INK, MUTED, GRID = '#172733', '#596571', '#e3e7eb'
 
@@ -160,7 +170,7 @@ def optical_spectrum_mjy(epoch):
     # 1 mJy = 1e-26 erg/s/cm^2/Hz. Both axes are observed-frame.
     flux_mjy = flux * 1e-17 * wave**2 / 2.99792458e18 / 1e-26
     label = (epoch['date'] + ' NGPS' if epoch.get('instrument') == 'NGPS'
-             else epoch.get('label', epoch['date']))
+             else epoch.get('figure_label', epoch.get('label', epoch['date'])))
     if '–' in label:
         label = '2021–2022 coadd'
     return wave / 1e4, flux_mjy, label
@@ -173,12 +183,14 @@ def draw_combined_spectrum(ax, compact=True):
         wave, flux_mjy, label = optical_spectrum_mjy(epoch)
         handle, = ax.plot(wave, flux_mjy, color=color,
                           lw=.65 if compact else .85, label=label, zorder=3)
-        optical_handles.append(handle)
+        if label != '_nolegend_':
+            optical_handles.append(handle)
 
     data, groups, _ = load_spherex(prefix)
+    retained = retained_measurements(prefix, data)
     infrared_handles = []
     for group in groups:
-        idx = group['indices']
+        idx = group['indices'][retained[group['indices']]]
         handle = ax.errorbar(data['wavelength_um'][idx], data['flux_mjy'][idx],
                             xerr=data['wavelength_half_width_um'][idx],
                             yerr=data['flux_err_mjy'][idx], fmt='o',
@@ -193,6 +205,10 @@ def draw_combined_spectrum(ax, compact=True):
     ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f'{v:g}'))
     ax.xaxis.set_minor_formatter(NullFormatter())
     ax.set_yticks([0, 4, 8, 12, 16] if prefix == 'A3' else [0, .5, 1, 1.5, 2])
+    if prefix == 'P1823':
+        ax.set_ylim(0, 1.25 * max(np.max((data['flux_mjy'] + data['flux_err_mjy'])[retained]),
+            max(np.nanmax(optical_spectrum_mjy(e)[1]) for e in epochs)))
+        ax.yaxis.set_major_locator(MaxNLocator(5))
     ax.grid(axis='y', color=GRID, lw=.5)
     ax.set_axisbelow(True)
     ax.tick_params(length=2.5, pad=2, labelsize=7 if compact else 9)
@@ -229,18 +245,21 @@ def draw_combined_spectrum(ax, compact=True):
 # Separate spectral panels preserve the optical detail and infrared continuum.
 ax_spec = fig.add_axes([.09, .362, .882, .174])
 optical_flux = []
+optical_xlim = (.34, .94) if prefix == 'P1823' else (.34, 1.04)
 for epoch, color in zip(epochs, COLORS):
     wave, flux, label = optical_spectrum_mjy(epoch)
     ax_spec.plot(wave, flux, color=color, lw=.65, label=label)
-    optical_flux.extend(flux[(wave >= .34) & (wave <= 1.04) & np.isfinite(flux)])
-ax_spec.set(xlim=(.34, 1.04), ylim=(0, max(optical_flux) * 1.12),
+    optical_flux.extend(flux[(wave >= optical_xlim[0]) & (wave <= optical_xlim[1]) & np.isfinite(flux)])
+ax_spec.set(xlim=optical_xlim, ylim=(0, max(optical_flux) * 1.12),
             xlabel='Observed wavelength (µm)', ylabel=r'$F_\nu$ (mJy)')
-ax_spec.set_xticks(np.arange(.4, 1.01, .1))
+ax_spec.set_xticks(np.arange(.4, optical_xlim[1], .1))
 ax_spec.set_title('(c) Optical spectra', loc='left', pad=5)
 ax_spec.set_xlabel('Observed wavelength (µm)', labelpad=2)
 ax_spec.set_ylabel(r'$F_\nu$ (mJy)', labelpad=3)
-ax_spec.legend(loc='upper right', frameon=False, fontsize=6.4, handlelength=1.4,
-               borderaxespad=.2, labelspacing=.2)
+legend_options = (dict(loc='lower right', bbox_to_anchor=(1, 1.04), ncol=3)
+                  if prefix == 'P1823' else dict(loc='upper right'))
+ax_spec.legend(frameon=False, fontsize=6.4, handlelength=1.4,
+               borderaxespad=.2, labelspacing=.2, **legend_options)
 for rest, label in OPTICAL_LINES:
     wave = rest * (1 + z) / 1e4
     ax_spec.axvline(wave, color='#b4bdc4', lw=.5, zorder=0)
@@ -253,7 +272,7 @@ ax_spherex = fig.add_axes([.09, .092, .882, .162])
 draw_spherex_panel(ax_spherex, prefix, z, fontsize=6.0)
 
 for suffix in ('pdf', 'png'):
-    stem = 'fig1_single_example_preview' if prefix == 'A3' else 'fig1_P2190_example_preview'
+    stem = 'fig1_single_example_preview' if prefix == 'A3' else f'fig1_{prefix}_example_preview'
     path = HERE / f'{stem}.{suffix}'
     fig.savefig(path, dpi=240)
     print(path)

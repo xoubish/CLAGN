@@ -1,4 +1,4 @@
-"""Exploratory continuum variability check for the supplied A3 or P2190 CSV.
+"""Exploratory continuum variability check for a supplied SPHEREx CSV.
 
 Fit each epoch independently at its own wavelength samples, then integrate
 the fitted continuum over identical observed-wavelength intervals. This avoids
@@ -14,7 +14,7 @@ os.environ.setdefault('MPLCONFIGDIR', '/tmp/clagn-matplotlib')
 import numpy as np
 from scipy.linalg import cho_factor, cho_solve
 from scipy.stats import chi2
-from spherex_line_labels import CSV_PATHS, load_spherex
+from spherex_line_labels import CSV_PATHS, load_spherex, retained_measurements
 
 HERE = Path(__file__).resolve().parent
 WINDOWS = [(2.6, 3.5), (3.5, 4.0), (4.0, 4.5), (4.5, 5.0), (4.0, 5.0)]
@@ -46,12 +46,17 @@ def summarize(flux, covariance):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--target', choices=['A3', 'P2190'], default='A3')
-    prefix = parser.parse_args().target
+    parser.add_argument('--target', choices=['A3', 'P2190', 'P1823'], default='A3')
+    parser.add_argument('--include-excluded', action='store_true',
+                        help='Sensitivity check including the user-excluded P1823 point.')
+    args = parser.parse_args()
+    prefix = args.target
+    output_name = prefix + ('_including_outlier' if args.include_excluded else '')
     source = CSV_PATHS[prefix]
     data, groups, rows = load_spherex(prefix)
     assert len(groups) == 3, 'This comparison requires exactly three observing periods.'
     wave, flux, errors = (data[k] for k in ['wavelength_um', 'flux_mjy', 'flux_err_mjy'])
+    retained = np.ones(len(rows), bool) if args.include_excluded else retained_measurements(prefix, data)
     epoch = np.empty(len(rows), dtype=int)
     for i, group in enumerate(groups):
         epoch[group['indices']] = i
@@ -59,11 +64,13 @@ def main():
     calibration_var = np.array([float(r['variance_calibration_mjy2']) for r in rows])
     # CSV errors/variances are rounded independently to 5-6 significant digits.
     np.testing.assert_allclose(measurement_var + calibration_var, errors**2, rtol=2e-4)
-    cal_fraction = np.median(np.sqrt(calibration_var) / flux)
+    cal_fraction = np.median(np.sqrt(calibration_var) / np.abs(flux))
     assert np.isclose(cal_fraction, .02, atol=1e-5)
     results = []
-    for lower, upper in WINDOWS:
-        selected = (wave >= lower) & (wave <= upper)
+    windows = ([(.85, 1.), (1.15, 1.5), (2.2, 2.6)] + WINDOWS
+               if prefix == 'P1823' else WINDOWS)
+    for lower, upper in windows:
+        selected = (wave >= lower) & (wave <= upper) & retained
         x = (wave[selected] - (lower + upper) / 2) / (upper - lower)
         y, err, ids = flux[selected], errors[selected], epoch[selected]
         for degree in (1, 2, 3):
@@ -79,6 +86,7 @@ def main():
             independent = summarize(integral @ b, integral @ cov @ integral.T)
             independent['fit_chi2'] = float(np.sum(((y - predicted) / err)**2))
             independent['fit_dof'] = len(y) - len(b)
+            independent['fit_p'] = float(chi2.sf(independent['fit_chi2'], independent['fit_dof']))
             # Sensitivity scenario, not a measured covariance: move the CSV's
             # existing 2% term out of the diagonal into one shared scale per
             # epoch. Independent epochs; no double counting the 2% term.
@@ -88,13 +96,25 @@ def main():
                 covariance += np.outer(calibration, calibration)
             bc, cc = solve(design, y, covariance)
             correlated = summarize(integral @ bc, integral @ cc @ integral.T)
+            residual = y - design @ bc
+            correlated['fit_chi2'] = float(residual @ cho_solve(cho_factor(covariance), residual))
+            correlated['fit_dof'] = len(y) - len(b)
+            # Sensitivity to excess point-to-point scatter; only inflate the
+            # measurement variance, leaving the existing shared 2% term intact.
+            inflation = max(1., correlated['fit_chi2'] / correlated['fit_dof'])
+            inflated_covariance = covariance + (inflation - 1.) * np.diag(measurement_var[selected])
+            bi, ci = solve(design, y, inflated_covariance)
+            inflated = summarize(integral @ bi, integral @ ci @ integral.T)
+            inflated['measurement_variance_inflation'] = inflation
             results.append(dict(observed_window_um=[lower, upper], degree=degree,
                                 counts=np.bincount(ids, minlength=3).tolist(),
                                 independent_errors=independent,
-                                epoch_correlated_calibration=correlated))
+                                epoch_correlated_calibration=correlated,
+                                excess_scatter_and_correlated_calibration=inflated))
     summary = dict(
         input=source.name, sha256=hashlib.sha256(source.read_bytes()).hexdigest(),
         epochs=[g['label'] for g in groups],
+        excluded_csv_row_indices=np.flatnonzero(~retained).tolist(),
         method='Independent polynomial per epoch; uniform wavelength average of F_nu over common observed intervals. Quadratic adopted, linear/cubic sensitivity checks.',
         calibration_fraction_in_csv=float(cal_fraction),
         covariance_scenario='Independent measurement variances plus a 2% multiplicative term fully correlated within each epoch and independent between epochs; replaces the original diagonal calibration variance.',
@@ -105,7 +125,7 @@ def main():
             'Background, aperture, processing-version and other systematics have not been independently validated with control sources.',
             'Nominal significances assume the fitted smooth continuum is adequate; inspect fit chi-square and degree sensitivity.',
         ], results=results)
-    (HERE / f'spherex_{prefix}_variability.json').write_text(json.dumps(summary, indent=2) + '\n')
+    (HERE / f'spherex_{output_name}_variability.json').write_text(json.dumps(summary, indent=2) + '\n')
     lines = [
         f'# {prefix} SPHEREx continuum variability check', '',
         f'Regenerate with `python check_a3_spherex_variability.py --target {prefix}`.', '',
@@ -113,8 +133,8 @@ def main():
         'Fit an independent quadratic continuum to each epoch at its actual wavelengths, '
         'then average the fitted F_nu over identical wavelength intervals. '
         'This accounts for unequal wavelength sampling without imposing the same continuum shape.', '',
-        '| Observed interval (µm) | Mean fluxes in chronological order (mJy) | First-to-last change | Nominal significance | Shared 2% scenario |',
-        '|---|---|---|---|---|',
+        '| Observed interval (µm) | Mean fluxes in chronological order (mJy) | First-to-last change | Nominal significance | Shared 2% scenario | Shared 2% + excess scatter |',
+        '|---|---|---|---|---|---|',
     ]
     for result in results:
         if result['degree'] != 2:
@@ -122,13 +142,19 @@ def main():
         nominal = result['independent_errors']
         comparison = nominal['contrasts'][1]
         shared = result['epoch_correlated_calibration']['contrasts'][1]
+        inflated = result['excess_scatter_and_correlated_calibration']['contrasts'][1]
         means = ', '.join(f'{f:.3f}' for f in nominal['mean_flux_mjy'])
         lo, hi = result['observed_window_um']
         lines.append(f'| {lo:g}–{hi:g} | {means} | {comparison["change_percent"]:+.1f}% | '
-                     f'{comparison["signed_sigma"]:.1f}σ | {shared["signed_sigma"]:.1f}σ |')
+                     f'{comparison["signed_sigma"]:.1f}σ | {shared["signed_sigma"]:.1f}σ | {inflated["signed_sigma"]:.1f}σ |')
     broad_results = [r for r in results if r['observed_window_um'] == [4.0, 5.0]]
     changes = [r['independent_errors']['contrasts'][1]['change_percent'] for r in broad_results]
     interpretation = (
+        'P1823 interpretations must use the global constant-flux tests, all epoch pairs, '
+        'continuum-model checks and fit residuals recorded in the JSON. The isolated '
+        '4.06996 micron point is excluded in the primary calculation and restored '
+        'with --include-excluded for sensitivity analysis.'
+        if prefix == 'P1823' else
         'P2190 shows a candidate long-wavelength brightening concentrated between '
         'summer 2025 and early 2026; the last two epochs are consistent with each other. '
         'There is no comparable significant change at 3.5–4 µm. '
@@ -155,7 +181,7 @@ def main():
         'Instrument context: [IRSA spectral calibration products](https://irsa.ipac.caltech.edu/data/SPHEREx/docs/spherex_spectral_calibrations.html) '
         'provide the spectral response curves needed for a full response-based comparison. '
         'The numerical findings above come from the supplied CSV, not from that documentation.', '']
-    (HERE / f'spherex_{prefix}_variability.md').write_text('\n'.join(lines))
+    (HERE / f'spherex_{output_name}_variability.md').write_text('\n'.join(lines))
     print('\n'.join(lines[:12]))
 
 

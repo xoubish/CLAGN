@@ -1,0 +1,10 @@
+{
+  "source": "docs/index.html, candidate-data JSON, P1823",
+  "source_sha256": "c613e049d8d8eff9db06ae9e44a981c74a74a26d97f59dd31260b5db5bb5b02e",
+  "data_sha256": "c1d34b1f2dc2d92959544bdabbf59221aac84111865f4784e3b609ddd5a5ed0f",
+  "snapshot_date": "2026-09-25",
+  "archival_epochs": 20,
+  "ngps_epochs": 1,
+  "spherex_object_name": "Shooby_AGN",
+  "coordinate_separation_arcsec": 0.3133443517834261
+}

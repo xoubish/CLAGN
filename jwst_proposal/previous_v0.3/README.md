@@ -2,7 +2,7 @@
 
 This is the active, Git-visible proposal folder. Copy this directory into another repository or open it in another checkout; building the proposal and regenerating its figures require no files from the ignored `observing/` or `data/` trees.
 
-The active scientific draft is v0.4 (2026-09-25): four core pages, followed by supplemental information, references and the AI disclosure on page 5. The previous v0.3 text, PDF and model figure are preserved in `previous_v0.3/`. See `revision_notes_v0.4.md` for the scientific changes and remaining ETC/APT work.
+The current scientific text and figure designs are v0.3. This relocation preserves them. The previous working copies, historical drafts and review notes remain in the original ignored `observing/jwst_cycle6_20260925/proposal_draft/` directory.
 
 ## Edit and build
 
@@ -12,7 +12,7 @@ Edit `proposal.tex`, then run from this directory:
 latexmk -pdf -interaction=nonstopmode -halt-on-error proposal.tex
 ```
 
-Alternatively, run `make`, which uses latexmk when available and otherwise Tectonic. To select a portable binary, use `make TECTONIC=/path/to/tectonic`. The existing figure PDFs are included, so Python is unnecessary for ordinary text editing and compilation. A TeX distribution with `latexmk`, `pdflatex`, `mathptmx`, and `graphicx` is sufficient.
+Alternatively, run `make`. The existing figure PDFs are included, so Python is unnecessary for ordinary text editing and compilation. A TeX distribution with `latexmk`, `pdflatex`, `mathptmx`, and `graphicx` is sufficient.
 
 ## Files
 
@@ -22,10 +22,9 @@ Alternatively, run `make`, which uses latexmk when available and otherwise Tecto
 | `apt_title_abstract.txt` | Separate title and abstract for APT |
 | `jwstproposaltemplate_v6.sty` | Unmodified official Cycle 6 style |
 | `JWST_proposal_template_cy6.tex` | Original official template for reference |
-| `fig1_single_example_preview.pdf` / `.png` | Active Figure 1: A3 cutout, light curves, optical spectra and SPHEREx |
-| `fig1_histories.pdf` / `.png` | Supporting three-anchor history figure (previous draft) |
+| `fig1_histories.pdf` / `.png` | Archival/NGPS spectra, ZTF and WISE histories |
 | `fig2_model.pdf` / `.png` | Illustrative dust-model comparison |
-| `make_fig1_single_example.py`, `spherex_line_labels.py`, `make_fig2_model.py` | Active figure generators |
+| `make_fig1_histories.py`, `make_fig2_model.py` | Figure generators |
 | `inputs/figure_targets.json` | Only the three targets and data fields used by these generators |
 | `inputs/provenance.json` | Snapshot origin and checksums |
 | `inputs/allwise_w1w4_candidates.csv` | Existing AllWISE planning table |
@@ -34,7 +33,7 @@ The figure snapshot preserves the local collaboration epochs already used in v0.
 
 ## Regenerate figures
 
-The active single-galaxy Figure 1 is in `fig1_single_example_preview.pdf`
+A single-galaxy alternative is available in `fig1_single_example_preview.pdf`
 and `.png`: A3's 15-arcsec SDSS cutout, light curves, and separate optical
 and SPHEREx panels with line labels. Both spectral panels use observed wavelength
 in microns and F-nu in mJy, with linear axes and independently chosen ranges.
@@ -44,7 +43,7 @@ the object-name header and separate H-beta close-up are omitted. Run
 `fig1_single_example_notes.md` for the caption, provenance and extraction details.
 A3 now has three dated SPHEREx observing intervals, flux uncertainties and
 spectral widths, with matching intervals shaded on its light curves. The active
-proposal uses this A3 figure; the legacy `preview` filename is retained.
+proposal still uses the original Figure 1.
 
 The companion `fig1_P2190_example_preview.pdf` / `.png` shows J1601+3656 at
 z = 0.739785, using the three spectra and light curves saved in the public
@@ -64,11 +63,11 @@ assumptions are saved in `spherex_P2190_variability.md` / `.json` and the A3 equ
 
 ```sh
 python -m pip install -r requirements.txt
-python make_fig1_single_example.py
+python make_fig1_histories.py
 python make_fig2_model.py
 ```
 
-Or run `make figures`. The generators use the bundled inputs and the supplied SPHEREx CSVs relative to their own location. They do not download data or access the original workspace. Times New Roman/Times fonts reproduce the original figure appearance when installed.
+Or run `make figures`. Both scripts load `inputs/figure_targets.json` relative to their own location. They do not download data or access the original workspace. Times New Roman/Times fonts reproduce the original figure appearance when installed.
 
 ## Git and Overleaf
 
@@ -78,14 +77,4 @@ For Overleaf, run `make bundle`, upload `clagn_jwst_cycle6_draft.zip`, and selec
 
 ## Working status
 
-This is an editable proposal draft, not a submitted program. The PDF compiles with the unchanged official template; its four core pages and figures have been inspected. Figure 2 is an illustrative shell model, not a target fit or sensitivity forecast. Final target-specific ETC sensitivities, background choices and APT charged times remain unvalidated. The AllWISE error-column units also need checking before uncertainty propagation. Keep the official style unchanged and update the AI disclosure as the proposal is revised.
-
-## P1823 example
-
-`fig1_P1823_example_preview.pdf` / `.png` adds P1823 (J162039.13+430814.6,
-z = 0.6204823), using the new Shooby_AGN SPHEREx CSV. It shows all 20 archival
-optical spectra plus the 2026 NGPS spectrum, with a compact year-grouped legend.
-Run `python make_fig1_single_example.py --target P1823` to regenerate it and its
-larger supporting spectra. See `fig1_P1823_notes.md` for data provenance,
-display choices and the measured continuum comparison. The active proposal
-continues to use A3.
+This is an editable proposal draft, not a submitted program. The relocation does not validate the model assumptions, figure typography, target states, ETC sensitivities, or APT charged times. Those scientific and submission checks remain part of proposal development. Keep the official style unchanged and update the AI disclosure as the proposal is revised.
