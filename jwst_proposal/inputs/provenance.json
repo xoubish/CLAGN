@@ -1,5 +1,5 @@
 {
-  "description": "Active proposal inputs: measured P1823 example, provisional 11-target working sample and descriptive timing audit. Historical paths record origins, not runtime dependencies.",
+  "description": "Active inputs for the 24-target, 12-fading/12-rising MIRI/MRS working proposal and measured P1823 figure. Historical paths record origins, not runtime dependencies.",
   "historical_sources": [
     {
       "path": "jwst_proposal/inputs/figure_targets.json",
@@ -157,7 +157,7 @@
       "method": "Target-only columns and rows from saved single-exposure responses, sorted by name/MJD; no input photometry altered. See fig1_connected_provenance.json for W2 visit grouping, quality cuts, uncertainties and conversion.",
       "rows": 595
     },
-    "timing_history_snapshot.json": {
+    "../../archive/jwst_before_24_target_miri/inputs/timing_history_snapshot.json": {
       "description": "Saved displayed light curves and dates for the working timing review. ZTF is the observer-page display series, not newly retrieved or a full raw catalogue. NEOWISE flux/magnitude units recorded per series. Annual summaries are descriptive, not fitted nuclear luminosities or event dates.",
       "sources": [
         {
@@ -173,8 +173,9 @@
           "sha256": "c747901ca0bc7b02e151244c853a77daa0798d83fe92a95f26f713d7ede7efc6"
         }
       ],
-      "target_count": 12,
-      "note": "Includes removed P9584 for the decision audit; no photometry altered. Calendar-year medians are descriptive, not event dates or lag measurements."
+      "target_count": 19,
+      "note": "Includes removed P9584 for the decision audit; no photometry altered. Calendar-year medians are descriptive, not event dates or lag measurements.",
+      "status": "Historical snapshot preserved in the project archive; not a completeness audit of the current sample."
     }
   },
   "bundled_inputs": [
@@ -192,39 +193,30 @@
     },
     {
       "path": "inputs/fig1_connected_provenance.json",
-      "sha256": "4de42a6b592c179ecf7a7b97ae2ede7a0868f44b8012ca36b1a89ec7fede99cf"
+      "sha256": "30e2efba3f09d989401e15cd73522bba33a3dae677b6aa4aa6d9c9830b8e44ec"
     },
     {
       "path": "inputs/figure_neowise_exposures.csv",
       "sha256": "68240116fbd48c64dded28a6d254bb43cc19a972de4d2490072314688a08f07b"
     },
     {
-      "path": "inputs/jwst_sample.csv",
-      "sha256": "4347c11f0bd6081161fc9e748b402d55f693bdfbd83a3b0c5b3f52d481243496"
-    },
-    {
-      "path": "inputs/sampleA_embedding.csv",
-      "sha256": "08e4c85fa85b4de94d59054ca34535d800bdaeabb752ccbb32377f43a0626972"
-    },
-    {
-      "path": "inputs/selection_pool.csv",
-      "sha256": "d18cd530324f76b02da18d60c9bad3ae825389cfe9018f3a5060efe05a02e2ce"
+      "path": "inputs/jwst_sample_cycle6.csv",
+      "sha256": "ddd2d652b5772fa43f4fc95858b0332273d5b4eddfb64b9ca1eb6ba776e10609"
     },
     {
       "path": "inputs/selection_summary.json",
-      "sha256": "131b7526eae5d674608990f60a47ac20ea01f5aa2b9d54ea14d0615507817b07"
+      "sha256": "fe063c0821e73dabc093b704c4ff0265eaf24e22437382695b57704d3bc41605"
     },
     {
       "path": "inputs/spaxel_scryer_Shooby_AGN_ra245p1631_dec43p1373_cleaned.csv",
       "sha256": "826d4928774d509427e702a1fbcd0afdb88cb5acdf6981a4978136335a9bfaba"
-    },
-    {
-      "path": "inputs/timing_audit.json",
-      "sha256": "49aa4981d2c2dc913d82679a601ecd7e0071e4146b74a9532727cbbae033cb64"
-    },
-    {
-      "path": "inputs/timing_history_snapshot.json",
-      "sha256": "c971a79902866f61be877b85a15c5d9d212b95b5aa6612dc7937ce6ef5395736"
     }
-  ]
+  ],
+  "current_sample": {
+    "path": "inputs/jwst_sample_cycle6.csv",
+    "status": "Authoritative working membership; source-by-source audit pending.",
+    "spherex_and_ztf_wise_manifold_availability": "Confirmed for all 24 by the user on 2026-09-26; spectra for the entire sample are not bundled here."
+  },
+  "archived_workflow": "../archive/jwst_before_24_target_miri/",
+  "figure_presentation": "NGPS legend displays year only (2026); exact epoch retained in internal provenance and time-marker position. Measurements unchanged."
 }

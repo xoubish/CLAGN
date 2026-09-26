@@ -1,17 +1,35 @@
 # JWST Cycle 6 proposal
 
-The current draft is [proposal.pdf](proposal.pdf), edited in `proposal.tex`.
-The science case tests the dust response to luminosity changes in strongly
-varying quasars and other AGN, including changing-look objects. Broad-line
-appearance or disappearance is not a selection requirement. Figure 1 shows
-P1823 in a high optical state, alongside its earlier infrared decline and
-recovery. The text beside Figure 1 explains how these measurements and the
-requested JWST spectra test the dust response.
-The optical spectrum spans 0–0.6 mJy. Figure 1 has no source heading or outer box;
-the caption identifies the source.
+The current source is [proposal.tex](proposal.tex); [proposal.pdf](proposal.pdf)
+is its compiled draft. The working design is **24 AGN: 12 fading and 12 rising,
+with one MIRI/MRS visit per target**. SPHEREx supplies the near-infrared spectra.
+Recovery and reversal are retained in individual histories, not a third group.
 
-This folder contains only the active proposal, its figure, and the files
-needed to rebuild them. All figure inputs are bundled under `inputs/`.
+## Current sample and status
+
+[inputs/jwst_sample_cycle6.csv](inputs/jwst_sample_cycle6.csv) is the authoritative
+working target list. Source identities, memberships and its existing estimates
+have not been changed by the document cleanup. The user confirms SPHEREx data
+and ZTF/WISE manifold coverage for all targets. The table records five completed
+September NGPS observations and 19 scheduled for October 26–27, 2026.
+Individual September exposure UTC dates can fall on September 24.
+
+The intended category is Medium: more than 50 and at most 130 charged hours,
+including overheads, under the [Cycle 6 rules](https://jwst-docs.stsci.edu/jwst-opportunities-and-policies/jwst-call-for-proposals-for-cycle-6/jwst-proposal-types-and-categories/jwst-general-observer-go-proposals).
+No total time is yet validated. Target-specific ETC/APT calculations must determine it.
+
+The next review must verify individual rising/fading assignments, event intervals,
+host contributions and lag estimates. Three entries carry reversal flags. The
+existing table assumes a warm-dust delay ten times the hot-dust delay throughout;
+this is not a validated measurement. Figure 2, the target/epoch tables, model
+separation, statistical power, visibility and duplication checks remain unfinished.
+Red text marks unresolved quantities and the model figure. Procedural checks
+are collected in [completion_notes.md](completion_notes.md).
+
+The rebuilt draft has six pages: scientific justification and observations on
+pages 1–4, supplemental information on page 5, and references on pages 5–6.
+The required sections currently fit within the five-page Medium limit, leaving
+space for the target table. Recheck the limit after completing figures and tables.
 
 ## Build
 
@@ -19,54 +37,43 @@ needed to rebuild them. All figure inputs are bundled under `inputs/`.
 make
 ```
 
-To regenerate the timing audit, selection and figure, install `requirements.txt`,
-then run `make figures PYTHON=/path/to/python` followed by `make`.
-Run `make clean` to remove compilation files while retaining the PDFs.
+To refresh the sample summary and regenerate Figure 1, install `requirements.txt`
+and run `make figures PYTHON=/path/to/python`, followed by `make`.
+`make_selection.py` summarizes the authoritative CSV and checks its counts and
+unique identifiers; it does not reselect targets or validate physical classifications.
+`make clean` removes compilation files while retaining PDFs.
 For Overleaf, upload this folder and select `proposal.tex` as the main document.
 
 ## Files
 
 | File | Purpose |
 | --- | --- |
-| `proposal.tex` / `proposal.pdf` | Current text and compiled proposal |
-| `apt_title_abstract.txt` | Title and abstract for APT |
-| `jwstproposaltemplate_v6.sty` | Unmodified official style |
-| `fig1_connected.pdf` / `.png` | P1823 light curves and spectra with emission-line labels |
+| `proposal.tex` / `proposal.pdf` | Current text and compiled draft |
+| `apt_title_abstract.txt` | Matching title and abstract for APT |
+| `jwstproposaltemplate_v6.sty` | Official style, unchanged |
+| `fig1_connected.pdf` / `.png` | P1823 measured light curves and spectra |
 | `make_fig1_connected.py` | Figure generator |
-| `make_selection.py` | Reproduce the provisional sample and documented membership decisions |
-| `make_timing_audit.py` | Reproduce the descriptive history audit from the bundled snapshot |
-| `spherex_data.py` | SPHEREx input loading and epoch grouping |
-| `inputs/` | Spectra, light curves, cutouts, selection and provenance |
-| `validation.json` | Latest document and reproducibility checks |
+| `make_selection.py` | Summarize the agreed 24-source CSV |
+| `spherex_data.py` | Figure SPHEREx input loading and epoch grouping |
+| `inputs/jwst_sample_cycle6.csv` | Authoritative working sample |
+| `inputs/selection_summary.json` | Counts, observing status and pending audits |
+| `inputs/provenance.json` | Input origins and checksums |
+| `validation.json` | Current document build checks and remaining work |
+| `completion_notes.md` | Outstanding checks kept outside the proposal narrative |
 
-## Working status
+The superseded selection/timing scripts, sample tables and summaries are preserved
+in [the project archive](../archive/jwst_before_24_target_miri/README.md).
+Older proposal drafts under `observing/` are historical and are not build inputs.
 
-The compiled draft has six pages: four core pages, supplemental information
-on page 5, references on pages 5–6, and the disclosure on page 6.
-The working design has 11 targets and a 37–51 h planning allocation, scaled
-from the previous per-target allowances rather than recomputed with ETC/APT.
-ETC/APT will settle the [program category](https://jwst-docs.stsci.edu/jwst-opportunities-and-policies/jwst-call-for-proposals-for-cycle-6/jwst-proposal-types-and-categories/jwst-general-observer-go-proposals); a Medium request remains possible.
-Final event-date and dust-delay audits, target-specific ETC/APT calculations, scheduling
-and duplication checks remain outstanding.
+## Figure 1
 
-Figure 1 contains only P1823, with its measured optical and infrared histories.
-There is no target table in the PDF. P9694 is retained as a variable science
-candidate because its optical and infrared histories show brightening; P9584
-is removed from the working request. There are no dedicated controls. P1823's
-18-micron feature lies beyond MRS, so its test uses the continuum and accessible
-9.7-micron feature. SPHEREx availability is not asserted for every target.
-
-Figure 1 preserves the existing P330E calibration and the previously requested
-exclusion of one P1823 point; the CSV is intact. The input provenance manifest
-records the extraction and calibration metadata, historical sources and current
-file checksums. The plotted spectra do not establish significant SPHEREx
-variability or quantitative separation of competing dust models.
-
-SPHEREx already covers 0.75–5 microns. MIRI adds the longer-wavelength warm
-continuum and accessible silicate features. NIRSpec adds spectral/spatial detail
-in the overlapping near-IR range near the MIRI epoch. The test first asks whether
-a fixed dust distribution under changing illumination explains the dated data,
-then whether allowing the inner dust distribution to change is required.
+Figure 1 contains P1823 only. It preserves the P330E calibration and the previously
+requested exclusion of one SPHEREx point; the input CSV is intact. Its optical
+spectrum spans 0–0.6 mJy. P1823's 18-micron peak lies beyond MRS; its test uses
+the warm continuum and accessible 9.7-micron feature. The figure does not itself
+establish significant SPHEREx variability or separation of competing dust models.
+Only P1823's figure data are bundled here; availability across the full sample is
+confirmed by the user and does not imply that all spectra are in this folder.
 
 Gold dashed lines mark expected redshifted emission-line positions, not fitted
 detections. Vacuum wavelengths follow the [SDSS optical line table](https://classic.sdss.org/dr6/algorithms/linestable.php)
@@ -76,7 +83,9 @@ offset horizontally to keep neighboring lines readable.
 
 Date keys above the optical and SPHEREx panels use the same colors as their
 spectra and the time markers on both light curves. Archival optical spectra
-are grouped by year in the key; the latest spectrum is labelled 24 Sep 2026.
+are grouped by year in the key; the latest spectrum is labelled 2026.
+NGPS observing status, months and program identifiers are omitted from the
+proposal and its target table, following the user's presentation preference.
 Each of the 20 optical epochs since 2015 has a dashed marker at its saved MJD.
 The labelled 2002 spectrum is outside the displayed window. SPHEREx keys show
 each visit's month range; dotted lines mark median observation dates, with
@@ -96,59 +105,3 @@ Visit magnitudes are medians; their approximate statistical errors are
 These plotted errors exclude absolute calibration uncertainty; no color
 correction is applied. Figure provenance records all W2 visits and quality cuts.
 Earlier measurements remain in the inputs, outside the displayed time window.
-
-## Working selection provenance
-
-The 11-object list retains the earlier seven-source core and three literature
-anchors, plus P9694 as a variable candidate. It has not yet passed a selection
-by event age relative to dust delay. Final membership and sample size require
-event intervals, nuclear luminosities, lag distributions and model predictions
-at the allowed JWST dates. The manifold records how the original pool was
-assembled; it does not establish timing coverage.
-
-The bundled pool contains the 18 NGPS-observed nuclei and 108 low-redshift
-catalogue CLAGN with saved manifold projections. The reference map contains
-1,960 AGN, 167 labelled as CLAGN. Selection uses the original coordinates:
-
-1. Require a known-CLAGN fraction of at least 0.20 among 50 neighbors and at
-   least 0.16 for both 25 and 75 neighbors, within 0.75 units of a reference
-   point. Select the connected passing region containing the most NGPS targets.
-2. Retain its seven NGPS targets: P1823, P7281, P7837, P8548, P11113, P11530
-   and P10381. Require z<0.3, with P1823 retained for its optical/SPHEREx history.
-3. Add all three qualifying catalogue anchors in that region: P22470, P2759
-   and P16663. They have z<0.3, W3/W4 S/N>=3, AllWISE ccf=0000 and ext_flag=0.
-4. The earlier selection added P9694 and P9584 outside the enriched region.
-   The timing review retains P9694 as a variable science candidate and removes
-   P9584, which has no demonstrated matched-control role.
-
-`inputs/jwst_sample.csv` records the resulting list and scores;
-`inputs/selection_summary.json` records the rules and the audit of all 18 NGPS
-objects. `inputs/selection_pool.csv` is the compact input snapshot. These are
-descriptive neighborhood fractions, not calibrated transition probabilities.
-P8548's weak W4 baseline (S/N=2.5) is described in the observations section.
-
-## Timing evidence and limits
-
-`inputs/timing_history_snapshot.json` bundles the saved displayed optical
-series, NEOWISE visits, spectral dates and prior review summaries for the
-eleven candidates and the removed control. It records original source hashes.
-`inputs/timing_audit.json` gives reproducible calendar-year medians, date
-coverage and the selection decisions. These are descriptive summaries without
-host subtraction, not fitted event times or lag measurements. Figure 1 and
-its original measurements are unchanged.
-
-The histories include P1823's 2019–2023 rise, P11530's 2018–2021 decline and
-partial 2022–2023 recovery, and P9694's 2021–2022 rise followed by a brighter
-state through 2025. These trends support comparing different histories, but do
-not establish that the sample spans early, late and recovering dust-response
-phases. That requires rest-frame event ages divided by luminosity-dependent
-lag estimates, evaluated at each allowed JWST date. Two literature anchors
-lack full optical display series in the bundled snapshot.
-
-The baseline remains one visit per instrument per source. The provisional
-90-day observer-frame inter-instrument limit requires source-specific checks;
-shorter necessary intervals must be justified and entered in APT before
-submission. No repeat visits are included without predicted detectable change.
-Cycle 6 nominally runs from July 2027 to June 2028, so current optical coverage
-must bridge the saved light curves to the JWST epoch. Timing sources are cited
-in proposal references 3, 7, 8, 26 and 27.

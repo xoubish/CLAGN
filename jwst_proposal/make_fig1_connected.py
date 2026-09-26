@@ -135,7 +135,7 @@ def optical_times(epochs):
         date=Time(e['mjd'],format='mjd').datetime
         recent=e.get('instrument')=='NGPS'
         times.append(dict(mjd=float(e['mjd']),date=date.strftime('%Y-%m-%d'),
-            label=date.strftime('%d %b %Y') if recent else str(date.year),
+            label=str(date.year),
             color=orange if recent else colors[date.year],
             in_lightcurve_window=bool(LIGHTCURVE_YEARS[0]<=year(e['mjd'])<=LIGHTCURVE_YEARS[1])))
     return times

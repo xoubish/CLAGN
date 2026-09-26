@@ -1,255 +1,235 @@
 {
-  "selection": "Expanded 18-source working sample for replicated history comparisons; NGPS priority with literature anchors, no dedicated controls. Event-age/lag and class-allocation audit pending.",
-  "parent_rows": 1960,
-  "labelled_clagn": 167,
-  "parent_labelled_fraction": 0.08520408163265306,
-  "candidate_pool": 126,
-  "ngps_pool": 18,
-  "rule": {
-    "k_neighbors": [
-      25,
-      50,
-      75
-    ],
-    "minimum_labelled_fractions": [
-      0.16,
-      0.2,
-      0.16
-    ],
-    "maximum_nearest_parent_distance": 0.75,
-    "connected_region": "Component containing the most NGPS targets passing the manifold rule",
-    "science_redshift": "0 < z < 0.3; P1823 retained for its optical/SPHEREx history",
-    "anchors": "All catalogue CLAGN in the selected component with z<0.3, W3/W4 SNR>=3, AllWISE ccf=0000 and ext_flag=0",
-    "historical_comparisons": "NGPS targets with z<0.3, fractions<=0.08 at all three neighborhood sizes, W3/W4 SNR>=3",
-    "timing_review": "Retain P9694 for its 2021\u20132022 optical rise and brighter state through 2025; omit P9584. See timing_audit.json.",
-    "expansion": "Seven documented additions from sample_expansion.json. Their measured variability and archival quality determine inclusion, not manifold membership."
+  "selection": "Agreed working design: 24 AGN, 12 fading and 12 rising; individual source audit pending.",
+  "source": "inputs/jwst_sample_cycle6.csv",
+  "source_sha256": "ddd2d652b5772fa43f4fc95858b0332273d5b4eddfb64b9ca1eb6ba776e10609",
+  "instrument": "MIRI/MRS",
+  "visits_per_target": 1,
+  "total": 24,
+  "family_counts": {
+    "fade": 12,
+    "rise": 12
   },
-  "chosen_component": 5,
-  "ngps_core": [
-    "P1823",
-    "P7281",
-    "P7837",
-    "P8548",
-    "P11113",
-    "P11530",
-    "P10381"
-  ],
-  "literature_anchors": [
-    "P22470",
-    "P2759",
-    "P16663"
-  ],
-  "additional_variables": [
-    "P9694"
-  ],
-  "expansion": [
-    "P7847",
-    "P9506",
-    "P8499",
-    "P13030",
-    "P24541",
-    "P21240",
-    "P20040"
-  ],
-  "all_observed_candidates": [
-    "P1823",
-    "P7281",
-    "P7837",
-    "P8548",
-    "P11113",
-    "P11530",
-    "P10381",
-    "P9694",
-    "P7847",
-    "P9506"
-  ],
-  "all_literature_anchors": [
-    "P22470",
-    "P2759",
-    "P16663",
-    "P8499",
-    "P13030",
-    "P24541",
-    "P21240",
-    "P20040"
-  ],
-  "comparisons": [],
-  "removed_from_request": [
-    "P9584"
-  ],
-  "total": 18,
-  "response_phase_coverage_validated": false,
-  "interpretation": "Neighborhood label fractions record pool provenance, not response phases. Eighteen is a working design with a goal of roughly six sources per history family, not a demonstrated balanced allocation or validated power calculation.",
-  "ngps_audit": [
+  "requested_category": "Medium",
+  "medium_charged_time_h": {
+    "lower_exclusive": 50,
+    "upper_inclusive": 130
+  },
+  "charged_time_h": null,
+  "ETC_APT_validated": false,
+  "data_availability": {
+    "basis": "User confirmation on 2026-09-26; not a file-by-file completeness audit.",
+    "spherex_all_targets": true,
+    "ztf_wise_manifold_all_targets": true
+  },
+  "ngps": {
+    "completed_ids": [
+      "F02",
+      "F04",
+      "F06",
+      "F07",
+      "R01"
+    ],
+    "completed_count": 5,
+    "scheduled_ids": [
+      "F01",
+      "F03",
+      "F05",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "R02",
+      "R03",
+      "R04",
+      "R05",
+      "R06",
+      "R07",
+      "R08",
+      "R09",
+      "R10",
+      "R11",
+      "R12"
+    ],
+    "scheduled_count": 19,
+    "scheduled_dates": [
+      "2026-10-26",
+      "2026-10-27"
+    ],
+    "note": "CSV date identifies the September observing night; individual exposure UTC dates can be September 24."
+  },
+  "targets": [
     {
-      "name": "P2190",
-      "f25": 0.0,
-      "f50": 0.0,
-      "f75": 0.0,
-      "component": 0,
-      "included": false,
-      "spectral_history_note": "Broad profiles broadly resemble the archive; adds a 2026 epoch, with no obvious new on/off event."
+      "id": "F01",
+      "target": "J075934.95+322143.3",
+      "internal_id": "P14388",
+      "family": "fade",
+      "reversal": false
     },
     {
-      "name": "P1887",
-      "f25": 0.0,
-      "f50": 0.02,
-      "f75": 0.04,
-      "component": 0,
-      "included": false,
-      "spectral_history_note": "Broad profiles broadly resemble the archive; adds a 2026 epoch, with no obvious new on/off event."
+      "id": "F02",
+      "target": "J003352.71+202104.1",
+      "internal_id": "P9506",
+      "family": "fade",
+      "reversal": false
     },
     {
-      "name": "P2921",
-      "f25": 0.12,
-      "f50": 0.1,
-      "f75": 0.08,
-      "component": 0,
-      "included": false,
-      "spectral_history_note": "Possible weaker Hbeta and MgII profiles than in 2002; telluric absorption and FeII/continuum choices prevent a secure fading classification."
+      "id": "F03",
+      "target": "J105325.40+302419.3",
+      "internal_id": "P24976",
+      "family": "fade",
+      "reversal": false
     },
     {
-      "name": "P1963",
-      "f25": 0.28,
-      "f50": 0.18,
-      "f75": 0.13333333333333333,
-      "component": 0,
-      "included": false,
-      "spectral_history_note": "No obvious broad-line appearance/disappearance in the initial comparison; extends the baseline."
+      "id": "F04",
+      "target": "J005346.16+223222.4",
+      "internal_id": "P10381",
+      "family": "fade",
+      "reversal": false
     },
     {
-      "name": "P1823",
-      "f25": 0.4,
-      "f50": 0.38,
-      "f75": 0.37333333333333335,
-      "component": 5,
-      "included": true,
-      "spectral_history_note": "High continuum state with broadly similar recent line profiles. Important time-domain target; neither a secure record luminosity nor a demonstrated turn-on."
+      "id": "F05",
+      "target": "J085359.05+212803.4",
+      "internal_id": "CLAGN_0816",
+      "family": "fade",
+      "reversal": false
     },
     {
-      "name": "P7281",
-      "f25": 0.28,
-      "f50": 0.32,
-      "f75": 0.26666666666666666,
-      "component": 5,
-      "included": true,
-      "spectral_history_note": "No obvious new broad-line state transition in the initial comparison; extends the baseline."
+      "id": "F06",
+      "target": "J012558.06+151813.7",
+      "internal_id": "P11530",
+      "family": "fade",
+      "reversal": true
     },
     {
-      "name": "P7847",
-      "f25": 0.2,
-      "f50": 0.14,
-      "f75": 0.13333333333333333,
-      "component": 0,
-      "included": true,
-      "spectral_history_note": "No obvious new broad-line state transition in the initial comparison; extends the baseline."
+      "id": "F07",
+      "target": "J234433.09+260038.9",
+      "internal_id": "P7837",
+      "family": "fade",
+      "reversal": false
     },
     {
-      "name": "P8544",
-      "f25": 0.0,
-      "f50": 0.0,
-      "f75": 0.0,
-      "component": 0,
-      "included": false,
-      "spectral_history_note": "Possible broad-Hbeta weakening versus 2012: wing/continuum proxy lower by about 21-35%; requires spectral decomposition and uncertainty assessment."
+      "id": "F08",
+      "target": "J104427.75+271806.3",
+      "internal_id": "CLAGN_0826",
+      "family": "fade",
+      "reversal": false
     },
     {
-      "name": "P7837",
-      "f25": 0.28,
-      "f50": 0.3,
-      "f75": 0.32,
-      "component": 5,
-      "included": true,
-      "spectral_history_note": "No obvious new broad-line state transition in the initial comparison; extends the baseline."
+      "id": "F09",
+      "target": "NGC2617",
+      "internal_id": "CLAGN_0987",
+      "family": "fade",
+      "reversal": false
     },
     {
-      "name": "P8548",
-      "f25": 0.24,
-      "f50": 0.2,
-      "f75": 0.18666666666666668,
-      "component": 5,
-      "included": true,
-      "spectral_history_note": "No obvious new broad-line state transition in the initial comparison; extends the baseline."
+      "id": "F10",
+      "target": "J085337.26+014303.6",
+      "internal_id": "J085337.26+014303.6",
+      "family": "fade",
+      "reversal": false
     },
     {
-      "name": "P9599",
-      "f25": 0.0,
-      "f50": 0.02,
-      "f75": 0.02666666666666667,
-      "component": 0,
-      "included": false,
-      "spectral_history_note": "No obvious new broad-line state transition in the initial comparison; extends the baseline."
+      "id": "F11",
+      "target": "J2330323-022745",
+      "internal_id": "CLAGN_0795",
+      "family": "fade",
+      "reversal": false
     },
     {
-      "name": "P11113",
-      "f25": 0.32,
-      "f50": 0.24,
-      "f75": 0.25333333333333335,
-      "component": 5,
-      "included": true,
-      "spectral_history_note": "No obvious new broad-line state transition in the initial comparison; extends the baseline."
+      "id": "F12",
+      "target": "J0458403-215931",
+      "internal_id": "CLAGN_0801",
+      "family": "fade",
+      "reversal": false
     },
     {
-      "name": "P9227",
-      "f25": 0.12,
-      "f50": 0.08,
-      "f75": 0.09333333333333334,
-      "component": 0,
-      "included": false,
-      "spectral_history_note": "Possible Halpha wing strengthening versus 2017, but Hbeta changes less; telluric and continuum systematics need resolution."
+      "id": "R01",
+      "target": "J162039.13+430814.6",
+      "internal_id": "P1823",
+      "family": "rise",
+      "reversal": false
     },
     {
-      "name": "P11530",
-      "f25": 0.24,
-      "f50": 0.26,
-      "f75": 0.21333333333333335,
-      "component": 5,
-      "included": true,
-      "spectral_history_note": "Strong long-term spectral/color change versus 2019; NGPS resembles the redder 2023-2025 state. Test intrinsic fading against host/aperture effects; no confirmed turn-off."
+      "id": "R02",
+      "target": "J220537.71-071114.5",
+      "internal_id": "CLAGN_0215",
+      "family": "rise",
+      "reversal": false
     },
     {
-      "name": "P9506",
-      "f25": 0.24,
-      "f50": 0.14,
-      "f75": 0.16,
-      "component": 0,
-      "included": true,
-      "spectral_history_note": "No obvious new broad-line state transition in the initial comparison; extends the baseline."
+      "id": "R03",
+      "target": "J104705.16+544405.8",
+      "internal_id": "P24541",
+      "family": "rise",
+      "reversal": false
     },
     {
-      "name": "P9584",
-      "f25": 0.0,
-      "f50": 0.04,
-      "f75": 0.05333333333333334,
-      "component": 0,
-      "included": false,
-      "spectral_history_note": "No obvious new broad-line state transition in the initial comparison; extends the baseline."
+      "id": "R04",
+      "target": "J082942.66+415436.8",
+      "internal_id": "CLAGN_0030",
+      "family": "rise",
+      "reversal": true
     },
     {
-      "name": "P10381",
-      "f25": 0.32,
-      "f50": 0.3,
-      "f75": 0.30666666666666664,
-      "component": 5,
-      "included": true,
-      "spectral_history_note": "Broad Hbeta remains present. Hbeta-wing/[OIII] proxy is within about 3-5% of 2014 and 1-3% of 2024 across continuum choices. Possible recovery after published fading; fit the 2018 spectrum before claiming recurrence."
+      "id": "R05",
+      "target": "J104043.38+273518.9",
+      "internal_id": "CLAGN_0824",
+      "family": "rise",
+      "reversal": false
     },
     {
-      "name": "P9694",
-      "f25": 0.0,
-      "f50": 0.04,
-      "f75": 0.06666666666666667,
-      "component": 0,
-      "included": true,
-      "spectral_history_note": "Strongest clean new broad-profile change in our triage: Hbeta-wing/continuum about 37-38% higher and wing/[OIII] about 32-33% higher than 2021. Broad lines already existed; not a confirmed turn-on."
+      "id": "R06",
+      "target": "J083826.50+371906.7",
+      "internal_id": "P17881",
+      "family": "rise",
+      "reversal": true
+    },
+    {
+      "id": "R07",
+      "target": "J101152.98+544206.4",
+      "internal_id": "CLAGN_0045",
+      "family": "rise",
+      "reversal": false
+    },
+    {
+      "id": "R08",
+      "target": "J094838.42+403043.7",
+      "internal_id": "CLAGN_0818",
+      "family": "rise",
+      "reversal": false
+    },
+    {
+      "id": "R09",
+      "target": "UGC03601",
+      "internal_id": "CLAGN_0969",
+      "family": "rise",
+      "reversal": false
+    },
+    {
+      "id": "R10",
+      "target": "J19263018+4133053",
+      "internal_id": "CLAGN_0972",
+      "family": "rise",
+      "reversal": false
+    },
+    {
+      "id": "R11",
+      "target": "J1949137-184716",
+      "internal_id": "CLAGN_0808",
+      "family": "rise",
+      "reversal": false
+    },
+    {
+      "id": "R12",
+      "target": "J20145928+2523010",
+      "internal_id": "CLAGN_0973",
+      "family": "rise",
+      "reversal": false
     }
   ],
-  "grid": {
-    "x_min": 0,
-    "x_max": 24,
-    "nx": 301,
-    "y_min": -5,
-    "y_max": 12,
-    "ny": 214
-  }
+  "history_classifications_validated": false,
+  "response_phase_coverage_validated": false,
+  "statistical_power_validated": false,
+  "timing_note": "Existing CSV estimates are provisional. Every warm delay implies ten times the hot delay; that assumption requires validation."
 }
