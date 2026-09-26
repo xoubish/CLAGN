@@ -1,0 +1,73 @@
+{
+  "working_sample_size": 18,
+  "baseline_size": 11,
+  "dedicated_controls": 0,
+  "added": [
+    {
+      "name": "P7847",
+      "role": "variable candidate",
+      "reason": "Adds a 2022\u20132025 optical decline after an earlier rise; W1 turns down after its 2023 annual maximum. Extends the fading sample with an already-observed low-redshift nucleus."
+    },
+    {
+      "name": "P9506",
+      "role": "variable candidate",
+      "reason": "Adds sustained infrared decline from the mid-2010s through 2024 with a non-monotonic optical history and recent optical brightening. The different histories constrain delayed response; not classified as a new line transition."
+    },
+    {
+      "name": "P8499",
+      "role": "literature anchor",
+      "reason": "Catalogue turn-on anchor with large optical rise to 2021 followed by decline, and a W1 peak in 2022 followed by decline. Extends the range of variability amplitudes and optical/IR timing."
+    },
+    {
+      "name": "P13030",
+      "role": "literature anchor",
+      "reason": "Catalogue CLAGN with historical fading and a repeating-transition candidacy; saved optical light curves brighten through 2025 and W1 recovers after a 2019 minimum in flux. Adds an independent recovery history, not a newly confirmed recurrence."
+    },
+    {
+      "name": "P24541",
+      "role": "literature anchor",
+      "reason": "Catalogue CLAGN and repeating-transition candidate; optical data brighten from 2020 to 2023 and W1 recovers after 2020. Optical sampling is sparse and needs a better onset bracket."
+    },
+    {
+      "name": "P21240",
+      "role": "literature anchor",
+      "reason": "Optical rise to 2020, decline through 2024, then brightening in 2025; W1 has a different, slower trend. Adds a reversal history for joint temporal fitting."
+    },
+    {
+      "name": "P20040",
+      "role": "literature anchor",
+      "reason": "Catalogue CLAGN with historical spectral change and infrared decline to a relatively steady recent state. Adds a longer-history anchor; recent optical variation is weak and host dilution must be assessed."
+    }
+  ],
+  "selection_basis": "Documented variability histories, redshift coverage and usable archival W3/W4 measurements; NGPS-observed sources prioritized. Existing sources retained provisionally. Manifold location does not gate the additions.",
+  "candidate_gates": {
+    "redshift": "0<z<0.3 for all seven additions",
+    "W3_W4_SNR_minimum": 3,
+    "new_literature_AllWISE_ccf": "0000",
+    "new_literature_ext_flag": 0
+  },
+  "history_class_counts_validated": false,
+  "event_age_lag_selection_validated": false,
+  "field_and_duplication_checks_complete": false,
+  "statistical_design": {
+    "purpose": "Replicated comparisons of dust-response residuals among history classes and versus continuous event-age/lag; a targeted sample, not a population-rate survey.",
+    "history_families": [
+      "rising or sustained brighter state",
+      "fading or sustained fainter state",
+      "recovery or reversal"
+    ],
+    "target_per_family": 6,
+    "group_allocation_is_a_design_goal": true,
+    "primary_comparison": "Brightening versus fading in the log hot-to-warm dust-continuum ratio residual under the fixed-distribution model; recovery is a secondary comparison.",
+    "equal_scatter_group_mean_se_in_sigma": 0.4082482904638631,
+    "equal_scatter_difference_se_in_sigma": 0.5773502691896257,
+    "same_scatter_overall_se_ratio_18_vs_11": 0.7817359599705717,
+    "assumptions": "Illustrative independent equal-variance measurements, common within-group total scatter. Not a power forecast; correlated calibration/model errors and unequal precision reduce the gain.",
+    "power_validated": false
+  },
+  "planning_time_h_range": [
+    60,
+    83
+  ],
+  "ETC_APT_validated": false
+}

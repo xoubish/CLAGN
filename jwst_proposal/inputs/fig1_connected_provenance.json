@@ -1,0 +1,571 @@
+{
+  "examples": [
+    {
+      "prefix": "P1823",
+      "name": "P1823",
+      "z": 0.6204823,
+      "optical_epochs": 21,
+      "optical_dates": [
+        {
+          "mjd": 52374.0,
+          "date": "2002-04-10",
+          "label": "2002",
+          "color": "#a6cee4",
+          "in_lightcurve_window": false
+        },
+        {
+          "mjd": 59310.0,
+          "date": "2021-04-06",
+          "label": "2021",
+          "color": "#71b1d7",
+          "in_lightcurve_window": true
+        },
+        {
+          "mjd": 59311.40505383,
+          "date": "2021-04-07",
+          "label": "2021",
+          "color": "#71b1d7",
+          "in_lightcurve_window": true
+        },
+        {
+          "mjd": 59312.0,
+          "date": "2021-04-08",
+          "label": "2021",
+          "color": "#71b1d7",
+          "in_lightcurve_window": true
+        },
+        {
+          "mjd": 59329.40792134,
+          "date": "2021-04-25",
+          "label": "2021",
+          "color": "#71b1d7",
+          "in_lightcurve_window": true
+        },
+        {
+          "mjd": 59342.0,
+          "date": "2021-05-08",
+          "label": "2021",
+          "color": "#71b1d7",
+          "in_lightcurve_window": true
+        },
+        {
+          "mjd": 59351.0,
+          "date": "2021-05-17",
+          "label": "2021",
+          "color": "#71b1d7",
+          "in_lightcurve_window": true
+        },
+        {
+          "mjd": 59370.0,
+          "date": "2021-06-05",
+          "label": "2021",
+          "color": "#71b1d7",
+          "in_lightcurve_window": true
+        },
+        {
+          "mjd": 59708.0,
+          "date": "2022-05-09",
+          "label": "2022",
+          "color": "#4191c6",
+          "in_lightcurve_window": true
+        },
+        {
+          "mjd": 59709.0,
+          "date": "2022-05-10",
+          "label": "2022",
+          "color": "#4191c6",
+          "in_lightcurve_window": true
+        },
+        {
+          "mjd": 59807.0,
+          "date": "2022-08-16",
+          "label": "2022",
+          "color": "#4191c6",
+          "in_lightcurve_window": true
+        },
+        {
+          "mjd": 59817.0,
+          "date": "2022-08-26",
+          "label": "2022",
+          "color": "#4191c6",
+          "in_lightcurve_window": true
+        },
+        {
+          "mjd": 59818.0,
+          "date": "2022-08-27",
+          "label": "2022",
+          "color": "#4191c6",
+          "in_lightcurve_window": true
+        },
+        {
+          "mjd": 60030.0,
+          "date": "2023-03-27",
+          "label": "2023",
+          "color": "#1e6db2",
+          "in_lightcurve_window": true
+        },
+        {
+          "mjd": 60031.0,
+          "date": "2023-03-28",
+          "label": "2023",
+          "color": "#1e6db2",
+          "in_lightcurve_window": true
+        },
+        {
+          "mjd": 60107.0,
+          "date": "2023-06-12",
+          "label": "2023",
+          "color": "#1e6db2",
+          "in_lightcurve_window": true
+        },
+        {
+          "mjd": 60329.0,
+          "date": "2024-01-20",
+          "label": "2024",
+          "color": "#084a91",
+          "in_lightcurve_window": true
+        },
+        {
+          "mjd": 60353.0,
+          "date": "2024-02-13",
+          "label": "2024",
+          "color": "#084a91",
+          "in_lightcurve_window": true
+        },
+        {
+          "mjd": 60433.0,
+          "date": "2024-05-03",
+          "label": "2024",
+          "color": "#084a91",
+          "in_lightcurve_window": true
+        },
+        {
+          "mjd": 60524.0,
+          "date": "2024-08-02",
+          "label": "2024",
+          "color": "#084a91",
+          "in_lightcurve_window": true
+        },
+        {
+          "mjd": 61307.15426556,
+          "date": "2026-09-24",
+          "label": "24 Sep 2026",
+          "color": "#e36a30",
+          "in_lightcurve_window": true
+        }
+      ],
+      "optical_date_key": [
+        "2002",
+        "2021",
+        "2022",
+        "2023",
+        "2024",
+        "24 Sep 2026"
+      ],
+      "spherex_dates": [
+        {
+          "label": "Jul\u2013Aug 2025",
+          "color": "#2878a5",
+          "median_mjd": 60869.233413,
+          "start_mjd": 60858.297121,
+          "end_mjd": 60904.293229
+        },
+        {
+          "label": "Jan\u2013Feb 2026",
+          "color": "#a14c7d",
+          "median_mjd": 61075.952185,
+          "start_mjd": 61058.16211,
+          "end_mjd": 61088.510487
+        },
+        {
+          "label": "Jul\u2013Aug 2026",
+          "color": "#27836c",
+          "median_mjd": 61238.010387999995,
+          "start_mjd": 61225.792062,
+          "end_mjd": 61258.514727
+        }
+      ],
+      "w2": {
+        "raw_exposures": 595,
+        "accepted_exposures": 584,
+        "visits": [
+          {
+            "visit": 315,
+            "mjd": 56697.00098471,
+            "mag": 12.89,
+            "mag_err": 0.02312447045353599,
+            "flux_mjy": 1.1994724999920487,
+            "flux_err_mjy": 0.02554687433682302,
+            "n": 18
+          },
+          {
+            "visit": 316,
+            "mjd": 56877.82099413,
+            "mag": 12.921,
+            "mag_err": 0.015172586505223837,
+            "flux_mjy": 1.1657093917471757,
+            "flux_err_mjy": 0.01629016929593501,
+            "n": 27
+          },
+          {
+            "visit": 317,
+            "mjd": 57058.95092189,
+            "mag": 12.951,
+            "mag_err": 0.020914389627475043,
+            "flux_mjy": 1.1339405745527986,
+            "flux_err_mjy": 0.021842943881459038,
+            "n": 23
+          },
+          {
+            "visit": 318,
+            "mjd": 57236.720590405,
+            "mag": 12.9905,
+            "mag_err": 0.02777240573609048,
+            "flux_mjy": 1.0934282632155459,
+            "flux_err_mjy": 0.027969163445273334,
+            "n": 26
+          },
+          {
+            "visit": 319,
+            "mjd": 57426.095239639995,
+            "mag": 13.068000000000001,
+            "mag_err": 0.029025894058603095,
+            "flux_mjy": 1.0180996671391074,
+            "flux_err_mjy": 0.027217709928040915,
+            "n": 24
+          },
+          {
+            "visit": 320,
+            "mjd": 57595.47520373,
+            "mag": 13.06,
+            "mag_err": 0.025509931535971146,
+            "flux_mjy": 1.0256290077637753,
+            "flux_err_mjy": 0.024097681973484938,
+            "n": 27
+          },
+          {
+            "visit": 321,
+            "mjd": 57790.196137335006,
+            "mag": 13.141,
+            "mag_err": 0.022526484071520372,
+            "flux_mjy": 0.951897739427891,
+            "flux_err_mjy": 0.01974964928954865,
+            "n": 26
+          },
+          {
+            "visit": 322,
+            "mjd": 57956.040592445,
+            "mag": 13.199,
+            "mag_err": 0.021917597104215168,
+            "flux_mjy": 0.9023817334008838,
+            "flux_err_mjy": 0.018216247353831077,
+            "n": 26
+          },
+          {
+            "visit": 323,
+            "mjd": 58155.09156363,
+            "mag": 13.188,
+            "mag_err": 0.024845612092617233,
+            "flux_mjy": 0.9115705697741262,
+            "flux_err_mjy": 0.020860065891142907,
+            "n": 37
+          },
+          {
+            "visit": 324,
+            "mjd": 58316.46276162,
+            "mag": 13.223,
+            "mag_err": 0.03211380176623656,
+            "flux_mjy": 0.8826535971317359,
+            "flux_err_mjy": 0.02610704379417717,
+            "n": 27
+          },
+          {
+            "visit": 325,
+            "mjd": 58521.38274572,
+            "mag": 13.298,
+            "mag_err": 0.02758393077531367,
+            "flux_mjy": 0.8237402656371283,
+            "flux_err_mjy": 0.02092773029451923,
+            "n": 22
+          },
+          {
+            "visit": 326,
+            "mjd": 58683.57665626,
+            "mag": 13.278,
+            "mag_err": 0.03986819263787838,
+            "flux_mjy": 0.8390547405713896,
+            "flux_err_mjy": 0.030810058542974788,
+            "n": 27
+          },
+          {
+            "visit": 327,
+            "mjd": 58885.74658349,
+            "mag": 13.2555,
+            "mag_err": 0.0428349571177742,
+            "flux_mjy": 0.8566241136414364,
+            "flux_err_mjy": 0.03379592299959869,
+            "n": 22
+          },
+          {
+            "visit": 328,
+            "mjd": 59047.725354744995,
+            "mag": 13.275500000000001,
+            "mag_err": 0.0416073396153137,
+            "flux_mjy": 0.840988961508796,
+            "flux_err_mjy": 0.03222819058706945,
+            "n": 26
+          },
+          {
+            "visit": 329,
+            "mjd": 59252.53527906,
+            "mag": 13.2005,
+            "mag_err": 0.03758163626498762,
+            "flux_mjy": 0.9011359077484016,
+            "flux_err_mjy": 0.031191887828650115,
+            "n": 30
+          },
+          {
+            "visit": 330,
+            "mjd": 59412.4081103,
+            "mag": 13.2345,
+            "mag_err": 0.026870501718737613,
+            "flux_mjy": 0.8733539633604361,
+            "flux_err_mjy": 0.021614328665378504,
+            "n": 44
+          },
+          {
+            "visit": 331,
+            "mjd": 59616.91384898,
+            "mag": 13.178,
+            "mag_err": 0.02146479116444146,
+            "flux_mjy": 0.9200052284071054,
+            "flux_err_mjy": 0.018188322367266002,
+            "n": 25
+          },
+          {
+            "visit": 332,
+            "mjd": 59778.94543162,
+            "mag": 13.2025,
+            "mag_err": 0.022276654278073686,
+            "flux_mjy": 0.8994774819975616,
+            "flux_err_mjy": 0.01845508034968371,
+            "n": 22
+          },
+          {
+            "visit": 333,
+            "mjd": 59981.124288884996,
+            "mag": 13.0635,
+            "mag_err": 0.024719031948827137,
+            "flux_mjy": 1.0223280937771193,
+            "flux_err_mjy": 0.02327541506077878,
+            "n": 26
+          },
+          {
+            "visit": 334,
+            "mjd": 60143.34814914,
+            "mag": 13.036,
+            "mag_err": 0.026276477125019456,
+            "flux_mjy": 1.0485527786434323,
+            "flux_err_mjy": 0.02537658132947458,
+            "n": 27
+          },
+          {
+            "visit": 335,
+            "mjd": 60348.1587775,
+            "mag": 12.987,
+            "mag_err": 0.023392716080882416,
+            "flux_mjy": 1.0969587468923843,
+            "flux_err_mjy": 0.023634511224768995,
+            "n": 25
+          },
+          {
+            "visit": 336,
+            "mjd": 60510.26091889,
+            "mag": 12.966,
+            "mag_err": 0.04069113059580336,
+            "flux_mjy": 1.1183823266062953,
+            "flux_err_mjy": 0.041914639217647785,
+            "n": 27
+          }
+        ]
+      },
+      "w2_visits_displayed": 20,
+      "spherex_rows": 373,
+      "spherex_plotted": 372,
+      "spherex_intervals": [
+        {
+          "label": "Jul\u2013Aug 2025",
+          "start_mjd": 60858.297121,
+          "end_mjd": 60904.293229
+        },
+        {
+          "label": "Jan\u2013Feb 2026",
+          "start_mjd": 61058.16211,
+          "end_mjd": 61088.510487
+        },
+        {
+          "label": "Jul\u2013Aug 2026",
+          "start_mjd": 61225.792062,
+          "end_mjd": 61258.514727
+        }
+      ],
+      "optical_line_markers": [
+        {
+          "label": "Mg II",
+          "members": [
+            "Mg II"
+          ],
+          "observed_um": [
+            0.45359195541291
+          ]
+        },
+        {
+          "label": "[O II]",
+          "members": [
+            "[O II]"
+          ],
+          "observed_um": [
+            0.60396866164716
+          ]
+        },
+        {
+          "label": "H\u03b3",
+          "members": [
+            "H\u03b3"
+          ],
+          "observed_um": [
+            0.7035615592264
+          ]
+        },
+        {
+          "label": "H\u03b2",
+          "members": [
+            "H\u03b2"
+          ],
+          "observed_um": [
+            0.7879886870563999
+          ]
+        },
+        {
+          "label": "[O III]",
+          "members": [
+            "[O III] 4959",
+            "[O III] 5007"
+          ],
+          "observed_um": [
+            0.80380702502785,
+            0.8115764274152001
+          ]
+        }
+      ],
+      "spherex_line_markers": [
+        {
+          "label": "H\u03b2/[O III]",
+          "members": [
+            "H\u03b2",
+            "[O III] 4959",
+            "[O III] 5007"
+          ],
+          "observed_um": [
+            0.7879886870563999,
+            0.80380702502785,
+            0.8115764274152001
+          ]
+        },
+        {
+          "label": "H\u03b1",
+          "members": [
+            "H\u03b1"
+          ],
+          "observed_um": [
+            1.0637834311402998
+          ]
+        },
+        {
+          "label": "Pa\u03b4",
+          "members": [
+            "Pa\u03b4"
+          ],
+          "observed_um": [
+            1.62890880796
+          ]
+        },
+        {
+          "label": "He I/Pa\u03b3",
+          "members": [
+            "He I",
+            "Pa\u03b3"
+          ],
+          "observed_um": [
+            1.7554684755899999,
+            1.77296968443
+          ]
+        },
+        {
+          "label": "Pa\u03b2",
+          "members": [
+            "Pa\u03b2"
+          ],
+          "observed_um": [
+            2.07778240506
+          ]
+        },
+        {
+          "label": "Pa\u03b1",
+          "members": [
+            "Pa\u03b1"
+          ],
+          "observed_um": [
+            3.03937660188
+          ]
+        },
+        {
+          "label": "Br\u03b3",
+          "members": [
+            "Br\u03b3"
+          ],
+          "observed_um": [
+            3.51012671003
+          ]
+        },
+        {
+          "label": "Br\u03b2",
+          "members": [
+            "Br\u03b2"
+          ],
+          "observed_um": [
+            4.25522447157
+          ]
+        }
+      ]
+    }
+  ],
+  "spectral_flux": "Observed Fnu mJy; no inter-epoch renormalisation; NGPS P330E",
+  "layout": "Single P1823 example: light curves above full-width optical and SPHEREx spectra",
+  "manifold_shown": false,
+  "optical_flux_limits_mjy": [
+    0,
+    0.6
+  ],
+  "source_heading_shown": false,
+  "history_heading_shown": false,
+  "outer_box_shown": false,
+  "lightcurve_year_limits": [
+    2015,
+    2028
+  ],
+  "wise_bands": [
+    "W1",
+    "W2"
+  ],
+  "spectral_time_markers": "Both light curves: dashed lines at every optical epoch within the displayed window; dotted lines at each SPHEREx visit median MJD and shaded visit date ranges. Colors match the date keys above the spectra. The labelled 2002 optical spectrum predates the displayed window.",
+  "wise_w2_input": "figure_neowise_exposures.csv",
+  "wise_w2_method": "NEOWISE visit=round(MJD/180); qual_frame>0; first two cc_flags=00; finite W1/W2 magnitudes and errors; positive W2 error; separation<3 arcsec; at least 3 exposures. Median magnitude and MJD; approximate median error=1.2533*sample_std(mag)/sqrt(n). Convert flux and propagate statistical error; no color correction or absolute calibration error added.",
+  "wise_w2_zero_mag_jy": 171.787,
+  "wise_calibration_source": "https://irsa.ipac.caltech.edu/data/WISE/docs/release/All-Sky/expsup/sec4_4h.html",
+  "line_marker_interpretation": "Expected redshifted positions, not fitted detections; labels may be displaced for readability",
+  "line_wavelength_sources": {
+    "optical": "https://classic.sdss.org/dr6/algorithms/linestable.php",
+    "infrared": "https://www.stsci.edu/instruments/nicmos/documents/handbooks/instrument/v5/Appendix_26.html"
+  }
+}

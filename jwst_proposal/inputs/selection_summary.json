@@ -1,0 +1,255 @@
+{
+  "selection": "Expanded 18-source working sample for replicated history comparisons; NGPS priority with literature anchors, no dedicated controls. Event-age/lag and class-allocation audit pending.",
+  "parent_rows": 1960,
+  "labelled_clagn": 167,
+  "parent_labelled_fraction": 0.08520408163265306,
+  "candidate_pool": 126,
+  "ngps_pool": 18,
+  "rule": {
+    "k_neighbors": [
+      25,
+      50,
+      75
+    ],
+    "minimum_labelled_fractions": [
+      0.16,
+      0.2,
+      0.16
+    ],
+    "maximum_nearest_parent_distance": 0.75,
+    "connected_region": "Component containing the most NGPS targets passing the manifold rule",
+    "science_redshift": "0 < z < 0.3; P1823 retained for its optical/SPHEREx history",
+    "anchors": "All catalogue CLAGN in the selected component with z<0.3, W3/W4 SNR>=3, AllWISE ccf=0000 and ext_flag=0",
+    "historical_comparisons": "NGPS targets with z<0.3, fractions<=0.08 at all three neighborhood sizes, W3/W4 SNR>=3",
+    "timing_review": "Retain P9694 for its 2021\u20132022 optical rise and brighter state through 2025; omit P9584. See timing_audit.json.",
+    "expansion": "Seven documented additions from sample_expansion.json. Their measured variability and archival quality determine inclusion, not manifold membership."
+  },
+  "chosen_component": 5,
+  "ngps_core": [
+    "P1823",
+    "P7281",
+    "P7837",
+    "P8548",
+    "P11113",
+    "P11530",
+    "P10381"
+  ],
+  "literature_anchors": [
+    "P22470",
+    "P2759",
+    "P16663"
+  ],
+  "additional_variables": [
+    "P9694"
+  ],
+  "expansion": [
+    "P7847",
+    "P9506",
+    "P8499",
+    "P13030",
+    "P24541",
+    "P21240",
+    "P20040"
+  ],
+  "all_observed_candidates": [
+    "P1823",
+    "P7281",
+    "P7837",
+    "P8548",
+    "P11113",
+    "P11530",
+    "P10381",
+    "P9694",
+    "P7847",
+    "P9506"
+  ],
+  "all_literature_anchors": [
+    "P22470",
+    "P2759",
+    "P16663",
+    "P8499",
+    "P13030",
+    "P24541",
+    "P21240",
+    "P20040"
+  ],
+  "comparisons": [],
+  "removed_from_request": [
+    "P9584"
+  ],
+  "total": 18,
+  "response_phase_coverage_validated": false,
+  "interpretation": "Neighborhood label fractions record pool provenance, not response phases. Eighteen is a working design with a goal of roughly six sources per history family, not a demonstrated balanced allocation or validated power calculation.",
+  "ngps_audit": [
+    {
+      "name": "P2190",
+      "f25": 0.0,
+      "f50": 0.0,
+      "f75": 0.0,
+      "component": 0,
+      "included": false,
+      "spectral_history_note": "Broad profiles broadly resemble the archive; adds a 2026 epoch, with no obvious new on/off event."
+    },
+    {
+      "name": "P1887",
+      "f25": 0.0,
+      "f50": 0.02,
+      "f75": 0.04,
+      "component": 0,
+      "included": false,
+      "spectral_history_note": "Broad profiles broadly resemble the archive; adds a 2026 epoch, with no obvious new on/off event."
+    },
+    {
+      "name": "P2921",
+      "f25": 0.12,
+      "f50": 0.1,
+      "f75": 0.08,
+      "component": 0,
+      "included": false,
+      "spectral_history_note": "Possible weaker Hbeta and MgII profiles than in 2002; telluric absorption and FeII/continuum choices prevent a secure fading classification."
+    },
+    {
+      "name": "P1963",
+      "f25": 0.28,
+      "f50": 0.18,
+      "f75": 0.13333333333333333,
+      "component": 0,
+      "included": false,
+      "spectral_history_note": "No obvious broad-line appearance/disappearance in the initial comparison; extends the baseline."
+    },
+    {
+      "name": "P1823",
+      "f25": 0.4,
+      "f50": 0.38,
+      "f75": 0.37333333333333335,
+      "component": 5,
+      "included": true,
+      "spectral_history_note": "High continuum state with broadly similar recent line profiles. Important time-domain target; neither a secure record luminosity nor a demonstrated turn-on."
+    },
+    {
+      "name": "P7281",
+      "f25": 0.28,
+      "f50": 0.32,
+      "f75": 0.26666666666666666,
+      "component": 5,
+      "included": true,
+      "spectral_history_note": "No obvious new broad-line state transition in the initial comparison; extends the baseline."
+    },
+    {
+      "name": "P7847",
+      "f25": 0.2,
+      "f50": 0.14,
+      "f75": 0.13333333333333333,
+      "component": 0,
+      "included": true,
+      "spectral_history_note": "No obvious new broad-line state transition in the initial comparison; extends the baseline."
+    },
+    {
+      "name": "P8544",
+      "f25": 0.0,
+      "f50": 0.0,
+      "f75": 0.0,
+      "component": 0,
+      "included": false,
+      "spectral_history_note": "Possible broad-Hbeta weakening versus 2012: wing/continuum proxy lower by about 21-35%; requires spectral decomposition and uncertainty assessment."
+    },
+    {
+      "name": "P7837",
+      "f25": 0.28,
+      "f50": 0.3,
+      "f75": 0.32,
+      "component": 5,
+      "included": true,
+      "spectral_history_note": "No obvious new broad-line state transition in the initial comparison; extends the baseline."
+    },
+    {
+      "name": "P8548",
+      "f25": 0.24,
+      "f50": 0.2,
+      "f75": 0.18666666666666668,
+      "component": 5,
+      "included": true,
+      "spectral_history_note": "No obvious new broad-line state transition in the initial comparison; extends the baseline."
+    },
+    {
+      "name": "P9599",
+      "f25": 0.0,
+      "f50": 0.02,
+      "f75": 0.02666666666666667,
+      "component": 0,
+      "included": false,
+      "spectral_history_note": "No obvious new broad-line state transition in the initial comparison; extends the baseline."
+    },
+    {
+      "name": "P11113",
+      "f25": 0.32,
+      "f50": 0.24,
+      "f75": 0.25333333333333335,
+      "component": 5,
+      "included": true,
+      "spectral_history_note": "No obvious new broad-line state transition in the initial comparison; extends the baseline."
+    },
+    {
+      "name": "P9227",
+      "f25": 0.12,
+      "f50": 0.08,
+      "f75": 0.09333333333333334,
+      "component": 0,
+      "included": false,
+      "spectral_history_note": "Possible Halpha wing strengthening versus 2017, but Hbeta changes less; telluric and continuum systematics need resolution."
+    },
+    {
+      "name": "P11530",
+      "f25": 0.24,
+      "f50": 0.26,
+      "f75": 0.21333333333333335,
+      "component": 5,
+      "included": true,
+      "spectral_history_note": "Strong long-term spectral/color change versus 2019; NGPS resembles the redder 2023-2025 state. Test intrinsic fading against host/aperture effects; no confirmed turn-off."
+    },
+    {
+      "name": "P9506",
+      "f25": 0.24,
+      "f50": 0.14,
+      "f75": 0.16,
+      "component": 0,
+      "included": true,
+      "spectral_history_note": "No obvious new broad-line state transition in the initial comparison; extends the baseline."
+    },
+    {
+      "name": "P9584",
+      "f25": 0.0,
+      "f50": 0.04,
+      "f75": 0.05333333333333334,
+      "component": 0,
+      "included": false,
+      "spectral_history_note": "No obvious new broad-line state transition in the initial comparison; extends the baseline."
+    },
+    {
+      "name": "P10381",
+      "f25": 0.32,
+      "f50": 0.3,
+      "f75": 0.30666666666666664,
+      "component": 5,
+      "included": true,
+      "spectral_history_note": "Broad Hbeta remains present. Hbeta-wing/[OIII] proxy is within about 3-5% of 2014 and 1-3% of 2024 across continuum choices. Possible recovery after published fading; fit the 2018 spectrum before claiming recurrence."
+    },
+    {
+      "name": "P9694",
+      "f25": 0.0,
+      "f50": 0.04,
+      "f75": 0.06666666666666667,
+      "component": 0,
+      "included": true,
+      "spectral_history_note": "Strongest clean new broad-profile change in our triage: Hbeta-wing/continuum about 37-38% higher and wing/[OIII] about 32-33% higher than 2021. Broad lines already existed; not a confirmed turn-on."
+    }
+  ],
+  "grid": {
+    "x_min": 0,
+    "x_max": 24,
+    "nx": 301,
+    "y_min": -5,
+    "y_max": 12,
+    "ny": 214
+  }
+}

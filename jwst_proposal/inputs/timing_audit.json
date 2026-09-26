@@ -1,0 +1,3622 @@
+{
+  "description": "Timing evidence from saved light curves; calendar-year medians without inter-survey rescaling or host subtraction. Display-series counts are not raw exposure counts.",
+  "cycle6_nominal_dates": [
+    "2027-07-01",
+    "2028-06-30"
+  ],
+  "event_onsets_fitted": false,
+  "target_dust_lags_measured": false,
+  "normalized_response_phase_coverage_validated": false,
+  "interpretation": "Years covered by photometry or spectroscopy do not themselves determine time since an illumination change. Infer event intervals and luminosity-dependent lag distributions before asserting response-phase coverage.",
+  "selection_decisions": {
+    "P9694": "Retain as a variable science candidate: optical rise between the 2021 and 2022 annual medians, brighter through 2025, W1 rising through 2024. Not a stable control.",
+    "P9584": "Remove from the working request. Small optical changes and no demonstrated matched-control role; original data remain in this decision audit."
+  },
+  "observed_trend_intervals": {
+    "P1823": "Sustained optical rise in 2019\u20132023; W1 minimum around 2018\u20132019 and recovery through 2024; spectral high state in September 2026.",
+    "P11530": "Optical decline in 2018\u20132021, partial recovery in 2022\u20132023, renewed fading through 2025. W1 also shows decline and recovery.",
+    "P9694": "Optical rise between 2021 and 2022 annual medians; brighter through 2025, while W1 rises through 2024.",
+    "P11113": "Optical r brightening between 2021 and 2022, decline through 2025; W1 rises through 2024."
+  },
+  "pending": [
+    "Bracket optical change times and amplitudes with calibrated, host-corrected data; spectral observation dates alone are not transition dates.",
+    "Estimate rest-frame dust lag distributions and luminosity uncertainty; assess event-age/lag coverage at allowed JWST dates.",
+    "Check historical optical coverage of the three literature anchors; two do not have full optical display series in this snapshot.",
+    "Obtain contemporary optical coverage to bridge saved light curves into the JWST epoch.",
+    "Validate the inter-instrument separation and any repeat-visit benefit with source-specific predictions and APT visibility."
+  ],
+  "targets": [
+    {
+      "name": "P1823",
+      "z": 0.6204823,
+      "bands": {
+        "ZTF_g": {
+          "units": "AB mag",
+          "points": 273,
+          "start_utc": "2018-03-27",
+          "end_utc": "2025-10-19",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 28,
+              "median": 18.65
+            },
+            {
+              "year": 2019,
+              "points": 40,
+              "median": 18.637
+            },
+            {
+              "year": 2020,
+              "points": 40,
+              "median": 18.5315
+            },
+            {
+              "year": 2021,
+              "points": 39,
+              "median": 18.451
+            },
+            {
+              "year": 2022,
+              "points": 33,
+              "median": 18.215
+            },
+            {
+              "year": 2023,
+              "points": 29,
+              "median": 18.088
+            },
+            {
+              "year": 2024,
+              "points": 33,
+              "median": 18.129
+            },
+            {
+              "year": 2025,
+              "points": 31,
+              "median": 18.168
+            }
+          ]
+        },
+        "ZTF_r": {
+          "units": "AB mag",
+          "points": 278,
+          "start_utc": "2018-03-21",
+          "end_utc": "2025-10-18",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 28,
+              "median": 18.6555
+            },
+            {
+              "year": 2019,
+              "points": 37,
+              "median": 18.645
+            },
+            {
+              "year": 2020,
+              "points": 40,
+              "median": 18.5165
+            },
+            {
+              "year": 2021,
+              "points": 39,
+              "median": 18.449
+            },
+            {
+              "year": 2022,
+              "points": 34,
+              "median": 18.2125
+            },
+            {
+              "year": 2023,
+              "points": 30,
+              "median": 18.0875
+            },
+            {
+              "year": 2024,
+              "points": 36,
+              "median": 18.122
+            },
+            {
+              "year": 2025,
+              "points": 34,
+              "median": 18.1785
+            }
+          ]
+        },
+        "NEOWISE_W1": {
+          "units": "mJy",
+          "points": 22,
+          "start_utc": "2014-02-09",
+          "end_utc": "2024-07-19",
+          "annual_medians": [
+            {
+              "year": 2014,
+              "points": 2,
+              "median": 0.64695
+            },
+            {
+              "year": 2015,
+              "points": 2,
+              "median": 0.6064
+            },
+            {
+              "year": 2016,
+              "points": 2,
+              "median": 0.557
+            },
+            {
+              "year": 2017,
+              "points": 2,
+              "median": 0.48050000000000004
+            },
+            {
+              "year": 2018,
+              "points": 2,
+              "median": 0.45875
+            },
+            {
+              "year": 2019,
+              "points": 2,
+              "median": 0.45894999999999997
+            },
+            {
+              "year": 2020,
+              "points": 2,
+              "median": 0.4707
+            },
+            {
+              "year": 2021,
+              "points": 2,
+              "median": 0.49415
+            },
+            {
+              "year": 2022,
+              "points": 2,
+              "median": 0.5538000000000001
+            },
+            {
+              "year": 2023,
+              "points": 2,
+              "median": 0.6316999999999999
+            },
+            {
+              "year": 2024,
+              "points": 2,
+              "median": 0.70915
+            }
+          ]
+        }
+      },
+      "spectral_dates": [
+        {
+          "mjd": 52374,
+          "date": "2002-04-10",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 59310,
+          "date": "2021-04-06",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 59311,
+          "date": "2021-04-07",
+          "src": "DESI",
+          "file_available": true
+        },
+        {
+          "mjd": 59312,
+          "date": "2021-04-08",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 59329,
+          "date": "2021-04-25",
+          "src": "DESI",
+          "file_available": true
+        },
+        {
+          "mjd": 59342,
+          "date": "2021-05-08",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 59351,
+          "date": "2021-05-17",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 59370,
+          "date": "2021-06-05",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 59708,
+          "date": "2022-05-09",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 59709,
+          "date": "2022-05-10",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 59807,
+          "date": "2022-08-16",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 59817,
+          "date": "2022-08-26",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 59818,
+          "date": "2022-08-27",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 60030,
+          "date": "2023-03-27",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 60031,
+          "date": "2023-03-28",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 60107,
+          "date": "2023-06-12",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 60329,
+          "date": "2024-01-20",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 60353,
+          "date": "2024-02-13",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 60433,
+          "date": "2024-05-03",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 60524,
+          "date": "2024-08-02",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 61307.15426556,
+          "date": "2026-09-24",
+          "src": "NGPS",
+          "file_available": true
+        }
+      ],
+      "existing_review": {
+        "reference_date": "2025-05-21",
+        "ztf_last_date": "2025-10-21",
+        "neowise_last_date": "2024-07-19",
+        "trigger_direction": "",
+        "optical_change_abs": "0.042499999999996874",
+        "neowise_amplitude_mag": "0.47202500000000036"
+      },
+      "spectral_review": "High continuum state with broadly similar recent line profiles. Important time-domain target; neither a secure record luminosity nor a demonstrated turn-on.",
+      "extraction": {},
+      "expansion_rationale": null
+    },
+    {
+      "name": "P7281",
+      "z": 0.1873381,
+      "bands": {
+        "ZTF_g": {
+          "units": "AB mag",
+          "points": 41,
+          "start_utc": "2018-08-05",
+          "end_utc": "2023-09-09",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 12,
+              "median": 17.541
+            },
+            {
+              "year": 2019,
+              "points": 20,
+              "median": 17.567
+            },
+            {
+              "year": 2022,
+              "points": 7,
+              "median": 17.34
+            },
+            {
+              "year": 2023,
+              "points": 2,
+              "median": 17.4245
+            }
+          ]
+        },
+        "ZTF_r": {
+          "units": "AB mag",
+          "points": 36,
+          "start_utc": "2018-07-27",
+          "end_utc": "2025-05-02",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 12,
+              "median": 17.298000000000002
+            },
+            {
+              "year": 2019,
+              "points": 11,
+              "median": 17.336
+            },
+            {
+              "year": 2022,
+              "points": 3,
+              "median": 17.162
+            },
+            {
+              "year": 2023,
+              "points": 3,
+              "median": 17.238
+            },
+            {
+              "year": 2024,
+              "points": 5,
+              "median": 17.204
+            },
+            {
+              "year": 2025,
+              "points": 2,
+              "median": 17.3275
+            }
+          ]
+        },
+        "NEOWISE_W1": {
+          "units": "mJy",
+          "points": 22,
+          "start_utc": "2013-12-21",
+          "end_utc": "2024-06-23",
+          "annual_medians": [
+            {
+              "year": 2013,
+              "points": 1,
+              "median": 1.3524
+            },
+            {
+              "year": 2014,
+              "points": 2,
+              "median": 1.4378
+            },
+            {
+              "year": 2015,
+              "points": 2,
+              "median": 1.6094
+            },
+            {
+              "year": 2016,
+              "points": 2,
+              "median": 1.74325
+            },
+            {
+              "year": 2017,
+              "points": 2,
+              "median": 1.7565499999999998
+            },
+            {
+              "year": 2018,
+              "points": 2,
+              "median": 1.78485
+            },
+            {
+              "year": 2019,
+              "points": 2,
+              "median": 1.84595
+            },
+            {
+              "year": 2020,
+              "points": 2,
+              "median": 1.80255
+            },
+            {
+              "year": 2021,
+              "points": 2,
+              "median": 1.74755
+            },
+            {
+              "year": 2022,
+              "points": 2,
+              "median": 1.84055
+            },
+            {
+              "year": 2023,
+              "points": 2,
+              "median": 1.8077
+            },
+            {
+              "year": 2024,
+              "points": 1,
+              "median": 1.7584
+            }
+          ]
+        }
+      },
+      "spectral_dates": [
+        {
+          "mjd": 57329,
+          "date": "2015-11-03",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 59188,
+          "date": "2020-12-05",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 60251,
+          "date": "2023-11-03",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 60608,
+          "date": "2024-10-25",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 60645,
+          "date": "2024-12-01",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 61307.17545763,
+          "date": "2026-09-24",
+          "src": "NGPS",
+          "file_available": true
+        }
+      ],
+      "existing_review": {
+        "reference_date": "2024-12-01",
+        "ztf_last_date": "2025-05-03",
+        "neowise_last_date": "2024-06-22",
+        "trigger_direction": "",
+        "optical_change_abs": "",
+        "neowise_amplitude_mag": "0.3247250000000008"
+      },
+      "spectral_review": "No obvious new broad-line state transition in the initial comparison; extends the baseline.",
+      "extraction": {},
+      "expansion_rationale": null
+    },
+    {
+      "name": "P7837",
+      "z": 0.1631054,
+      "bands": {
+        "ZTF_g": {
+          "units": "AB mag",
+          "points": 221,
+          "start_utc": "2018-05-09",
+          "end_utc": "2025-10-19",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 27,
+              "median": 18.123
+            },
+            {
+              "year": 2019,
+              "points": 31,
+              "median": 18.277
+            },
+            {
+              "year": 2020,
+              "points": 31,
+              "median": 18.327
+            },
+            {
+              "year": 2021,
+              "points": 30,
+              "median": 18.2255
+            },
+            {
+              "year": 2022,
+              "points": 28,
+              "median": 18.209
+            },
+            {
+              "year": 2023,
+              "points": 27,
+              "median": 18.166
+            },
+            {
+              "year": 2024,
+              "points": 27,
+              "median": 18.114
+            },
+            {
+              "year": 2025,
+              "points": 20,
+              "median": 18.1325
+            }
+          ]
+        },
+        "ZTF_r": {
+          "units": "AB mag",
+          "points": 245,
+          "start_utc": "2018-05-09",
+          "end_utc": "2025-10-19",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 27,
+              "median": 17.848
+            },
+            {
+              "year": 2019,
+              "points": 24,
+              "median": 17.974
+            },
+            {
+              "year": 2020,
+              "points": 32,
+              "median": 17.9825
+            },
+            {
+              "year": 2021,
+              "points": 37,
+              "median": 17.935
+            },
+            {
+              "year": 2022,
+              "points": 35,
+              "median": 17.911
+            },
+            {
+              "year": 2023,
+              "points": 31,
+              "median": 17.887
+            },
+            {
+              "year": 2024,
+              "points": 33,
+              "median": 17.862
+            },
+            {
+              "year": 2025,
+              "points": 26,
+              "median": 17.8585
+            }
+          ]
+        },
+        "NEOWISE_W1": {
+          "units": "mJy",
+          "points": 22,
+          "start_utc": "2013-12-26",
+          "end_utc": "2024-06-28",
+          "annual_medians": [
+            {
+              "year": 2013,
+              "points": 1,
+              "median": 1.6623
+            },
+            {
+              "year": 2014,
+              "points": 2,
+              "median": 1.45285
+            },
+            {
+              "year": 2015,
+              "points": 2,
+              "median": 1.24235
+            },
+            {
+              "year": 2016,
+              "points": 2,
+              "median": 1.18065
+            },
+            {
+              "year": 2017,
+              "points": 2,
+              "median": 1.1829
+            },
+            {
+              "year": 2018,
+              "points": 2,
+              "median": 1.37415
+            },
+            {
+              "year": 2019,
+              "points": 2,
+              "median": 1.1456499999999998
+            },
+            {
+              "year": 2020,
+              "points": 2,
+              "median": 1.1362999999999999
+            },
+            {
+              "year": 2021,
+              "points": 2,
+              "median": 1.2041
+            },
+            {
+              "year": 2022,
+              "points": 2,
+              "median": 1.2858
+            },
+            {
+              "year": 2023,
+              "points": 2,
+              "median": 1.22095
+            },
+            {
+              "year": 2024,
+              "points": 1,
+              "median": 1.1741
+            }
+          ]
+        }
+      },
+      "spectral_dates": [
+        {
+          "mjd": 57580,
+          "date": "2016-07-11",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 61307.20773673,
+          "date": "2026-09-24",
+          "src": "NGPS",
+          "file_available": true
+        }
+      ],
+      "existing_review": {
+        "reference_date": "2016-07-11",
+        "ztf_last_date": "2025-10-21",
+        "neowise_last_date": "2024-06-28",
+        "trigger_direction": "",
+        "optical_change_abs": "",
+        "neowise_amplitude_mag": "0.2881"
+      },
+      "spectral_review": "No obvious new broad-line state transition in the initial comparison; extends the baseline.",
+      "extraction": {},
+      "expansion_rationale": null
+    },
+    {
+      "name": "P8548",
+      "z": 0.0580817,
+      "bands": {
+        "ZTF_g": {
+          "units": "AB mag",
+          "points": 203,
+          "start_utc": "2018-05-30",
+          "end_utc": "2025-10-19",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 24,
+              "median": 17.8425
+            },
+            {
+              "year": 2019,
+              "points": 26,
+              "median": 17.674500000000002
+            },
+            {
+              "year": 2020,
+              "points": 32,
+              "median": 17.71
+            },
+            {
+              "year": 2021,
+              "points": 25,
+              "median": 17.718
+            },
+            {
+              "year": 2022,
+              "points": 25,
+              "median": 18.052
+            },
+            {
+              "year": 2023,
+              "points": 24,
+              "median": 17.973
+            },
+            {
+              "year": 2024,
+              "points": 28,
+              "median": 17.935000000000002
+            },
+            {
+              "year": 2025,
+              "points": 19,
+              "median": 17.947
+            }
+          ]
+        },
+        "ZTF_r": {
+          "units": "AB mag",
+          "points": 227,
+          "start_utc": "2018-06-02",
+          "end_utc": "2025-10-19",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 25,
+              "median": 17.283
+            },
+            {
+              "year": 2019,
+              "points": 28,
+              "median": 17.122999999999998
+            },
+            {
+              "year": 2020,
+              "points": 35,
+              "median": 17.143
+            },
+            {
+              "year": 2021,
+              "points": 29,
+              "median": 17.154
+            },
+            {
+              "year": 2022,
+              "points": 28,
+              "median": 17.3855
+            },
+            {
+              "year": 2023,
+              "points": 26,
+              "median": 17.334
+            },
+            {
+              "year": 2024,
+              "points": 32,
+              "median": 17.294
+            },
+            {
+              "year": 2025,
+              "points": 24,
+              "median": 17.3435
+            }
+          ]
+        },
+        "NEOWISE_W1": {
+          "units": "mJy",
+          "points": 22,
+          "start_utc": "2013-12-29",
+          "end_utc": "2024-07-03",
+          "annual_medians": [
+            {
+              "year": 2013,
+              "points": 1,
+              "median": 2.1514
+            },
+            {
+              "year": 2014,
+              "points": 2,
+              "median": 2.0185
+            },
+            {
+              "year": 2015,
+              "points": 2,
+              "median": 1.8407499999999999
+            },
+            {
+              "year": 2016,
+              "points": 2,
+              "median": 1.94145
+            },
+            {
+              "year": 2017,
+              "points": 2,
+              "median": 2.0220000000000002
+            },
+            {
+              "year": 2018,
+              "points": 2,
+              "median": 1.85225
+            },
+            {
+              "year": 2019,
+              "points": 2,
+              "median": 2.3013
+            },
+            {
+              "year": 2020,
+              "points": 2,
+              "median": 2.30215
+            },
+            {
+              "year": 2021,
+              "points": 2,
+              "median": 2.42
+            },
+            {
+              "year": 2022,
+              "points": 2,
+              "median": 1.8628999999999998
+            },
+            {
+              "year": 2023,
+              "points": 2,
+              "median": 1.7686
+            },
+            {
+              "year": 2024,
+              "points": 1,
+              "median": 2.1385
+            }
+          ]
+        }
+      },
+      "spectral_dates": [
+        {
+          "mjd": 56947,
+          "date": "2014-10-17",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 59557,
+          "date": "2021-12-09",
+          "src": "DESI",
+          "file_available": true
+        },
+        {
+          "mjd": 61307.21924503,
+          "date": "2026-09-24",
+          "src": "NGPS",
+          "file_available": true
+        }
+      ],
+      "existing_review": {
+        "reference_date": "2021-12-09",
+        "ztf_last_date": "2025-10-21",
+        "neowise_last_date": "2024-07-03",
+        "trigger_direction": "",
+        "optical_change_abs": "0.054999999999999716",
+        "neowise_amplitude_mag": "0.430299999999999"
+      },
+      "spectral_review": "No obvious new broad-line state transition in the initial comparison; extends the baseline.",
+      "extraction": {},
+      "expansion_rationale": null
+    },
+    {
+      "name": "P11113",
+      "z": 0.2271015,
+      "bands": {
+        "ZTF_g": {
+          "units": "AB mag",
+          "points": 33,
+          "start_utc": "2018-08-04",
+          "end_utc": "2023-09-06",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 11,
+              "median": 17.351
+            },
+            {
+              "year": 2019,
+              "points": 14,
+              "median": 17.2965
+            },
+            {
+              "year": 2022,
+              "points": 7,
+              "median": 17.032
+            },
+            {
+              "year": 2023,
+              "points": 1,
+              "median": 17.191
+            }
+          ]
+        },
+        "ZTF_r": {
+          "units": "AB mag",
+          "points": 230,
+          "start_utc": "2018-06-07",
+          "end_utc": "2025-10-20",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 26,
+              "median": 17.183
+            },
+            {
+              "year": 2019,
+              "points": 34,
+              "median": 17.2
+            },
+            {
+              "year": 2020,
+              "points": 35,
+              "median": 17.289
+            },
+            {
+              "year": 2021,
+              "points": 32,
+              "median": 17.326
+            },
+            {
+              "year": 2022,
+              "points": 29,
+              "median": 16.964
+            },
+            {
+              "year": 2023,
+              "points": 24,
+              "median": 17.04
+            },
+            {
+              "year": 2024,
+              "points": 31,
+              "median": 17.109
+            },
+            {
+              "year": 2025,
+              "points": 19,
+              "median": 17.313
+            }
+          ]
+        },
+        "NEOWISE_W1": {
+          "units": "mJy",
+          "points": 22,
+          "start_utc": "2014-01-18",
+          "end_utc": "2024-07-22",
+          "annual_medians": [
+            {
+              "year": 2014,
+              "points": 2,
+              "median": 2.8129
+            },
+            {
+              "year": 2015,
+              "points": 2,
+              "median": 2.7217000000000002
+            },
+            {
+              "year": 2016,
+              "points": 2,
+              "median": 2.70025
+            },
+            {
+              "year": 2017,
+              "points": 2,
+              "median": 2.4457500000000003
+            },
+            {
+              "year": 2018,
+              "points": 3,
+              "median": 2.5913
+            },
+            {
+              "year": 2019,
+              "points": 2,
+              "median": 2.53515
+            },
+            {
+              "year": 2020,
+              "points": 2,
+              "median": 2.4764
+            },
+            {
+              "year": 2021,
+              "points": 2,
+              "median": 2.4867
+            },
+            {
+              "year": 2022,
+              "points": 2,
+              "median": 2.7368
+            },
+            {
+              "year": 2023,
+              "points": 2,
+              "median": 3.03705
+            },
+            {
+              "year": 2024,
+              "points": 1,
+              "median": 3.2503
+            }
+          ]
+        }
+      },
+      "spectral_dates": [
+        {
+          "mjd": 58430,
+          "date": "2018-11-08",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 61307.23952129,
+          "date": "2026-09-24",
+          "src": "NGPS",
+          "file_available": true
+        }
+      ],
+      "existing_review": {
+        "reference_date": "2018-11-08",
+        "ztf_last_date": "2025-10-21",
+        "neowise_last_date": "2024-07-22",
+        "trigger_direction": "",
+        "optical_change_abs": "0.10200000000000031",
+        "neowise_amplitude_mag": "0.24985000000000035"
+      },
+      "spectral_review": "No obvious new broad-line state transition in the initial comparison; extends the baseline.",
+      "extraction": {},
+      "expansion_rationale": null
+    },
+    {
+      "name": "P11530",
+      "z": 0.1116921,
+      "bands": {
+        "ZTF_g": {
+          "units": "AB mag",
+          "points": 213,
+          "start_utc": "2018-06-22",
+          "end_utc": "2025-10-19",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 23,
+              "median": 17.824
+            },
+            {
+              "year": 2019,
+              "points": 33,
+              "median": 18.072
+            },
+            {
+              "year": 2020,
+              "points": 32,
+              "median": 18.448
+            },
+            {
+              "year": 2021,
+              "points": 26,
+              "median": 18.4795
+            },
+            {
+              "year": 2022,
+              "points": 25,
+              "median": 18.01
+            },
+            {
+              "year": 2023,
+              "points": 28,
+              "median": 18.0165
+            },
+            {
+              "year": 2024,
+              "points": 26,
+              "median": 18.1935
+            },
+            {
+              "year": 2025,
+              "points": 20,
+              "median": 18.389499999999998
+            }
+          ]
+        },
+        "ZTF_r": {
+          "units": "AB mag",
+          "points": 225,
+          "start_utc": "2018-06-19",
+          "end_utc": "2025-10-19",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 26,
+              "median": 17.2345
+            },
+            {
+              "year": 2019,
+              "points": 31,
+              "median": 17.392
+            },
+            {
+              "year": 2020,
+              "points": 36,
+              "median": 17.605
+            },
+            {
+              "year": 2021,
+              "points": 26,
+              "median": 17.613999999999997
+            },
+            {
+              "year": 2022,
+              "points": 27,
+              "median": 17.397
+            },
+            {
+              "year": 2023,
+              "points": 30,
+              "median": 17.387
+            },
+            {
+              "year": 2024,
+              "points": 25,
+              "median": 17.478
+            },
+            {
+              "year": 2025,
+              "points": 24,
+              "median": 17.573
+            }
+          ]
+        },
+        "NEOWISE_W1": {
+          "units": "mJy",
+          "points": 22,
+          "start_utc": "2014-01-14",
+          "end_utc": "2024-07-17",
+          "annual_medians": [
+            {
+              "year": 2014,
+              "points": 2,
+              "median": 2.23115
+            },
+            {
+              "year": 2015,
+              "points": 2,
+              "median": 2.5728
+            },
+            {
+              "year": 2016,
+              "points": 2,
+              "median": 2.11315
+            },
+            {
+              "year": 2017,
+              "points": 3,
+              "median": 2.4633
+            },
+            {
+              "year": 2018,
+              "points": 2,
+              "median": 2.8767
+            },
+            {
+              "year": 2019,
+              "points": 2,
+              "median": 3.7041999999999997
+            },
+            {
+              "year": 2020,
+              "points": 2,
+              "median": 2.1618500000000003
+            },
+            {
+              "year": 2021,
+              "points": 2,
+              "median": 1.7015500000000001
+            },
+            {
+              "year": 2022,
+              "points": 2,
+              "median": 2.1077
+            },
+            {
+              "year": 2023,
+              "points": 2,
+              "median": 2.949
+            },
+            {
+              "year": 2024,
+              "points": 1,
+              "median": 2.792
+            }
+          ]
+        }
+      },
+      "spectral_dates": [
+        {
+          "mjd": 58515,
+          "date": "2019-02-01",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 60230,
+          "date": "2023-10-13",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 60278,
+          "date": "2023-11-30",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 60281,
+          "date": "2023-12-03",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 60337,
+          "date": "2024-01-28",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 60338,
+          "date": "2024-01-29",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 60558,
+          "date": "2024-09-05",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 60620,
+          "date": "2024-11-06",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 60635,
+          "date": "2024-11-21",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 60702,
+          "date": "2025-01-27",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 60703,
+          "date": "2025-01-28",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 61307.25942519,
+          "date": "2026-09-24",
+          "src": "NGPS",
+          "file_available": true
+        }
+      ],
+      "existing_review": {
+        "reference_date": "2025-12-22",
+        "ztf_last_date": "2025-10-21",
+        "neowise_last_date": "2024-07-17",
+        "trigger_direction": "",
+        "optical_change_abs": "",
+        "neowise_amplitude_mag": "0.6986499999999989"
+      },
+      "spectral_review": "Strong long-term spectral/color change versus 2019; NGPS resembles the redder 2023-2025 state. Test intrinsic fading against host/aperture effects; no confirmed turn-off.",
+      "extraction": {},
+      "expansion_rationale": null
+    },
+    {
+      "name": "P10381",
+      "z": 0.1485672,
+      "bands": {
+        "ZTF_g": {
+          "units": "AB mag",
+          "points": 218,
+          "start_utc": "2018-06-04",
+          "end_utc": "2025-10-19",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 26,
+              "median": 17.7845
+            },
+            {
+              "year": 2019,
+              "points": 35,
+              "median": 17.65
+            },
+            {
+              "year": 2020,
+              "points": 34,
+              "median": 17.3935
+            },
+            {
+              "year": 2021,
+              "points": 26,
+              "median": 17.3915
+            },
+            {
+              "year": 2022,
+              "points": 26,
+              "median": 17.463
+            },
+            {
+              "year": 2023,
+              "points": 28,
+              "median": 17.1555
+            },
+            {
+              "year": 2024,
+              "points": 28,
+              "median": 16.97
+            },
+            {
+              "year": 2025,
+              "points": 15,
+              "median": 17.018
+            }
+          ]
+        },
+        "ZTF_r": {
+          "units": "AB mag",
+          "points": 239,
+          "start_utc": "2018-06-07",
+          "end_utc": "2025-10-19",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 25,
+              "median": 17.461
+            },
+            {
+              "year": 2019,
+              "points": 32,
+              "median": 17.369
+            },
+            {
+              "year": 2020,
+              "points": 40,
+              "median": 17.1785
+            },
+            {
+              "year": 2021,
+              "points": 31,
+              "median": 17.205
+            },
+            {
+              "year": 2022,
+              "points": 29,
+              "median": 17.231
+            },
+            {
+              "year": 2023,
+              "points": 33,
+              "median": 16.944
+            },
+            {
+              "year": 2024,
+              "points": 29,
+              "median": 16.85
+            },
+            {
+              "year": 2025,
+              "points": 20,
+              "median": 16.8915
+            }
+          ]
+        },
+        "NEOWISE_W1": {
+          "units": "mJy",
+          "points": 21,
+          "start_utc": "2014-01-10",
+          "end_utc": "2023-12-21",
+          "annual_medians": [
+            {
+              "year": 2014,
+              "points": 2,
+              "median": 4.33035
+            },
+            {
+              "year": 2015,
+              "points": 2,
+              "median": 4.3268
+            },
+            {
+              "year": 2016,
+              "points": 3,
+              "median": 3.9803
+            },
+            {
+              "year": 2017,
+              "points": 2,
+              "median": 4.13645
+            },
+            {
+              "year": 2018,
+              "points": 2,
+              "median": 3.40205
+            },
+            {
+              "year": 2019,
+              "points": 2,
+              "median": 2.6955999999999998
+            },
+            {
+              "year": 2020,
+              "points": 2,
+              "median": 2.9734
+            },
+            {
+              "year": 2021,
+              "points": 2,
+              "median": 3.2447
+            },
+            {
+              "year": 2022,
+              "points": 2,
+              "median": 2.9459
+            },
+            {
+              "year": 2023,
+              "points": 2,
+              "median": 3.2641
+            }
+          ]
+        }
+      },
+      "spectral_dates": [
+        {
+          "mjd": 56904,
+          "date": "2014-09-04",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 59523,
+          "date": "2021-11-05",
+          "src": "DESI",
+          "file_available": true
+        },
+        {
+          "mjd": 60235,
+          "date": "2023-10-18",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 60236,
+          "date": "2023-10-19",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 60565,
+          "date": "2024-09-12",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 60566,
+          "date": "2024-09-13",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 60587,
+          "date": "2024-10-04",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 61307.28658117,
+          "date": "2026-09-24",
+          "src": "NGPS",
+          "file_available": true
+        }
+      ],
+      "existing_review": {
+        "reference_date": "2021-11-05",
+        "ztf_last_date": "2025-10-21",
+        "neowise_last_date": "2023-12-21",
+        "trigger_direction": "brightening",
+        "optical_change_abs": "0.45700000000000074",
+        "neowise_amplitude_mag": "0.503499999999999"
+      },
+      "spectral_review": "Broad Hbeta remains present. Hbeta-wing/[OIII] proxy is within about 3-5% of 2014 and 1-3% of 2024 across continuum choices. Possible recovery after published fading; fit the 2018 spectrum before claiming recurrence.",
+      "extraction": {},
+      "expansion_rationale": null
+    },
+    {
+      "name": "P22470",
+      "z": 0.2041101,
+      "bands": {
+        "ZTF_g": {
+          "units": "AB mag",
+          "points": 193,
+          "start_utc": "2018-03-25",
+          "end_utc": "2025-05-29",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 18,
+              "median": 19.438499999999998
+            },
+            {
+              "year": 2019,
+              "points": 24,
+              "median": 19.474
+            },
+            {
+              "year": 2020,
+              "points": 31,
+              "median": 19.543
+            },
+            {
+              "year": 2021,
+              "points": 26,
+              "median": 19.523
+            },
+            {
+              "year": 2022,
+              "points": 25,
+              "median": 19.444
+            },
+            {
+              "year": 2023,
+              "points": 26,
+              "median": 19.4065
+            },
+            {
+              "year": 2024,
+              "points": 30,
+              "median": 19.156
+            },
+            {
+              "year": 2025,
+              "points": 13,
+              "median": 19.186
+            }
+          ]
+        },
+        "ZTF_r": {
+          "units": "AB mag",
+          "points": 166,
+          "start_utc": "2018-04-10",
+          "end_utc": "2025-05-21",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 21,
+              "median": 18.338
+            },
+            {
+              "year": 2019,
+              "points": 27,
+              "median": 18.361
+            },
+            {
+              "year": 2020,
+              "points": 33,
+              "median": 18.368
+            },
+            {
+              "year": 2021,
+              "points": 30,
+              "median": 18.369999999999997
+            },
+            {
+              "year": 2022,
+              "points": 25,
+              "median": 18.371
+            },
+            {
+              "year": 2023,
+              "points": 21,
+              "median": 18.36
+            },
+            {
+              "year": 2024,
+              "points": 7,
+              "median": 18.166
+            },
+            {
+              "year": 2025,
+              "points": 2,
+              "median": 18.296
+            }
+          ]
+        },
+        "NEOWISE_W1": {
+          "units": "mJy",
+          "points": 17,
+          "start_utc": "2014-05-05",
+          "end_utc": "2024-04-15",
+          "annual_medians": [
+            {
+              "year": 2014,
+              "points": 2,
+              "median": 0.83325
+            },
+            {
+              "year": 2016,
+              "points": 1,
+              "median": 0.8134
+            },
+            {
+              "year": 2017,
+              "points": 2,
+              "median": 0.8686
+            },
+            {
+              "year": 2018,
+              "points": 1,
+              "median": 0.9211
+            },
+            {
+              "year": 2019,
+              "points": 2,
+              "median": 0.8322499999999999
+            },
+            {
+              "year": 2020,
+              "points": 2,
+              "median": 0.7867500000000001
+            },
+            {
+              "year": 2021,
+              "points": 2,
+              "median": 0.7616499999999999
+            },
+            {
+              "year": 2022,
+              "points": 2,
+              "median": 0.8274
+            },
+            {
+              "year": 2023,
+              "points": 2,
+              "median": 0.843
+            },
+            {
+              "year": 2024,
+              "points": 1,
+              "median": 0.8732
+            }
+          ]
+        }
+      },
+      "spectral_dates": [
+        {
+          "mjd": 52614,
+          "date": "2002-12-06",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 56769,
+          "date": "2014-04-22",
+          "src": "SDSS",
+          "file_available": true
+        }
+      ],
+      "existing_review": {
+        "reference_date": "2014-04-22",
+        "ztf_last_date": "2025-05-29",
+        "neowise_last_date": "2024-04-15",
+        "trigger_direction": "",
+        "optical_change_abs": "",
+        "neowise_amplitude_mag": "0.17159999999999975"
+      },
+      "spectral_review": "",
+      "extraction": {},
+      "expansion_rationale": null
+    },
+    {
+      "name": "P2759",
+      "z": 0.2602845,
+      "bands": {
+        "NEOWISE_W1": {
+          "units": "Vega mag",
+          "points": 22,
+          "start_utc": "2014-02-11",
+          "end_utc": "2024-07-21",
+          "annual_medians": [
+            {
+              "year": 2014,
+              "points": 2,
+              "median": 14.52175
+            },
+            {
+              "year": 2015,
+              "points": 2,
+              "median": 14.4485
+            },
+            {
+              "year": 2016,
+              "points": 2,
+              "median": 14.53275
+            },
+            {
+              "year": 2017,
+              "points": 2,
+              "median": 14.4775
+            },
+            {
+              "year": 2018,
+              "points": 2,
+              "median": 14.592500000000001
+            },
+            {
+              "year": 2019,
+              "points": 2,
+              "median": 14.6125
+            },
+            {
+              "year": 2020,
+              "points": 2,
+              "median": 14.568
+            },
+            {
+              "year": 2021,
+              "points": 2,
+              "median": 14.681999999999999
+            },
+            {
+              "year": 2022,
+              "points": 2,
+              "median": 14.502
+            },
+            {
+              "year": 2023,
+              "points": 2,
+              "median": 14.38275
+            },
+            {
+              "year": 2024,
+              "points": 2,
+              "median": 14.4235
+            }
+          ]
+        }
+      },
+      "spectral_dates": [],
+      "existing_review": {
+        "reference_date": "2025-05-21",
+        "ztf_last_date": "2025-10-21",
+        "neowise_last_date": "2024-07-21",
+        "trigger_direction": "",
+        "optical_change_abs": "0.024499999999999744",
+        "neowise_amplitude_mag": "0.2551500000000022"
+      },
+      "spectral_review": "turn-off",
+      "extraction": {},
+      "expansion_rationale": null
+    },
+    {
+      "name": "P16663",
+      "z": 0.1514835,
+      "bands": {
+        "NEOWISE_W1": {
+          "units": "Vega mag",
+          "points": 15,
+          "start_utc": "2014-10-24",
+          "end_utc": "2024-03-27",
+          "annual_medians": [
+            {
+              "year": 2014,
+              "points": 1,
+              "median": 14.133
+            },
+            {
+              "year": 2015,
+              "points": 2,
+              "median": 14.15
+            },
+            {
+              "year": 2016,
+              "points": 2,
+              "median": 14.1405
+            },
+            {
+              "year": 2017,
+              "points": 2,
+              "median": 14.000499999999999
+            },
+            {
+              "year": 2018,
+              "points": 2,
+              "median": 13.833
+            },
+            {
+              "year": 2019,
+              "points": 1,
+              "median": 13.642
+            },
+            {
+              "year": 2021,
+              "points": 1,
+              "median": 13.5215
+            },
+            {
+              "year": 2022,
+              "points": 1,
+              "median": 13.4
+            },
+            {
+              "year": 2023,
+              "points": 2,
+              "median": 13.614999999999998
+            },
+            {
+              "year": 2024,
+              "points": 1,
+              "median": 13.545
+            }
+          ]
+        }
+      },
+      "spectral_dates": [],
+      "existing_review": {
+        "reference_date": "2008-02-28",
+        "ztf_last_date": "2025-08-30",
+        "neowise_last_date": "2024-03-27",
+        "trigger_direction": "",
+        "optical_change_abs": "",
+        "neowise_amplitude_mag": "0.6866000000000003"
+      },
+      "spectral_review": "",
+      "extraction": {},
+      "expansion_rationale": null
+    },
+    {
+      "name": "P9694",
+      "z": 0.2377224,
+      "bands": {
+        "ZTF_g": {
+          "units": "AB mag",
+          "points": 212,
+          "start_utc": "2018-06-03",
+          "end_utc": "2025-10-19",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 24,
+              "median": 16.801499999999997
+            },
+            {
+              "year": 2019,
+              "points": 32,
+              "median": 16.994500000000002
+            },
+            {
+              "year": 2020,
+              "points": 32,
+              "median": 16.8975
+            },
+            {
+              "year": 2021,
+              "points": 26,
+              "median": 16.868
+            },
+            {
+              "year": 2022,
+              "points": 26,
+              "median": 16.558999999999997
+            },
+            {
+              "year": 2023,
+              "points": 27,
+              "median": 16.548
+            },
+            {
+              "year": 2024,
+              "points": 25,
+              "median": 16.54
+            },
+            {
+              "year": 2025,
+              "points": 20,
+              "median": 16.5715
+            }
+          ]
+        },
+        "ZTF_r": {
+          "units": "AB mag",
+          "points": 224,
+          "start_utc": "2018-06-09",
+          "end_utc": "2025-10-19",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 25,
+              "median": 16.6
+            },
+            {
+              "year": 2019,
+              "points": 28,
+              "median": 16.7485
+            },
+            {
+              "year": 2020,
+              "points": 35,
+              "median": 16.669
+            },
+            {
+              "year": 2021,
+              "points": 28,
+              "median": 16.604
+            },
+            {
+              "year": 2022,
+              "points": 27,
+              "median": 16.387
+            },
+            {
+              "year": 2023,
+              "points": 28,
+              "median": 16.387
+            },
+            {
+              "year": 2024,
+              "points": 28,
+              "median": 16.4065
+            },
+            {
+              "year": 2025,
+              "points": 25,
+              "median": 16.355
+            }
+          ]
+        },
+        "NEOWISE_W1": {
+          "units": "mJy",
+          "points": 22,
+          "start_utc": "2014-01-01",
+          "end_utc": "2024-07-06",
+          "annual_medians": [
+            {
+              "year": 2014,
+              "points": 2,
+              "median": 5.38075
+            },
+            {
+              "year": 2015,
+              "points": 3,
+              "median": 5.3817
+            },
+            {
+              "year": 2016,
+              "points": 2,
+              "median": 5.5452
+            },
+            {
+              "year": 2017,
+              "points": 2,
+              "median": 5.68435
+            },
+            {
+              "year": 2018,
+              "points": 2,
+              "median": 6.2894
+            },
+            {
+              "year": 2019,
+              "points": 2,
+              "median": 6.47925
+            },
+            {
+              "year": 2020,
+              "points": 2,
+              "median": 6.1535
+            },
+            {
+              "year": 2021,
+              "points": 2,
+              "median": 6.3889499999999995
+            },
+            {
+              "year": 2022,
+              "points": 2,
+              "median": 6.8309999999999995
+            },
+            {
+              "year": 2023,
+              "points": 2,
+              "median": 7.2873
+            },
+            {
+              "year": 2024,
+              "points": 1,
+              "median": 7.4734
+            }
+          ]
+        }
+      },
+      "spectral_dates": [
+        {
+          "mjd": 58424,
+          "date": "2018-11-02",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 59501,
+          "date": "2021-10-14",
+          "src": "DESI",
+          "file_available": true
+        },
+        {
+          "mjd": 61307.29725315,
+          "date": "2026-09-24",
+          "src": "NGPS",
+          "file_available": true
+        }
+      ],
+      "existing_review": {
+        "reference_date": "2021-10-14",
+        "ztf_last_date": "2025-10-21",
+        "neowise_last_date": "2024-07-06",
+        "trigger_direction": "",
+        "optical_change_abs": "0.2714999999999961",
+        "neowise_amplitude_mag": "0.35097500000000004"
+      },
+      "spectral_review": "Strongest clean new broad-profile change in our triage: Hbeta-wing/continuum about 37-38% higher and wing/[OIII] about 32-33% higher than 2021. Broad lines already existed; not a confirmed turn-on.",
+      "extraction": {},
+      "expansion_rationale": null
+    },
+    {
+      "name": "P9584",
+      "z": 0.178817,
+      "bands": {
+        "ZTF_g": {
+          "units": "AB mag",
+          "points": 211,
+          "start_utc": "2018-06-03",
+          "end_utc": "2025-10-18",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 25,
+              "median": 16.835
+            },
+            {
+              "year": 2019,
+              "points": 31,
+              "median": 16.852
+            },
+            {
+              "year": 2020,
+              "points": 32,
+              "median": 16.825
+            },
+            {
+              "year": 2021,
+              "points": 26,
+              "median": 16.863500000000002
+            },
+            {
+              "year": 2022,
+              "points": 27,
+              "median": 16.866
+            },
+            {
+              "year": 2023,
+              "points": 24,
+              "median": 16.857
+            },
+            {
+              "year": 2024,
+              "points": 28,
+              "median": 16.859
+            },
+            {
+              "year": 2025,
+              "points": 18,
+              "median": 16.8905
+            }
+          ]
+        },
+        "ZTF_r": {
+          "units": "AB mag",
+          "points": 231,
+          "start_utc": "2018-06-11",
+          "end_utc": "2025-10-19",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 26,
+              "median": 16.6815
+            },
+            {
+              "year": 2019,
+              "points": 30,
+              "median": 16.708
+            },
+            {
+              "year": 2020,
+              "points": 36,
+              "median": 16.680500000000002
+            },
+            {
+              "year": 2021,
+              "points": 29,
+              "median": 16.696
+            },
+            {
+              "year": 2022,
+              "points": 31,
+              "median": 16.716
+            },
+            {
+              "year": 2023,
+              "points": 25,
+              "median": 16.716
+            },
+            {
+              "year": 2024,
+              "points": 30,
+              "median": 16.7265
+            },
+            {
+              "year": 2025,
+              "points": 24,
+              "median": 16.732
+            }
+          ]
+        },
+        "NEOWISE_W1": {
+          "units": "mJy",
+          "points": 22,
+          "start_utc": "2014-01-04",
+          "end_utc": "2024-07-10",
+          "annual_medians": [
+            {
+              "year": 2014,
+              "points": 2,
+              "median": 4.31545
+            },
+            {
+              "year": 2015,
+              "points": 2,
+              "median": 3.9734000000000003
+            },
+            {
+              "year": 2016,
+              "points": 3,
+              "median": 3.8012
+            },
+            {
+              "year": 2017,
+              "points": 2,
+              "median": 3.85695
+            },
+            {
+              "year": 2018,
+              "points": 2,
+              "median": 4.2143
+            },
+            {
+              "year": 2019,
+              "points": 2,
+              "median": 4.3264499999999995
+            },
+            {
+              "year": 2020,
+              "points": 2,
+              "median": 4.386799999999999
+            },
+            {
+              "year": 2021,
+              "points": 2,
+              "median": 4.44485
+            },
+            {
+              "year": 2022,
+              "points": 2,
+              "median": 4.29465
+            },
+            {
+              "year": 2023,
+              "points": 2,
+              "median": 4.12315
+            },
+            {
+              "year": 2024,
+              "points": 1,
+              "median": 4.1373
+            }
+          ]
+        }
+      },
+      "spectral_dates": [
+        {
+          "mjd": 56898,
+          "date": "2014-08-29",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 59553,
+          "date": "2021-12-05",
+          "src": "DESI",
+          "file_available": true
+        },
+        {
+          "mjd": 61307.2776542,
+          "date": "2026-09-24",
+          "src": "NGPS",
+          "file_available": true
+        }
+      ],
+      "existing_review": {
+        "reference_date": "2021-12-05",
+        "ztf_last_date": "2025-10-20",
+        "neowise_last_date": "2024-07-10",
+        "trigger_direction": "",
+        "optical_change_abs": "0.015000000000004121",
+        "neowise_amplitude_mag": "0.17777500000000046"
+      },
+      "spectral_review": "No obvious new broad-line state transition in the initial comparison; extends the baseline.",
+      "extraction": {},
+      "expansion_rationale": null
+    },
+    {
+      "name": "P7847",
+      "z": 0.2794114,
+      "bands": {
+        "ZTF_g": {
+          "units": "AB mag",
+          "points": 219,
+          "start_utc": "2018-06-05",
+          "end_utc": "2025-10-01",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 27,
+              "median": 17.199
+            },
+            {
+              "year": 2019,
+              "points": 33,
+              "median": 17.198
+            },
+            {
+              "year": 2020,
+              "points": 34,
+              "median": 17.1635
+            },
+            {
+              "year": 2021,
+              "points": 28,
+              "median": 17.0365
+            },
+            {
+              "year": 2022,
+              "points": 28,
+              "median": 17.0165
+            },
+            {
+              "year": 2023,
+              "points": 26,
+              "median": 17.2135
+            },
+            {
+              "year": 2024,
+              "points": 30,
+              "median": 17.308
+            },
+            {
+              "year": 2025,
+              "points": 13,
+              "median": 17.367
+            }
+          ]
+        },
+        "ZTF_r": {
+          "units": "AB mag",
+          "points": 244,
+          "start_utc": "2018-06-02",
+          "end_utc": "2025-10-01",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 27,
+              "median": 16.886
+            },
+            {
+              "year": 2019,
+              "points": 32,
+              "median": 16.887500000000003
+            },
+            {
+              "year": 2020,
+              "points": 37,
+              "median": 16.854
+            },
+            {
+              "year": 2021,
+              "points": 34,
+              "median": 16.752000000000002
+            },
+            {
+              "year": 2022,
+              "points": 31,
+              "median": 16.781
+            },
+            {
+              "year": 2023,
+              "points": 28,
+              "median": 16.934
+            },
+            {
+              "year": 2024,
+              "points": 37,
+              "median": 17.008
+            },
+            {
+              "year": 2025,
+              "points": 18,
+              "median": 17.0495
+            }
+          ]
+        },
+        "NEOWISE_W1": {
+          "units": "mJy",
+          "points": 22,
+          "start_utc": "2013-12-29",
+          "end_utc": "2024-07-03",
+          "annual_medians": [
+            {
+              "year": 2013,
+              "points": 1,
+              "median": 3.6704
+            },
+            {
+              "year": 2014,
+              "points": 2,
+              "median": 3.5820499999999997
+            },
+            {
+              "year": 2015,
+              "points": 2,
+              "median": 3.8579
+            },
+            {
+              "year": 2016,
+              "points": 2,
+              "median": 4.1326
+            },
+            {
+              "year": 2017,
+              "points": 2,
+              "median": 4.27515
+            },
+            {
+              "year": 2018,
+              "points": 2,
+              "median": 4.29455
+            },
+            {
+              "year": 2019,
+              "points": 2,
+              "median": 4.19585
+            },
+            {
+              "year": 2020,
+              "points": 2,
+              "median": 4.259499999999999
+            },
+            {
+              "year": 2021,
+              "points": 2,
+              "median": 4.3538499999999996
+            },
+            {
+              "year": 2022,
+              "points": 2,
+              "median": 4.61525
+            },
+            {
+              "year": 2023,
+              "points": 2,
+              "median": 4.7558
+            },
+            {
+              "year": 2024,
+              "points": 1,
+              "median": 4.421
+            }
+          ]
+        }
+      },
+      "spectral_dates": [
+        {
+          "mjd": 58072,
+          "date": "2017-11-15",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 61307.18449626,
+          "date": "2026-09-24",
+          "src": "NGPS",
+          "file_available": true
+        }
+      ],
+      "existing_review": {
+        "reference_date": "2017-11-15",
+        "ztf_last_date": "2025-10-01",
+        "neowise_last_date": "2024-07-03",
+        "trigger_direction": "",
+        "optical_change_abs": "",
+        "neowise_amplitude_mag": "0.2927500000000016",
+        "field_status": "clear"
+      },
+      "spectral_review": "No obvious new broad-line state transition in the initial comparison; extends the baseline.",
+      "extraction": {
+        "source": "docs/index.html",
+        "method": "Existing displayed light curves without reprocessing."
+      },
+      "expansion_rationale": "Adds a 2022\u20132025 optical decline after an earlier rise; W1 turns down after its 2023 annual maximum. Extends the fading sample with an already-observed low-redshift nucleus."
+    },
+    {
+      "name": "P9506",
+      "z": 0.2315291,
+      "bands": {
+        "ZTF_g": {
+          "units": "AB mag",
+          "points": 216,
+          "start_utc": "2018-06-03",
+          "end_utc": "2025-10-18",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 26,
+              "median": 17.8305
+            },
+            {
+              "year": 2019,
+              "points": 31,
+              "median": 17.936
+            },
+            {
+              "year": 2020,
+              "points": 32,
+              "median": 17.8655
+            },
+            {
+              "year": 2021,
+              "points": 27,
+              "median": 18.075
+            },
+            {
+              "year": 2022,
+              "points": 27,
+              "median": 17.902
+            },
+            {
+              "year": 2023,
+              "points": 27,
+              "median": 18.075
+            },
+            {
+              "year": 2024,
+              "points": 28,
+              "median": 18.0085
+            },
+            {
+              "year": 2025,
+              "points": 18,
+              "median": 17.786
+            }
+          ]
+        },
+        "ZTF_r": {
+          "units": "AB mag",
+          "points": 234,
+          "start_utc": "2018-06-11",
+          "end_utc": "2025-10-19",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 26,
+              "median": 17.6285
+            },
+            {
+              "year": 2019,
+              "points": 30,
+              "median": 17.698
+            },
+            {
+              "year": 2020,
+              "points": 36,
+              "median": 17.622999999999998
+            },
+            {
+              "year": 2021,
+              "points": 29,
+              "median": 17.812
+            },
+            {
+              "year": 2022,
+              "points": 31,
+              "median": 17.659
+            },
+            {
+              "year": 2023,
+              "points": 28,
+              "median": 17.7765
+            },
+            {
+              "year": 2024,
+              "points": 30,
+              "median": 17.743000000000002
+            },
+            {
+              "year": 2025,
+              "points": 24,
+              "median": 17.586
+            }
+          ]
+        },
+        "NEOWISE_W1": {
+          "units": "mJy",
+          "points": 22,
+          "start_utc": "2014-01-03",
+          "end_utc": "2024-07-08",
+          "annual_medians": [
+            {
+              "year": 2014,
+              "points": 2,
+              "median": 2.5914
+            },
+            {
+              "year": 2015,
+              "points": 3,
+              "median": 2.7613
+            },
+            {
+              "year": 2016,
+              "points": 2,
+              "median": 2.7626
+            },
+            {
+              "year": 2017,
+              "points": 2,
+              "median": 2.4792
+            },
+            {
+              "year": 2018,
+              "points": 2,
+              "median": 2.1594499999999996
+            },
+            {
+              "year": 2019,
+              "points": 2,
+              "median": 2.07235
+            },
+            {
+              "year": 2020,
+              "points": 2,
+              "median": 2.1418
+            },
+            {
+              "year": 2021,
+              "points": 2,
+              "median": 1.9926499999999998
+            },
+            {
+              "year": 2022,
+              "points": 2,
+              "median": 1.9420000000000002
+            },
+            {
+              "year": 2023,
+              "points": 2,
+              "median": 1.8244500000000001
+            },
+            {
+              "year": 2024,
+              "points": 1,
+              "median": 1.7616
+            }
+          ]
+        }
+      },
+      "spectral_dates": [
+        {
+          "mjd": 56946,
+          "date": "2014-10-16",
+          "src": "SDSS",
+          "file_available": true
+        },
+        {
+          "mjd": 61307.26865333,
+          "date": "2026-09-24",
+          "src": "NGPS",
+          "file_available": true
+        }
+      ],
+      "existing_review": {
+        "reference_date": "2014-10-16",
+        "ztf_last_date": "2025-10-20",
+        "neowise_last_date": "2024-07-08",
+        "trigger_direction": "",
+        "optical_change_abs": "",
+        "neowise_amplitude_mag": "0.4610000000000021",
+        "field_status": "clear"
+      },
+      "spectral_review": "No obvious new broad-line state transition in the initial comparison; extends the baseline.",
+      "extraction": {
+        "source": "docs/index.html",
+        "method": "Existing displayed light curves without reprocessing."
+      },
+      "expansion_rationale": "Adds sustained infrared decline from the mid-2010s through 2024 with a non-monotonic optical history and recent optical brightening. The different histories constrain delayed response; not classified as a new line transition."
+    },
+    {
+      "name": "P8499",
+      "z": 0.2425975,
+      "bands": {
+        "ZTF_g": {
+          "units": "AB mag",
+          "points": 1048,
+          "start_utc": "2018-06-05",
+          "end_utc": "2025-10-21",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 48,
+              "median": 18.3124275
+            },
+            {
+              "year": 2019,
+              "points": 81,
+              "median": 18.6604309
+            },
+            {
+              "year": 2020,
+              "points": 214,
+              "median": 18.08436775
+            },
+            {
+              "year": 2021,
+              "points": 209,
+              "median": 17.6238289
+            },
+            {
+              "year": 2022,
+              "points": 203,
+              "median": 17.9392052
+            },
+            {
+              "year": 2023,
+              "points": 198,
+              "median": 18.423938749999998
+            },
+            {
+              "year": 2024,
+              "points": 60,
+              "median": 18.643651
+            },
+            {
+              "year": 2025,
+              "points": 35,
+              "median": 18.4143505
+            }
+          ]
+        },
+        "ZTF_r": {
+          "units": "AB mag",
+          "points": 1355,
+          "start_utc": "2018-05-30",
+          "end_utc": "2025-10-21",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 61,
+              "median": 17.8990746
+            },
+            {
+              "year": 2019,
+              "points": 82,
+              "median": 18.10107615
+            },
+            {
+              "year": 2020,
+              "points": 252,
+              "median": 17.738925950000002
+            },
+            {
+              "year": 2021,
+              "points": 287,
+              "median": 17.4265385
+            },
+            {
+              "year": 2022,
+              "points": 270,
+              "median": 17.59845065
+            },
+            {
+              "year": 2023,
+              "points": 264,
+              "median": 17.923492449999998
+            },
+            {
+              "year": 2024,
+              "points": 90,
+              "median": 18.10156915
+            },
+            {
+              "year": 2025,
+              "points": 49,
+              "median": 17.9578285
+            }
+          ]
+        },
+        "NEOWISE_W1": {
+          "units": "Vega mag",
+          "points": 22,
+          "start_utc": "2014-01-04",
+          "end_utc": "2024-07-09",
+          "annual_medians": [
+            {
+              "year": 2014,
+              "points": 2,
+              "median": 13.655000000000001
+            },
+            {
+              "year": 2015,
+              "points": 3,
+              "median": 13.691
+            },
+            {
+              "year": 2016,
+              "points": 2,
+              "median": 13.6235
+            },
+            {
+              "year": 2017,
+              "points": 2,
+              "median": 13.2985
+            },
+            {
+              "year": 2018,
+              "points": 2,
+              "median": 13.084
+            },
+            {
+              "year": 2019,
+              "points": 2,
+              "median": 13.0945
+            },
+            {
+              "year": 2020,
+              "points": 2,
+              "median": 12.9845
+            },
+            {
+              "year": 2021,
+              "points": 2,
+              "median": 12.6765
+            },
+            {
+              "year": 2022,
+              "points": 2,
+              "median": 12.47475
+            },
+            {
+              "year": 2023,
+              "points": 2,
+              "median": 12.577
+            },
+            {
+              "year": 2024,
+              "points": 1,
+              "median": 12.8285
+            }
+          ]
+        }
+      },
+      "spectral_dates": [],
+      "existing_review": {
+        "reference_date": "",
+        "ztf_last_date": "2025-10-21",
+        "neowise_last_date": "2024-07-09",
+        "trigger_direction": "",
+        "optical_change_abs": "",
+        "neowise_amplitude_mag": "1.2097499999999997",
+        "field_status": "pending"
+      },
+      "spectral_review": "turn-on",
+      "extraction": {
+        "source": "data/ztf_cache/calib/P8499.csv",
+        "sha256": "8eb0bbac2f5c8d0d2ad28fd7096a17a19591cbece38509a7f7a409958e743a47",
+        "method": "catflags=0, 0<magerr<=0.2 mag, position within 1 arcsec of bundled target. In each band choose the OID with the most passing measurements; lexicographic OID breaks ties. No inter-OID merging, rescaling or host subtraction.",
+        "selected_oid": {
+          "zg": "601116400003766",
+          "zr": "601216400007587"
+        },
+        "infrared_source": "data/neowise_visits_poolall.csv",
+        "catalogue_history": {
+          "first_spectrum_date": "57361",
+          "last_spectrum_date": "DESI DR1",
+          "reference": "Guo 2025",
+          "transition_type": "turn-on",
+          "duplicate_notes": "Guo 2025 DESI/SDSS DR1 statistical catalog; DESI TARGETID=39628441154227229; transition=turn-on; SDSS plate-MJD-fiber=7693-57361-56. DESI-specific MJD not adopted here because the public MRT/FITS MJD values for DESI and SDSS are identical for most sources; baseline left blank pending direct DESI epoch verification."
+        }
+      },
+      "expansion_rationale": "Catalogue turn-on anchor with large optical rise to 2021 followed by decline, and a W1 peak in 2022 followed by decline. Extends the range of variability amplitudes and optical/IR timing."
+    },
+    {
+      "name": "P13030",
+      "z": 0.1820198,
+      "bands": {
+        "ZTF_g": {
+          "units": "AB mag",
+          "points": 479,
+          "start_utc": "2018-07-24",
+          "end_utc": "2025-10-20",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 59,
+              "median": 18.9160042
+            },
+            {
+              "year": 2019,
+              "points": 62,
+              "median": 18.9080963
+            },
+            {
+              "year": 2020,
+              "points": 113,
+              "median": 18.8677979
+            },
+            {
+              "year": 2021,
+              "points": 51,
+              "median": 18.7531548
+            },
+            {
+              "year": 2022,
+              "points": 45,
+              "median": 18.5409031
+            },
+            {
+              "year": 2023,
+              "points": 45,
+              "median": 18.3221931
+            },
+            {
+              "year": 2024,
+              "points": 48,
+              "median": 18.3406906
+            },
+            {
+              "year": 2025,
+              "points": 56,
+              "median": 18.2719412
+            }
+          ]
+        },
+        "ZTF_r": {
+          "units": "AB mag",
+          "points": 488,
+          "start_utc": "2018-07-24",
+          "end_utc": "2025-10-20",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 73,
+              "median": 17.9230251
+            },
+            {
+              "year": 2019,
+              "points": 56,
+              "median": 17.9220753
+            },
+            {
+              "year": 2020,
+              "points": 123,
+              "median": 17.9128532
+            },
+            {
+              "year": 2021,
+              "points": 69,
+              "median": 17.8429298
+            },
+            {
+              "year": 2022,
+              "points": 45,
+              "median": 17.745842
+            },
+            {
+              "year": 2023,
+              "points": 42,
+              "median": 17.641078
+            },
+            {
+              "year": 2024,
+              "points": 32,
+              "median": 17.6458626
+            },
+            {
+              "year": 2025,
+              "points": 48,
+              "median": 17.634593
+            }
+          ]
+        },
+        "NEOWISE_W1": {
+          "units": "Vega mag",
+          "points": 22,
+          "start_utc": "2014-01-19",
+          "end_utc": "2024-07-23",
+          "annual_medians": [
+            {
+              "year": 2014,
+              "points": 2,
+              "median": 13.27275
+            },
+            {
+              "year": 2015,
+              "points": 2,
+              "median": 13.0985
+            },
+            {
+              "year": 2016,
+              "points": 2,
+              "median": 13.0965
+            },
+            {
+              "year": 2017,
+              "points": 2,
+              "median": 13.2605
+            },
+            {
+              "year": 2018,
+              "points": 3,
+              "median": 13.696
+            },
+            {
+              "year": 2019,
+              "points": 2,
+              "median": 13.89125
+            },
+            {
+              "year": 2020,
+              "points": 2,
+              "median": 13.8445
+            },
+            {
+              "year": 2021,
+              "points": 2,
+              "median": 13.622
+            },
+            {
+              "year": 2022,
+              "points": 2,
+              "median": 13.597
+            },
+            {
+              "year": 2023,
+              "points": 1,
+              "median": 13.271
+            },
+            {
+              "year": 2024,
+              "points": 2,
+              "median": 13.3125
+            }
+          ]
+        }
+      },
+      "spectral_dates": [],
+      "existing_review": {
+        "reference_date": "",
+        "ztf_last_date": "2025-10-20",
+        "neowise_last_date": "2024-07-23",
+        "trigger_direction": "",
+        "optical_change_abs": "",
+        "neowise_amplitude_mag": "0.8041750000000008",
+        "field_status": "pending"
+      },
+      "spectral_review": "",
+      "extraction": {
+        "source": "data/ztf_cache/calib/P13030.csv",
+        "sha256": "a6de94c0d5d43cb0a5349acce06ed0dd389fa02e8a9d35aa6de0a032adb8db40",
+        "method": "catflags=0, 0<magerr<=0.2 mag, position within 1 arcsec of bundled target. In each band choose the OID with the most passing measurements; lexicographic OID breaks ties. No inter-OID merging, rescaling or host subtraction.",
+        "selected_oid": {
+          "zg": "401116200001853",
+          "zr": "401216200019114"
+        },
+        "infrared_source": "data/neowise_visits_poolall.csv",
+        "catalogue_history": {
+          "first_spectrum_date": "51816",
+          "last_spectrum_date": "58097",
+          "reference": "Panda 2024; Dong 2025",
+          "transition_type": "",
+          "duplicate_notes": "Final Panda 2024 working sample; original literature sample: Green+2022; compiled/reanalyzed in Panda 2024; non-flagged spectra used: 3. Also appears in Dong 2025 Table B1 as confirmed CL AGN; coordinate match separation=0.234 arcsec; transition=turn-off; line=Hbeta; SDSS/LAMOST MJD=51816->57747. Listed as RCL AGN candidate in Dong 2025 Table 2; inverted post-second-spectrum WISE variability: W1=0.77 mag, W2=0.77 mag, r=17.63 mag."
+        }
+      },
+      "expansion_rationale": "Catalogue CLAGN with historical fading and a repeating-transition candidacy; saved optical light curves brighten through 2025 and W1 recovers after a 2019 minimum in flux. Adds an independent recovery history, not a newly confirmed recurrence."
+    },
+    {
+      "name": "P24541",
+      "z": 0.2147729,
+      "bands": {
+        "ZTF_g": {
+          "units": "AB mag",
+          "points": 34,
+          "start_utc": "2018-03-29",
+          "end_utc": "2024-02-01",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 5,
+              "median": 19.5668869
+            },
+            {
+              "year": 2019,
+              "points": 9,
+              "median": 19.6025219
+            },
+            {
+              "year": 2020,
+              "points": 9,
+              "median": 19.76754
+            },
+            {
+              "year": 2021,
+              "points": 2,
+              "median": 19.60008715
+            },
+            {
+              "year": 2023,
+              "points": 8,
+              "median": 18.76780415
+            },
+            {
+              "year": 2024,
+              "points": 1,
+              "median": 18.4455967
+            }
+          ]
+        },
+        "ZTF_r": {
+          "units": "AB mag",
+          "points": 62,
+          "start_utc": "2018-11-17",
+          "end_utc": "2024-07-18",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 6,
+              "median": 18.9105997
+            },
+            {
+              "year": 2019,
+              "points": 20,
+              "median": 18.99176975
+            },
+            {
+              "year": 2020,
+              "points": 16,
+              "median": 19.04584405
+            },
+            {
+              "year": 2022,
+              "points": 1,
+              "median": 18.7791309
+            },
+            {
+              "year": 2023,
+              "points": 7,
+              "median": 18.1765499
+            },
+            {
+              "year": 2024,
+              "points": 12,
+              "median": 18.36259745
+            }
+          ]
+        },
+        "NEOWISE_W1": {
+          "units": "Vega mag",
+          "points": 17,
+          "start_utc": "2014-05-05",
+          "end_utc": "2024-04-14",
+          "annual_medians": [
+            {
+              "year": 2014,
+              "points": 2,
+              "median": 14.468250000000001
+            },
+            {
+              "year": 2015,
+              "points": 1,
+              "median": 14.565000000000001
+            },
+            {
+              "year": 2017,
+              "points": 2,
+              "median": 14.698500000000001
+            },
+            {
+              "year": 2018,
+              "points": 1,
+              "median": 14.85
+            },
+            {
+              "year": 2019,
+              "points": 2,
+              "median": 14.8255
+            },
+            {
+              "year": 2020,
+              "points": 2,
+              "median": 14.9285
+            },
+            {
+              "year": 2021,
+              "points": 2,
+              "median": 14.851
+            },
+            {
+              "year": 2022,
+              "points": 2,
+              "median": 14.6905
+            },
+            {
+              "year": 2023,
+              "points": 2,
+              "median": 14.354
+            },
+            {
+              "year": 2024,
+              "points": 1,
+              "median": 14.035
+            }
+          ]
+        }
+      },
+      "spectral_dates": [],
+      "existing_review": {
+        "reference_date": "2016-02-11",
+        "ztf_last_date": "2024-07-18",
+        "neowise_last_date": "2024-04-14",
+        "trigger_direction": "",
+        "optical_change_abs": "",
+        "neowise_amplitude_mag": "0.7566999999999986",
+        "field_status": "pending"
+      },
+      "spectral_review": "",
+      "extraction": {
+        "source": "data/ztf_cache/pool/P24541.csv",
+        "sha256": "1b37ec9faa1fa0339ac65a79cfca515dc9e5a2956633920a2fd3d97bef85806b",
+        "method": "catflags=0, 0<magerr<=0.2 mag, position within 1 arcsec of bundled target. In each band choose the OID with the most passing measurements; lexicographic OID breaks ties. No inter-OID merging, rescaling or host subtraction.",
+        "selected_oid": {
+          "zg": "1790116100005616",
+          "zr": "1789213100001613"
+        },
+        "infrared_source": "data/neowise_visits_poolall.csv",
+        "catalogue_history": {
+          "first_spectrum_date": "52368",
+          "last_spectrum_date": "57429",
+          "reference": "Panda 2024; Dong 2025",
+          "transition_type": "",
+          "duplicate_notes": "Final Panda 2024 working sample; original literature sample: Wang+2019; compiled/reanalyzed in Panda 2024; non-flagged spectra used: 3. Also appears in Dong 2025 Table B1 as confirmed CL AGN; coordinate match separation=0.124 arcsec; transition=turn-off; line=Hbeta; SDSS/LAMOST MJD=52368->57044. Listed as RCL AGN candidate in Dong 2025 Table 2; inverted post-second-spectrum WISE variability: W1=0.44 mag, W2=0.51 mag, r=19.01 mag."
+        }
+      },
+      "expansion_rationale": "Catalogue CLAGN and repeating-transition candidate; optical data brighten from 2020 to 2023 and W1 recovers after 2020. Optical sampling is sparse and needs a better onset bracket."
+    },
+    {
+      "name": "P21240",
+      "z": 0.1598634,
+      "bands": {
+        "ZTF_g": {
+          "units": "AB mag",
+          "points": 788,
+          "start_utc": "2018-03-25",
+          "end_utc": "2025-10-20",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 63,
+              "median": 17.5682545
+            },
+            {
+              "year": 2019,
+              "points": 50,
+              "median": 17.4337845
+            },
+            {
+              "year": 2020,
+              "points": 197,
+              "median": 17.1729488
+            },
+            {
+              "year": 2021,
+              "points": 173,
+              "median": 17.2111282
+            },
+            {
+              "year": 2022,
+              "points": 96,
+              "median": 17.420964249999997
+            },
+            {
+              "year": 2023,
+              "points": 88,
+              "median": 17.6487093
+            },
+            {
+              "year": 2024,
+              "points": 80,
+              "median": 17.914196
+            },
+            {
+              "year": 2025,
+              "points": 41,
+              "median": 17.3423405
+            }
+          ]
+        },
+        "ZTF_r": {
+          "units": "AB mag",
+          "points": 1261,
+          "start_utc": "2018-04-10",
+          "end_utc": "2025-10-20",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 72,
+              "median": 17.2909327
+            },
+            {
+              "year": 2019,
+              "points": 257,
+              "median": 17.1185532
+            },
+            {
+              "year": 2020,
+              "points": 242,
+              "median": 16.9807615
+            },
+            {
+              "year": 2021,
+              "points": 240,
+              "median": 17.08115485
+            },
+            {
+              "year": 2022,
+              "points": 157,
+              "median": 17.1997662
+            },
+            {
+              "year": 2023,
+              "points": 163,
+              "median": 17.3675232
+            },
+            {
+              "year": 2024,
+              "points": 97,
+              "median": 17.576931
+            },
+            {
+              "year": 2025,
+              "points": 33,
+              "median": 17.1489201
+            }
+          ]
+        },
+        "NEOWISE_W1": {
+          "units": "Vega mag",
+          "points": 17,
+          "start_utc": "2014-04-26",
+          "end_utc": "2024-04-06",
+          "annual_medians": [
+            {
+              "year": 2014,
+              "points": 2,
+              "median": 12.928
+            },
+            {
+              "year": 2015,
+              "points": 2,
+              "median": 13.0565
+            },
+            {
+              "year": 2016,
+              "points": 1,
+              "median": 13.246500000000001
+            },
+            {
+              "year": 2017,
+              "points": 2,
+              "median": 13.38825
+            },
+            {
+              "year": 2018,
+              "points": 1,
+              "median": 13.411999999999999
+            },
+            {
+              "year": 2020,
+              "points": 2,
+              "median": 13.190750000000001
+            },
+            {
+              "year": 2021,
+              "points": 2,
+              "median": 13.0535
+            },
+            {
+              "year": 2022,
+              "points": 2,
+              "median": 13.19125
+            },
+            {
+              "year": 2023,
+              "points": 2,
+              "median": 13.315999999999999
+            },
+            {
+              "year": 2024,
+              "points": 1,
+              "median": 13.458
+            }
+          ]
+        }
+      },
+      "spectral_dates": [],
+      "existing_review": {
+        "reference_date": "2014-01-28",
+        "ztf_last_date": "2025-10-20",
+        "neowise_last_date": "2024-04-06",
+        "trigger_direction": "",
+        "optical_change_abs": "",
+        "neowise_amplitude_mag": "0.4905000000000008",
+        "field_status": "pending"
+      },
+      "spectral_review": "",
+      "extraction": {
+        "source": "data/ztf_cache/v2/P21240.csv",
+        "sha256": "b6604efc6f9a3fb4c2fcf5d4b2ed3eabe502543051b063730eb0caaa4e0c483f",
+        "method": "catflags=0, 0<magerr<=0.2 mag, position within 1 arcsec of bundled target. In each band choose the OID with the most passing measurements; lexicographic OID breaks ties. No inter-OID merging, rescaling or host subtraction.",
+        "selected_oid": {
+          "zg": "750105100005026",
+          "zr": "750205100002377"
+        },
+        "infrared_source": "data/neowise_visits_poolall.csv",
+        "catalogue_history": {
+          "first_spectrum_date": "52316",
+          "last_spectrum_date": "56685",
+          "reference": "Panda 2024",
+          "transition_type": "",
+          "duplicate_notes": "Final Panda 2024 working sample; original literature sample: Graham+2020; compiled/reanalyzed in Panda 2024; non-flagged spectra used: 2."
+        }
+      },
+      "expansion_rationale": "Optical rise to 2020, decline through 2024, then brightening in 2025; W1 has a different, slower trend. Adds a reversal history for joint temporal fitting."
+    },
+    {
+      "name": "P20040",
+      "z": 0.1216571,
+      "bands": {
+        "ZTF_g": {
+          "units": "AB mag",
+          "points": 276,
+          "start_utc": "2018-03-25",
+          "end_utc": "2025-05-20",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 32,
+              "median": 18.977462799999998
+            },
+            {
+              "year": 2019,
+              "points": 23,
+              "median": 18.9769497
+            },
+            {
+              "year": 2020,
+              "points": 42,
+              "median": 18.97366715
+            },
+            {
+              "year": 2021,
+              "points": 63,
+              "median": 18.9730721
+            },
+            {
+              "year": 2022,
+              "points": 32,
+              "median": 18.9431696
+            },
+            {
+              "year": 2023,
+              "points": 23,
+              "median": 18.9067307
+            },
+            {
+              "year": 2024,
+              "points": 38,
+              "median": 18.94778725
+            },
+            {
+              "year": 2025,
+              "points": 23,
+              "median": 19.0106506
+            }
+          ]
+        },
+        "ZTF_r": {
+          "units": "AB mag",
+          "points": 724,
+          "start_utc": "2018-04-09",
+          "end_utc": "2025-05-22",
+          "annual_medians": [
+            {
+              "year": 2018,
+              "points": 34,
+              "median": 18.0430336
+            },
+            {
+              "year": 2019,
+              "points": 354,
+              "median": 18.05634785
+            },
+            {
+              "year": 2020,
+              "points": 54,
+              "median": 18.04798605
+            },
+            {
+              "year": 2021,
+              "points": 94,
+              "median": 18.038821249999998
+            },
+            {
+              "year": 2022,
+              "points": 66,
+              "median": 18.087908749999997
+            },
+            {
+              "year": 2023,
+              "points": 47,
+              "median": 18.0804291
+            },
+            {
+              "year": 2024,
+              "points": 46,
+              "median": 18.0540104
+            },
+            {
+              "year": 2025,
+              "points": 29,
+              "median": 18.0748482
+            }
+          ]
+        },
+        "NEOWISE_W1": {
+          "units": "Vega mag",
+          "points": 17,
+          "start_utc": "2014-05-05",
+          "end_utc": "2024-04-14",
+          "annual_medians": [
+            {
+              "year": 2014,
+              "points": 2,
+              "median": 13.7005
+            },
+            {
+              "year": 2016,
+              "points": 1,
+              "median": 13.774000000000001
+            },
+            {
+              "year": 2017,
+              "points": 2,
+              "median": 13.9805
+            },
+            {
+              "year": 2018,
+              "points": 1,
+              "median": 14.015
+            },
+            {
+              "year": 2019,
+              "points": 2,
+              "median": 13.974
+            },
+            {
+              "year": 2020,
+              "points": 2,
+              "median": 14.024750000000001
+            },
+            {
+              "year": 2021,
+              "points": 2,
+              "median": 14.066500000000001
+            },
+            {
+              "year": 2022,
+              "points": 2,
+              "median": 14.095500000000001
+            },
+            {
+              "year": 2023,
+              "points": 2,
+              "median": 14.117
+            },
+            {
+              "year": 2024,
+              "points": 1,
+              "median": 14.087
+            }
+          ]
+        }
+      },
+      "spectral_dates": [],
+      "existing_review": {
+        "reference_date": "2021-04-09",
+        "ztf_last_date": "2025-10-05",
+        "neowise_last_date": "2024-04-14",
+        "trigger_direction": "",
+        "optical_change_abs": "0.054000000000002046",
+        "neowise_amplitude_mag": "0.40700000000000003",
+        "field_status": "pending"
+      },
+      "spectral_review": "",
+      "extraction": {
+        "source": "data/ztf_cache/calib/P20040.csv",
+        "sha256": "7a8e177845453b3c4a9b6417bc2e525e23eaca0432c7463849ef1ee8632039b2",
+        "method": "catflags=0, 0<magerr<=0.2 mag, position within 1 arcsec of bundled target. In each band choose the OID with the most passing measurements; lexicographic OID breaks ties. No inter-OID merging, rescaling or host subtraction.",
+        "selected_oid": {
+          "zg": "466103300016712",
+          "zr": "466203300005965"
+        },
+        "infrared_source": "data/neowise_visits_poolall.csv",
+        "catalogue_history": {
+          "first_spectrum_date": "51924",
+          "last_spectrum_date": "59257",
+          "reference": "Zeltyn 2024",
+          "transition_type": "",
+          "duplicate_notes": "New CL-AGN in Zeltyn 2024 Table 5; core CL-AGN sample. Ancillary flags: inconclusive follow-up spectroscopy; optical photometry inconclusive/irrelevant; WISE trend matches optical spectral change."
+        }
+      },
+      "expansion_rationale": "Catalogue CLAGN with historical spectral change and infrared decline to a relatively steady recent state. Adds a longer-history anchor; recent optical variation is weak and host dilution must be assessed."
+    }
+  ]
+}

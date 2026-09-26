@@ -1,0 +1,171 @@
+{
+  "version": "0.9 review draft",
+  "date_utc": "2026-09-26",
+  "pages": 6,
+  "core_pages": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "supplement_page": 5,
+  "references_pages": [
+    5,
+    6
+  ],
+  "style_sha256": "d5e8b0c1133974ac9eaa6cc27213794ceec297337c69f2ec13254a10684fdd08",
+  "style_unchanged": true,
+  "layout_warnings": [],
+  "targets": 11,
+  "projected_targets": 11,
+  "catalogue_clagn": 3,
+  "recent_followup_science": 8,
+  "comparisons": 0,
+  "planning_time_h_range": [
+    37,
+    51
+  ],
+  "ETC_APT_validated": false,
+  "submission_ready": false,
+  "figure1": "fig1_connected.pdf",
+  "figure1_sourcecards": [
+    "P1823"
+  ],
+  "active_location": "jwst_proposal/",
+  "figure1_layout": "Single P1823 example: light curves above full-width optical and SPHEREx spectra",
+  "figure1_expected_emission_lines_labelled": true,
+  "figure1_line_markers_are_fitted_detections": false,
+  "figure_revision_checks": {
+    "spectral_epoch_counts_unchanged": true,
+    "spherex_plotted_counts": {
+      "P1823": 372
+    },
+    "optical_epoch_counts": {
+      "P1823": 21
+    },
+    "emission_line_positions_unchanged": true,
+    "manifold_and_observing_selection_narrative_removed": true,
+    "compiled_without_layout_warnings": true,
+    "w2_independent_binning_and_flux_checks": true,
+    "w2_visits_displayed": {
+      "P1823": 20
+    },
+    "added_measurements": "W2 visits retained from previous revision; no new measurements in single-example revision",
+    "single_example_matches_previous_P1823_measurements_and_line_positions": true,
+    "standalone_figure_regenerated_after_unused_input_cleanup": true,
+    "original_P1823_source_measurements_unchanged": true,
+    "spectral_date_keys_and_time_markers_verified_against_inputs": true,
+    "obsolete_toy_model_predictions_removed_from_science_case": true,
+    "figure1_unchanged_when_removing_second_figure": true,
+    "second_figure_and_build_dependencies_removed": true,
+    "figure1_and_measurements_unchanged_in_timing_revision": true
+  },
+  "figure1_manifold_shown": false,
+  "selection_checks": {
+    "rules_recomputed_independently": true,
+    "selected_ngps": [
+      "P1823",
+      "P7281",
+      "P7837",
+      "P8548",
+      "P11113",
+      "P11530",
+      "P10381",
+      "P9694"
+    ],
+    "literature_anchors": [
+      "P22470",
+      "P2759",
+      "P16663"
+    ],
+    "comparisons": [],
+    "selection_procedure_kept_in_working_inputs": true,
+    "working_target_list_unchanged": false,
+    "reselected_for_broader_variability_population": false,
+    "broader_selection_audit_pending": "Bracket event intervals, estimate host-corrected luminosities and lag ranges, validate response-phase coverage at allowed JWST dates, and justify final membership and size.",
+    "removed_from_request": [
+      "P9584"
+    ],
+    "reclassified_as_variable": [
+      "P9694"
+    ]
+  },
+  "figure1_lightcurve_year_limits": [
+    2015,
+    2028
+  ],
+  "figure1_wise_bands": [
+    "W1",
+    "W2"
+  ],
+  "figure1_time_labels": {
+    "optical": [
+      "2002",
+      "2021",
+      "2022",
+      "2023",
+      "2024",
+      "24 Sep 2026"
+    ],
+    "spherex": [
+      "Jul\u2013Aug 2025",
+      "Jan\u2013Feb 2026",
+      "Jul\u2013Aug 2026"
+    ],
+    "optical_markers_per_lightcurve": 20,
+    "spherex_median_markers_per_lightcurve": 3,
+    "outside_display_window": [
+      "2002-04-10"
+    ]
+  },
+  "figure1_optical_flux_limits_mjy": [
+    0,
+    0.6
+  ],
+  "figure1_source_heading_shown": false,
+  "figure1_history_heading_shown": false,
+  "figure1_outer_box_shown": false,
+  "science_framing": {
+    "population": "Strongly varying quasars and other AGN, including CLAGN",
+    "question": "Delayed illumination of fixed dust versus changes in the emitting distribution across brightening, fading and recovery",
+    "broad_line_appearance_or_disappearance_required": false,
+    "figure1_example": "P1823 in a high optical state, with earlier infrared decline and recovery",
+    "p1823_record_brightness_claimed": false,
+    "population_reference": "Rumbaugh et al. 2018, ApJ, 854, 160; https://arxiv.org/abs/1706.07875",
+    "dust_test_presentation": "Single observed-data figure followed by a direct explanation of fixed versus evolving dust under the measured luminosity history; no illustrative model-separation prediction."
+  },
+  "p1823_brightness_review": {
+    "optical_spectrum_date": "2026-09-24",
+    "ztf_latest_mjd": 60967.2,
+    "ztf_latest_year": 2025,
+    "continuum_check": "Native saved fluxes in observed 4200\u20134400, 5400\u20135600, 6800\u20137000, 8500\u20138700 Angstrom windows; latest P330E spectrum has largest median Fnu in all four among 21 bundled spectra. Slit/aperture and absolute calibration differences have not been removed.",
+    "interpretation": "High optical state supported; a record optical luminosity is not established by this comparison."
+  },
+  "quantitative_dust_model_discrimination_validated": false,
+  "disclosure_page": 6,
+  "active_figures": [
+    "fig1_connected.pdf"
+  ],
+  "target_table_in_pdf": false,
+  "timing_checks": {
+    "annual_medians_independently_verified": true,
+    "event_onsets_fitted": false,
+    "target_dust_lags_measured": false,
+    "response_phase_coverage_validated": false,
+    "cycle6_nominal_dates": [
+      "2027-07-01",
+      "2028-06-30"
+    ],
+    "jwst_visits_per_instrument_per_target": 1,
+    "repeat_visits_allocated": false,
+    "provisional_instrument_separation_observer_days": 90,
+    "instrument_separation_validated": false,
+    "timing_sources": [
+      "https://arxiv.org/abs/1406.2078",
+      "https://arxiv.org/abs/1910.08722",
+      "https://arxiv.org/abs/1904.08946",
+      "https://arxiv.org/abs/2011.07638",
+      "https://jwst-docs.stsci.edu/jwst-opportunities-and-policies/jwst-call-for-proposals-for-cycle-6"
+    ]
+  }
+}
