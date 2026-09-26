@@ -11,3 +11,11 @@
 *.zip
 __pycache__/
 .DS_Store
+
+# Generated ETC trials and per-query archive caches stay local.
+# Scripts, adopted recipes, summaries and audit tables remain versioned.
+/review/technical_runs/
+/duplication/cache/
+
+# User-downloaded exports belong in etc/downloads/web_exports/.
+/wb*.tar

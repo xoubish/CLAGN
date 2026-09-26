@@ -1,0 +1,99 @@
+{
+  "status": "Conditional planning sensitivity, not a measured scatter or predicted population effect.",
+  "diagnostic": "Difference of group means in delta_warm = log10(observed/predicted nuclear 8--13 micron continuum luminosity).",
+  "baseline": {
+    "n_per_group": 12,
+    "scatter_dex": 0.2,
+    "offset_dex": 0.25,
+    "alpha": 0.05
+  },
+  "baseline_power": 0.832947946606537,
+  "baseline_mean_difference_se_dex": 0.08164965809277261,
+  "baseline_offset_ratio": 1.7782794100389228,
+  "test": "Independent equal-variance Gaussian residuals; pooled two-sample t-test; two-sided alpha=0.05; df=22.",
+  "assumptions": [
+    "0.20 dex is an explicit planning assumption, not estimated from the sample or Figure 2.",
+    "Scatter includes intrinsic dispersion and independent per-source measurement/model errors.",
+    "0.25 dex is a design effect-size benchmark, not a dust-model population prediction.",
+    "The calculation includes no shared/group-dependent systematic errors or covariate-estimation penalty.",
+    "A 5% two-sided false-positive threshold is not a three-sigma detection criterion.",
+    "Final inference must account for unequal errors, covariates, and correlated uncertainties."
+  ],
+  "scatter_scenarios": [
+    {
+      "scatter_dex": 0.15,
+      "mean_difference_se_dex": 0.06123724356957945,
+      "offset_dex_for_80_percent_power": 0.17952178706296545,
+      "ratio_for_80_percent_power": 1.5118955440665744,
+      "power_for_025_dex": 0.9737246912410275
+    },
+    {
+      "scatter_dex": 0.2,
+      "mean_difference_se_dex": 0.08164965809277261,
+      "offset_dex_for_80_percent_power": 0.23936238275064525,
+      "ratio_for_80_percent_power": 1.7352513172419886,
+      "power_for_025_dex": 0.832947946606537
+    },
+    {
+      "scatter_dex": 0.25,
+      "mean_difference_se_dex": 0.10206207261596575,
+      "offset_dex_for_80_percent_power": 0.29920297843830657,
+      "ratio_for_80_percent_power": 1.9916039476450356,
+      "power_for_025_dex": 0.6486425507266572
+    },
+    {
+      "scatter_dex": 0.3,
+      "mean_difference_se_dex": 0.1224744871391589,
+      "offset_dex_for_80_percent_power": 0.3590435741259309,
+      "ratio_for_80_percent_power": 2.2858281361683632,
+      "power_for_025_dex": 0.49680740341591534
+    }
+  ],
+  "sample_size_scenarios": [
+    {
+      "n_per_group": 8,
+      "total": 16,
+      "power": 0.6429378585190336
+    },
+    {
+      "n_per_group": 10,
+      "total": 20,
+      "power": 0.7528783668100699
+    },
+    {
+      "n_per_group": 11,
+      "total": 22,
+      "power": 0.7962714048096872
+    },
+    {
+      "n_per_group": 12,
+      "total": 24,
+      "power": 0.832947946606537
+    },
+    {
+      "n_per_group": 15,
+      "total": 30,
+      "power": 0.9104815846797886
+    },
+    {
+      "n_per_group": 18,
+      "total": 36,
+      "power": 0.9537306511774594
+    }
+  ],
+  "stricter_threshold_check": {
+    "alpha": 0.0027,
+    "power": 0.40242227995509633
+  },
+  "monte_carlo": {
+    "seed": 260926,
+    "trials": 200000,
+    "false_positive_rate": 0.050465,
+    "empirical_power": 0.83201,
+    "analytic_power": 0.832947946606537
+  },
+  "references": [
+    "https://www.itl.nist.gov/div898/handbook/eda/section3/eda353.htm",
+    "https://www.itl.nist.gov/div898/handbook/prc/section2/prc222.htm"
+  ]
+}

@@ -1,0 +1,203 @@
+{
+  "date": "2026-09-26T21:39:34.637551+00:00",
+  "records": [
+    {
+      "action": "deleted",
+      "path": "review/technical_runs/p1823_rest12/local_export.tar",
+      "bytes": 327680,
+      "sha256": "0ab7c0118694b52feed9748deeb4f34b74d6876979a0c12bcf8bd1a146350398"
+    },
+    {
+      "action": "deleted",
+      "path": "review/technical_runs/r06_rest18_80/local_export.tar",
+      "bytes": 327680,
+      "sha256": "346e44e0d01d0eeda977facea27a52f1862b744258faa60ab2414ea61f50cb5a"
+    },
+    {
+      "action": "deleted",
+      "path": "review/technical_runs/r06_rest5_80/local_export.tar",
+      "bytes": 307200,
+      "sha256": "9beb6486ac33080146d49f7994e87e11dbeb9bec83254b48aa648f0c683d4334"
+    },
+    {
+      "action": "deleted",
+      "path": "review/technical_runs/r06_rest12/local_export.tar",
+      "bytes": 327680,
+      "sha256": "3f92f20b69d9b001ac9dfac07e1016e4c1ed7a9ff97991d6f50f5ef70b7f3ef4"
+    },
+    {
+      "action": "deleted",
+      "path": "review/technical_runs/r06_rest8/local_export.tar",
+      "bytes": 307200,
+      "sha256": "983fecd7578e46daf503182508d788e9e3cc973d06aaaa317dfd839e0221001a"
+    },
+    {
+      "action": "deleted",
+      "path": "review/technical_runs/bright_envelope_ch1b/local_export.tar",
+      "bytes": 307200,
+      "sha256": "95254f1fa542180f3c2cc3e81bfe0da413af7c547798a7e624d48afcd4bed6bd"
+    },
+    {
+      "action": "deleted",
+      "path": "review/technical_runs/r06_rest12_80/local_export.tar",
+      "bytes": 327680,
+      "sha256": "50d60d1aa9c7157f288346c74d04dadf41f3fd8c811cddff303636ad48ae89e8"
+    },
+    {
+      "action": "deleted",
+      "path": "review/technical_runs/bright_envelope_ch2b/local_export.tar",
+      "bytes": 307200,
+      "sha256": "60152b1c3780bdaed578f43bea3632b579ad9cd7cd68b37456c71264d16c6415"
+    },
+    {
+      "action": "deleted",
+      "path": "review/technical_runs/bright_envelope_ch3b/local_export.tar",
+      "bytes": 327680,
+      "sha256": "dc4bb04debd86d7b70bb4270f517bad7e3c3a7ed9ec9a13dbc1434e436223da5"
+    },
+    {
+      "action": "deleted",
+      "path": "review/technical_runs/p1823_rest12_75/local_export.tar",
+      "bytes": 327680,
+      "sha256": "5a067c59db1217252435c7c2b916e583216cae360827d7907485c64a2d1abf27"
+    },
+    {
+      "action": "deleted",
+      "path": "review/technical_runs/p1823_rest8/local_export.tar",
+      "bytes": 327680,
+      "sha256": "441a580f0563c5a55aa393f7dd23809ad15dcd6ae66893bdb5ca5dd232d40f05"
+    },
+    {
+      "action": "deleted",
+      "path": "review/technical_runs/r06_rest5/local_export.tar",
+      "bytes": 307200,
+      "sha256": "12ce373271315a4bcf71fab31b75b01aa75f4287d6961e1df10a46f320ffa103"
+    },
+    {
+      "action": "deleted",
+      "path": "review/technical_runs/bright_envelope_ch4b/local_export.tar",
+      "bytes": 327680,
+      "sha256": "7ab3bdfc4e337ba1b39cd8205fcd525989cb0a789862b44ca1f8551c3ddb90df"
+    },
+    {
+      "action": "deleted",
+      "path": "etc/local_runs/validation_ch4b_60groups/local_export.tar",
+      "bytes": 327680,
+      "sha256": "619484eae787318eb9d34a9e987e27739dc3b42755c3b548740abf298038b290"
+    },
+    {
+      "action": "deleted",
+      "path": "etc/local_runs/r06_ch3c_60groups_r06/local_export.tar",
+      "bytes": 327680,
+      "sha256": "61ea39fd2b796fd1781cde25a8607884feff48b03d0f6252e0ce32649fc68f31"
+    },
+    {
+      "action": "deleted",
+      "path": "etc/local_runs/r06_ch3c_27groups_r06/local_export.tar",
+      "bytes": 327680,
+      "sha256": "e95b1f30e456f40ef891359c6d8161d9709f1651b09c9a6e4276f08aa0e93136"
+    },
+    {
+      "action": "deleted",
+      "path": "etc/downloads/synphot1_v16.tar.partial",
+      "bytes": 44744704,
+      "sha256": "d979e1d9bb11d7547d37527144d41f53b5751421e1211c10082ebe1c5ea03657"
+    },
+    {
+      "action": "deleted",
+      "path": "etc/downloads/pandeia_psfs-2026.7-jwst.tar.gz.partial",
+      "bytes": 407605248,
+      "sha256": "6e9cfd27c4a529c56a415ec7151d7ed22365e5730c94b3c11476fc6501bc1099"
+    },
+    {
+      "action": "deleted",
+      "path": "apt/downloads/APT_ARM_2026.5.1.pkg",
+      "bytes": 232156532,
+      "sha256": "28411dcd58f3560cb7a35a73d849fbd0817d2172479f2c07fe1a078d5c311b28"
+    },
+    {
+      "action": "moved_local",
+      "path": "wb325241_c7_2026-09-26_18.26.09.tar",
+      "destination": "etc/downloads/web_exports/wb325241_c7_2026-09-26_18.26.09.tar",
+      "bytes": 18616320,
+      "sha256": "114b2c819e415854b90d4f27f385582961de1a9f84a9e96bee68ee4ac1327b19"
+    },
+    {
+      "action": "moved_local",
+      "path": "wb325241_c7_2026-09-26_18.58.14.tar",
+      "destination": "etc/downloads/web_exports/wb325241_c7_2026-09-26_18.58.14.tar",
+      "bytes": 18595840,
+      "sha256": "c9ce8f99bf16211cbc0f1954f220b52b31075ed9fcca9fea63e07da517148178"
+    },
+    {
+      "action": "moved_local",
+      "path": "wb325241_c7_2026-09-26_19.02.44.tar",
+      "destination": "etc/downloads/web_exports/wb325241_c7_2026-09-26_19.02.44.tar",
+      "bytes": 18595840,
+      "sha256": "5a42b42e2928566e9634b3b99cb1b02c3d2e5745234e3bc2b098a67b5dcb30a7"
+    },
+    {
+      "action": "moved_local",
+      "path": "wb325241_c7_2026-09-26_19.08.41.tar",
+      "destination": "etc/downloads/web_exports/wb325241_c7_2026-09-26_19.08.41.tar",
+      "bytes": 18810880,
+      "sha256": "c0af72cf601527f371d1dbc5cbf97b3c418ae7f07b238377792506682f97d38d"
+    },
+    {
+      "action": "moved_local",
+      "path": "wb325241_c7_2026-09-26_19.14.26.tar",
+      "destination": "etc/downloads/web_exports/wb325241_c7_2026-09-26_19.14.26.tar",
+      "bytes": 16527360,
+      "sha256": "64d8f13715faf8d160db713068afa9414e168c185248fcfa38aa9902f998e6eb"
+    },
+    {
+      "action": "moved_local",
+      "path": "wb325241_c7_2026-09-26_19.17.43.tar",
+      "destination": "etc/downloads/web_exports/wb325241_c7_2026-09-26_19.17.43.tar",
+      "bytes": 16527360,
+      "sha256": "b6d8a0dc9fa3b94e9b6c5d7e5a5e760ce9b62bcb518b249a110f63a2600b1cc0"
+    },
+    {
+      "action": "moved_local",
+      "path": "apt/clagn24_miri_draft.aptx.2026_09_26_19_43.aptbackup",
+      "destination": "apt/work/automatic_backups/clagn24_miri_draft.aptx.2026_09_26_19_43.aptbackup",
+      "bytes": 10923
+    },
+    {
+      "action": "moved_local",
+      "path": "apt/clagn24_miri_draft.aptx.2026_09_26_19_46.aptbackup",
+      "destination": "apt/work/automatic_backups/clagn24_miri_draft.aptx.2026_09_26_19_46.aptbackup",
+      "bytes": 10923
+    },
+    {
+      "action": "moved_local",
+      "path": "apt/clagn24_miri_draft.aptx.2026_09_26_19_47.aptbackup",
+      "destination": "apt/work/automatic_backups/clagn24_miri_draft.aptx.2026_09_26_19_47.aptbackup",
+      "bytes": 334262
+    },
+    {
+      "action": "moved_local",
+      "path": "apt/clagn24_miri_draft.aptx.2026_09_26_20_14.aptbackup",
+      "destination": "apt/work/automatic_backups/clagn24_miri_draft.aptx.2026_09_26_20_14.aptbackup",
+      "bytes": 9250
+    },
+    {
+      "action": "moved_local",
+      "path": "apt/clagn24_miri_draft.aptx.2026_09_26_20_15.aptbackup",
+      "destination": "apt/work/automatic_backups/clagn24_miri_draft.aptx.2026_09_26_20_15.aptbackup",
+      "bytes": 335413
+    },
+    {
+      "action": "moved_local",
+      "path": "apt/clagn24_miri_draft.aptx.2026_09_26_21_27.aptbackup",
+      "destination": "apt/work/automatic_backups/clagn24_miri_draft.aptx.2026_09_26_21_27.aptbackup",
+      "bytes": 9354
+    },
+    {
+      "action": "moved_local",
+      "path": "apt/clagn24_miri_draft.aptx.2026_09_26_21_29.aptbackup",
+      "destination": "apt/work/automatic_backups/clagn24_miri_draft.aptx.2026_09_26_21_29.aptbackup",
+      "bytes": 336026
+    }
+  ]
+}

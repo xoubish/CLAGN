@@ -1,0 +1,47 @@
+{
+  "id": "R12",
+  "target": "J20145928+2523010",
+  "science_ra_deg": 303.74691666666666,
+  "science_dec_deg": 25.383666666666667,
+  "selected": {
+    "radius_arcsec": 135,
+    "pa_deg": 175,
+    "ra_deg": 303.7505331399239,
+    "dec_deg": 25.346309321291336,
+    "nearest_allwise_arcsec": 28.855746536698756,
+    "nearest_2mass_arcsec": 28.693563748937468,
+    "nearest_bright_w1_arcsec": 63.66661785478399,
+    "wise_patch_z": [
+      -0.296426844710044,
+      0.5903434866126407,
+      -0.13179669884941178
+    ],
+    "passed": true,
+    "score": 23.293563748937466
+  },
+  "original": {
+    "radius_arcsec": 60,
+    "pa_deg": 0,
+    "ra_deg": 303.7469166666667,
+    "dec_deg": 25.400333333333332,
+    "nearest_allwise_arcsec": 2.5601867021273965,
+    "nearest_2mass_arcsec": 2.3869928782839347,
+    "nearest_bright_w1_arcsec": 114.20399428634674,
+    "wise_patch_z": [
+      1.3451096623727739,
+      0.8317514863370348,
+      1.1520900894089312
+    ],
+    "passed": false,
+    "score": -0.013007121716065217
+  },
+  "moved": true,
+  "catalog_counts": {
+    "allwise": 823,
+    "twomass": 1161
+  },
+  "visual_review": "accepted",
+  "twomass_image": "cache/R12_2massJ_0.fits",
+  "sdss_note": "R12_sdss.jpg: 404 Client Error: NOT FOUND. Requested (ra, dec) is outside the SDSS footprint. for url: https://skyserver.sdss.org/dr18/SkyServerWS/ImgCutout/getjpeg?ra=303.7505331399239&dec=25.346309321291336&scale=0.25&width=280&height=280",
+  "review_note": "Crowded region and structured diffuse W3 emission. Selected field is 135 arcsec away with no compact IR source in the inspection region; nearest W1<10 source is 63.7 arcsec away. Inspect diffuse foreground residuals during reduction."
+}

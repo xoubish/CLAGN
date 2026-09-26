@@ -1,0 +1,47 @@
+{
+  "id": "R11",
+  "target": "J1949137-184716",
+  "science_ra_deg": 297.3070833333333,
+  "science_dec_deg": -18.78777777777778,
+  "selected": {
+    "radius_arcsec": 60,
+    "pa_deg": 95,
+    "ra_deg": 297.324621172905,
+    "dec_deg": -18.78922955508374,
+    "nearest_allwise_arcsec": 28.782299265763054,
+    "nearest_2mass_arcsec": 28.595000576334698,
+    "nearest_bright_w1_arcsec": 180.0,
+    "wise_patch_z": [
+      -0.1158281706299035,
+      1.6708019089846577,
+      1.590303872928255
+    ],
+    "passed": true,
+    "score": 26.1950005763347
+  },
+  "original": {
+    "radius_arcsec": 60,
+    "pa_deg": 0,
+    "ra_deg": 297.3070833333333,
+    "dec_deg": -18.771111111111114,
+    "nearest_allwise_arcsec": 21.728924168926515,
+    "nearest_2mass_arcsec": 21.58761144220495,
+    "nearest_bright_w1_arcsec": 180.0,
+    "wise_patch_z": [
+      3.060401671276627,
+      1.142192866809252,
+      1.0881961458999274
+    ],
+    "passed": false,
+    "score": 16.00640642837507
+  },
+  "moved": true,
+  "catalog_counts": {
+    "allwise": 172,
+    "twomass": 125
+  },
+  "visual_review": "accepted",
+  "twomass_image": "cache/R11_2massJ_0.fits",
+  "sdss_note": "R11_sdss.jpg: 404 Client Error: NOT FOUND. Requested (ra, dec) is outside the SDSS footprint. for url: https://skyserver.sdss.org/dr18/SkyServerWS/ImgCutout/getjpeg?ra=297.324621172905&dec=-18.78922955508374&scale=0.25&width=280&height=280",
+  "review_note": "No obvious compact infrared source or bright-star artifact in the selected central sky field."
+}

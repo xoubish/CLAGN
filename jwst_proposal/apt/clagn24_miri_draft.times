@@ -1,0 +1,889 @@
+# APT Output Product
+# 
+# APT Version: Version 2026.5.1  
+# Date: Sat Sep 26 21:29:19 GMT 2026
+
+JWST Times Report for JWST Draft Proposal 0 (clagn24_miri_draft.aptx)
+
+Note: Glossary of terms and column headers at bottom of this report
+
+========================================
+* F01 science (Obs 1)
+  Science     Total Time
+  Duration    Charged
+      1268          6492
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+    Acq   FULL               FAST              2.775      4      1      0      1        11.100     1         1        1      1      11.100            26               57               14
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       2228 (  692) (  294) (  265) (  429) (  360) (   72) (    0) (    0) (  116)  2100          896             0        6492
+
+========================================
+* F01-SKY background (Obs 2)
+  Science     Total Time
+  Duration    Charged
+      1268          3883
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   328          536             0        3883
+
+========================================
+* F02 science (Obs 3)
+  Science     Total Time
+  Duration    Charged
+      1268          5064
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+    Acq   FULL               FASTGRPAVG        2.775     40      1      0      1       111.002     1         1        1      1     111.002            26              158              114
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       2329 (  692) (  294) (  366) (  429) (  360) (   72) (    0) (    0) (  116)   768          699             0        5064
+
+========================================
+* F02-SKY background (Obs 4)
+  Science     Total Time
+  Duration    Charged
+      1268          3819
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   273          527             0        3819
+
+========================================
+* F03 science (Obs 5)
+  Science     Total Time
+  Duration    Charged
+      1268          4969
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+    Acq   FULL               FASTGRPAVG        2.775     40      1      0      1       111.002     1         1        1      1     111.002            26              158              114
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       2329 (  692) (  294) (  366) (  429) (  360) (   72) (    0) (    0) (  116)   686          686             0        4969
+
+========================================
+* F03-SKY background (Obs 6)
+  Science     Total Time
+  Duration    Charged
+      1268          3870
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   317          534             0        3870
+
+========================================
+* F04 science (Obs 7)
+  Science     Total Time
+  Duration    Charged
+      1268          6512
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+    Acq   FULL               FAST              2.775     10      1      0      1        27.750     1         1        1      1      27.750            26               74               30
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       2245 (  692) (  294) (  282) (  429) (  360) (   72) (    0) (    0) (  116)  2100          899             0        6512
+
+========================================
+* F04-SKY background (Obs 8)
+  Science     Total Time
+  Duration    Charged
+      1268          3883
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   328          536             0        3883
+
+========================================
+* F05 science (Obs 9)
+  Science     Total Time
+  Duration    Charged
+      1268          6609
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+    Acq   FULL               FASTGRPAVG        2.775     40      1      0      1       111.002     1         1        1      1     111.002            26              158              114
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       2329 (  692) (  294) (  366) (  429) (  360) (   72) (    0) (    0) (  116)  2100          912             0        6609
+
+========================================
+* F05-SKY background (Obs 10)
+  Science     Total Time
+  Duration    Charged
+      1268          3883
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   328          536             0        3883
+
+========================================
+* F06 science (Obs 11)
+  Science     Total Time
+  Duration    Charged
+      1268          6609
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+    Acq   FULL               FASTGRPAVG        2.775     40      1      0      1       111.002     1         1        1      1     111.002            26              158              114
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       2329 (  692) (  294) (  366) (  429) (  360) (   72) (    0) (    0) (  116)  2100          912             0        6609
+
+========================================
+* F06-SKY background (Obs 12)
+  Science     Total Time
+  Duration    Charged
+      1268          3819
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   273          527             0        3819
+
+========================================
+* F07 science (Obs 13)
+  Science     Total Time
+  Duration    Charged
+      1268          6609
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+    Acq   FULL               FASTGRPAVG        2.775     40      1      0      1       111.002     1         1        1      1     111.002            26              158              114
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       2329 (  692) (  294) (  366) (  429) (  360) (   72) (    0) (    0) (  116)  2100          912             0        6609
+
+========================================
+* F07-SKY background (Obs 14)
+  Science     Total Time
+  Duration    Charged
+      1268          3838
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   289          530             0        3838
+
+========================================
+* F08 science (Obs 15)
+  Science     Total Time
+  Duration    Charged
+      1268          4843
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+    Acq   FULL               FAST              2.775     10      1      0      1        27.750     1         1        1      1      27.750            26               74               30
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       2245 (  692) (  294) (  282) (  429) (  360) (   72) (    0) (    0) (  116)   662          668             0        4843
+
+========================================
+* F08-SKY background (Obs 16)
+  Science     Total Time
+  Duration    Charged
+      1268          3819
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   273          527             0        3819
+
+========================================
+* F09 science (Obs 17)
+  Science     Total Time
+  Duration    Charged
+      1268          6512
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+    Acq   FULL               FAST              2.775     10      1      0      1        27.750     1         1        1      1      27.750            26               74               30
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       2245 (  692) (  294) (  282) (  429) (  360) (   72) (    0) (    0) (  116)  2100          899             0        6512
+
+========================================
+* F09-SKY background (Obs 18)
+  Science     Total Time
+  Duration    Charged
+      1268          3819
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   273          527             0        3819
+
+========================================
+* F10 science (Obs 19)
+  Science     Total Time
+  Duration    Charged
+      1268          5229
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+    Acq   FULL               FASTGRPAVG        2.775     40      1      0      1       111.002     1         1        1      1     111.002            26              158              114
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       2329 (  692) (  294) (  366) (  429) (  360) (   72) (    0) (    0) (  116)   910          722             0        5229
+
+========================================
+* F10-SKY background (Obs 20)
+  Science     Total Time
+  Duration    Charged
+      1268          3870
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   317          534             0        3870
+
+========================================
+* F11 science (Obs 21)
+  Science     Total Time
+  Duration    Charged
+      1268          6512
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+    Acq   FULL               FAST              2.775     10      1      0      1        27.750     1         1        1      1      27.750            26               74               30
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       2245 (  692) (  294) (  282) (  429) (  360) (   72) (    0) (    0) (  116)  2100          899             0        6512
+
+========================================
+* F11-SKY background (Obs 22)
+  Science     Total Time
+  Duration    Charged
+      1268          3855
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   304          532             0        3855
+
+========================================
+* F12 science (Obs 23)
+  Science     Total Time
+  Duration    Charged
+      1268          6609
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+    Acq   FULL               FASTGRPAVG        2.775     40      1      0      1       111.002     1         1        1      1     111.002            26              158              114
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       2329 (  692) (  294) (  366) (  429) (  360) (   72) (    0) (    0) (  116)  2100          912             0        6609
+
+========================================
+* F12-SKY background (Obs 24)
+  Science     Total Time
+  Duration    Charged
+      1268          3870
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   317          534             0        3870
+
+========================================
+* R01 science (Obs 25)
+  Science     Total Time
+  Duration    Charged
+      1804          7114
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+    Acq   FULL               FAST              2.775      4      1      0      1        11.100     1         1        1      1      11.100            26               57               14
+      1   FULL               FASTR1            2.775     75      1      0      1       208.128     4         4        1      1     832.512            26              256              211
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1804       2228 (  692) (  294) (  265) (  429) (  360) (   72) (    0) (    0) (  116)  2100          982             0        7114
+
+========================================
+* R01-SKY background (Obs 26)
+  Science     Total Time
+  Duration    Charged
+      1804          4460
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+      1   FULL               FASTR1            2.775     75      1      0      1       208.128     4         4        1      1     832.512            26              256              211
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1804       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   289          616             0        4460
+
+========================================
+* R02 science (Obs 27)
+  Science     Total Time
+  Duration    Charged
+      1268          6609
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+    Acq   FULL               FASTGRPAVG        2.775     40      1      0      1       111.002     1         1        1      1     111.002            26              158              114
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       2329 (  692) (  294) (  366) (  429) (  360) (   72) (    0) (    0) (  116)  2100          912             0        6609
+
+========================================
+* R02-SKY background (Obs 28)
+  Science     Total Time
+  Duration    Charged
+      1268          3883
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   328          536             0        3883
+
+========================================
+* R03 science (Obs 29)
+  Science     Total Time
+  Duration    Charged
+      1268          6492
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+    Acq   FULL               FAST              2.775      4      1      0      1        11.100     1         1        1      1      11.100            26               57               14
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       2228 (  692) (  294) (  265) (  429) (  360) (   72) (    0) (    0) (  116)  2100          896             0        6492
+
+========================================
+* R03-SKY background (Obs 30)
+  Science     Total Time
+  Duration    Charged
+      1268          3855
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   304          532             0        3855
+
+========================================
+* R04 science (Obs 31)
+  Science     Total Time
+  Duration    Charged
+      1268          4949
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+    Acq   FULL               FAST              2.775     10      1      0      1        27.750     1         1        1      1      27.750            26               74               30
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       2245 (  692) (  294) (  282) (  429) (  360) (   72) (    0) (    0) (  116)   753          683             0        4949
+
+========================================
+* R04-SKY background (Obs 32)
+  Science     Total Time
+  Duration    Charged
+      1268          3883
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   328          536             0        3883
+
+========================================
+* R05 science (Obs 33)
+  Science     Total Time
+  Duration    Charged
+      1268          6609
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+    Acq   FULL               FASTGRPAVG        2.775     40      1      0      1       111.002     1         1        1      1     111.002            26              158              114
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       2329 (  692) (  294) (  366) (  429) (  360) (   72) (    0) (    0) (  116)  2100          912             0        6609
+
+========================================
+* R05-SKY background (Obs 34)
+  Science     Total Time
+  Duration    Charged
+      1268          3819
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   273          527             0        3819
+
+========================================
+* R06 science (Obs 35)
+  Science     Total Time
+  Duration    Charged
+      1492          6752
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+    Acq   FULL               FAST              2.775      4      1      0      1        11.100     1         1        1      1      11.100            26               57               14
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     80      1      0      1       222.003     4         4        1      1     888.012            26              270              225
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1492       2228 (  692) (  294) (  265) (  429) (  360) (   72) (    0) (    0) (  116)  2100          932             0        6752
+
+========================================
+* R06-SKY background (Obs 36)
+  Science     Total Time
+  Duration    Charged
+      1492          4079
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     80      1      0      1       222.003     4         4        1      1     888.012            26              270              225
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1492       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   273          563             0        4079
+
+========================================
+* R07 science (Obs 37)
+  Science     Total Time
+  Duration    Charged
+      1268          5062
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+    Acq   FULL               FASTGRPAVG        2.775     40      1      0      1       111.002     1         1        1      1     111.002            26              158              114
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       2329 (  692) (  294) (  366) (  429) (  360) (   72) (    0) (    0) (  116)   766          699             0        5062
+
+========================================
+* R07-SKY background (Obs 38)
+  Science     Total Time
+  Duration    Charged
+      1268          3819
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   273          527             0        3819
+
+========================================
+* R08 science (Obs 39)
+  Science     Total Time
+  Duration    Charged
+      1268          6512
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+    Acq   FULL               FAST              2.775     10      1      0      1        27.750     1         1        1      1      27.750            26               74               30
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       2245 (  692) (  294) (  282) (  429) (  360) (   72) (    0) (    0) (  116)  2100          899             0        6512
+
+========================================
+* R08-SKY background (Obs 40)
+  Science     Total Time
+  Duration    Charged
+      1268          3819
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   273          527             0        3819
+
+========================================
+* R09 science (Obs 41)
+  Science     Total Time
+  Duration    Charged
+      1268          6512
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+    Acq   FULL               FAST              2.775     10      1      0      1        27.750     1         1        1      1      27.750            26               74               30
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       2245 (  692) (  294) (  282) (  429) (  360) (   72) (    0) (    0) (  116)  2100          899             0        6512
+
+========================================
+* R09-SKY background (Obs 42)
+  Science     Total Time
+  Duration    Charged
+      1268          3855
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   304          532             0        3855
+
+========================================
+* R10 science (Obs 43)
+  Science     Total Time
+  Duration    Charged
+      1268          6609
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+    Acq   FULL               FASTGRPAVG        2.775     40      1      0      1       111.002     1         1        1      1     111.002            26              158              114
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       2329 (  692) (  294) (  366) (  429) (  360) (   72) (    0) (    0) (  116)  2100          912             0        6609
+
+========================================
+* R10-SKY background (Obs 44)
+  Science     Total Time
+  Duration    Charged
+      1268          3838
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   289          530             0        3838
+
+========================================
+* R11 science (Obs 45)
+  Science     Total Time
+  Duration    Charged
+      1268          6609
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+    Acq   FULL               FASTGRPAVG        2.775     40      1      0      1       111.002     1         1        1      1     111.002            26              158              114
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       2329 (  692) (  294) (  366) (  429) (  360) (   72) (    0) (    0) (  116)  2100          912             0        6609
+
+========================================
+* R11-SKY background (Obs 46)
+  Science     Total Time
+  Duration    Charged
+      1268          3819
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   273          527             0        3819
+
+========================================
+* R12 science (Obs 47)
+  Science     Total Time
+  Duration    Charged
+      1268          6512
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+    Acq   FULL               FAST              2.775     10      1      0      1        27.750     1         1        1      1      27.750            26               74               30
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       2245 (  692) (  294) (  282) (  429) (  360) (   72) (    0) (    0) (  116)  2100          899             0        6512
+
+========================================
+* R12-SKY background (Obs 48)
+  Science     Total Time
+  Duration    Charged
+      1268          3896
+
+  Exposure Specifications:
+    Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+      2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
+      3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
+
+  Visit Durations:
+          Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
+    Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
+        1     0.00     1268       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   339          538             0        3896
+
+
+
+========================================
+Glossary
+========================================
+
+   Exposure Specifications Glossary:
+       FrameRead = Frame Read Time                       
+       Groups = Number of Groups per Integration         
+       NFrame = Number of Frames per Group               
+       GrpGap = Gap between groups, based on readout pattern
+       Ints = Number of Integrations per Exposure        
+       PhotonCollect (sec) = FrameReadTime * ((Groups * NFrame) + ((Groups - 1) * GrpGap)) * Ints
+       Diths = Number of Dithers                         
+       PrimDiths = Number of Primary Dithers             
+       SecDiths = Number of Secondary Dithers            
+       NumExp = Number of Exposures                      
+       TotalPhoton = PhotonCollect * Diths * NumExp      
+       Exposure Setup = Duration of exposure configuration overhead
+       Exposure Duration = Photon collect time + reset overhead + exposure setup + exposure cleanup
+       Exposing Duration = Photon collect time + reset overhead
+
+========================================
+   Visit Durations Glossary:
+       Instrument overhead = (sum of all items in parentheses)
+       SAMs = Small Angle Maneuvers                      
+       GS Acq = Guide Star Acquisition time              
+       Targ Acq = Target Acquisition time                
+       Exp Ovhd = Exposure Overheads                     
+       Mech = Mechanism motion overhead                  
+       OSS = Onboard Script overheads, compile time, etc.
+       MSA = MSA configuration change overhead           
+       IRS2 = Overhead for changing IRS2 status          
+       Visit Ovhd = Visit Overheads                      
+       Observatory Overhead = 0.16 * (Science Duration + Instrument Overhead + Slew Time)
+       Direct Sched Overhead = Tight Timing / Rapid Target Of Opportunity overhead
+       Total Time Charged = Science Duration + Instrument Overhead + Slew Time + Observatory Overhead + Direct Sched Overhead
+
+       NOTE: Total Exposure Time as seen in the APT GUI has not been added to this report at this time.
+

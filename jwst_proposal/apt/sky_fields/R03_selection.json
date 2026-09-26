@@ -1,0 +1,47 @@
+{
+  "id": "R03",
+  "target": "J104705.16+544405.8",
+  "science_ra_deg": 161.77149999999997,
+  "science_dec_deg": 54.734972222222225,
+  "selected": {
+    "radius_arcsec": 90,
+    "pa_deg": 330,
+    "ra_deg": 161.74983812981262,
+    "dec_deg": 54.75662092782491,
+    "nearest_allwise_arcsec": 30.04106153966434,
+    "nearest_2mass_arcsec": 30.548197640670683,
+    "nearest_bright_w1_arcsec": 180.0,
+    "wise_patch_z": [
+      0.7334145256544902,
+      2.160379338022756,
+      1.620026283497395
+    ],
+    "passed": true,
+    "score": 25.95992352559607
+  },
+  "original": {
+    "radius_arcsec": 60,
+    "pa_deg": 0,
+    "ra_deg": 161.7715,
+    "dec_deg": 54.7516388888889,
+    "nearest_allwise_arcsec": 22.503556866659263,
+    "nearest_2mass_arcsec": 22.543013122876392,
+    "nearest_bright_w1_arcsec": 180.0,
+    "wise_patch_z": [
+      12.469028289467747,
+      2.2611779814780366,
+      0.4727937192632949
+    ],
+    "passed": false,
+    "score": -11.303528001743977
+  },
+  "moved": true,
+  "catalog_counts": {
+    "allwise": 115,
+    "twomass": 11
+  },
+  "visual_review": "accepted",
+  "twomass_image": "cache/R03_2massJ_0.fits",
+  "sdss_image": "cache/R03_sdss.jpg",
+  "review_note": "Linear red trail in the SDSS exposure appears to be an imaging artifact; absent in WISE and 2MASS."
+}

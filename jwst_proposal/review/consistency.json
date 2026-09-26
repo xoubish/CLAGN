@@ -1,0 +1,315 @@
+{
+  "checked_at_utc": "2026-09-26T21:40:07.907006+00:00",
+  "passed": true,
+  "observations": 48,
+  "science_targets": 24,
+  "science_sky_pairs": 24,
+  "all_groups_and_acquisitions_match": true,
+  "generator_inventory_matches": true,
+  "apt_xml_matches_archive": true,
+  "abstract_matches": true,
+  "charged_time_h": 67.33,
+  "requested_time_h": 67.4,
+  "science_duration_h": 17.33,
+  "photon_collection_source_plus_sky_h": 17.291582577777778,
+  "scheduling": [
+    {
+      "visit": "Visit Planner:00000:001:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:002:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:003:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:004:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:005:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:006:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:007:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:008:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:009:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:010:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:011:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:012:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:013:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:014:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:015:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:016:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:017:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:018:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:019:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:020:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:021:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:022:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:023:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:024:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:025:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:026:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:027:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:028:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:029:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:030:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:031:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:032:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:033:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:034:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:035:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:036:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:037:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:038:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:039:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:040:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:041:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:042:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:043:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:044:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:045:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:046:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:047:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    },
+    {
+      "visit": "Visit Planner:00000:048:001",
+      "engine": "19.0.1",
+      "up_to_date": true,
+      "has_windows": true
+    }
+  ],
+  "pages": 7,
+  "core_pages": 5,
+  "style_sha256": "d5e8b0c1133974ac9eaa6cc27213794ceec297337c69f2ec13254a10684fdd08",
+  "layout_warnings": [],
+  "automated_anonymity_screen_passed": true,
+  "visual_review_pages": [
+    5,
+    7
+  ],
+  "limitations": "Focused ETC model checks; nuclear flux fractions, individual histories and extended-host acquisition centering are not fully validated."
+}

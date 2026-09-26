@@ -1,0 +1,4 @@
+.venv/
+reference_data/
+downloads/
+local_runs/

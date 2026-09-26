@@ -1,0 +1,274 @@
+{
+  "archive": "wb325241_c7_2026-09-26_19.02.44.tar",
+  "archive_sha256": "5a42b42e2928566e9634b3b99cb1b02c3d2e5745234e3bc2b098a67b5dcb30a7",
+  "configuration": {
+    "detector": {
+      "nexp": 4,
+      "ngroup": 27,
+      "nint": 1,
+      "readout_pattern": "fastr1",
+      "subarray": "full"
+    },
+    "instrument": {
+      "aperture": "ch3",
+      "disperser": "short",
+      "filter": null,
+      "instrument": "miri",
+      "mode": "mrs"
+    }
+  },
+  "scene": [
+    {
+      "id": 1,
+      "position": {
+        "orientation": 0.0,
+        "x_offset": 0.0,
+        "y_offset": 0.0
+      },
+      "shape": {
+        "geometry": "point"
+      },
+      "spectrum": {
+        "extinction": {
+          "bandpass": "j",
+          "law": "mw_rv_31",
+          "unit": "mag",
+          "value": 0
+        },
+        "extinction_first": true,
+        "lines": [],
+        "normalization": {
+          "bandpass": "wise,w3",
+          "norm_flux": 0.95,
+          "norm_fluxunit": "mjy",
+          "type": "photsys"
+        },
+        "redshift": 0.211,
+        "sed": {
+          "index": 2,
+          "sed_type": "powerlaw",
+          "unit": "fnu"
+        }
+      }
+    }
+  ],
+  "strategy": {
+    "aperture_size": 0.6,
+    "method": "ifunodoffscene",
+    "reference_wavelength": 12.81,
+    "target_source": "4",
+    "target_type": "source",
+    "target_xy": [
+      0.0,
+      0.0
+    ],
+    "units": "arcsec"
+  },
+  "wavelength_range_um": [
+    11.531577674966293,
+    13.478075800000001
+  ],
+  "output_pixel_count": 907,
+  "native_snr_at_reference": 7.831071012453228,
+  "method": "Whole-pixel sum(flux)/sqrt(sum(noise**2)); diagonal covariance assumption",
+  "limitations": [
+    "No spectral covariance supplied or propagated",
+    "No added calibration, resampling, or host-decomposition errors",
+    "One point source only; host photon noise is absent",
+    "No engine version, sky coordinates, or scalar timing report in input.json",
+    "One channel/sub-band only; does not establish full program time"
+  ],
+  "bins": [
+    {
+      "center_um": 11.7,
+      "requested_R": 100,
+      "actual_R": 100.84836749765738,
+      "n_pixels": 54,
+      "summed_signal_e_s": 386.52070417217266,
+      "diagonal_noise_e_s": 7.039419740207202,
+      "snr_diagonal": 54.908034814925756
+    },
+    {
+      "center_um": 12.0,
+      "requested_R": 100,
+      "actual_R": 101.55360083680105,
+      "n_pixels": 55,
+      "summed_signal_e_s": 340.3762797303014,
+      "diagonal_noise_e_s": 7.0198608763270425,
+      "snr_diagonal": 48.48761047076396
+    },
+    {
+      "center_um": 12.5,
+      "requested_R": 100,
+      "actual_R": 100.3133628955477,
+      "n_pixels": 58,
+      "summed_signal_e_s": 402.41796134014794,
+      "diagonal_noise_e_s": 7.26929074209887,
+      "snr_diagonal": 55.358627907068325
+    },
+    {
+      "center_um": 12.81,
+      "requested_R": 100,
+      "actual_R": 101.05874218865699,
+      "n_pixels": 59,
+      "summed_signal_e_s": 441.7806943292464,
+      "diagonal_noise_e_s": 7.374444240012739,
+      "snr_diagonal": 59.906981455253806
+    },
+    {
+      "center_um": 13.0,
+      "requested_R": 100,
+      "actual_R": 100.8464243482991,
+      "n_pixels": 60,
+      "summed_signal_e_s": 421.23277855681033,
+      "diagonal_noise_e_s": 7.395958005202539,
+      "snr_diagonal": 56.95445786205148
+    },
+    {
+      "center_um": 13.3,
+      "requested_R": 100,
+      "actual_R": 99.84739114532313,
+      "n_pixels": 62,
+      "summed_signal_e_s": 379.0567742812499,
+      "diagonal_noise_e_s": 7.442066066401042,
+      "snr_diagonal": 50.934346846582145
+    }
+  ],
+  "full_subband_bins": [
+    {
+      "center_um": 11.590957665760335,
+      "requested_R": 100,
+      "actual_R": 99.90066402378935,
+      "n_pixels": 54,
+      "summed_signal_e_s": 376.1950573168817,
+      "diagonal_noise_e_s": 7.027126183803126,
+      "snr_diagonal": 53.534695048450445
+    },
+    {
+      "center_um": 11.707449702602148,
+      "requested_R": 100,
+      "actual_R": 99.07780615958197,
+      "n_pixels": 55,
+      "summed_signal_e_s": 393.33808839771285,
+      "diagonal_noise_e_s": 7.10358162994468,
+      "snr_diagonal": 55.371798184119136
+    },
+    {
+      "center_um": 11.825112513683578,
+      "requested_R": 100,
+      "actual_R": 100.07356300540845,
+      "n_pixels": 55,
+      "summed_signal_e_s": 378.055161702248,
+      "diagonal_noise_e_s": 7.077956334987627,
+      "snr_diagonal": 53.413039556835415
+    },
+    {
+      "center_um": 11.943957865579895,
+      "requested_R": 100,
+      "actual_R": 101.12004961344685,
+      "n_pixels": 55,
+      "summed_signal_e_s": 348.163046269468,
+      "diagonal_noise_e_s": 7.031986115495104,
+      "snr_diagonal": 49.51133869594604
+    },
+    {
+      "center_um": 12.063997643123411,
+      "requested_R": 100,
+      "actual_R": 100.25716535643566,
+      "n_pixels": 56,
+      "summed_signal_e_s": 354.4959024192765,
+      "diagonal_noise_e_s": 7.094399218902149,
+      "snr_diagonal": 49.96841754757274
+    },
+    {
+      "center_um": 12.18524385059199,
+      "requested_R": 100,
+      "actual_R": 99.47886728547417,
+      "n_pixels": 57,
+      "summed_signal_e_s": 405.5212307533966,
+      "diagonal_noise_e_s": 7.221548361867644,
+      "snr_diagonal": 56.154332898287244
+    },
+    {
+      "center_um": 12.307708612909497,
+      "requested_R": 100,
+      "actual_R": 100.50302196346315,
+      "n_pixels": 57,
+      "summed_signal_e_s": 412.5101219317001,
+      "diagonal_noise_e_s": 7.231538527026708,
+      "snr_diagonal": 57.04320323953334
+    },
+    {
+      "center_um": 12.431404176858337,
+      "requested_R": 100,
+      "actual_R": 99.76457711941072,
+      "n_pixels": 58,
+      "summed_signal_e_s": 402.43749847714344,
+      "diagonal_noise_e_s": 7.269771658667396,
+      "snr_diagonal": 55.35765322110726
+    },
+    {
+      "center_um": 12.55634291230415,
+      "requested_R": 100,
+      "actual_R": 99.06620056208997,
+      "n_pixels": 59,
+      "summed_signal_e_s": 410.3609193980343,
+      "diagonal_noise_e_s": 7.332666989564151,
+      "snr_diagonal": 55.9633923076092
+    },
+    {
+      "center_um": 12.682537313432835,
+      "requested_R": 100,
+      "actual_R": 100.04284972282466,
+      "n_pixels": 59,
+      "summed_signal_e_s": 430.0186338067911,
+      "diagonal_noise_e_s": 7.359206019798308,
+      "snr_diagonal": 58.4327484038253
+    },
+    {
+      "center_um": 12.81,
+      "requested_R": 100,
+      "actual_R": 101.05874218865699,
+      "n_pixels": 59,
+      "summed_signal_e_s": 441.7806943292464,
+      "diagonal_noise_e_s": 7.374444240012739,
+      "snr_diagonal": 59.906981455253806
+    },
+    {
+      "center_um": 12.938743718592965,
+      "requested_R": 100,
+      "actual_R": 98.76356709844686,
+      "n_pixels": 61,
+      "summed_signal_e_s": 427.7153126976025,
+      "diagonal_noise_e_s": 7.456993814869104,
+      "snr_diagonal": 57.35760593561795
+    },
+    {
+      "center_um": 13.068781343905457,
+      "requested_R": 100,
+      "actual_R": 101.35062304238748,
+      "n_pixels": 60,
+      "summed_signal_e_s": 419.0871322698616,
+      "diagonal_noise_e_s": 7.393043455629347,
+      "snr_diagonal": 56.686685907513855
+    },
+    {
+      "center_um": 13.200125880025112,
+      "requested_R": 100,
+      "actual_R": 99.09183844939449,
+      "n_pixels": 62,
+      "summed_signal_e_s": 399.8915467751166,
+      "diagonal_noise_e_s": 7.470427428256566,
+      "snr_diagonal": 53.529941976618936
+    },
+    {
+      "center_um": 13.332790461733909,
+      "requested_R": 100,
+      "actual_R": 100.1249064537518,
+      "n_pixels": 62,
+      "summed_signal_e_s": 372.44708258015635,
+      "diagonal_noise_e_s": 7.432986231564753,
+      "snr_diagonal": 50.10732846490834
+    }
+  ]
+}

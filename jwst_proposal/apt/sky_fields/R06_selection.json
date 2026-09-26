@@ -1,0 +1,47 @@
+{
+  "id": "R06",
+  "target": "J083826.50+371906.7",
+  "science_ra_deg": 129.61041666666665,
+  "science_dec_deg": 37.31852777777778,
+  "selected": {
+    "radius_arcsec": 60,
+    "pa_deg": 310,
+    "ra_deg": 129.5943603494731,
+    "dec_deg": 37.32923981997958,
+    "nearest_allwise_arcsec": 29.24338239527729,
+    "nearest_2mass_arcsec": 33.44086603551478,
+    "nearest_bright_w1_arcsec": 180.0,
+    "wise_patch_z": [
+      0.5233072268335817,
+      0.7002319883558915,
+      1.1045488539113903
+    ],
+    "passed": true,
+    "score": 26.843382395277292
+  },
+  "original": {
+    "radius_arcsec": 60,
+    "pa_deg": 0,
+    "ra_deg": 129.61041666666665,
+    "dec_deg": 37.33519444444445,
+    "nearest_allwise_arcsec": 11.404233163264953,
+    "nearest_2mass_arcsec": 18.992686881367767,
+    "nearest_bright_w1_arcsec": 180.0,
+    "wise_patch_z": [
+      20.148351674611927,
+      1.3482872115017666,
+      0.14748743730757116
+    ],
+    "passed": false,
+    "score": -45.44082186057082
+  },
+  "moved": true,
+  "catalog_counts": {
+    "allwise": 111,
+    "twomass": 14
+  },
+  "visual_review": "accepted",
+  "twomass_image": "cache/R06_2massJ_0.fits",
+  "sdss_image": "cache/R06_sdss.jpg",
+  "review_note": "No obvious compact infrared source or bright-star artifact in the selected central sky field."
+}

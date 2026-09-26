@@ -1,0 +1,104 @@
+{
+  "r06_rest5": {
+    "report": "review/technical_runs/r06_rest5/report.json",
+    "bins": [
+      {
+        "center_um": 6.0555,
+        "requested_R": 100,
+        "actual_R": 99.75638717635947,
+        "n_pixels": 56,
+        "summed_signal_e_s": 63.21702749987037,
+        "diagonal_noise_e_s": 1.667899023610487,
+        "snr_diagonal": 37.902191082902014
+      }
+    ],
+    "saturation_fraction": 0.0006299781096043464,
+    "source_time_s": 666.0096000000001,
+    "warnings": {}
+  },
+  "r06_rest5_80": {
+    "report": "review/technical_runs/r06_rest5_80/report.json",
+    "bins": [
+      {
+        "center_um": 6.0555,
+        "requested_R": 100,
+        "actual_R": 99.75638717635947,
+        "n_pixels": 56,
+        "summed_signal_e_s": 63.21702749987037,
+        "diagonal_noise_e_s": 1.1532912186772948,
+        "snr_diagonal": 54.81445317200432
+      }
+    ],
+    "saturation_fraction": 0.0008399708128057952,
+    "source_time_s": 888.0128000000001,
+    "warnings": {}
+  },
+  "r06_rest12_80": {
+    "report": "review/technical_runs/r06_rest12_80/report.json",
+    "bins": [
+      {
+        "center_um": 14.5332,
+        "requested_R": 100,
+        "actual_R": 100.60189579518088,
+        "n_pixels": 58,
+        "summed_signal_e_s": 515.7825418917746,
+        "diagonal_noise_e_s": 2.290598918915651,
+        "snr_diagonal": 225.173659881033
+      }
+    ],
+    "saturation_fraction": 0.003577650288407542,
+    "source_time_s": 888.0128000000001,
+    "warnings": {}
+  },
+  "r06_rest18_80": {
+    "report": "review/technical_runs/r06_rest18_80/report.json",
+    "bins": [
+      {
+        "center_um": 21.7998,
+        "requested_R": 100,
+        "actual_R": 100.27967087645497,
+        "n_pixels": 52,
+        "summed_signal_e_s": 161.9448606085843,
+        "diagonal_noise_e_s": 2.6344968698566555,
+        "snr_diagonal": 61.470887463000025
+      }
+    ],
+    "saturation_fraction": 0.002968944532883866,
+    "source_time_s": 888.0128000000001,
+    "warnings": {}
+  },
+  "p1823_rest12": {
+    "report": "review/technical_runs/p1823_rest12/report.json",
+    "bins": [
+      {
+        "center_um": 19.446,
+        "requested_R": 100,
+        "actual_R": 99.89384193510028,
+        "n_pixels": 56,
+        "summed_signal_e_s": 141.11827660527143,
+        "diagonal_noise_e_s": 7.5348551577949925,
+        "snr_diagonal": 18.728731163369627
+      }
+    ],
+    "saturation_fraction": 0.0008501801980325837,
+    "source_time_s": 299.70432,
+    "warnings": {}
+  },
+  "p1823_rest12_75": {
+    "report": "review/technical_runs/p1823_rest12_75/report.json",
+    "bins": [
+      {
+        "center_um": 19.446,
+        "requested_R": 100,
+        "actual_R": 99.89384193510028,
+        "n_pixels": 56,
+        "summed_signal_e_s": 141.11827660527143,
+        "diagonal_noise_e_s": 2.4295626759758018,
+        "snr_diagonal": 58.08381812936484
+      }
+    ],
+    "saturation_fraction": 0.0023616116612016217,
+    "source_time_s": 832.5120000000001,
+    "warnings": {}
+  }
+}

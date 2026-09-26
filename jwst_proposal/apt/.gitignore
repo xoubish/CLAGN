@@ -1,0 +1,14 @@
+downloads/
+runtime/
+logs/
+work/
+sky_fields/cache/
+sky_fields/review_*.png
+
+# Automatic snapshots and rejected/search candidates are local provenance.
+*.aptbackup
+sky_fields/*_candidates.json
+sky_fields/fetch_failures.json
+
+# Keep the assembled review artifact, alongside the accepted selections.
+!sky_fields/sky_field_review.pdf

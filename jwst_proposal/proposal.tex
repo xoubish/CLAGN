@@ -3,41 +3,39 @@
 \usepackage{jwstproposaltemplate_v6}
 \usepackage{graphicx}
 \usepackage{amsmath}
-\usepackage{xcolor}
-% Unresolved numerical inputs remain red. See completion_notes.md for the audit.
-\newcommand{\calc}[1]{\textcolor{red}{#1}}
 \begin{document}
 \scientificjustification
 
 \noindent\textbf{Does circumnuclear dust remember an AGN's accretion history?}
 Large luminosity changes in active galactic nuclei (AGN) provide timed experiments on the material surrounding accreting black holes. Strongly variable quasars [1--4], including changing-look AGN [5], alter the radiation incident on circumnuclear dust over observable timescales. Existing grains heat or cool as that radiation reaches them; sufficiently large changes may also destroy grains or permit new dust to form. \textbf{Can the infrared response be explained by changing illumination of an unchanged dust distribution, including light-travel delays, or is additional evolution of the dust required?} Resolving this question is essential to interpreting infrared spectra as measures of an AGN's luminosity and dust covering factor during variability.
 
-We propose MIRI/MRS spectroscopy of \textbf{24 AGN, divided into 12 fading and 12 rising sources}, with SPHEREx spectra, ZTF/WISE light curves, and several optical spectra per source, including 2026 NGPS spectra. The near-infrared histories constrain the response of hot dust close to the nucleus. MIRI measures the longer-wavelength continuum and silicate features of warmer, more distant dust, which can still echo earlier illumination. Together, these observations test whether a single dust distribution accounts for both responses.
+We propose MIRI/MRS spectroscopy of \textbf{24 AGN, divided into 12 fading and 12 rising sources}, with SPHEREx spectra, ZTF/WISE light curves, and several optical spectra per source, including 2026 NGPS spectra. This measured history makes each nucleus a timed experiment: SPHEREx constrains the hot-dust response, while MIRI captures the warm continuum and silicate features that retain the imprint of earlier illumination. A single MIRI epoch per source completes the spectral comparison needed to test whether circumnuclear dust remembers an AGN's accretion history.
 
 \noindent\textbf{From infrared echoes to dust evolution.}
 The equilibrium sublimation radius scales approximately as $L^{1/2}$ [6--8], but the dust distribution need not adjust immediately. A rising source tests whether increased heating alone explains the spectrum or whether the inner emitting region changes. After fading, surviving grains cool, while dust formation at smaller radii may eventually restore a hotter component. Recovery after a decline provides a further test of whether the spectrum depends on the path to the present luminosity.
 
-WISE has established infrared echoes of changing-look transitions [9--12] and enabled variability-based searches for these sources [10,12,13]. Broadband colours alone, however, cannot separate changes in temperature, emitting area, extinction and host dilution [14]. Reverberation studies illustrate the physical alternatives: the inner dust radius in Mrk~590 decreased after a luminosity decline, suggesting replenishment within a few years [15], whereas the hottest dust in NGC~4151 remained at approximately the same radius over decades, with a much longer response from the warm component [16]. Recent MRS observations reveal spectral diversity beyond current dust models [17], including the distinctive silicate spectrum of the recently activated nucleus Ansky [18]. Connecting that diversity to measured illumination histories is the next step.
+WISE has established infrared echoes of changing-look transitions [9--12] and enabled variability-based searches for these sources [10,12,13]. Broadband colours alone, however, cannot separate changes in temperature, emitting area, extinction and host dilution [14]. Reverberation studies illustrate the physical alternatives: the inner dust radius in Mrk~590 decreased after a luminosity decline, suggesting replenishment within a few years [15], whereas the hottest dust in NGC~4151 remained at approximately the same radius over decades, with a much longer response from the warm component [16]. Recent MRS observations reveal spectral diversity beyond current dust models [17], including the distinctive silicate spectrum of the recently brightened nucleus Ansky [18]. Connecting that diversity to measured illumination histories is the next step.
 
 \noindent\textbf{Why MIRI?}
-SPHEREx covers 0.75--5~$\mu$m [19], tracing the hot-dust spectrum. At longer wavelengths the variability is damped and delayed [20], so the warm emission records a different portion of the preceding history. MIRI/MRS extends coverage to 27.9~$\mu$m and resolves the warm continuum, silicate features, aromatic bands and ionic lines [21]. Its spatial information also separates the nuclear point source from measurable extended host emission. These constraints are necessary to distinguish a delayed thermal response from a change in the emitting dust.
+SPHEREx covers 0.75--5~$\mu$m [19], tracing the hot-dust spectrum. At longer wavelengths the variability is damped and delayed [20], so the warm emission records a different portion of the preceding history. MIRI/MRS supplies the missing measurement: spectroscopy to 27.9~$\mu$m [21]. The warm-continuum shape and luminosity test the distribution of emitting temperatures; the strengths and profiles of the 9.7 and 18~$\mu$m silicate features constrain optical depth and the arrangement of emitting and obscuring dust. Aromatic bands and spatial information constrain host contamination. Together these measurements test dust-response models that broadband colours alone cannot distinguish.
 
+\clearpage
 \begin{figure}[!t]
 \centering
 \includegraphics[width=\textwidth]{fig1_connected.pdf}
-\caption{\textbf{P1823 illustrates the measured baseline for the dust-response experiment.} At $z=0.620$, the quasar is in a high optical state following an earlier WISE decline and recovery. Top: SDSS image (5$''$ bar), ZTF $g,r$, and WISE W1/W2 light curves. Middle: 21 optical spectra. Bottom: three SPHEREx visits. Matching colours connect the spectra to their dates on the light curves; shading spans each SPHEREx visit. The 2002 optical epoch predates the displayed window. Spectra use observed wavelength and mJy; gold markers indicate expected line positions.}
+\caption{\textbf{Rich existing data anchor the dust-response experiment across the full sample.} One representative source illustrates the optical spectroscopy, SPHEREx spectra and ZTF/WISE light curves available for all 24 targets. Top: SDSS image (5$''$ bar), ZTF $g,r$, and WISE W1/W2 light curves. Middle: 21 optical spectra. Bottom: three SPHEREx visits. Matching colours connect the spectra to their dates on the light curves; shading spans each SPHEREx visit. The 2002 optical epoch predates the displayed window. Spectra use observed wavelength and mJy; gold markers indicate expected line positions.}
 \label{fig:history}
 \end{figure}
 
 \noindent\textbf{A sample selected by variability history.}
-All targets have positions in a low-dimensional manifold of ZTF/WISE variability. Their measured histories define the rising and fading comparison groups, including catalogue CLAGN [22--25]; broad-line appearance or disappearance is not required. The archival optical record is extended with 2026 NGPS spectra to constrain continuum and broad-line changes. Figure~\ref{fig:history} shows the available sequence for P1823: a sustained optical rise, an infrared decline followed by recovery, and three dated SPHEREx visits. P11530 provides a contrasting history, fading over 2018--2021 and partly recovering in 2022--2023.
-
-The relevant comparison is the rest-frame age of a luminosity change,
-$\Delta t=(t_{\rm JWST}-t_{\rm change})/(1+z)$, relative to the hot- and warm-dust delays, $\tau_{\rm dust}$ and $\tau_{\rm warm}$. The delays depend on luminosity [8,20,26]. We will bracket changes with optical data and estimate delays from luminosities or reverberation constraints, propagating event-date, host and lag uncertainties. Earlier reversals remain in each source's illumination history.
+We selected the sample from a low-dimensional manifold of ZTF and WISE light-curve variability, using the measured histories to identify rising and fading nuclei. The sample includes catalogue CLAGN [22--25], but broad-line appearance or disappearance is not required. The archival optical record is extended with 2026 NGPS spectra to constrain continuum and broad-line changes. Figure~\ref{fig:history} shows the available sequence for P1823: a sustained optical rise, an infrared decline followed by recovery, and three dated SPHEREx visits. P11530 provides a contrasting history, fading over 2018--2021 and partly recovering in 2022--2023.
 
 \clearpage
 \noindent\textbf{Testing fixed and evolving dust.}
-We will first fit the optical history, WISE photometry and SPHEREx spectra with a fixed dust distribution, including light-travel delays, extinction and host emission. Clumpy and disk-plus-wind geometries [31--33] provide alternative descriptions of the unresolved dust. The fitted model predicts the warm continuum and silicate spectrum at the MIRI epoch. We will then allow the amount or location of inner dust to evolve, retaining the same treatment of illumination and observational uncertainties. Agreement with fixed dust constrains structural changes; a history-dependent discrepancy that persists across geometry and host models would support dust evolution.
+The existing optical history, WISE photometry and SPHEREx spectra anchor a prediction for each target's warm continuum and silicate spectrum at the MIRI epoch. We will calculate these predictions for a fixed dust distribution, including light-travel delays, extinction and host emission, using clumpy and disk-plus-wind geometries [27--29]. We will then allow the amount or location of inner dust to evolve, retaining the same treatment of illumination and observational uncertainties. MIRI tests these predictions directly: agreement constrains structural changes, while a history-dependent discrepancy that persists across geometry and host models provides evidence for dust evolution.
+
+We compare the rest-frame age of a luminosity change,
+$\Delta t=(t_{\rm JWST}-t_{\rm change})/(1+z)$, with the hot- and warm-dust delays, $\tau_{\rm dust}$ and $\tau_{\rm warm}$. Optical data bracket the changes; luminosities or reverberation measurements constrain the delays [8,20,26]. Each illumination history retains earlier reversals, with event-date, host and lag uncertainties propagated through the analysis.
 
 Our primary diagnostic is
 \[
@@ -46,37 +44,41 @@ Our primary diagnostic is
 \]
 the residual nuclear warm-dust continuum luminosity relative to the fixed-distribution prediction. We will compare this residual between the two groups and against continuous $\Delta t/\tau_{\rm dust}$ and $\Delta t/\tau_{\rm warm}$, accounting for luminosity and host contribution. As a secondary diagnostic, the rest 2--5 to 8--13~$\mu$m luminosity ratio connects the model-interpolated hot component to the MIRI measurement.
 
-\begin{figure}[!ht]
+Figure~\ref{fig:predictions} illustrates the spectral leverage: even after matching the integrated hot-dust luminosity, a changing inner boundary alters the warm continuum and silicate emission relative to a fixed-distribution response. The joint continuum and feature comparison is essential: no single silicate feature uniquely establishes dust evolution. For the observed targets, we will fit the full dated histories and spectra, testing whether the warm-dust differences survive uncertainties in geometry, extinction and host emission.
+
+\begin{figure}[!p]
 \centering
-\fbox{\parbox{0.9\textwidth}{\centering\vspace{1.7cm}\calc{Model-prediction figure to be inserted}\vspace{1.7cm}}}
-\caption{\calc{Fixed and evolving dust predictions for $\delta_{\rm warm}$ as a function of event age relative to dust delay, with target positions and expected measurement uncertainties. Quantitative predictions remain to be calculated.}}
+\includegraphics[width=\textwidth]{fig2_diagnostics.pdf}
+\caption{\textbf{MIRI tests the spectral imprint of a changing dust distribution.} Top: schematic dust cross-sections compare a fixed inner boundary (blue) with one that expands after a rise or contracts after a fade (dashed red); dark centers with surrounding disks denote accreting black holes, and dots denote dust. Sizes and dot counts are illustrative. Bottom: calculated fractional differences, $100(F_\nu^{\rm evolving}/F_\nu^{\rm fixed}-1)$, for optically thin silicate/graphite models [34] with identical illumination histories and light-travel delays. The evolving boundary follows $R_{\rm in}\propto L^{1/2}$; both models are evaluated at $t=20R_{\rm in,Si,0}/c$ and matched in 2--4~$\mu$m luminosity (blue shading). Red shading spans the model difference; gold marks 8--13~$\mu$m and the silicate wavelengths. The 18~$\mu$m contrast complements the overlap near 9.7~$\mu$m in the fading example. Green ticks locate PAH contamination to model separately. These are controlled illustrations, not target fits or universal residual signs.}
 \label{fig:predictions}
 \end{figure}
 
 \noindent\textbf{Why 24 sources?}
-Twelve objects per group provide replication across different luminosity histories and reduce sensitivity to individual peculiarities. For independent measurements with a common within-group scatter $s$, the uncertainty on each mean is $s/\sqrt{12}=0.289s$ and on the rising--fading difference is $s\sqrt{2/12}=0.408s$. The expected scatter of \calc{$X$~dex} and model separation of \calc{$Y$~dex} set the quantitative sensitivity of the experiment (Figure~\ref{fig:predictions}). The inference will include unequal errors, intrinsic scatter and shared calibration and model uncertainties; removing individual sources will test robustness. The result concerns dust response in this deliberately selected sample, rather than a population-wide transition rate.
+The 24-source sample combines equal representation of rising and fading nuclei with a range of measured illumination histories: sustained brightening, prolonged declines, and fading followed by recovery. Changes occurring at different epochs provide leverage on the evolution of the infrared response with event age. Twelve independent sources in each group provide repeated tests of the same dust-response hypotheses, reducing the influence of individual peculiarities while retaining the diversity needed to identify history-dependent behaviour. The balanced comparison tests for systematic differences in warm-continuum residuals and silicate structure between rising and fading nuclei, accounting for luminosity, host contribution and response age. Sources with reversals add a complementary test of whether the present dust spectrum retains the imprint of earlier states. Together, these comparisons connect the direction, timing and sequence of luminosity changes to the warm-dust spectrum: the essential measurements for testing dust memory across the population.
 
 \clearpage
 \descriptionofobservations
 
 \noindent\textbf{Spectral coverage and sensitivity.}
-We request one MIRI/MRS visit per target, using all three grating settings, target acquisition and a four-point dither to cover approximately 4.9--27.9~$\mu$m [21,28]. Twenty-three targets have $z<0.3$, placing both silicate peaks within MRS. P1823 provides the well-sampled optical/SPHEREx baseline at higher redshift: its 9.7~$\mu$m feature lies at 15.7~$\mu$m, while its 18~$\mu$m peak is outside MRS. The primary diagnostic is accessible for every target and does not depend on channel~4C.
+We request one MIRI/MRS science visit and a matching sky visit per target, using all three grating settings, target acquisition on the nucleus and a four-point dither to cover approximately 4.9--27.9~$\mu$m [21,30]. Twenty-three targets have $z<0.3$, placing both silicate peaks within MRS. P1823 provides the well-sampled optical/SPHEREx baseline at higher redshift: its 9.7~$\mu$m feature lies at 15.7~$\mu$m, while its 18~$\mu$m peak is outside MRS. The primary diagnostic is accessible for every target and does not depend on channel~4C.
 
-Archival total-source W3 and W4 fluxes span approximately 1.9--48.4 and 3.7--82.6~mJy. Exposure design will use conservative nuclear continua and host backgrounds, with a target S/N of \calc{50} per $R=100$ bin near rest 5 and 12~$\mu$m and \calc{30} across the accessible 18~$\mu$m feature. The readout is \calc{FASTR1}; dedicated sky observations accompany the \calc{$M$} targets requiring separate host/background measurements, while suitable compact sources use dither-pair subtraction [28]. The total request, including overheads, is \textbf{\calc{$X$~h}} for a Medium program [27].
+Archival total-source W3 and W4 fluxes span 1.9--48.4 and 3.7--82.6~mJy. Our sensitivity goals are S/N of 50 per $R=100$ bin near rest 5 and 12~$\mu$m and 30 across the accessible 18~$\mu$m feature. We use FULL/FASTR1, one integration per dither, and 27/60/27 groups in settings A/B/C for 22 targets. Four dithers give 299.7/666.0/299.7~s on source, with all four channels observed simultaneously. The W3-faint J083826.50+371906.7 uses 80 groups in B (888.0~s); P1823 uses 75 groups in A (832.5~s) to secure its redshifted warm continuum. Equal-duration sky exposures preserve extended host emission for decomposition [30]. Science-plus-sky integration totals 17.29~h. \textbf{We request 67.4~h}, including acquisition, visit operations, slews and observatory overheads calculated with APT~2026.5.1: a Medium program [31].
+
+ETC/Pandeia~2026.7 calculations for J083826.50+371906.7 ($z=0.2111$), using a point source with $F_\nu\propto\lambda^2$ and 0.95~mJy in W3 (half the archival total), give S/N of 55/225/61 per $R=100$ bin at rest 5/12/18~$\mu$m. The adopted sky spectrum, matching sky exposures and extraction radii of $0.3''$/$0.6''$/$0.9''$ are included. For P1823, a flatter continuum based on its W3/W4 colour and half its W3 flux gives S/N~58 at rest 12~$\mu$m with the longer A exposure. Statistical estimates assume independent spectral-sample errors; inference also propagates host and calibration uncertainties. Acquisition uses F560W for the faintest sources and the neutral-density filter for brighter nuclei, with readouts selected to achieve S/N above 50 without saturation in the adopted flux brackets [35].
 
 \noindent\textbf{Connecting the observing epochs.}
-WISE and SPHEREx data enter the model at their actual dates. We will propagate uncertainty in the illumination between those measurements and the MIRI visit, rather than treating archival spectra as contemporaneous. Optical monitoring and spectroscopy near the JWST epoch will constrain intervening variability. The comparison uses the full preceding history and requires one MIRI epoch per source, without a rapid-response trigger or coordinated near-infrared visit.
+WISE and SPHEREx data enter the model at their actual dates, with uncertainty propagated through gaps in the illumination history. Optical monitoring and spectroscopy near the JWST epoch will constrain intervening variability. The full preceding history supports a single MIRI epoch per source, without a rapid-response trigger.
 
 \noindent\textbf{Separating nuclear dust from the host.}
-We will decompose each MRS cube into a point source and extended emission [17], then fit the continuum, silicates, aromatic bands, H$_2$ and ionic lines [30]. Aromatic bands and [Ne\,\textsc{ii}] constrain host contamination; [Ne\,\textsc{v}] and [Ne\,\textsc{vi}] measurements or limits constrain the hard ionizing component. Optical spectral decomposition will calibrate the photometric histories to nuclear continuum and broad-line luminosities. Unobserved intervals and the conversion to dust-heating luminosity enter as uncertainties.
+We will decompose each MRS cube into a point source and extended emission [17], then fit the continuum, silicates, aromatic bands, H$_2$ and ionic lines [32]. Aromatic bands and [Ne\,\textsc{ii}] constrain host contamination; [Ne\,\textsc{v}] and [Ne\,\textsc{vi}] measurements or limits constrain the hard ionizing component. Optical spectral decomposition will calibrate the photometric histories to nuclear continuum and broad-line luminosities. Unobserved intervals and the conversion to dust-heating luminosity enter as uncertainties.
 
-The 2010 W3/W4 measurements constrain earlier emission in larger apertures. We will predict these fluxes by integrating redshifted nuclear-plus-host models through the WISE bandpasses, including colour corrections and uncertain emission outside MRS coverage. Archival imaging constrains host light beyond the MRS field and informs the SPHEREx aperture model. Where the nuclear baseline cannot be isolated, it will enter as an interval or upper bound. Wavelength-dependent calibration covariance [29] and alternative host decompositions will be included in the model comparison. Residuals common to both history groups would point to limitations of the model family; a reproducible dependence on illumination history would provide the stronger evidence for dust evolution.
+To compare with the 2010 W3/W4 measurements, we will integrate redshifted nuclear-plus-host models through the WISE bandpasses, including colour corrections and uncertain emission outside MRS coverage. Archival imaging constrains host light beyond the MRS field and informs the SPHEREx aperture model. Poorly constrained nuclear baselines enter as intervals or upper bounds. Wavelength-dependent calibration covariance [33] and alternative host decompositions enter the model comparison; evidence for evolution must persist across these treatments.
 
 \clearpage
 \supplementalinformation
-\noindent\textbf{Special requirements.} No timing constraints, coordinated parallels or joint-facility time are requested. Dedicated MRS sky observations will use the applicable background-observation requirements [28]. \calc{[Target-specific sky requirements and APT visibility to be finalized.]}
+\noindent\textbf{Special requirements.} Each science/sky pair is linked as a consecutive, noninterruptible sequence to obtain a contemporaneous background [30]. Sky fields are selected using WISE and 2MASS catalogs and images, with at least $25''$ clearance from catalogued sources. Twenty-three fields lie within 1--2~arcmin of their nuclei; the crowded field around J20145928+2523010 uses a $135''$ offset. Background targets are marked extended and use four-point extended-source dithers, with no target acquisition. No absolute-date constraints, coordinated parallels or joint-facility time are requested. APT's Visit Planner returns scheduling windows for all 48 visits.
 
-\noindent\textbf{Duplications.} \calc{[Target-by-target archive and approved-program duplication results.]}
+\noindent\textbf{Duplications.} A coordinate-based MAST search on 2026 September 26, including archived and planned JWST observations, found no overlapping observations within $120''$ of any of the 24 science positions. No potential MIRI/MRS duplications were identified.
 
 \references
 \noindent [1] Rumbaugh, N., et al. 2018, ApJ, 854, 160.\par
@@ -104,13 +106,18 @@ The 2010 W3/W4 measurements constrain earlier emission in larger apertures. We w
 \noindent [23] Zeltyn, G., et al. 2024, ApJ, 966, 85.\par
 \noindent [24] Guo, W.-J., et al. 2025, ApJS, 278, 28.\par
 \noindent [25] Dong, Q., et al. 2025, ApJ, 986, 160.\par
-\noindent [26] Minezaki, T., et al. 2019, arXiv:1910.08722.\par
-\noindent [27] STScI, ``JWST Call for Proposals for Cycle 6'' and ``JWST Observations Needing Special Requirements'', accessed 2026 September 26.\par
-\noindent [28] STScI, JWST User Documentation, ``MIRI MRS Recommended Strategies'' and ``MIRI MRS Dedicated Sky Observations'', accessed 2026 September 25--26.\par
-\noindent [29] STScI, JWST User Documentation, ``MIRI MRS Calibration Status'', accessed 2026 September 25--26.\par
-\noindent [30] Donnan, F. R., et al. 2023, MNRAS, 519, 3691.\par
-\noindent [31] Nenkova, M., et al. 2008, ApJ, 685, 160.\par
-\noindent [32] H\"onig, S. F., Kishimoto, M., Tristram, K. R. W., et al. 2013, ApJ, 771, 87.\par
-\noindent [33] H\"onig, S. F., \& Kishimoto, M. 2017, ApJL, 838, L20.\par
+\noindent [26] Minezaki, T., et al. 2019, ApJ, 886, 150.\par
+\noindent [27] Nenkova, M., et al. 2008, ApJ, 685, 160.\par
+\noindent [28] H\"onig, S. F., Kishimoto, M., Tristram, K. R. W., et al. 2013, ApJ, 771, 87.\par
+\noindent [29] H\"onig, S. F., \& Kishimoto, M. 2017, ApJL, 838, L20.\par
+\noindent [30] STScI, JWST User Documentation, ``MIRI MRS Recommended Strategies'' and ``MIRI MRS Dedicated Sky Observations'', accessed 2026 September 25--26.\par
+\noindent [31] STScI, ``JWST Call for Proposals for Cycle 6'' and ``JWST Observations Needing Special Requirements'', accessed 2026 September 26.\par
+\noindent [32] Donnan, F. R., et al. 2023, MNRAS, 519, 3691.\par
+\noindent [33] STScI, JWST User Documentation, ``MIRI MRS Calibration Status'', accessed 2026 September 25--26.\par
+\noindent [34] Laor, A., \& Draine, B. T. 1993, ApJ, 402, 441; optical-property tables supplied by B. T. Draine.\par
 
+\noindent [35] STScI, JWST User Documentation, ``MIRI MRS Target Acquisition'' and ``JWST ETC MIRI Target Acquisition'', accessed 2026 September 26.\par
+
+\noindent\textbf{Generative AI disclosure.} OpenAI Codex (GPT-6; used 2026 September 26, revision recorded at 21:29 UTC) assisted with drafting and editing, literature searches, and code for exposure-time calculations, archive checks, APT preparation and figures.\par
+\templateversion
 \end{document}

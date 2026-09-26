@@ -1,0 +1,175 @@
+[
+  {
+    "id": "F01",
+    "target": "J075934.95+322143.3",
+    "catalog_separation_arcsec": 0.09808770299583904,
+    "allwise_extended_flag": 0,
+    "neighbors_within5_arcsec": []
+  },
+  {
+    "id": "F02",
+    "target": "J003352.71+202104.1",
+    "catalog_separation_arcsec": 0.18714956498308843,
+    "allwise_extended_flag": 0,
+    "neighbors_within5_arcsec": []
+  },
+  {
+    "id": "F03",
+    "target": "J105325.40+302419.3",
+    "catalog_separation_arcsec": 0.0692395351705252,
+    "allwise_extended_flag": 0,
+    "neighbors_within5_arcsec": []
+  },
+  {
+    "id": "F04",
+    "target": "J005346.16+223222.4",
+    "catalog_separation_arcsec": 0.13404072085346608,
+    "allwise_extended_flag": 0,
+    "neighbors_within5_arcsec": []
+  },
+  {
+    "id": "F05",
+    "target": "J085359.05+212803.4",
+    "catalog_separation_arcsec": 0.08860887860076605,
+    "allwise_extended_flag": 0,
+    "neighbors_within5_arcsec": []
+  },
+  {
+    "id": "F06",
+    "target": "J012558.06+151813.7",
+    "catalog_separation_arcsec": 0.05345854766221494,
+    "allwise_extended_flag": 0,
+    "neighbors_within5_arcsec": []
+  },
+  {
+    "id": "F07",
+    "target": "J234433.09+260038.9",
+    "catalog_separation_arcsec": 0.07149070932593085,
+    "allwise_extended_flag": 0,
+    "neighbors_within5_arcsec": []
+  },
+  {
+    "id": "F08",
+    "target": "J104427.75+271806.3",
+    "catalog_separation_arcsec": 0.2458122539074082,
+    "allwise_extended_flag": 5,
+    "neighbors_within5_arcsec": []
+  },
+  {
+    "id": "F09",
+    "target": "NGC2617",
+    "catalog_separation_arcsec": 0.5596138350619955,
+    "allwise_extended_flag": 5,
+    "neighbors_within5_arcsec": []
+  },
+  {
+    "id": "F10",
+    "target": "J085337.26+014303.6",
+    "catalog_separation_arcsec": 0.1982140920272542,
+    "allwise_extended_flag": 4,
+    "neighbors_within5_arcsec": []
+  },
+  {
+    "id": "F11",
+    "target": "J2330323-022745",
+    "catalog_separation_arcsec": 0.34610650221748906,
+    "allwise_extended_flag": 5,
+    "neighbors_within5_arcsec": []
+  },
+  {
+    "id": "F12",
+    "target": "J0458403-215931",
+    "catalog_separation_arcsec": 0.17142171060650224,
+    "allwise_extended_flag": 5,
+    "neighbors_within5_arcsec": []
+  },
+  {
+    "id": "R01",
+    "target": "J162039.13+430814.6",
+    "catalog_separation_arcsec": 0.028842126902195196,
+    "allwise_extended_flag": 0,
+    "neighbors_within5_arcsec": []
+  },
+  {
+    "id": "R02",
+    "target": "J220537.71-071114.5",
+    "catalog_separation_arcsec": 0.1258098006450256,
+    "allwise_extended_flag": 0,
+    "neighbors_within5_arcsec": []
+  },
+  {
+    "id": "R03",
+    "target": "J104705.16+544405.8",
+    "catalog_separation_arcsec": 0.016894420502958182,
+    "allwise_extended_flag": 0,
+    "neighbors_within5_arcsec": []
+  },
+  {
+    "id": "R04",
+    "target": "J082942.66+415436.8",
+    "catalog_separation_arcsec": 0.056000978584257274,
+    "allwise_extended_flag": 0,
+    "neighbors_within5_arcsec": []
+  },
+  {
+    "id": "R05",
+    "target": "J104043.38+273518.9",
+    "catalog_separation_arcsec": 0.14003908787532005,
+    "allwise_extended_flag": 0,
+    "neighbors_within5_arcsec": []
+  },
+  {
+    "id": "R06",
+    "target": "J083826.50+371906.7",
+    "catalog_separation_arcsec": 0.10126293199813628,
+    "allwise_extended_flag": 0,
+    "neighbors_within5_arcsec": []
+  },
+  {
+    "id": "R07",
+    "target": "J101152.98+544206.4",
+    "catalog_separation_arcsec": 0.09897633617530088,
+    "allwise_extended_flag": 0,
+    "neighbors_within5_arcsec": []
+  },
+  {
+    "id": "R08",
+    "target": "J094838.42+403043.7",
+    "catalog_separation_arcsec": 0.4314506463486104,
+    "allwise_extended_flag": 5,
+    "neighbors_within5_arcsec": [
+      {
+        "separation": 4.9779652338168985,
+        "w1mag": 13.614
+      }
+    ]
+  },
+  {
+    "id": "R09",
+    "target": "UGC03601",
+    "catalog_separation_arcsec": 0.05984758380029731,
+    "allwise_extended_flag": 5,
+    "neighbors_within5_arcsec": []
+  },
+  {
+    "id": "R10",
+    "target": "J19263018+4133053",
+    "catalog_separation_arcsec": 0.03808688864971651,
+    "allwise_extended_flag": 5,
+    "neighbors_within5_arcsec": []
+  },
+  {
+    "id": "R11",
+    "target": "J1949137-184716",
+    "catalog_separation_arcsec": 0.6792638249589023,
+    "allwise_extended_flag": 0,
+    "neighbors_within5_arcsec": []
+  },
+  {
+    "id": "R12",
+    "target": "J20145928+2523010",
+    "catalog_separation_arcsec": 0.044109545636301914,
+    "allwise_extended_flag": 5,
+    "neighbors_within5_arcsec": []
+  }
+]

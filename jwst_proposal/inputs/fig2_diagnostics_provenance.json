@@ -1,0 +1,63 @@
+{
+  "status": "Illustrative calculation; not fitted to any observed target or SPHEREx spectrum.",
+  "model": "Optically thin, isotropic shells; no self-absorption, host emission, or stochastic heating.",
+  "heating": "Monochromatic 0.1 um radiation; same spectral shape and step history in each hypothesis.",
+  "grains": "0.1 um spheres; 60/40 silicate/graphite mass, densities 3.5/2.24 g cm^-3.",
+  "grain_temperatures": "Separate equilibrium integrals for each species; inner-edge initial T=1000/1500 K.",
+  "distribution": "dM/dlnr proportional to r; fixed outer radius 100 initial silicate inner radii.",
+  "echo": "Uniform shell delay from 0 to 2r/c, evaluated at t=20 initial silicate inner-radius/c.",
+  "alternative": "Each species inner boundary scales with sqrt(L/L_initial), immediately after illumination arrives.",
+  "amplitude_fit": "Each evolving spectrum is rescaled to match the fixed model integrated 2--4 um luminosity. This represents a free dust mass amplitude; it does not fit colors or any actual data.",
+  "limitations": [
+    "Not a clumpy or disk-wind radiative transfer calculation.",
+    "No fit to actual light curves or near-IR spectra; cannot establish indistinguishable existing-data fits.",
+    "No posterior predictive uncertainty or population power calculation.",
+    "Residual signs are specific to this boundary prescription, not universal rising/fading signatures.",
+    "PAH positions marked only; no invented PAH fluxes.",
+    "Cartoons show boundary motion only; dust dot counts, outer radii and brightness are schematic.",
+    "No ETC error bars are plotted on this figure."
+  ],
+  "opacities": {
+    "Sil_21.gz": {
+      "url": "https://www.astro.princeton.edu/~draine/dust/diel/Sil_21.gz",
+      "sha256": "b12fb5b21598375019ead3c4bab97295bd72a6a6426bf51d35ee0481ff506452"
+    },
+    "Gra_21.gz": {
+      "url": "https://www.astro.princeton.edu/~draine/dust/diel/Gra_21.gz",
+      "sha256": "a9f10677b4f71c9a9bdb7f20d671fa56ca20ea70efd265c915aab90bfd0f0214"
+    }
+  },
+  "opacity_reference": "Laor & Draine 1993, ApJ 402, 441; Draine & Lee 1984, ApJ 285, 89.",
+  "wavelength_axis": "Rest-frame model wavelengths; no target-specific coverage claimed.",
+  "actual_targets_fitted": [],
+  "calculations": [
+    {
+      "luminosity_ratio": 4.0,
+      "label": "Rising: $L\\,\\times\\,4$",
+      "evolved_dust_mass_amplitude_scale": 1.6553134513476848,
+      "percent_difference_at_rest_18um": 35.615126097824984,
+      "normalization": "same scale for both curves: fixed Fnu at 12um = 1"
+    },
+    {
+      "luminosity_ratio": 0.25,
+      "label": "Fading: $L\\,/\\,4$",
+      "evolved_dust_mass_amplitude_scale": 0.6091194468236616,
+      "percent_difference_at_rest_18um": -27.644859455330785,
+      "normalization": "same scale for both curves: fixed Fnu at 12um = 1"
+    }
+  ],
+  "numerical_checks": [
+    {
+      "luminosity_ratio": 4.0,
+      "maximum_equilibrium_relative_error": 3.1086244689504383e-15,
+      "maximum_relative_change_doubling_radial_grid": 0.0001163918339504022
+    },
+    {
+      "luminosity_ratio": 0.25,
+      "maximum_equilibrium_relative_error": 3.219646771412954e-15,
+      "maximum_relative_change_doubling_radial_grid": 0.0024212987753258197
+    }
+  ],
+  "no_change_and_pre_echo_equal": true,
+  "presentation": "Compact cartoons and fractional differences, with panel labels only; explanation in proposal caption."
+}

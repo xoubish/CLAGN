@@ -1,0 +1,61 @@
+{
+  "engine_version": "2026.7",
+  "reference_data_version": "2026.7",
+  "psf_version": "2026.7",
+  "input_sha256": "af397e5a27050f696a43aaa25e2fbc58501ad3acc0bd15eee7e6fb756d8c5237",
+  "runtime_seconds": 1.6487396660013474,
+  "scalar": {
+    "total_exposure_time": 666.0096000000001,
+    "all_dithers_time": 1332.0192000000002,
+    "exposure_time": 166.50240000000002,
+    "measurement_time": 158.17728,
+    "saturation_time": 166.50240000000002,
+    "photon_collect": 666.0096000000001,
+    "total_integrations": 4,
+    "duty_cycle": 1.0,
+    "cr_ramp_rate": 0.0749237529186565,
+    "extraction_area": 14.451486778588327,
+    "background_area": null,
+    "fraction_saturation": 0.0022267083996628995,
+    "sat_ngroups": 26945.0,
+    "sat_ngroupsp1": 26946.0,
+    "brightest_pixel": 2.589831829071045,
+    "filter": null,
+    "disperser": "medium",
+    "x_offset": 0.0,
+    "y_offset": 0.0,
+    "aperture_size": 0.9,
+    "sn": 6.801781717058586,
+    "extracted_flux": 3.096863093559522,
+    "extracted_noise": 0.45530174627520287,
+    "background_total": 31.642532569498616,
+    "background_sky": 31.642532569498616,
+    "contamination": 0.0,
+    "reference_wavelength": 21.80115159047399,
+    "background": 313.5123462583488
+  },
+  "warnings": {},
+  "web_validation": {
+    "archive": "wb325241_c7_2026-09-26_19.17.43.tar",
+    "archive_sha256": "b6d8a0dc9fa3b94e9b6c5d7e5a5e760ce9b62bcb518b249a110f63a2600b1cc0",
+    "input_identical": true,
+    "spectra": {
+      "extracted_flux": {
+        "samples": 916,
+        "max_relative_difference": 3.485831491944446e-16,
+        "matches_rtol_1e_5": true
+      },
+      "extracted_noise": {
+        "samples": 916,
+        "max_relative_difference": 5.251036396540323e-16,
+        "matches_rtol_1e_5": true
+      },
+      "sn": {
+        "samples": 916,
+        "max_relative_difference": 7.0317009606011825e-16,
+        "matches_rtol_1e_5": true
+      }
+    },
+    "passed": true
+  }
+}

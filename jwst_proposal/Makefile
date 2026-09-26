@@ -8,6 +8,7 @@ all:
 figures:
 	$(PYTHON) make_selection.py
 	$(PYTHON) make_fig1_connected.py
+	$(PYTHON) make_fig2_diagnostics.py
 
 clean:
 	latexmk -c proposal.tex

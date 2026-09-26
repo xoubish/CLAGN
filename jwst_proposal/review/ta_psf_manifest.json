@@ -1,0 +1,295 @@
+{
+  "source": "Complete imager members from existing official 2026.7 PSF archive prefix; no partial FITS used",
+  "files": [
+    {
+      "file": "miri_imager_10.0512.fits",
+      "bytes": 204480,
+      "sha256": "fea8fc9253fb08fde8f4933d789074dc9512ca007df1060fbdcd6bb8ea56b876"
+    },
+    {
+      "file": "miri_imager_10.3897.fits",
+      "bytes": 204480,
+      "sha256": "aea3494e1569f33b62c4b72b3cb2f9077a3a169e06b373dfbfaabecaff603157"
+    },
+    {
+      "file": "miri_imager_10.7397.fits",
+      "bytes": 204480,
+      "sha256": "66ce7adda57fcc2ab4c505f065453155a1524b632156b900cffcd77c0ab7aec5"
+    },
+    {
+      "file": "miri_imager_11.1015.fits",
+      "bytes": 204480,
+      "sha256": "e7b41eba443cbdf93801764be7e4512d56c1147d73eea05b5eefdfc9e70d7853"
+    },
+    {
+      "file": "miri_imager_11.4754.fits",
+      "bytes": 204480,
+      "sha256": "ef3985e67ce9f266ce4c5120dab8a498a22a9e12bcaf6553a097bb42c1b789ad"
+    },
+    {
+      "file": "miri_imager_11.8619.fits",
+      "bytes": 204480,
+      "sha256": "d1ed4680ff31abbd165b07401174d218d1723e793a14c343f8ec2ad6c8dee4ee"
+    },
+    {
+      "file": "miri_imager_12.2615.fits",
+      "bytes": 204480,
+      "sha256": "bcd3d6f02502a834327aefa08239bce3dfd236407657526fe3196ea241c06c37"
+    },
+    {
+      "file": "miri_imager_12.6745.fits",
+      "bytes": 204480,
+      "sha256": "fb35a6889e6cd7f365eb5aa25edfcca251e7f894ff48ba00706a0fd7bc8b8a8b"
+    },
+    {
+      "file": "miri_imager_13.1014.fits",
+      "bytes": 204480,
+      "sha256": "af29edccbd20fd342bb2fefe890b9d6bb6f0a278180ed1f44ad7e3b61e759ad5"
+    },
+    {
+      "file": "miri_imager_13.5427.fits",
+      "bytes": 204480,
+      "sha256": "5061e0063f1bc126da5430345fcec3532641635392cc55b6ecc0f92556be90c4"
+    },
+    {
+      "file": "miri_imager_13.9989.fits",
+      "bytes": 204480,
+      "sha256": "91a31ab05a1d24bcf4f121469f8665fd5e557bf74ce346e8bf36391ba608f9be"
+    },
+    {
+      "file": "miri_imager_14.4704.fits",
+      "bytes": 204480,
+      "sha256": "4241a050238ac301e240e360daecc4e6a6a9ee133d182805e9cbebf6985815a3"
+    },
+    {
+      "file": "miri_imager_14.9579.fits",
+      "bytes": 204480,
+      "sha256": "1734ece14cd606aa518db6e73b3386af26635b675d2b64d8c998897e0064e23f"
+    },
+    {
+      "file": "miri_imager_15.4617.fits",
+      "bytes": 204480,
+      "sha256": "1d176baf536ba82a402ce70ef5eb91c6f132ad9c5fbc33f5e139a78d78d250ec"
+    },
+    {
+      "file": "miri_imager_15.9825.fits",
+      "bytes": 204480,
+      "sha256": "31eeac24ecf05eaa2fe623c0cb961f7c31cd48774911098087d93c00e9d65746"
+    },
+    {
+      "file": "miri_imager_16.5209.fits",
+      "bytes": 204480,
+      "sha256": "5281a5fa16bfd1e5a8d9e60481f5252b554e5e86c42f4197abd0ac294264b556"
+    },
+    {
+      "file": "miri_imager_17.0773.fits",
+      "bytes": 204480,
+      "sha256": "ce2846f8e3cf57db7950706a7b76b8de9e11caf978caab3a6454014ca787713d"
+    },
+    {
+      "file": "miri_imager_17.6526.fits",
+      "bytes": 204480,
+      "sha256": "eed3509ff5a85c4abe070bfe6e2d2aad2a8a9c502e02f99a6c096574a0dc36f4"
+    },
+    {
+      "file": "miri_imager_18.2472.fits",
+      "bytes": 204480,
+      "sha256": "b1df12f46a5974e11c204e23935f5958927085c8782d99e0545fef7c29ea9d57"
+    },
+    {
+      "file": "miri_imager_18.8618.fits",
+      "bytes": 204480,
+      "sha256": "882151f57f96e1274c08020ee023067118f418d6a088cb7dae3346afcfcc4bb6"
+    },
+    {
+      "file": "miri_imager_19.4972.fits",
+      "bytes": 204480,
+      "sha256": "1f37182a1e98fa32e927fc4d25208dc89f6372127cb35c9713fc1bcab0661099"
+    },
+    {
+      "file": "miri_imager_20.1539.fits",
+      "bytes": 204480,
+      "sha256": "19154f18de53f4ff8502cd141fbd6ce4909b00639854097687953043eab0865f"
+    },
+    {
+      "file": "miri_imager_20.8327.fits",
+      "bytes": 204480,
+      "sha256": "2451c04e1a25464450e35dcacc159efc5507fafbc50c00140b273811e6c6b814"
+    },
+    {
+      "file": "miri_imager_21.5345.fits",
+      "bytes": 204480,
+      "sha256": "a59a74a1bae41b4b59e8fc58d27b67114c8e78d2d4c71979542c0e099cfb13a3"
+    },
+    {
+      "file": "miri_imager_22.2598.fits",
+      "bytes": 204480,
+      "sha256": "784c29911d6b8c4db17f164a611f4c60a72bed2b2f4609aa23d0c2244407a8de"
+    },
+    {
+      "file": "miri_imager_23.0096.fits",
+      "bytes": 204480,
+      "sha256": "ce7d992e227ba20f44048fdee3de61071d22c7b5319dd40f553363e56ded62b9"
+    },
+    {
+      "file": "miri_imager_23.7847.fits",
+      "bytes": 204480,
+      "sha256": "28261346759bb337e971272f7bef99bea9f7e565f6af9c896a5c7211059a0a09"
+    },
+    {
+      "file": "miri_imager_24.5858.fits",
+      "bytes": 204480,
+      "sha256": "728dcd2c843b37c2f58677deae5ae8ccb79ef78a8383acc8aaa0ccc47cb8e92f"
+    },
+    {
+      "file": "miri_imager_25.4140.fits",
+      "bytes": 204480,
+      "sha256": "b169305befdd58a3391872afd47e801deaa4746c2c33971783649161406a38a3"
+    },
+    {
+      "file": "miri_imager_26.2700.fits",
+      "bytes": 204480,
+      "sha256": "09141fb46e786f8d972a31a98af1a23a629493142eb56a5eafe4aca784c157e6"
+    },
+    {
+      "file": "miri_imager_27.1549.fits",
+      "bytes": 204480,
+      "sha256": "1ea70c4146fabe6f646eb81266c8e2b729178d93d372b0eb68e728d34530216d"
+    },
+    {
+      "file": "miri_imager_28.0696.fits",
+      "bytes": 204480,
+      "sha256": "958d1c44d13fc37d87aba25bf35b55ff10b02954db8fc929a436308cbca8655f"
+    },
+    {
+      "file": "miri_imager_29.0151.fits",
+      "bytes": 204480,
+      "sha256": "368ed79bcc05c779377f9cd724a97e79909ac940191695bce6798a8d83c99f7a"
+    },
+    {
+      "file": "miri_imager_29.9924.fits",
+      "bytes": 204480,
+      "sha256": "4ace434d5bab4553803dbec11e3d015e08e5e370a6f93bc90e208402d236b1a8"
+    },
+    {
+      "file": "miri_imager_30.0000.fits",
+      "bytes": 204480,
+      "sha256": "85a350f725f4a1cd848764d177eebdd62d41597f4387446149482a31fc93cb28"
+    },
+    {
+      "file": "miri_imager_4.6914.fits",
+      "bytes": 204480,
+      "sha256": "7eda1dcc8db7895cd793c8859cd9a19cbfd8a2fdc485eed7c02353ca5560e27a"
+    },
+    {
+      "file": "miri_imager_4.8494.fits",
+      "bytes": 204480,
+      "sha256": "93c71a4facbe8243b870c301e8c314d04a661cc22a33b90f40069c9edb12e598"
+    },
+    {
+      "file": "miri_imager_5.0127.fits",
+      "bytes": 204480,
+      "sha256": "c702cdd301cc6c449bc933a2aac4b84a5cb0677b1d75a22b5d4df325911fe6e7"
+    },
+    {
+      "file": "miri_imager_5.1816.fits",
+      "bytes": 204480,
+      "sha256": "761141cdaca830b1d201b6116de226e97c4d9243801e17a28b746e30a6754a1b"
+    },
+    {
+      "file": "miri_imager_5.3561.fits",
+      "bytes": 204480,
+      "sha256": "6666961e3511458ce95bb08852416788fb94d211be494273f7a062d42948e950"
+    },
+    {
+      "file": "miri_imager_5.5365.fits",
+      "bytes": 204480,
+      "sha256": "18729e0e7c473679485d5c2cc8d9b2e890c67938eb361f90b38b8028f43a7445"
+    },
+    {
+      "file": "miri_imager_5.7230.fits",
+      "bytes": 204480,
+      "sha256": "a4f0cbe1ced29e8e13ce9c4dd4e7a67b57d7d7b8a3f33f13e0c802f53cfb6487"
+    },
+    {
+      "file": "miri_imager_5.9158.fits",
+      "bytes": 204480,
+      "sha256": "6338132a3fde14085b2a4dc571c66e512c638c0e521893463d1a42b747dbff8e"
+    },
+    {
+      "file": "miri_imager_6.1151.fits",
+      "bytes": 204480,
+      "sha256": "c178b581f853c5f45b423758cde5a5edf68d06ee5567303247e5c4a11ac7e5f7"
+    },
+    {
+      "file": "miri_imager_6.3211.fits",
+      "bytes": 204480,
+      "sha256": "a6baff636353dcdc638e913078889771c88c3b186e6d85746114764a11d9b0c8"
+    },
+    {
+      "file": "miri_imager_6.5340.fits",
+      "bytes": 204480,
+      "sha256": "bc3d284cc751f5b6c60f5b86e1ee7649ece4245de0dd3481bafb88a4858d245d"
+    },
+    {
+      "file": "miri_imager_6.7541.fits",
+      "bytes": 204480,
+      "sha256": "0d118a76324d6e5afc369bdf8ef200fc6e3930729705ba740b6096421285c3e1"
+    },
+    {
+      "file": "miri_imager_6.9816.fits",
+      "bytes": 204480,
+      "sha256": "5b594474049a60f8426f8511e62df37f85a3429cb1c30303bab0b1dbaddd5d85"
+    },
+    {
+      "file": "miri_imager_7.2167.fits",
+      "bytes": 204480,
+      "sha256": "cfaed1246bac9c5e0f40d05dd3e4a6684fc7f410e9e030f1e74296448cade5da"
+    },
+    {
+      "file": "miri_imager_7.4598.fits",
+      "bytes": 204480,
+      "sha256": "626e8abe930278487e735ee66edb707a32848d3f4a92f9e177eb8cd34af108aa"
+    },
+    {
+      "file": "miri_imager_7.7111.fits",
+      "bytes": 204480,
+      "sha256": "6a33e9bfd2169db90a98cbe96ae9f777e4cc75313fb5c5b5eea31be737c90097"
+    },
+    {
+      "file": "miri_imager_7.9708.fits",
+      "bytes": 204480,
+      "sha256": "3396db14170821151a2968d698dbf059d15d85e3a6ec3049cf4f4f6fda50bce4"
+    },
+    {
+      "file": "miri_imager_8.2393.fits",
+      "bytes": 204480,
+      "sha256": "66fe5f30d04e92f2056eb5fea58515f76c883ec239e22a560aaedb07b3c7b2bd"
+    },
+    {
+      "file": "miri_imager_8.5168.fits",
+      "bytes": 204480,
+      "sha256": "f5d9aa691f1769ff677c696b210706150d6d0f8510817d453f17c66da6e50417"
+    },
+    {
+      "file": "miri_imager_8.8037.fits",
+      "bytes": 204480,
+      "sha256": "f63fa37fc0995c96795b91772994014b792160a8b4d43eda9c66f1ab3fa2b24e"
+    },
+    {
+      "file": "miri_imager_9.1003.fits",
+      "bytes": 204480,
+      "sha256": "d95a7f3f9fcc721cd62656db208b83fb4294bb9bf1384a7dcc97dc0392782f48"
+    },
+    {
+      "file": "miri_imager_9.4068.fits",
+      "bytes": 204480,
+      "sha256": "fe8db312f15b9ab9010b6cf99a5d9f4d74e312fb1611ff84215db96ee08a9a67"
+    },
+    {
+      "file": "miri_imager_9.7237.fits",
+      "bytes": 204480,
+      "sha256": "fc0aa2dd1e6437952f7b0065ebebbecd544dcd321b513b0a841c3ff3c65dfb32"
+    }
+  ]
+}

@@ -1,0 +1,550 @@
+{
+  "scope": "MIRI/MRS PSFs, full JWST instrument reference data, WISE W1-W4 bandpasses, Vega reference",
+  "files": [
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_4.8494.fits",
+      "bytes": 48960,
+      "sha256": "f45f293de928a30dd9685fe83a2357c3a5147006e13a932cb56bbdc05770ed9a"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_4.9421.fits",
+      "bytes": 48960,
+      "sha256": "69bc95cbac36379dcde0a2e35fbc412145902c65576ac855a5ea37c8a59415a3"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_5.0365.fits",
+      "bytes": 48960,
+      "sha256": "7d7a00d1a2335347b0a763f5164cad7bbaa9defed9b199183b92906e7aca0323"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_5.1328.fits",
+      "bytes": 48960,
+      "sha256": "8f2985c3627e6147217cf5782d0f4bc74e00ddece691cc0fc7cb492f926720e4"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_5.2309.fits",
+      "bytes": 48960,
+      "sha256": "8e2855f2129fb2af2faa09894f4119e4197904debee57049d5e4ce234b8b2297"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_5.3308.fits",
+      "bytes": 48960,
+      "sha256": "51159182f64516b4148c5920762649ef7728b309a14644b9ab9e178f75edc646"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_5.4327.fits",
+      "bytes": 48960,
+      "sha256": "f6e8149946ec9f9fe19fc0e2636c106d14444772c74854c145aa484a17bd41dd"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_5.5365.fits",
+      "bytes": 48960,
+      "sha256": "7b5f56bbe9c149c84256df8d484a7ed6da41245f2015ef38ac2fe64c1bc9a7a4"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_5.6424.fits",
+      "bytes": 48960,
+      "sha256": "d2af22897a36af41958cfb261ae0a9e2e2e2148c41505f66ce824209275b4a0e"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_5.7502.fits",
+      "bytes": 48960,
+      "sha256": "82dda4df83a6d5bf8c26efb09b2e214708da50aa181b01ee564c3bfdd82a62cb"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_5.8601.fits",
+      "bytes": 48960,
+      "sha256": "1c2e54846345567f2a5a51cc2ef4f0843878420e9ed7493bef1b5902246ac47f"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_5.9721.fits",
+      "bytes": 48960,
+      "sha256": "1774633be1145c0afb722d12ddabfcbe831f863587bacb12cb489ffbbcc13bbc"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_6.0862.fits",
+      "bytes": 48960,
+      "sha256": "0b2972eacc053730530c028300bb0561ae1917a302590d2aa2901c030648cce5"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_6.2025.fits",
+      "bytes": 48960,
+      "sha256": "c149ac95f2148a3070cc3ff2f3ce6128e78910b1dc1e8d71111090ccef859fb1"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_6.3211.fits",
+      "bytes": 48960,
+      "sha256": "6238a3085ed3758fbaca80a02317a2e230a4ace72ed653838b4cca4ee3da5a3e"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_6.4419.fits",
+      "bytes": 48960,
+      "sha256": "ce32da733adcac9039beb12c19c0ab4893d7b51ccedda974b48fa4ea93734647"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_6.5650.fits",
+      "bytes": 48960,
+      "sha256": "b6479cf231257bd377c705d80177cca77b6aadbdb44cede24196fbe62fe09637"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_6.6904.fits",
+      "bytes": 48960,
+      "sha256": "9f28581d50ea05d973e4eaa789916aef645a8481bfde2f2fc5532e66aed021de"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_6.8183.fits",
+      "bytes": 48960,
+      "sha256": "822274db63dd2d619cc3bfdc4807d93ad522f4da641731dda7df8980c1d4ad67"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_6.9486.fits",
+      "bytes": 48960,
+      "sha256": "ee5e6281b04cc80008db223edd8b56fac158b8063a59cf7fe69365ce6cf4d4c4"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_7.0814.fits",
+      "bytes": 48960,
+      "sha256": "1144cbf2470659c62ae950e814b9a86c7a81f097f1833464c70604fe51f57676"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_7.2167.fits",
+      "bytes": 48960,
+      "sha256": "127b63cb3b5ede072f0049ae5d14e7d490bf023d9c99d2907551646255f75a32"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_7.3546.fits",
+      "bytes": 48960,
+      "sha256": "d24247557e70e46a87fb8a4ec063ec3fcad25d24cc1c321c97f1701277328ff1"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_7.4952.fits",
+      "bytes": 48960,
+      "sha256": "a3e285f169a0aaa9ae01bfda08566e9fbc8c3e20cdd9b4673b757d51842588a7"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_7.6384.fits",
+      "bytes": 48960,
+      "sha256": "46b17b2c061b25116af5edaaeb8841d2f71e2a974feee001f216eeb1baab98ff"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch1_7.7844.fits",
+      "bytes": 48960,
+      "sha256": "1e577176f1939ccd6cd405b71d28fad3aab31290338c894b38fbcd029c690d7a"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch2_10.1468.fits",
+      "bytes": 54720,
+      "sha256": "6125f2db49fef27f1ee6e6612faa0244cd986732d971a7378efc4921da787a7a"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch2_10.3407.fits",
+      "bytes": 54720,
+      "sha256": "e7a4b7d369578165bbd923d7e1086d2afcd1a52f3e0da9cf05796f08514d4b8c"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch2_10.5383.fits",
+      "bytes": 54720,
+      "sha256": "944b91dbbfcb010136f30a8c9181ced9a272cf03dc9cba1f930ee3c2afcd1e46"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch2_10.7397.fits",
+      "bytes": 54720,
+      "sha256": "76439b04095b8ba219ab824967a26033c44287de6e9798e91820f04c3b17e48e"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch2_10.9450.fits",
+      "bytes": 54720,
+      "sha256": "1a80e95144bed9fce3237d67104d6a7e7e529ac8166b3d63f0b0e8329afa7aff"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch2_11.1541.fits",
+      "bytes": 54720,
+      "sha256": "2ea281d1da17953def518fa07e74ff1df428e92d1fb313ab33fab3f172e4e3cf"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch2_11.3673.fits",
+      "bytes": 54720,
+      "sha256": "e89e113177d4a38442af89c18703e096e2f37379cdb7ac15cba1d15618dc29c2"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch2_11.5845.fits",
+      "bytes": 54720,
+      "sha256": "59ecfa1e6016fe3cb93036712b1dda9242eb0c47b96ce16756cdc8d960536e5a"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch2_11.8059.fits",
+      "bytes": 54720,
+      "sha256": "bf5d31340f13082204e606cb05130091e6aea6fc16fe28c745de3c6f7f5b4932"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch2_7.4952.fits",
+      "bytes": 54720,
+      "sha256": "dad65e80faef8a359819a001b0c99a5f7b1db6b0f015003d5477c2b4315c349b"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch2_7.6384.fits",
+      "bytes": 54720,
+      "sha256": "6f64453d93b90f80bb935320ed7eb550a3377621302840a067c7c6189fbd4909"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch2_7.7844.fits",
+      "bytes": 54720,
+      "sha256": "e4cdac2e9c64fb8d3127db56715862c82b3dd66c22fa9cef6541d811a0b23417"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch2_7.9332.fits",
+      "bytes": 54720,
+      "sha256": "8b2755d66f3c8aed5061fa039f8ff6e4d1ba80d784a9afdfd54b811040cde1ea"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch2_8.0848.fits",
+      "bytes": 54720,
+      "sha256": "67c7096508dab020d5f726e9513310b221506f8256c1b20d311a6cf6694aeed9"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch2_8.2393.fits",
+      "bytes": 54720,
+      "sha256": "2732c882a5be92f021daf372024feef21c7f5a453bfdf5d5a8a0cc5506e8fb45"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch2_8.3968.fits",
+      "bytes": 54720,
+      "sha256": "200be2a4c5da4ad951188d541973526e3e0a46bdb04fdfd4030a5a8c2058e5f4"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch2_8.5572.fits",
+      "bytes": 54720,
+      "sha256": "326814d5359e3a31c54ad6a1bcf3cd6324c746fd35ebb8d836dfd27cc5cb1de5"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch2_8.7208.fits",
+      "bytes": 54720,
+      "sha256": "433df0b88927eb59a87abb72a8088207462a150d298a3001227ab3eb69cf576d"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch2_8.8874.fits",
+      "bytes": 54720,
+      "sha256": "4627b8ca311b87e269b4853b0efc97d416ceb80c84d4eb608ff9d1f47af171e3"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch2_9.0573.fits",
+      "bytes": 54720,
+      "sha256": "13994bd5f54c5863e7459fb3e35f2f0f6ad4fd31fba7a1911888cf7861c2fae7"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch2_9.2304.fits",
+      "bytes": 54720,
+      "sha256": "46c0ce33dc8cccb01c3e177b41b1b763b3ab830de72f4564f0e9f80711f1e774"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch2_9.4068.fits",
+      "bytes": 54720,
+      "sha256": "373b6fc5681056e06e3151168bbaf43bdf38ebc5c14487581d3187a399b0a9ac"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch2_9.5866.fits",
+      "bytes": 54720,
+      "sha256": "0fe456feed1aaa599878486ea96199bb1092c9ae1e1cad252837df3b1dce28c7"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch2_9.7698.fits",
+      "bytes": 54720,
+      "sha256": "13e8f4eecf3fb85f0bdd8a66bf0ed1f84ffbab0cb99fcdf6f1baf15ffc0cdbaa"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch2_9.9565.fits",
+      "bytes": 54720,
+      "sha256": "84d90554e3d2706c389bc60739a2bbef6fcaf47d644b827c65bdde11fdae05ae"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_11.3673.fits",
+      "bytes": 60480,
+      "sha256": "2b4d3f31d50c7bbd8fff4e0dd7aebb2c83416fdb3167de59b9e876af8e622356"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_11.5845.fits",
+      "bytes": 60480,
+      "sha256": "b521e0ae23d28cc219621091bf6f7dc4dc05cb286de926311cb2c5c1be68e83e"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_11.8059.fits",
+      "bytes": 60480,
+      "sha256": "2630bb97e29eb8e9423f7cc893d8b822704128d6dd39f0107783673545184770"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_12.0316.fits",
+      "bytes": 60480,
+      "sha256": "c28f59fa623da9b8663280f8669906a8081ea24720dbe59c048d1a9dc4de5ac9"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_12.2615.fits",
+      "bytes": 60480,
+      "sha256": "a7c88a5e1e080727ad493951b55e247f0367bc300e780836353fa453139df22a"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_12.4958.fits",
+      "bytes": 60480,
+      "sha256": "b3638920bd16de9ef50ec9fe5544663f212a36fa71b36638a55861f5b76c7898"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_12.7346.fits",
+      "bytes": 60480,
+      "sha256": "ed6ddaa4afabe9a9513a652109848bbdc90d5dc9192d9232e808387487c6c5d5"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_12.9780.fits",
+      "bytes": 60480,
+      "sha256": "14124a78fbc07e5f6976a3a3e4be8240b9210759855402225f00b1e71764d0b4"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_13.2260.fits",
+      "bytes": 60480,
+      "sha256": "e7fd3add0042b211af2eb2728ea41d969e4d59bc1e3ab6ccb132e7b1e82ccd2f"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_13.4788.fits",
+      "bytes": 60480,
+      "sha256": "c5e62d3fef0d45e56fa23fc90e42abcc6aa545e2169998a3a76ddac1412adf8a"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_13.7364.fits",
+      "bytes": 60480,
+      "sha256": "f0a90a9eef5433015319ba16e15b214071b0045f48abe5a8f6bcfed1c3d22d73"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_13.9989.fits",
+      "bytes": 60480,
+      "sha256": "0f99a458613846f22533a8bf9a21ca610ea92b1b0b0f27cb5894818e1f52039e"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_14.2664.fits",
+      "bytes": 60480,
+      "sha256": "4636965c46d04972324c7ed6bf2ea1e9225c72bd672eaed9de89223786934153"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_14.5391.fits",
+      "bytes": 60480,
+      "sha256": "d8675b5c4a6def3dd6fb9ab4649cdb42fb365376b986b68cda02d8168317f684"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_14.8169.fits",
+      "bytes": 60480,
+      "sha256": "e3e24a42a9fa81eca7e55909bb023c77adadc1be9f4ec7f5c29d385cb238677c"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_15.1001.fits",
+      "bytes": 60480,
+      "sha256": "3007fefb6a2c560e86962a29a089f4a10db8070552ce77a0af776791f3653f4d"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_15.3887.fits",
+      "bytes": 60480,
+      "sha256": "37b1978f90043a6cfc5d0de3c0c85e24705f7041d098d16dfbbc88fd1a2a16d9"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_15.6828.fits",
+      "bytes": 60480,
+      "sha256": "6f6067357b40955c6c19dbff083d683f9ec72b802aa3d970785ff4a9a7419dd8"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_15.9825.fits",
+      "bytes": 60480,
+      "sha256": "d4b8b2ed64514a84025d8b15db6891edf625507f75b71fe429033f7109b853aa"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_16.2880.fits",
+      "bytes": 60480,
+      "sha256": "3648864f554ee3f4cc16cad421e4053009b5040b42119a4c71ed5a49ad8f115c"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_16.5992.fits",
+      "bytes": 60480,
+      "sha256": "0476e8cf9979b265344b712e75004269851e5033ef548132305503d1da74cdcc"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_16.9165.fits",
+      "bytes": 60480,
+      "sha256": "127e6a502a93df5cc35fdf88ea32b8a38be0348242bd00af94ed1b715f8ed5b2"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_17.2398.fits",
+      "bytes": 60480,
+      "sha256": "5d83a71683c59162cdf00519c3c19b97a6a1765fe7845bac4e3db1dfe4bd3f61"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_17.5692.fits",
+      "bytes": 60480,
+      "sha256": "30e723cbb8acaeb9f48807339aa3cba38e3576caa48cfcd869d66598290b047c"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_17.9050.fits",
+      "bytes": 60480,
+      "sha256": "4daa30eede2e003d8e0d120c9dfe4d3f862e8bd461caa7c5b4c9e0142e51a187"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch3_18.2472.fits",
+      "bytes": 60480,
+      "sha256": "8621dbf887a934859051b88ff8df072f106441fce4bf5476a102adca2a74f858"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_17.5692.fits",
+      "bytes": 77760,
+      "sha256": "c665316d96f56d988070043d8a61c22c66780f4683f080dbcbb0d14aaba1b302"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_17.9050.fits",
+      "bytes": 77760,
+      "sha256": "ef82616e902a337906222485535bc492c5f57e87094c5418d4d056e66418cdf8"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_18.2472.fits",
+      "bytes": 77760,
+      "sha256": "29bb41b1c2707a96914b85793105e401c3678897e27b858d5d6af804c9775855"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_18.5959.fits",
+      "bytes": 77760,
+      "sha256": "4f9650e648751a9a0d01db297bcf432d9472af2d2b4ff113f1c829c9a3dde473"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_18.9513.fits",
+      "bytes": 77760,
+      "sha256": "5589f55b26ff04a1198d0b49005f1ecdaa869d624c54549a3747027d5fb73080"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_19.3135.fits",
+      "bytes": 77760,
+      "sha256": "ea843c3bf90272acd5af910b5556de8bee21f6e1a928e6be723ebe88d41f61bd"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_19.6826.fits",
+      "bytes": 77760,
+      "sha256": "0cbfe4f60c3ed020fc2c935e48e2c36e5bf5dda848566c3ae778640ac7c92dec"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_20.0587.fits",
+      "bytes": 77760,
+      "sha256": "ca2e92159e7b48babb63fdbec8b2722f3ea0658d5d9d917807fd89b5f7819cd9"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_20.4421.fits",
+      "bytes": 77760,
+      "sha256": "d1372e1d7fb658f836913389bca2556a7b7985c9ad525c1354ef66a207edca4f"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_20.8327.fits",
+      "bytes": 77760,
+      "sha256": "c4323c7f53ff68d61b1703b8fe03568e13654fffd4ab8296a469000d814d06d4"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_21.2309.fits",
+      "bytes": 77760,
+      "sha256": "1a3ae82d44d2f22d690627e4a09e50decc57393b02a388bfc3218fec62c1b583"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_21.6366.fits",
+      "bytes": 77760,
+      "sha256": "2d1f59910ed14e69714ed3b9cff59b51d183e2df3d19559c659b1e758afe5592"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_22.0501.fits",
+      "bytes": 77760,
+      "sha256": "81f498c2cf65e841ad602cb01583b195e6fd1180625af701bad2036e93ab44c9"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_22.4715.fits",
+      "bytes": 77760,
+      "sha256": "276eec4f08df0a1d723a2f705cc790554c40b4c4d6b2a5723d29e4b946f9cc8e"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_22.9010.fits",
+      "bytes": 77760,
+      "sha256": "5219347559d327d84d1381a9adaec9fc55d97d21903df7a0bd55dfe5b9116fc9"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_23.3387.fits",
+      "bytes": 77760,
+      "sha256": "26e73f52bcf37f3b75fba7c1fd641f066ae626cfc9b1761acf196933963b898f"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_23.7847.fits",
+      "bytes": 77760,
+      "sha256": "934f7a9045d629d5947989b239730e4c38ed57b1e9410838d542c92e3722d0d7"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_24.2392.fits",
+      "bytes": 77760,
+      "sha256": "b79a7a4a613672718d2cc80302cf75992218ea14ea9ea92c8fb0db10ab16e4ca"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_24.7025.fits",
+      "bytes": 77760,
+      "sha256": "91ca5cb2b7d729f1ed82e764740638e840788dd5f3f7a8b7e2f1e86cb2693eee"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_25.1746.fits",
+      "bytes": 77760,
+      "sha256": "56ceda075798c2a73acc5d670c1983f9b567f54ca46e2941ab965e746920d073"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_25.6557.fits",
+      "bytes": 77760,
+      "sha256": "d3be525439baf3f8f4058ffbbc0b69ea1a5209b392e4c061b12f7790c17db57f"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_26.1460.fits",
+      "bytes": 77760,
+      "sha256": "1cd8ae9489d745a565c191cd6f6e31d1d99d5e4a4535c0c36a6179b48895aeb0"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_26.6457.fits",
+      "bytes": 77760,
+      "sha256": "6196c58abb027dc09673b20b8a606b6ac28a1ad490d85dc71dbf076e06ffaae8"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_27.1549.fits",
+      "bytes": 77760,
+      "sha256": "737d48611e9ec4a705854a6a4ef3f1e5ffe5009ee4fd4e79f24ae0fbf662adfb"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_27.6739.fits",
+      "bytes": 77760,
+      "sha256": "b858559d75eae11ca97125234c6a47ede64b7b9615ad255476b03bc0252a26a7"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_28.2027.fits",
+      "bytes": 77760,
+      "sha256": "34feafe103cab9387444d3d62401ff27b2b11d6668c173fc513e13882ca314c9"
+    },
+    {
+      "file": "reference_data/mrs_psfs_2026.7/jwst/miri/psfs/miri_ch4_28.7417.fits",
+      "bytes": 77760,
+      "sha256": "a85bd0cdea31cc9edf86a93ac6111cc084f666f675aa4b6d5cf786d3b6228db6"
+    },
+    {
+      "file": "reference_data/synphot/calspec/alpha_lyr_stis_010.fits",
+      "bytes": 288000,
+      "sha256": "c008e347f9867f2f697a65109ad780e172a440faf6353a302eaf4c03767cb8a2"
+    },
+    {
+      "file": "reference_data/synphot/comp/nonhst/wise_w1_001_syn.fits",
+      "bytes": 14400,
+      "sha256": "fbc343c96c48aadffca35215cd26bf707a1c685f93d9e169b4a3b1a2eb668dd8"
+    },
+    {
+      "file": "reference_data/synphot/comp/nonhst/wise_w2_001_syn.fits",
+      "bytes": 17280,
+      "sha256": "b82acfea81290b670f2cfabd0a8fec84c9fd4ce4139cc3d7679f86b11e452b03"
+    },
+    {
+      "file": "reference_data/synphot/comp/nonhst/wise_w3_001_syn.fits",
+      "bytes": 48960,
+      "sha256": "f07de4c961bfda25fdae571148f1fceadcb4907497ee649462bb19987dab86f4"
+    },
+    {
+      "file": "reference_data/synphot/comp/nonhst/wise_w4_001_syn.fits",
+      "bytes": 48960,
+      "sha256": "01ad6afef70f8e27adf9e20b18be2333ed07f3f29e6c864ad550277e2001f450"
+    }
+  ]
+}

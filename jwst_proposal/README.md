@@ -10,26 +10,30 @@ Recovery and reversal are retained in individual histories, not a third group.
 [inputs/jwst_sample_cycle6.csv](inputs/jwst_sample_cycle6.csv) is the authoritative
 working target list. Source identities, memberships and its existing estimates
 have not been changed by the document cleanup. The user confirms SPHEREx data
-and ZTF/WISE manifold coverage for all targets. The table records five completed
-September NGPS observations and 19 scheduled for October 26–27, 2026.
-Individual September exposure UTC dates can fall on September 24.
+and ZTF/WISE manifold coverage for all targets. The proposal describes the
+optical coverage as including 2026 NGPS spectra, without observing-status details.
 
 The intended category is Medium: more than 50 and at most 130 charged hours,
 including overheads, under the [Cycle 6 rules](https://jwst-docs.stsci.edu/jwst-opportunities-and-policies/jwst-call-for-proposals-for-cycle-6/jwst-proposal-types-and-categories/jwst-general-observer-go-proposals).
-No total time is yet validated. Target-specific ETC/APT calculations must determine it.
+APT gives 67.33 charged hours (67.4 hours in APT’s proposal summary and the text). The 24 science visits
+and 24 linked sky visits have scheduling windows from the online Visit Planner.
 
 The next review must verify individual rising/fading assignments, event intervals,
 host contributions and lag estimates. Three entries carry reversal flags. The
 existing table assumes a warm-dust delay ten times the hot-dust delay throughout;
-this is not a validated measurement. Figure 2, the target/epoch tables, model
-separation, statistical power, visibility and duplication checks remain unfinished.
-Red text marks unresolved quantities and the model figure. Procedural checks
-are collected in [completion_notes.md](completion_notes.md).
+this is not a validated measurement. Figure 2 is a calculated physical
+illustration, not a fit to individual targets. Focused sensitivity, acquisition
+and saturation checks are completed under the adopted source assumptions; see
+[the technical review](review/README.md). Nuclear centering needs a closer look
+for nine hosts flagged as extended in AllWISE.
+The [duplication audit](duplication/README.md), completed on 2026 September 26,
+found no JWST matches at any of the 24 science positions. The proposal has no
+remaining text placeholders. Working notes are in
+[completion_notes.md](completion_notes.md).
 
-The rebuilt draft has six pages: scientific justification and observations on
-pages 1–4, supplemental information on page 5, and references on pages 5–6.
-The required sections currently fit within the five-page Medium limit, leaving
-space for the target table. Recheck the limit after completing figures and tables.
+The rebuilt draft has seven pages: scientific justification and observations on
+pages 1–5, supplemental information on page 6, and references on pages 6–7.
+The required sections fit within the five-page Medium limit.
 
 ## Build
 
@@ -37,7 +41,7 @@ space for the target table. Recheck the limit after completing figures and table
 make
 ```
 
-To refresh the sample summary and regenerate Figure 1, install `requirements.txt`
+To refresh the sample summary and regenerate both figures, install `requirements.txt`
 and run `make figures PYTHON=/path/to/python`, followed by `make`.
 `make_selection.py` summarizes the authoritative CSV and checks its counts and
 unique identifiers; it does not reselect targets or validate physical classifications.
@@ -105,3 +109,13 @@ Visit magnitudes are medians; their approximate statistical errors are
 These plotted errors exclude absolute calibration uncertainty; no color
 correction is applied. Figure provenance records all W2 visits and quality cuts.
 Earlier measurements remain in the inputs, outside the displayed time window.
+
+## Repository contents
+
+Commit the proposal sources and current PDFs, the current APT project and reports,
+accepted sky selections, calculation scripts, compact results and audit tables.
+Generated ETC trials, raw query/download caches, runtime/reference installations
+and automatic APT backups are local-only and ignored by Git. Original downloaded
+ETC archives are preserved in `etc/downloads/web_exports/`. Redundant export bundles
+and unused installers/partial downloads were removed; details are recorded in
+`review/cleanup_manifest.json`.

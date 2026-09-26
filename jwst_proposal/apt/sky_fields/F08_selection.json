@@ -1,0 +1,47 @@
+{
+  "id": "F08",
+  "target": "J104427.75+271806.3",
+  "science_ra_deg": 161.1155833333333,
+  "science_dec_deg": 27.301805555555557,
+  "selected": {
+    "radius_arcsec": 60,
+    "pa_deg": 75,
+    "ra_deg": 161.13370097793504,
+    "dec_deg": 27.30611803877138,
+    "nearest_allwise_arcsec": 34.65306587318887,
+    "nearest_2mass_arcsec": 59.01922573433081,
+    "nearest_bright_w1_arcsec": 180.0,
+    "wise_patch_z": [
+      0.6297074655731528,
+      1.6150535004608106,
+      0.3004236615085415
+    ],
+    "passed": true,
+    "score": 32.25306587318887
+  },
+  "original": {
+    "radius_arcsec": 60,
+    "pa_deg": 0,
+    "ra_deg": 161.1155833333333,
+    "dec_deg": 27.318472222222226,
+    "nearest_allwise_arcsec": 2.335595903919835,
+    "nearest_2mass_arcsec": 60.28289056102957,
+    "nearest_bright_w1_arcsec": 180.0,
+    "wise_patch_z": [
+      1.8248207793539932,
+      0.9160990304568895,
+      1.393859529411034
+    ],
+    "passed": false,
+    "score": -0.06440409608016484
+  },
+  "moved": true,
+  "catalog_counts": {
+    "allwise": 97,
+    "twomass": 9
+  },
+  "visual_review": "accepted",
+  "twomass_image": "cache/F08_2massJ_0.fits",
+  "sdss_image": "cache/F08_sdss.jpg",
+  "review_note": "Faint optical object outside the central MRS footprint; no catalogued infrared source within the 20-arcsec inspection region."
+}

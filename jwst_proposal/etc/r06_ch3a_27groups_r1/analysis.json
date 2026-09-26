@@ -1,0 +1,137 @@
+{
+  "archive": "wb325241_c7_2026-09-26_18.58.14.tar",
+  "archive_sha256": "c9ce8f99bf16211cbc0f1954f220b52b31075ed9fcca9fea63e07da517148178",
+  "configuration": {
+    "detector": {
+      "nexp": 4,
+      "ngroup": 27,
+      "nint": 1,
+      "readout_pattern": "fastr1",
+      "subarray": "full"
+    },
+    "instrument": {
+      "aperture": "ch3",
+      "disperser": "short",
+      "filter": null,
+      "instrument": "miri",
+      "mode": "mrs"
+    }
+  },
+  "scene": [
+    {
+      "id": 1,
+      "position": {
+        "orientation": 0.0,
+        "x_offset": 0.0,
+        "y_offset": 0.0
+      },
+      "shape": {
+        "geometry": "point"
+      },
+      "spectrum": {
+        "extinction": {
+          "bandpass": "j",
+          "law": "mw_rv_31",
+          "unit": "mag",
+          "value": 0
+        },
+        "extinction_first": true,
+        "lines": [],
+        "normalization": {
+          "bandpass": "wise,w3",
+          "norm_flux": 0.95,
+          "norm_fluxunit": "mjy",
+          "type": "photsys"
+        },
+        "redshift": 0.211,
+        "sed": {
+          "index": 2,
+          "sed_type": "powerlaw",
+          "unit": "fnu"
+        }
+      }
+    }
+  ],
+  "strategy": {
+    "aperture_size": 1,
+    "method": "ifunodoffscene",
+    "reference_wavelength": 12.81,
+    "target_source": "4",
+    "target_type": "source",
+    "target_xy": [
+      0.0,
+      0.0
+    ],
+    "units": "arcsec"
+  },
+  "wavelength_range_um": [
+    11.531577674966293,
+    13.478075800000001
+  ],
+  "output_pixel_count": 907,
+  "native_snr_at_reference": 5.3725060783091925,
+  "method": "Whole-pixel sum(flux)/sqrt(sum(noise**2)); diagonal covariance assumption",
+  "limitations": [
+    "No spectral covariance supplied or propagated",
+    "No added calibration, resampling, or host-decomposition errors",
+    "One point source only; host photon noise is absent",
+    "No engine version, sky coordinates, or scalar timing report in input.json",
+    "One channel/sub-band only; does not establish full program time"
+  ],
+  "bins": [
+    {
+      "center_um": 11.7,
+      "requested_R": 100,
+      "actual_R": 100.84836749765738,
+      "n_pixels": 54,
+      "summed_signal_e_s": 442.983175847657,
+      "diagonal_noise_e_s": 11.958945363397206,
+      "snr_diagonal": 37.041993452323766
+    },
+    {
+      "center_um": 12.0,
+      "requested_R": 100,
+      "actual_R": 101.55360083680105,
+      "n_pixels": 55,
+      "summed_signal_e_s": 392.09324654616563,
+      "diagonal_noise_e_s": 11.949509176652443,
+      "snr_diagonal": 32.81249804906275
+    },
+    {
+      "center_um": 12.5,
+      "requested_R": 100,
+      "actual_R": 100.3133628955477,
+      "n_pixels": 58,
+      "summed_signal_e_s": 467.1470650947607,
+      "diagonal_noise_e_s": 12.361571447327025,
+      "snr_diagonal": 37.79026534654485
+    },
+    {
+      "center_um": 12.81,
+      "requested_R": 100,
+      "actual_R": 101.05874218865699,
+      "n_pixels": 59,
+      "summed_signal_e_s": 515.0119279318506,
+      "diagonal_noise_e_s": 12.531713044229218,
+      "snr_diagonal": 41.09669014237527
+    },
+    {
+      "center_um": 13.0,
+      "requested_R": 100,
+      "actual_R": 100.8464243482991,
+      "n_pixels": 60,
+      "summed_signal_e_s": 492.2372318344336,
+      "diagonal_noise_e_s": 12.579906097301063,
+      "snr_diagonal": 39.1288478647738
+    },
+    {
+      "center_um": 13.3,
+      "requested_R": 100,
+      "actual_R": 99.84739114532313,
+      "n_pixels": 62,
+      "summed_signal_e_s": 444.45751801147014,
+      "diagonal_noise_e_s": 12.679574597919308,
+      "snr_diagonal": 35.053030728996596
+    }
+  ]
+}
