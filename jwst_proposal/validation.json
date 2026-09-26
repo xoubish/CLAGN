@@ -1,6 +1,6 @@
 {
   "version": "Focused technical, bibliography and anonymity review",
-  "built_at_utc": "2026-09-26T21:37:57.936647+00:00",
+  "built_at_utc": "2026-09-26T21:47:11.870093+00:00",
   "source": "proposal.tex",
   "pdf": "proposal.pdf",
   "build_command": "make -C jwst_proposal",
@@ -42,8 +42,8 @@
   "history_classifications_validated": false,
   "response_phase_coverage_validated": false,
   "quantitative_dust_model_discrimination_validated": false,
-  "source_sha256": "05ed06bba11151cce512403c00e56a351ce465d0a3389aa32f85a25bf9519476",
-  "pdf_sha256": "be98ad50fc2b1fc97671aa14172254395b2061ca38865d1af1899f1da20449d5",
+  "source_sha256": "ec9b727439912c9ff9febbe4a483d999f8d72f8a9f26f5f478516137f1c9d6d3",
+  "pdf_sha256": "61fd1b473b42611135bf073440696b8e26a2a65453517a9d4e65838facdf40bc",
   "style_sha256": "d5e8b0c1133974ac9eaa6cc27213794ceec297337c69f2ec13254a10684fdd08",
   "style_unchanged": true,
   "figure1": "fig1_connected.pdf",
@@ -90,7 +90,7 @@
   "figure2_numerical_checks_passed": true,
   "figure2_presentation": "Black-hole cartoons and fractional spectral differences with a three-entry shading legend.",
   "figure2_spectral_values_unchanged": true,
-  "sample_size_justification": "Balanced rising/fading representation, diverse measured histories and event epochs, repeated physical tests and reversal histories.",
+  "sample_size_justification": "Balanced histories and explicit 0.289s group-mean / 0.408s group-contrast standard errors under independent common-scatter assumptions; shared systematics propagated separately.",
   "sample_power_calculation": "inputs/sample_power.json",
   "sample_power_calculation_validated": true,
   "remaining_text_placeholders": [],
@@ -126,6 +126,11 @@
   "anonymous_text_screen_passed": true,
   "template_version_statement_present": true,
   "AI_use_disclosure_present": true,
-  "figure1_caption": "Describes one representative example of the rich optical, SPHEREx and ZTF/WISE data available across all 24 targets; no target name in caption.",
-  "sample_selection_wording": "Explicit selection from the ZTF and WISE light-curve variability manifold, with histories identifying rising and fading nuclei."
+  "figure1_caption": "Exact user-supplied caption beginning Each target enters JWST with a measured illumination history and a dated hot-dust response; P1823 example, source-dependent epoch counts and 2026 Palomar/NGPS spectra.",
+  "sample_selection_wording": "Explicit selection from the ZTF and WISE light-curve variability manifold, with histories identifying rising and fading nuclei.",
+  "figure1_display_width_textwidth": 0.91,
+  "sample_precision_in_proposal": true,
+  "figure2_noise_comparison": "review/figure2_precision_comparison.json",
+  "figure2_model_scope_in_text": "Controlled optically thin illustration; target fits retain clumpy and disk-plus-wind geometries.",
+  "dedicated_sky_rationale": "Preserves extended host emission for decomposition around the compact nucleus, avoiding its inclusion in an on-source background estimate."
 }

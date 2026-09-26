@@ -522,3 +522,32 @@ program 1328. Results and cached responses are in `duplication/`; no matched
 programs required further inspection. Filled the final proposal placeholder with
 the dated result. Rebuilt successfully: five core pages, seven total, no layout
 warnings. Updated the README current-status summary and validation metadata.
+
+## Figure 2 precision and sample-size factors restored
+
+At the user's request, linked the modeled rest-12-micron differences (+23.58%
+and -15.71%) to the planned 2% per-bin statistical noise at S/N=50. The rounded
+16–24% contrasts are about 8–12 times that noise scale. This comparison is not
+a formal model-detection significance or a prediction for all 24 sources.
+The text also compares with the few-percent absolute-calibration differences
+and 1–2% setup-dependent differences in STScI's MRS calibration documentation.
+No universal calibration floor or AGN host-decomposition precision is assumed.
+
+Condensed Why 24 and restored standard errors 0.289s for each mean and 0.408s
+for their contrast, defining common within-group scatter and independent sources.
+Shared calibration/model uncertainties are explicitly treated separately. No
+assumed population effect size or claimed detection power was reintroduced.
+The exact Figure 1 caption is unchanged. Clean rebuild: five core pages, seven
+total; revised page 3 visually reviewed. Numerical record:
+`review/figure2_precision_comparison.json`.
+
+## Model illustration and dedicated sky clarified
+
+The main Figure 2 discussion now explicitly calls the optically thin case a
+controlled illustration. The proposed target fits retain clumpy and disk-plus-wind
+geometries. The observing paragraph now explains that dedicated, equal-depth sky
+preserves extended host emission around each compact nucleus for decomposition,
+avoiding its inclusion in an on-source background estimate. This follows STScI's
+MIRI MRS Dedicated Sky Observations guidance for point sources embedded in extended
+emission (checked 2026 September 26). No exposure or APT settings changed; the
+request remains 67.4 hours. Clean build: five core pages, seven total.

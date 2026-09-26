@@ -1,0 +1,23 @@
+{
+  "model_comparisons": [
+    {
+      "luminosity_ratio": 4.0,
+      "rest_wavelength_um": 12.0,
+      "percent_difference": 23.579654310307525,
+      "ratio_to_2percent_reference_noise": 11.789827155153763
+    },
+    {
+      "luminosity_ratio": 0.25,
+      "rest_wavelength_um": 12.0,
+      "percent_difference": -15.708477620208537,
+      "ratio_to_2percent_reference_noise": 7.854238810104269
+    }
+  ],
+  "statistical_noise_percent_at_snr50": 2.0,
+  "group_mean_se_factor": 0.2886751345948129,
+  "contrast_se_factor": 0.408248290463863,
+  "assumptions": "Figure 2 illustrates specific models, not target-fitted predictions. Noise comparison uses percentage scales, not a full likelihood significance. Mean/contrast formulae require independent sources with common scatter; shared uncertainties do not average down.",
+  "calibration_source": "https://jwst-docs.stsci.edu/jwst-calibration-status/miri-calibration-status/miri-mrs-calibration-status",
+  "calibration_accessed": "2026-09-26",
+  "calibration_basis": "Few-percent differences between standard-star absolute normalizations and 1\u20132% differences between exposure setups; not a universal total uncertainty or an AGN host-decomposition precision."
+}
