@@ -1,5 +1,5 @@
 {
-  "description": "Active inputs for the 24-target, 12-fading/12-rising MIRI/MRS working proposal and measured P1823 figure. Historical paths record origins, not runtime dependencies.",
+  "description": "Active inputs for the 24-target, 12-fading/12-rising MIRI/MRS proposal at z<0.3 and measured P9694 Figure 1. Historical inputs retain their original identities.",
   "historical_sources": [
     {
       "path": "jwst_proposal/inputs/figure_targets.json",
@@ -176,47 +176,148 @@
       "target_count": 19,
       "note": "Includes removed P9584 for the decision audit; no photometry altered. Calendar-year medians are descriptive, not event dates or lag measurements.",
       "status": "Historical snapshot preserved in the project archive; not a completeness audit of the current sample."
+    },
+    "P9694": {
+      "target": "J004607.98+090720.9",
+      "redshift": 0.2377224,
+      "figure_target_source": "Recovered A3_figure_target.json from pre-cleanup backup; target name verified as P9694.",
+      "ngps_source": "docs/observed/sep23_p330e/P9694.fits",
+      "ngps_source_sha256": "d7b524f6ee85d44a91b96b59907600ef32aeed5aa5b8dbff47965b4707141fc4",
+      "ngps_flux_standard": "P330E",
+      "spherex_rows_supplied": 289,
+      "spherex_rows_plotted": 289,
+      "spherex_exclusions": [],
+      "neowise_source": "data/neowise_cache/poolall/batch_01900.csv",
+      "neowise_exposures_bundled": 272,
+      "optical_epochs": [
+        2018,
+        2021,
+        2026
+      ]
     }
   },
   "bundled_inputs": [
     {
       "path": "inputs/P1823_figure_target.json",
-      "sha256": "c1d34b1f2dc2d92959544bdabbf59221aac84111865f4784e3b609ddd5a5ed0f"
+      "sha256": "c1d34b1f2dc2d92959544bdabbf59221aac84111865f4784e3b609ddd5a5ed0f",
+      "status": "Retained prior Figure 1 input; no longer used in the current figure or target list."
     },
     {
       "path": "inputs/P1823_ngps_flux_standards.fits",
-      "sha256": "772056c4d12b8e4691ea6b0f74991fdede7b4494da904e893b66e517c0ed988d"
+      "sha256": "772056c4d12b8e4691ea6b0f74991fdede7b4494da904e893b66e517c0ed988d",
+      "status": "Retained prior Figure 1 input; no longer used in the current figure or target list."
     },
     {
       "path": "inputs/P1823_sdss.jpg",
-      "sha256": "0d5577bb0ef7820d7ba75ee61c97a886117b783d556fc35d09db4e3157c88a04"
+      "sha256": "0d5577bb0ef7820d7ba75ee61c97a886117b783d556fc35d09db4e3157c88a04",
+      "status": "Retained prior Figure 1 input; no longer used in the current figure or target list."
     },
     {
       "path": "inputs/fig1_connected_provenance.json",
-      "sha256": "30e2efba3f09d989401e15cd73522bba33a3dae677b6aa4aa6d9c9830b8e44ec"
+      "sha256": "a58bac0852779e9797af645de1179b072a996d6e3934b3a6412b75496e4c9e91"
     },
     {
       "path": "inputs/figure_neowise_exposures.csv",
-      "sha256": "68240116fbd48c64dded28a6d254bb43cc19a972de4d2490072314688a08f07b"
+      "sha256": "0637318084e075930923f72fc3936691ac9cff64b422d204481114600bd3ff91"
     },
     {
       "path": "inputs/jwst_sample_cycle6.csv",
-      "sha256": "ddd2d652b5772fa43f4fc95858b0332273d5b4eddfb64b9ca1eb6ba776e10609"
+      "sha256": "448434474515b8ca6714871253f1e32db5ef742b456110089fc5dbaf19e15745"
     },
     {
       "path": "inputs/selection_summary.json",
-      "sha256": "fe063c0821e73dabc093b704c4ff0265eaf24e22437382695b57704d3bc41605"
+      "sha256": "21c916624323dcf461f5fa7a6e59a06820d0d6e77992872991fbb9f97360f951"
     },
     {
       "path": "inputs/spaxel_scryer_Shooby_AGN_ra245p1631_dec43p1373_cleaned.csv",
-      "sha256": "826d4928774d509427e702a1fbcd0afdb88cb5acdf6981a4978136335a9bfaba"
+      "sha256": "826d4928774d509427e702a1fbcd0afdb88cb5acdf6981a4978136335a9bfaba",
+      "status": "Retained prior Figure 1 input; no longer used in the current figure or target list."
+    },
+    {
+      "path": "inputs/P9694_figure_target.json",
+      "sha256": "1663772f8754eaef0769cb370413d66a4c6414b97fc1ad6431d9fe9b0d6fd4ba"
+    },
+    {
+      "path": "inputs/P9694_ngps_flux_standards.fits",
+      "sha256": "d7b524f6ee85d44a91b96b59907600ef32aeed5aa5b8dbff47965b4707141fc4"
+    },
+    {
+      "path": "inputs/P9694_sdss.jpg",
+      "sha256": "b11a0acd16ba8adda95cc17b4f2c12215b2a181aa1b5e9c8386f30f9cf0ac87d"
+    },
+    {
+      "path": "inputs/spaxel_scryer_P9694_ra11p5333_dec9p1225_cleaned.csv",
+      "sha256": "f4c392054f1db1c60a346c76e2d241fbe9b4200a4a41d5d50b1d3e5f4117ae23"
+    },
+    {
+      "path": "inputs/p9694_replacement.json",
+      "sha256": "1d9247feaf5b065526572fc7fd32d18cc0a31d8f57767359f45905649838b23c"
+    },
+    {
+      "path": "inputs/P9694_spherex_mean_fit.csv",
+      "sha256": "ce3fab53440936bd075d1cdac7c6189e52d9981e860501b9d5eac58cba58ce93"
+    },
+    {
+      "path": "inputs/host_templates/Ell5_template_norm.sed",
+      "sha256": "f984b8d9cd9d679fc2043dfa084662904792ca7ddf81f24403b9f234635984d3"
+    },
+    {
+      "path": "review/p9694_hot_dust/mean_fit.json",
+      "sha256": "e4406242738fc9900237ea7f98f0cdb05eb8d082155344ffff15385e3a49a9ab"
+    },
+    {
+      "path": "inputs/fig2_diagnostics_provenance.json",
+      "sha256": "86f2beb25ba47f8dbff1b020294a8b1a8c5049361ebf3f5370f60f76cfffb535"
     }
   ],
   "current_sample": {
     "path": "inputs/jwst_sample_cycle6.csv",
-    "status": "Authoritative working membership; source-by-source audit pending.",
-    "spherex_and_ztf_wise_manifold_availability": "Confirmed for all 24 by the user on 2026-09-26; spectra for the entire sample are not bundled here."
+    "status": "Authoritative 24-target working membership, updated for P9694; individual histories and nuclear flux assumptions remain subject to scientific review.",
+    "spherex_and_ztf_wise_manifold_availability": "Confirmed for all 24 by the user on 2026-09-26; spectra for the entire sample are not bundled here.",
+    "redshift_range": [
+      0.0142,
+      0.295
+    ],
+    "replacement": "R01: P9694 replaces P1823; user approved. P9694 is outside the original selected manifold regions."
   },
   "archived_workflow": "../archive/jwst_before_24_target_miri/",
-  "figure_presentation": "NGPS legend displays year only (2026); exact epoch retained in internal provenance and time-marker position. Measurements unchanged."
+  "figure_presentation": "P9694 histories and log spectra; identical dashed pooled mean continuum in optical/SPHEREx overlap and SPHEREx panel; model-dependent colour temperature ~1200 K; 2.8 pt filled SPHEREx circles with white edges.",
+  "figure2_presentation": "Compact four-panel horizontal row: AGN history, continuum, silicates, host light. Paired cartoons stacked in panel A; main headline and explanatory footnotes removed. Curves remain schematic.",
+  "figure2_memory_artifacts": [
+    {
+      "path": "make_fig2_memory.py",
+      "sha256": "99f24075978fa9d289b6ba0b08aca40f5d390d42414905f3d070b776dd075295"
+    },
+    {
+      "path": "inputs/fig2_memory_response.csv",
+      "sha256": "ed17542b7e1c15dd7d0e8cabe3f2f3370837e827847ec04983af2c7efe0e31d1"
+    },
+    {
+      "path": "inputs/fig2_diagnostics_provenance.json",
+      "sha256": "86f2beb25ba47f8dbff1b020294a8b1a8c5049361ebf3f5370f60f76cfffb535"
+    },
+    {
+      "path": "fig2_diagnostics.pdf",
+      "sha256": "fae32d67f82590b01b4a390731d0ac078f21783d4b6056f300aac920a383981d"
+    }
+  ],
+  "figure3_dust_evolution_artifacts": [
+    {
+      "path": "make_fig2_diagnostics.py",
+      "sha256": "4239d7777ad34f12f62f78aa17a327e2dfea987a38110cffd7aae982de4812cf"
+    },
+    {
+      "path": "inputs/fig3_dust_evolution_spectra.csv",
+      "sha256": "fe9e6806f4e9c8e11b37f1c96d3edcfa77748ae91306acc16d7629490da4884d"
+    },
+    {
+      "path": "inputs/fig3_dust_evolution_provenance.json",
+      "sha256": "1555c889bff3aa248066d84a382665b16436f1a5adbe0cbf9298689eda997b1c"
+    },
+    {
+      "path": "fig3_dust_evolution.pdf",
+      "sha256": "abf752705c00b419a7a4ecc552a1b995098a168d574bc6d6e274e7199cb24f5d"
+    }
+  ],
+  "science_question_hierarchy": "Primary AGN-history dependence; secondary dust evolution beyond delayed heating. Figures 2 and 3 are complementary illustrations, not detection forecasts."
 }

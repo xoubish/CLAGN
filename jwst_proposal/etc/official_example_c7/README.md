@@ -23,5 +23,5 @@ FITS headers, so the download date alone does not establish the calculation
 version. Recalculate with the current ETC before using results.
 
 Next case: R06 / P17881, J083826.50+371906.7 (z=0.2111), following the
-provisional scenarios in ../../completion_notes.md. Source photometry,
+provisional scenarios in ../../../archive/jwst_cleanup_20260926.zip::completion_notes.md. Source photometry,
 host contribution and spectral shape still need to be established for that run.

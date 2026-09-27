@@ -85,8 +85,8 @@
   },
   {
     "id": "R01",
-    "target": "J162039.13+430814.6",
-    "catalog_separation_arcsec": 0.028842126902195196,
+    "target": "J004607.98+090720.9",
+    "catalog_separation_arcsec": 0.021376681573147968,
     "allwise_extended_flag": 0,
     "neighbors_within5_arcsec": []
   },

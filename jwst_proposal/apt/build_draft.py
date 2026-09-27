@@ -53,10 +53,9 @@ def main():
                       APTVersion='Version 2024.1  JWST PRD: PRDOPSSOC-065, Roman PRD: RPRDDEVSOC-014',
                       PRDVersion='PRDOPSSOC-065')
     info = add(root, 'ProposalInformation')
-    add(info, 'Title', "Does circumnuclear dust remember an AGN's accretion history?")
-    abstract = (BASE / 'apt_title_abstract.txt').read_text().split('Abstract:\n', 1)[1].strip()
-    abstract = abstract.replace('to test whether delayed illumination of a fixed dust distribution explains their infrared response or whether the emitting distribution must evolve.',
-                                'to test how far delayed illumination of a fixed dust distribution explains their infrared response and whether additional evolution of the emitting dust is required.')
+    title_abstract = (BASE / 'apt_title_abstract.txt').read_text()
+    add(info, 'Title', title_abstract.split('Title:\n', 1)[1].split('\n\nAbstract:', 1)[0].strip())
+    abstract = title_abstract.split('Abstract:\n', 1)[1].strip()
     add(info, 'Abstract', abstract)
     add(info, 'ProposalID', '0')
     add(info, 'ProposalCategory', 'GO')
@@ -68,12 +67,15 @@ def main():
     requests = add(root, 'DataRequests')
     group = add(requests, 'ObservationGroup')
     add(group, 'Label', '24 AGN - MIRI/MRS')
-    add(group, 'Comments', '12 fading and 12 rising AGNs. A/B/C groups 27/60/27, except R06 B=80 and R01 A=75; four dithers and one integration. Flux-dependent F560W/FND acquisitions follow review/acquisition_recipes.csv. Sky coordinates come from the reviewed sky-field table when available; otherwise 60-arcsec north offsets require review.')
+    add(group, 'Comments', '12 fading and 12 rising AGNs. A/B/C groups 27/60/27, except R06 B=80; four dithers and one integration. Flux-dependent F560W/FND acquisitions follow review/acquisition_recipes.csv. Sky coordinates come from the reviewed sky-field table when available; otherwise 60-arcsec north offsets require review.')
     links = add(root, 'LinkingRequirements')
     inventory = []
     for idx, row in enumerate(rows):
         recipe = recipes[row['id']]
-        groups_a = 75 if row['id'] == 'R01' else 27
+        assert recipe['target'] == row['target'], 'Acquisition recipe belongs to a different target'
+        if row['id'] in sky_fields:
+            assert sky_fields[row['id']]['target'] == row['target'], 'Sky field belongs to a different target'
+        groups_a = 27
         groups_b = 80 if row['id'] == 'R06' else 60
         for sky in (False, True):
             num = 2 * idx + 1 + int(sky)

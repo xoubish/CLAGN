@@ -1,10 +1,10 @@
 # Focused technical and editorial review — 26 September 2026
 
-The proposal and saved APT file now request **67.4 hours**; the timing export
-contains **67.33 charged hours**. APT rounds the proposal summary upward to a tenth.
+The proposal and saved APT file now request **67.0 hours**; the timing export
+contains **67.00 charged hours**. APT rounds the proposal summary upward to a tenth.
 The program has 24 MIRI/MRS targets (12 fading, 12 rising), 24 matching sky visits,
 and current nonempty scheduling windows for all 48 visits. Source-plus-sky photon
-collection is 17.29 hours; APT science-duration accounting is 17.33 hours.
+collection is 17.00 hours; APT science-duration accounting is 17.03 hours.
 The official style is unchanged; the final PDF has five core pages plus two
 supplement/reference pages.
 
@@ -12,13 +12,11 @@ supplement/reference pages.
 
 1. R06/J083826.50+371906.7: increased setting B from 60 to 80 groups in both
    science and sky observations. Rest-5-micron S/N rises from 37.9 to 54.8.
-2. R01/P1823: increased setting A from 27 to 75 groups in both science and sky
-   observations. Rest-12-micron S/N rises from 18.7 to 58.1 for the flatter
-   high-redshift planning spectrum.
+2. R01/P9694 replaces P1823 and uses the default 27/60/27 sequence. Its new sky field, acquisition recipe and online scheduling have been checked.
 3. Replaced uniform F560W/FAST/10-group acquisitions, which saturate in the bright
    model cases, with flux-dependent recipes in `acquisition_recipes.csv`.
-4. Updated text, APT inventory, reproducible generator and time request; retained
-   the sample, sky coordinates and approved figures.
+4. Updated text, APT inventory, reproducible generator and time request; updated
+   R01 sample membership, sky coordinates and Figure 1 to P9694.
 
 ## MRS sensitivity and saturation
 
@@ -33,15 +31,19 @@ reports, spectral arrays and R=100 calculations are under the Git-ignored local
 | R06 | 5 microns | B, 80 | 0.3 arcsec | 54.8 |
 | R06 | 12 microns | B, 80 | 0.6 arcsec | 225.2 |
 | R06 | 18 microns | B, 80 | 0.9 arcsec | 61.5 |
-| P1823 | 12 microns | A, 75 | 0.85 arcsec | 58.1 |
+| P9694 | 5 microns | B, 60 | 0.3 arcsec | 336.0 |
+| P9694 | 12 microns | B, 60 | 0.6 arcsec | 1343.6 |
+| P9694 | 18 microns | B, 60 | 0.9 arcsec | 472.2 |
 
 R06 uses z=0.2111, a point source with Fnu proportional to wavelength squared,
-and W3=0.95 mJy (half the sample's archival total). P1823 uses z=0.6205,
-W3=1.3 mJy and an approximately wavelength^0.585 spectrum based on its W3/W4
-colour. That slope uses nominal band wavelengths; it is not an exact two-band
-synthetic-photometry fit. Both use the adopted numerical sky spectrum from the
-R06 web calculation, with equal-duration off-source subtraction. The P1823 run
-is a representative-background estimate, not a new field-specific background.
+and W3=0.95 mJy (half its archival total). P9694 uses z=0.2377224,
+W3=11.76 mJy (half its archival total) and the same wavelength-squared shape.
+Both use the adopted numerical sky spectrum from the R06 web calculation,
+with equal-duration off-source subtraction. These are representative-background
+estimates. `p9694_sensitivity.json` retains full compact inputs and anchor results;
+its maximum tested saturation fraction is 0.022, with no warnings. Historical
+P1823 calculations remain in `sensitivity_summary.json` but no longer justify
+an exposure or science claim for the current sample.
 
 The bright-envelope B-setting checks use W3=48.4 mJy, flat Fnu for channels 1–2
 and wavelength-squared spectra for channels 3–4. Maximum saturation fractions
@@ -63,8 +65,8 @@ to wavelength squared; the upper model is its full W3 with flat Fnu. These are
 assumed planning brackets, not measured bounds on JWST-epoch nuclear flux.
 The saved recipe passes both cases without saturation warnings and with S/N>50:
 
-- Four targets: F560W, FAST, 4 groups (11.10 s).
-- Eight targets: FND, FAST, 10 groups (27.75 s).
+- Three targets: F560W, FAST, 4 groups (11.10 s).
+- Nine targets: FND, FAST, 10 groups (27.75 s).
 - Twelve targets: FND, FASTGRPAVG, 10 groups (111.00 s; four coadded frames/group).
 
 Across the selected recipes, the minimum lower-case S/N is 51.79 and maximum
@@ -92,7 +94,7 @@ This bibliographic check is not a full replication of the cited science.
 
 The PDF text, metadata, figures and APT title/abstract were screened for identity
 leaks and NGPS observing-status/month/program details. The public wording remains
-“2026 NGPS spectra.” Published author lists in references are retained. No
+“2026 Palomar/NGPS spectra.” Published author lists in references are retained. No
 investigator names, affiliations or email addresses were introduced into the
 anonymous attachment or abstract. The APT administrative fields still need filling.
 
@@ -109,7 +111,7 @@ are outside the five-page required sections. The style file was not modified.
 - `audit_consistency.py` / `consistency.json`: saved APT/XML, inventory, recipe,
   scheduling-window, abstract and layout comparisons.
 - `apt_recompute.log`: completed APT 2026.5.1 online run; constraint generator 19.0.1.
-- Earlier APT files are preserved under `../apt/work/before_technical_review/`.
+- Earlier APT files are preserved under `../../archive/jwst_cleanup_20260926.zip::apt/work/before_technical_review/`.
 
 Official guidance consulted:
 - [MRS target acquisition](https://jwst-docs.stsci.edu/jwst-mid-infrared-instrument/miri-operations/miri-target-acquisition/miri-mrs-target-acquisition)
@@ -124,6 +126,6 @@ this review does not claim full-sample, every-wavelength ETC or astrophysical va
 
 `cleanup_manifest.json` records removed duplicate exports/unused downloads and
 relocated web exports/automatic backups. Original web ETC archives now live in
-`../etc/downloads/web_exports/`; APT snapshots live in `../apt/work/automatic_backups/`.
+`../etc/downloads/web_exports/`; APT snapshots live in `../../archive/jwst_cleanup_20260926.zip::apt/work/automatic_backups/`.
 These are local-only. Generated ETC grids and raw archive-query caches are
 ignored by Git, while recipes, scripts and summary results are retained.

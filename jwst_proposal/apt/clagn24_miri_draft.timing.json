@@ -1,8 +1,8 @@
 {
   "proposal_id" : "0",
   "number_of_visits" : 48,
-  "science_time" : 17.33,
-  "charged_time" : 67.33,
+  "science_time" : 17.03,
+  "charged_time" : 67.0,
   "observations" : [ {
     "id" : 1,
     "charged_duration_seconds" : 6492,
@@ -5729,14 +5729,14 @@
     } ]
   }, {
     "id" : 25,
-    "charged_duration_seconds" : 7114,
-    "science_duration_seconds" : 1804,
+    "charged_duration_seconds" : 6512,
+    "science_duration_seconds" : 1268,
     "number_of_visits" : 1,
     "instrument" : "MIRI",
     "template" : "MIRI Medium Resolution Spectroscopy",
     "visits" : [ {
       "id" : 1,
-      "scheduling_duration" : 4032,
+      "scheduling_duration" : 3513,
       "components" : [ {
         "type" : "VISIT_SLEW",
         "duration" : 2100
@@ -5763,13 +5763,13 @@
         "duration" : 26
       }, {
         "type" : "SCIENCE",
-        "duration" : 12
+        "duration" : 28
       }, {
         "type" : "EXPOSURE_OVERHEAD",
         "duration" : 2
       }, {
         "type" : "EXPOSURE_OVERHEAD",
-        "duration" : 17
+        "duration" : 18
       }, {
         "type" : "SAM",
         "duration" : 69
@@ -5784,7 +5784,7 @@
         "duration" : 26
       }, {
         "type" : "SCIENCE",
-        "duration" : 209
+        "duration" : 75
       }, {
         "type" : "EXPOSURE_OVERHEAD",
         "duration" : 2
@@ -5799,7 +5799,7 @@
         "duration" : 11
       }, {
         "type" : "SCIENCE",
-        "duration" : 209
+        "duration" : 75
       }, {
         "type" : "EXPOSURE_OVERHEAD",
         "duration" : 2
@@ -5814,7 +5814,7 @@
         "duration" : 11
       }, {
         "type" : "SCIENCE",
-        "duration" : 209
+        "duration" : 75
       }, {
         "type" : "EXPOSURE_OVERHEAD",
         "duration" : 2
@@ -5829,7 +5829,7 @@
         "duration" : 11
       }, {
         "type" : "SCIENCE",
-        "duration" : 209
+        "duration" : 75
       }, {
         "type" : "EXPOSURE_OVERHEAD",
         "duration" : 2
@@ -5981,17 +5981,17 @@
     } ]
   }, {
     "id" : 26,
-    "charged_duration_seconds" : 4460,
-    "science_duration_seconds" : 1804,
+    "charged_duration_seconds" : 3883,
+    "science_duration_seconds" : 1268,
     "number_of_visits" : 1,
     "instrument" : "MIRI",
     "template" : "MIRI Medium Resolution Spectroscopy",
     "visits" : [ {
       "id" : 1,
-      "scheduling_duration" : 3555,
+      "scheduling_duration" : 3019,
       "components" : [ {
         "type" : "VISIT_SLEW",
-        "duration" : 289
+        "duration" : 328
       }, {
         "type" : "VISIT_OVERHEADS",
         "duration" : 18
@@ -6009,7 +6009,7 @@
         "duration" : 26
       }, {
         "type" : "SCIENCE",
-        "duration" : 209
+        "duration" : 75
       }, {
         "type" : "EXPOSURE_OVERHEAD",
         "duration" : 2
@@ -6024,7 +6024,7 @@
         "duration" : 11
       }, {
         "type" : "SCIENCE",
-        "duration" : 209
+        "duration" : 75
       }, {
         "type" : "EXPOSURE_OVERHEAD",
         "duration" : 2
@@ -6039,7 +6039,7 @@
         "duration" : 11
       }, {
         "type" : "SCIENCE",
-        "duration" : 209
+        "duration" : 75
       }, {
         "type" : "EXPOSURE_OVERHEAD",
         "duration" : 2
@@ -6054,7 +6054,7 @@
         "duration" : 11
       }, {
         "type" : "SCIENCE",
-        "duration" : 209
+        "duration" : 75
       }, {
         "type" : "EXPOSURE_OVERHEAD",
         "duration" : 2

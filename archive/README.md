@@ -17,3 +17,5 @@
 The archive is local and git-ignored because it includes collaboration-derived products. Files were moved, not discarded. Old scripts/reports retain their historical paths and should be treated as snapshots; use `scripts/` for the maintained entry points.
 
 To recover an individual historical file, use the manifest to locate its destination and copy it where needed. Its hash records the content before any subsequent path edits. Avoid restoring the whole tree over newer observing products.
+
+[JWST cleanup, September 26](jwst_cleanup_20260926.zip) preserves old proposal and figure versions, APT snapshots and editing history in one compressed file.

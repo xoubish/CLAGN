@@ -1,4 +1,4 @@
-"""Load the supplied P1823 SPHEREx dataset used in Figure 1.
+"""Load supplied SPHEREx datasets, including P9694 for the current Figure 1.
 
 Preserves the exported errors, spectral widths, epoch grouping and the single
 previously requested P1823 exclusion. Input provenance is in inputs/provenance.json.
@@ -10,7 +10,7 @@ import numpy as np
 from astropy.time import Time
 
 HERE = Path(__file__).resolve().parent / 'inputs'
-CSV_PATHS = {'P1823': HERE / 'spaxel_scryer_Shooby_AGN_ra245p1631_dec43p1373_cleaned.csv'}
+CSV_PATHS = {'P9694': HERE / 'spaxel_scryer_P9694_ra11p5333_dec9p1225_cleaned.csv', 'P1823': HERE / 'spaxel_scryer_Shooby_AGN_ra245p1631_dec43p1373_cleaned.csv'}
 PASS_COLORS = ['#2878a5', '#a14c7d', '#27836c']
 
 

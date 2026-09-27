@@ -1,121 +1,67 @@
 # JWST Cycle 6 proposal
 
-The current source is [proposal.tex](proposal.tex); [proposal.pdf](proposal.pdf)
-is its compiled draft. The working design is **24 AGN: 12 fading and 12 rising,
-with one MIRI/MRS visit per target**. SPHEREx supplies the near-infrared spectra.
-Recovery and reversal are retained in individual histories, not a third group.
+Open **[proposal.pdf](proposal.pdf)** to read the current draft or edit
+**[proposal.tex](proposal.tex)**. The programme requests **67.0 hours for 24 AGN**
+(12 rising and 12 fading), with one MIRI/MRS science visit and a linked sky visit
+per target. The PDF has five core pages and seven pages overall.
 
-## Current sample and status
+## Working files
 
-[inputs/jwst_sample_cycle6.csv](inputs/jwst_sample_cycle6.csv) is the authoritative
-working target list. Source identities, memberships and its existing estimates
-have not been changed by the document cleanup. The user confirms SPHEREx data
-and ZTF/WISE manifold coverage for all targets. The proposal describes the
-optical coverage as including 2026 NGPS spectra, without observing-status details.
-
-The intended category is Medium: more than 50 and at most 130 charged hours,
-including overheads, under the [Cycle 6 rules](https://jwst-docs.stsci.edu/jwst-opportunities-and-policies/jwst-call-for-proposals-for-cycle-6/jwst-proposal-types-and-categories/jwst-general-observer-go-proposals).
-APT gives 67.33 charged hours (67.4 hours in APT’s proposal summary and the text). The 24 science visits
-and 24 linked sky visits have scheduling windows from the online Visit Planner.
-
-The next review must verify individual rising/fading assignments, event intervals,
-host contributions and lag estimates. Three entries carry reversal flags. The
-existing table assumes a warm-dust delay ten times the hot-dust delay throughout;
-this is not a validated measurement. Figure 2 is a calculated physical
-illustration, not a fit to individual targets. Focused sensitivity, acquisition
-and saturation checks are completed under the adopted source assumptions; see
-[the technical review](review/README.md). Nuclear centering needs a closer look
-for nine hosts flagged as extended in AllWISE.
-The [duplication audit](duplication/README.md), completed on 2026 September 26,
-found no JWST matches at any of the 24 science positions. The proposal has no
-remaining text placeholders. Working notes are in
-[completion_notes.md](completion_notes.md).
-
-The rebuilt draft has seven pages: scientific justification and observations on
-pages 1–5, supplemental information on page 6, and references on pages 6–7.
-The required sections fit within the five-page Medium limit.
+| Location | Contents |
+| --- | --- |
+| [proposal.tex](proposal.tex) / [proposal.pdf](proposal.pdf) | Current source and compiled proposal |
+| [apt/clagn24_miri_draft.aptx](apt/clagn24_miri_draft.aptx) | Current APT project; 48 visits |
+| [apt_title_abstract.txt](apt_title_abstract.txt) | Title and abstract matching APT |
+| [inputs/jwst_sample_cycle6.csv](inputs/jwst_sample_cycle6.csv) | Authoritative sample |
+| `fig1_connected.pdf`, `fig2_diagnostics.pdf`, `fig3_dust_evolution.pdf` | Figures used by LaTeX |
+| [inputs/](inputs/) | Saved figure data, models and provenance |
+| [review/README.md](review/README.md) | Technical checks and supporting analyses |
+| [apt/README.md](apt/README.md) | APT setup, accepted sky fields and timing reports |
+| [etc/LOCAL_SETUP.md](etc/LOCAL_SETUP.md) | ETC calculations and local runtime |
+| [duplication/README.md](duplication/README.md) | Duplication search |
+| [validation.json](validation.json) | Build status and outstanding scientific/technical checks |
 
 ## Build
 
+From this folder:
+
 ```sh
 make
+python review/audit_consistency.py
+make clean
 ```
 
-To refresh the sample summary and regenerate both figures, install `requirements.txt`
-and run `make figures PYTHON=/path/to/python`, followed by `make`.
-`make_selection.py` summarizes the authoritative CSV and checks its counts and
-unique identifiers; it does not reselect targets or validate physical classifications.
-`make clean` removes compilation files while retaining PDFs.
-For Overleaf, upload this folder and select `proposal.tex` as the main document.
+`make clean` removes temporary LaTeX files and retains the PDFs. Run the audit
+before cleaning, since it checks the build log. The official style file remains
+unchanged.
 
-## Files
+To regenerate the sample summary and all three figures, install
+`requirements.txt`, then run `make figures PYTHON=/path/to/python` and `make`.
+The generators save only the figure PDFs needed by the proposal.
+`make_selection.py` summarizes the agreed CSV; it does not reselect targets or
+validate their physical classifications.
 
-| File | Purpose |
-| --- | --- |
-| `proposal.tex` / `proposal.pdf` | Current text and compiled draft |
-| `apt_title_abstract.txt` | Matching title and abstract for APT |
-| `jwstproposaltemplate_v6.sty` | Official style, unchanged |
-| `fig1_connected.pdf` / `.png` | P1823 measured light curves and spectra |
-| `make_fig1_connected.py` | Figure generator |
-| `make_selection.py` | Summarize the agreed 24-source CSV |
-| `spherex_data.py` | Figure SPHEREx input loading and epoch grouping |
-| `inputs/jwst_sample_cycle6.csv` | Authoritative working sample |
-| `inputs/selection_summary.json` | Counts, observing status and pending audits |
-| `inputs/provenance.json` | Input origins and checksums |
-| `validation.json` | Current document build checks and remaining work |
-| `completion_notes.md` | Outstanding checks kept outside the proposal narrative |
+For a compact Overleaf upload, use `proposal.tex`, `jwstproposaltemplate_v6.sty`
+and the three figure PDFs. Select `proposal.tex` as the main document.
 
-The superseded selection/timing scripts, sample tables and summaries are preserved
-in [the project archive](../archive/jwst_before_24_target_miri/README.md).
-Older proposal drafts under `observing/` are historical and are not build inputs.
+## Scientific inputs
 
-## Figure 1
+Figure 1 uses the P9694 light curves, optical spectra and all 289 supplied
+SPHEREx measurements. The dashed curve is the pooled host + disc + blackbody
+fit, with a model-dependent colour temperature near 1200 K. Its inputs and
+masks are recorded in `inputs/fig1_connected_provenance.json` and
+[the fit report](review/p9694_hot_dust/README.md).
 
-Figure 1 contains P1823 only. It preserves the P330E calibration and the previously
-requested exclusion of one SPHEREx point; the input CSV is intact. Its optical
-spectrum spans 0–0.6 mJy. P1823's 18-micron peak lies beyond MRS; its test uses
-the warm continuum and accessible 9.7-micron feature. The figure does not itself
-establish significant SPHEREx variability or separation of competing dust models.
-Only P1823's figure data are bundled here; availability across the full sample is
-confirmed by the user and does not imply that all spectra are in this folder.
+Figure 2 illustrates history dependence relative to equilibrium at current
+nuclear power. Figure 3 compares delayed fixed dust with an evolving boundary
+under the same illumination history. Both are illustrations, not validated
+sample-level detection forecasts. The exploratory
+[P9694 predictivity analysis](review/p9694_predictivity/README.md) and
+[validation status](validation.json) retain the limits of the current checks.
 
-Gold dashed lines mark expected redshifted emission-line positions, not fitted
-detections. Vacuum wavelengths follow the [SDSS optical line table](https://classic.sdss.org/dr6/algorithms/linestable.php)
-and [STScI infrared line lists](https://www.stsci.edu/instruments/nicmos/documents/handbooks/instrument/v5/Appendix_26.html).
-The figure provenance records every plotted line position; a few labels are
-offset horizontally to keep neighboring lines readable.
+## Archived material
 
-Date keys above the optical and SPHEREx panels use the same colors as their
-spectra and the time markers on both light curves. Archival optical spectra
-are grouped by year in the key; the latest spectrum is labelled 2026.
-NGPS observing status, months and program identifiers are omitted from the
-proposal and its target table, following the user's presentation preference.
-Each of the 20 optical epochs since 2015 has a dashed marker at its saved MJD.
-The labelled 2002 spectrum is outside the displayed window. SPHEREx keys show
-each visit's month range; dotted lines mark median observation dates, with
-shading covering the full visit. Exact dates and colors are recorded in
-`inputs/fig1_connected_provenance.json`.
-
-Both ZTF and WISE panels start at 2015. W1 is shown as purple circles and W2 as
-brown squares, on the same mJy scale without offsets. The original W1 data are
-retained (filled circles: saved unWISE series; open circles: NEOWISE visits).
-W2 uses the bundled target-only NEOWISE exposure snapshot in
-`inputs/figure_neowise_exposures.csv`. The figure generator applies the existing
-W1 frame-quality and six-month grouping rules, additionally requiring finite,
-positive W2 uncertainties, and keeps visits with at least three measurements.
-Visit magnitudes are medians; their approximate statistical errors are
-`1.2533 * sample_std / sqrt(n)`. Conversion to mJy uses a W2 Vega zero point of
-171.787 Jy from the [WISE calibration table](https://irsa.ipac.caltech.edu/data/WISE/docs/release/All-Sky/expsup/sec4_4h.html).
-These plotted errors exclude absolute calibration uncertainty; no color
-correction is applied. Figure provenance records all W2 visits and quality cuts.
-Earlier measurements remain in the inputs, outside the displayed time window.
-
-## Repository contents
-
-Commit the proposal sources and current PDFs, the current APT project and reports,
-accepted sky selections, calculation scripts, compact results and audit tables.
-Generated ETC trials, raw query/download caches, runtime/reference installations
-and automatic APT backups are local-only and ignored by Git. Original downloaded
-ETC archives are preserved in `etc/downloads/web_exports/`. Redundant export bundles
-and unused installers/partial downloads were removed; details are recorded in
-`review/cleanup_manifest.json`.
+Old proposal and figure versions, APT snapshots, inactive logs and editing notes
+are consolidated in [one ZIP archive](../archive/jwst_cleanup_20260926.zip),
+along with the duplicate PNG previews. Earlier project
+archives remain under [archive/](../archive/README.md).

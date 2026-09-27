@@ -1,7 +1,7 @@
 # APT Output Product
 # 
 # APT Version: Version 2026.5.1  
-# Date: Sat Sep 26 21:29:19 GMT 2026
+# Date: Sat Sep 26 23:50:01 GMT 2026
 
 JWST Times Report for JWST Draft Proposal 0 (clagn24_miri_draft.aptx)
 
@@ -431,36 +431,36 @@ Note: Glossary of terms and column headers at bottom of this report
 * R01 science (Obs 25)
   Science     Total Time
   Duration    Charged
-      1804          7114
+      1268          6512
 
   Exposure Specifications:
     Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
-    Acq   FULL               FAST              2.775      4      1      0      1        11.100     1         1        1      1      11.100            26               57               14
-      1   FULL               FASTR1            2.775     75      1      0      1       208.128     4         4        1      1     832.512            26              256              211
+    Acq   FULL               FAST              2.775     10      1      0      1        27.750     1         1        1      1      27.750            26               74               30
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
       2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
       3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
 
   Visit Durations:
           Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
     Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
-        1     0.00     1804       2228 (  692) (  294) (  265) (  429) (  360) (   72) (    0) (    0) (  116)  2100          982             0        7114
+        1     0.00     1268       2245 (  692) (  294) (  282) (  429) (  360) (   72) (    0) (    0) (  116)  2100          899             0        6512
 
 ========================================
 * R01-SKY background (Obs 26)
   Science     Total Time
   Duration    Charged
-      1804          4460
+      1268          3883
 
   Exposure Specifications:
     Exp   SUBARRAY           READOUT       FrameRead Groups NFrame GrpGap   Ints PhotonCollect Diths PrimDiths SecDiths NumExp TotalPhoton ExposureSetup ExposureDuration ExposingDuration
-      1   FULL               FASTR1            2.775     75      1      0      1       208.128     4         4        1      1     832.512            26              256              211
+      1   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
       2   FULL               FASTR1            2.775     60      1      0      1       166.502     4         4        1      1     666.008            26              214              169
       3   FULL               FASTR1            2.775     27      1      0      1        74.926     4         4        1      1     299.704            26              122               77
 
   Visit Durations:
           Pointing Science  Instrument           (GS     (Targ  (Exp                                   (Visit   Slew  Observatory  Direct Sched  Total Time
     Visit Dist     Duration Overhead    (SAMs)    Acq)    Acq)   Ovhd)  (Mech)   (OSS)   (MSA)  (IRS2)   Ovhd)  Time  Overheads    Overhead      Charged
-        1     0.00     1804       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   289          616             0        4460
+        1     0.00     1268       1751 (  623) (  151) (    0) (  429) (  360) (   72) (    0) (    0) (  116)   328          536             0        3883
 
 ========================================
 * R02 science (Obs 27)

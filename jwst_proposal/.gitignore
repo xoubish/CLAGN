@@ -19,3 +19,6 @@ __pycache__/
 
 # User-downloaded exports belong in etc/downloads/web_exports/.
 /wb*.tar
+
+# Local visual comparisons and reversible figure trials.
+/review/local_backups/

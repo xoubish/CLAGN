@@ -1,9 +1,10 @@
-"""Figure 1: P1823 connects its luminosity history and spectra.
+"""Figure 1: P9694 connects its luminosity history and spectra.
 
 The cutout, time series and spectra are saved measurements. The panels retain all
-supplied spectral epochs, with the previously requested P1823 point exclusion.
+supplied spectral epochs without target-specific exclusions.
 """
 import json
+import hashlib
 import os
 from pathlib import Path
 
@@ -15,7 +16,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.colors import to_hex
 from matplotlib.lines import Line2D
-from matplotlib.ticker import MaxNLocator
+from matplotlib.ticker import MaxNLocator, FixedLocator, FuncFormatter, NullFormatter
 from matplotlib.transforms import Bbox
 from astropy.io import fits
 from astropy.time import Time
@@ -33,7 +34,7 @@ fig=plt.figure(figsize=(6.5,5.4),facecolor='white')
 blue,orange,green,pink,purple='#286296','#e36a30','#298b71','#b74680','#7654a2'
 W2_COLOR='#a85a16'
 LIGHTCURVE_YEARS=(2015,2028)
-OPTICAL_FLUX_LIMITS=(0,.6)
+OPTICAL_FLUX_LIMITS=(.4,12.0)
 W2_ZERO_JY=171.787
 WISE_CALIBRATION='https://irsa.ipac.caltech.edu/data/WISE/docs/release/All-Sky/expsup/sec4_4h.html'
 inventory=[]
@@ -43,13 +44,14 @@ LINE_SOURCES={
     'optical':'https://classic.sdss.org/dr6/algorithms/linestable.php',
     'infrared':'https://www.stsci.edu/instruments/nicmos/documents/handbooks/instrument/v5/Appendix_26.html',
 }
-REST={'Mg II':.2799117,'[O II]':.3727092,'Hγ':.434168,
+REST={'Mg II':.2799117,'[O II]':.3727092,'Hδ':.410289,'Hγ':.434168,
+      '[O I]':.6302046,'[S II] 6716':.671829,'[S II] 6731':.673267,
       'Hβ':.486268,'[O III] 4959':.4960295,'[O III] 5007':.5008240,
       'Hα':.656461,'Paδ':1.0052,'He I':1.0833,'Paγ':1.0941,
       'Paβ':1.2822,'Paα':1.8756,'Brγ':2.1661,'Brβ':2.6259}
 
 
-def mark_lines(ax,z,groups):
+def mark_lines(ax,z,groups,fontsize=12):
     """Label expected positions, with offsets only for label readability."""
     result=[]
     for label,members,label_x in groups:
@@ -59,7 +61,7 @@ def mark_lines(ax,z,groups):
         for wave in waves:
             ax.axvline(wave,ymax=.92,color='#a68143',lw=.5,ls=(0,(3,3)),alpha=.65,zorder=1)
         xpos=np.mean(waves) if label_x is None else label_x
-        text=ax.text(xpos,.975,label,rotation=90,va='top',ha='center',
+        text=ax.text(xpos,.975,label,rotation=90,va='top',ha='center',fontsize=fontsize,
                 transform=ax.get_xaxis_transform(),color='#735625',
                 bbox=dict(facecolor='white',edgecolor='none',pad=.15,alpha=.88),zorder=5)
         if label_x is not None:
@@ -128,7 +130,7 @@ def optical_times(epochs):
     """Use one archival color per year in spectra, date keys and time markers."""
     archival_years=sorted({Time(e['mjd'],format='mjd').datetime.year
                           for e in epochs if e.get('instrument')!='NGPS'})
-    colors={y:to_hex(plt.cm.Blues(.35+.55*i/max(1,len(archival_years)-1)))
+    colors={y:to_hex(plt.cm.Blues(.55+.35*i/max(1,len(archival_years)-1)))
             for i,y in enumerate(archival_years)}
     times=[]
     for e in epochs:
@@ -150,17 +152,17 @@ def date_key(ax,entries):
 
 
 def card():
-    prefix='P1823'
+    prefix='P9694'
     x,w=.012,.976
     t,epochs=load_target(prefix)
     optical_dates=optical_times(epochs)
-    ax_im=fig.add_axes([x+.024,.755,.105,.1264])
+    ax_im=fig.add_axes([x+.010,.79,.095,.1144])
     ax_im.imshow(plt.imread(INPUTS/f'{prefix}_sdss.jpg'),extent=[-20,20,-20,20])
     ax_im.set(xlim=(-7.5,7.5),ylim=(-7.5,7.5));ax_im.set_axis_off()
     ax_im.plot([1,6],[-5.5,-5.5],color='white',lw=1)
     ax_im.text(3.5,-4.8,'5″',ha='center',color='white',fontsize=12)
-    ax_g=fig.add_axes([x+.22,.75,.30,.135])
-    ax_w=fig.add_axes([x+.64,.75,w-.659,.135])
+    ax_g=fig.add_axes([x+.18,.745,.335,.155])
+    ax_w=fig.add_axes([x+.615,.745,w-.633,.155])
     ax_g.set_title('ZTF',loc='left',pad=3)
     ax_w.set_title('WISE',loc='left',pad=3)
     for band,c in [('g',green),('r',pink)]:
@@ -203,37 +205,72 @@ def card():
     ax_o=fig.add_axes([x+.095,.435,w-.118,.195])
     for e,obs in zip(epochs,optical_dates):
         wave,flux=flux_mjy(e);ngps=e.get('instrument')=='NGPS'
-        ax_o.plot(wave,flux,color=obs['color'],lw=.55 if ngps else .35)
-    ax_o.set(xlim=(.34,.94),ylim=OPTICAL_FLUX_LIMITS,xticks=[.4,.6,.8])
+        ax_o.plot(wave,flux,color=obs['color'],lw=.95 if ngps else .8)
+    ax_o.set(xlim=(.34,.94),yscale='log',ylim=OPTICAL_FLUX_LIMITS,xticks=[.4,.6,.8])
     ax_o.set_ylabel('Optical\n(mJy)',labelpad=1)
+    # Show the identical pooled continuum only within measured SPHEREx coverage.
+    mean_fit=json.loads((HERE/'review/p9694_hot_dust/mean_fit.json').read_text())
+    mean_path=HERE/mean_fit['provenance']['curve_path']
+    assert hashlib.sha256(mean_path.read_bytes()).hexdigest()==mean_fit['provenance']['curve_sha256']
+    mean_curve=np.genfromtxt(mean_path,delimiter=',',names=True)
+    optical_mean_limits=[float(d['wavelength_um'][keep].min()),ax_o.get_xlim()[1]]
+    optical_mean_wave=np.linspace(*optical_mean_limits,200)
+    ax_o.plot(optical_mean_wave,np.interp(optical_mean_wave,
+        mean_curve['wavelength_observed_um'],mean_curve['total_mjy']),
+        color='#242424',lw=1.2,ls=(0,(4,2.5)),zorder=4)
+    continuum_overlay=dict(type='pooled mean continuum curve',
+        curve=mean_fit['provenance']['curve_path'],observed_wavelength_limits_um=optical_mean_limits,
+        flux_scale_factor=1.0,measured_points_shown=False,
+        interpretation='Identical total model to lower panel, clipped to optical/SPHEREx overlap; no rescaling or extrapolation below SPHEREx coverage')
+
     optical_groups=[('Mg II',['Mg II'],None),('[O II]',['[O II]'],None),
-                     ('Hγ',['Hγ'],None),('Hβ',['Hβ'],.768),
-                     ('[O III]',['[O III] 4959','[O III] 5007'],.84)]
-    optical_markers=mark_lines(ax_o,t['z'],optical_groups)
+                     ('Hβ',['Hβ'],.587),
+                     ('[O III]',['[O III] 4959','[O III] 5007'],.642),
+                     ('Hα',['Hα'],None)]
+    optical_markers=mark_lines(ax_o,t['z'],optical_groups,fontsize=11)
     optical_key=list({obs['label']:obs for obs in optical_dates}.values())
     date_key(ax_o,optical_key)
     ax_s=fig.add_axes([x+.095,.105,w-.118,.235])
     for group in groups:
         idx=group['indices'];idx=idx[keep[idx]]
         ax_s.errorbar(d['wavelength_um'][idx],d['flux_mjy'][idx],yerr=d['flux_err_mjy'][idx],
-            xerr=d['wavelength_half_width_um'][idx],fmt='.',ms=1.5,lw=.3,color=group['color'],alpha=.8)
-    ax_s.set(xlim=(.7,5.05),ylim=(0,2.8),xticks=[1,2,3,4,5])
+            xerr=d['wavelength_half_width_um'][idx],fmt='o',ms=2.8,lw=.4,
+            color=group['color'],mec='white',mew=.25,alpha=.95,zorder=3)
+    mean_line,=ax_s.plot(mean_curve['wavelength_observed_um'],mean_curve['total_mjy'],
+        color='#242424',lw=1.0,ls=(0,(4,2.5)),zorder=2.5,
+        label=r'Mean fit: $T_{\rm col}\sim1200$ K')
+    ax_s.set(xlim=(.7,5.05),yscale='log',ylim=(.8,16),xticks=[1,2,3,4,5])
     ax_s.set_ylabel('SPHEREx\n(mJy)',labelpad=1)
     ax_s.set_xlabel('Observed wavelength (µm)',labelpad=1)
-    infrared_groups=[('Hβ/[O III]',['Hβ','[O III] 4959','[O III] 5007'],.80),
-                     ('Hα',['Hα'],None),('Paδ',['Paδ'],1.50),
-                     ('He I/Paγ',['He I','Paγ'],1.82),
-                     ('Paβ',['Paβ'],None),('Paα',['Paα'],None),
-                     ('Brγ',['Brγ'],None),('Brβ',['Brβ'],None)]
+    infrared_groups=[('Hα',['Hα'],None),
+                     ('Paβ',['Paβ'],None),('Paα',['Paα'],None)]
     infrared_markers=mark_lines(ax_s,t['z'],infrared_groups)
     date_key(ax_s,spherex_dates)
+    ax_s.add_artist(ax_s.get_legend())
+    ax_s.legend(handles=[mean_line],loc='lower right',fontsize=10.5,
+        frameon=True,facecolor='white',edgecolor='none',framealpha=.88,
+        handlelength=2.1,handletextpad=.4,borderpad=.2)
     for ax in [ax_o,ax_s]:
         ax.yaxis.set_major_locator(MaxNLocator(2,prune='upper'));ax.tick_params(pad=1,length=2)
         ax.grid(axis='y',lw=.3,color='#dce0e4');ax.set_axisbelow(True)
-    ax_o.set_yticks([0,.2,.4,.6])
+    ax_o.yaxis.set_major_locator(FixedLocator([.5,1,2,5,10]))
+    ax_o.yaxis.set_major_formatter(FuncFormatter(lambda value,pos:f'{value:g}'))
+    ax_o.yaxis.set_minor_formatter(NullFormatter())
+    ax_o.tick_params(axis='y',which='minor',length=0)
+    ax_s.yaxis.set_major_locator(FixedLocator([1,2,5,10]))
+    ax_s.yaxis.set_major_formatter(FuncFormatter(lambda value,pos:f'{value:g}'))
+    ax_s.yaxis.set_minor_formatter(NullFormatter())
+    ax_s.tick_params(axis='y',which='minor',length=0)
     inventory.append(dict(prefix=prefix,name=t['name'],z=t['z'],optical_epochs=len(epochs),
         optical_dates=optical_dates,optical_date_key=[e['label'] for e in optical_key],
-        spherex_dates=spherex_dates,
+        spherex_dates=spherex_dates,spherex_optical_continuum=continuum_overlay,
+        spherex_mean_fit=dict(result='review/p9694_hot_dust/mean_fit.json',
+            curve=mean_fit['provenance']['curve_path'],
+            temperature_K=mean_fit['baseline']['temperature_K'],
+            label='Mean fit: model-dependent colour temperature ~1200 K',
+            model='Pooled host + fixed-slope disc + blackbody; same continuum at all visits',
+            n_fit=mean_fit['baseline']['n_used'],
+            interpretation=mean_fit['provenance']['interpretation']),
         w2=w2_provenance,w2_visits_displayed=len(w2),
         spherex_rows=len(keep),spherex_plotted=int(keep.sum()),
         spherex_intervals=[{k:g[k] for k in ['label','start_mjd','end_mjd']} for g in groups],
@@ -244,21 +281,25 @@ def card():
 card()
 
 # Trim the space vacated by the heading without changing the panel scale.
-for ext in ['pdf','png']:
-    fig.savefig(HERE/f'fig1_connected.{ext}',dpi=240,
-        bbox_inches=Bbox.from_extents(0,.10,6.5,5.05))
+fig.savefig(HERE/'fig1_connected.pdf',dpi=240,
+    bbox_inches=Bbox.from_extents(0,.10,6.5,5.05))
 (INPUTS/'fig1_connected_provenance.json').write_text(json.dumps(dict(
     examples=inventory,
     spectral_flux='Observed Fnu mJy; no inter-epoch renormalisation; NGPS P330E',
-    layout='Single P1823 example: light curves above full-width optical and SPHEREx spectra',
+    layout='Single P9694 example: enlarged light-curve panels above full-width optical and SPHEREx spectra; five optical and three infrared line labels',
+    lightcurve_panel_height_fraction=.155,
     manifold_shown=False,
     optical_flux_limits_mjy=list(OPTICAL_FLUX_LIMITS),
+    optical_flux_scale='log', optical_linewidth_pt=dict(archival=.8,ngps=.95),
+    spherex_flux_scale='log',spherex_flux_limits_mjy=[.8,16],
+    spherex_marker_size_pt=2.8,spherex_marker='o',spherex_marker_alpha=.95,
+    spherex_marker_edge=dict(color='white',width_pt=.25),spherex_mean_fit_linestyle='dashed',
     source_heading_shown=False,history_heading_shown=False,outer_box_shown=False,
     lightcurve_year_limits=list(LIGHTCURVE_YEARS),wise_bands=['W1','W2'],
-    spectral_time_markers='Both light curves: dashed lines at every optical epoch within the displayed window; dotted lines at each SPHEREx visit median MJD and shaded visit date ranges. Colors match the date keys above the spectra. The labelled 2002 optical spectrum predates the displayed window.',
+    spectral_time_markers='Both light curves: dashed lines at every optical epoch within the displayed window; dotted lines at each SPHEREx visit median MJD and shaded visit date ranges. Colors match the date keys above the spectra.',
     wise_w2_input='figure_neowise_exposures.csv',
     wise_w2_method='NEOWISE visit=round(MJD/180); qual_frame>0; first two cc_flags=00; finite W1/W2 magnitudes and errors; positive W2 error; separation<3 arcsec; at least 3 exposures. Median magnitude and MJD; approximate median error=1.2533*sample_std(mag)/sqrt(n). Convert flux and propagate statistical error; no color correction or absolute calibration error added.',
     wise_w2_zero_mag_jy=W2_ZERO_JY,wise_calibration_source=WISE_CALIBRATION,
     line_marker_interpretation='Expected redshifted positions, not fitted detections; labels may be displaced for readability',
     line_wavelength_sources=LINE_SOURCES),indent=2)+'\n')
-print('Figure 1: P1823 alone; all supplied P1823 spectral epochs retained')
+print('Figure 1: P9694 alone; all supplied P9694 spectral epochs retained')

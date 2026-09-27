@@ -1,12 +1,12 @@
 {
-  "queried_utc": "2026-09-26T21:17:01.653038+00:00",
+  "queried_utc": "2026-09-26T23:46:54.408947+00:00",
   "method": "astroquery.mast.Observations.query_criteria, obs_collection=JWST, 120 arcsec.",
   "source": "https://spacetelescope.github.io/mast_notebooks/notebooks/JWST/duplication_checking/duplication_checking.html",
   "coordinate_columns": [
     "ra_hms",
     "dec_dms"
   ],
-  "input_sha256": "ddd2d652b5772fa43f4fc95858b0332273d5b4eddfb64b9ca1eb6ba776e10609",
+  "input_sha256": "448434474515b8ca6714871253f1e32db5ef742b456110089fc5dbaf19e15745",
   "includes_planned_calib_level_minus1": true,
   "public_only_filter": false,
   "targets_requested": 24,
@@ -15,7 +15,5 @@
   "miri_matched_targets": 0,
   "errors": [],
   "reviewed": true,
-  "reviewed_utc": "2026-09-26T21:19:14.373561+00:00",
-  "positive_control": "positive_control.json",
-  "conclusion": "No potential MIRI/MRS duplications identified for the 24 science targets in this MAST snapshot."
+  "replacement_check": "R01 freshly queried at P9694 coordinates; other 23 responses retained from same-day query."
 }

@@ -1,0 +1,1789 @@
+{
+  "n_data": 258,
+  "nominal_dof": 239,
+  "adequacy_chi2_threshold_99pct": 292.78175984974627,
+  "scope": "Exploratory optically thin shell families only; no clumpy/disc-wind posterior.",
+  "primary": {
+    "0.0": {
+      "evolution": 0.0,
+      "parameters": [
+        0.15901232876450566,
+        0.915075756148762,
+        0.6926383846613421,
+        -0.04482514084560811,
+        0.33333331227282276,
+        0.8322357975669159,
+        1.148373781524989
+      ],
+      "chi2": 1012.934398292347,
+      "amplitudes": [
+        0.0,
+        0.0,
+        24.071856704796698,
+        38.22054465922748,
+        0.0,
+        0.0,
+        0.0,
+        5.686189001517542,
+        1.5525168668085385,
+        2.3003929517216015,
+        0.6079261214645255,
+        0.0
+      ],
+      "optimizer_success": true,
+      "reduced_chi2": 4.238219239716933,
+      "nominal_p_value": 8.726817917469657e-96,
+      "passes_adequacy": false,
+      "residual_rms_fraction_by_dataset": {
+        "SPHEREx": 0.04729613693841424,
+        "W1": 0.09931199175153271,
+        "W2": 0.07411560342205524,
+        "optical_15pct_assumed": 0.3109657748990874
+      }
+    },
+    "-0.5": {
+      "evolution": -0.5,
+      "parameters": [
+        0.1452087393509725,
+        0.9695766617001927,
+        0.7652854047534374,
+        -0.5131118466660106,
+        0.33328350699471065,
+        0.9267371603939442,
+        1.36431330846579
+      ],
+      "chi2": 1032.0938568281683,
+      "amplitudes": [
+        0.0,
+        0.0,
+        0.0,
+        68.08678007853314,
+        0.0,
+        3.8106955712197745,
+        53.70944716308796,
+        3.4657123107065626,
+        0.0,
+        1.5580009495123726,
+        0.9401012769290487,
+        0.0
+      ],
+      "optimizer_success": false,
+      "reduced_chi2": 4.318384338193173,
+      "nominal_p_value": 5.524982885777044e-99,
+      "passes_adequacy": false,
+      "residual_rms_fraction_by_dataset": {
+        "SPHEREx": 0.050351755088063124,
+        "W1": 0.07237460179034136,
+        "W2": 0.058060969685959064,
+        "optical_15pct_assumed": 0.2630000664432609
+      }
+    },
+    "-1.0": {
+      "evolution": -1.0,
+      "parameters": [
+        0.15704487287952532,
+        0.9314736882851771,
+        0.6662914085705965,
+        -0.617646378591191,
+        0.3031591563566357,
+        0.8756178381823011,
+        1.328127639629327
+      ],
+      "chi2": 1250.9313409388583,
+      "amplitudes": [
+        0.0,
+        0.0,
+        20.914878269874944,
+        0.0,
+        0.0,
+        17.823042050133143,
+        204.63641994982066,
+        2.328636304147911,
+        3.315789012873574,
+        0.0,
+        0.6933670864795305,
+        0.0
+      ],
+      "optimizer_success": true,
+      "reduced_chi2": 5.234022347024512,
+      "nominal_p_value": 1.2498721476949643e-136,
+      "passes_adequacy": false,
+      "residual_rms_fraction_by_dataset": {
+        "SPHEREx": 0.05053877007499387,
+        "W1": 0.03008689636788384,
+        "W2": 0.05149888125408564,
+        "optical_15pct_assumed": 0.3132084363749247
+      }
+    }
+  },
+  "sensitivity_5pct_extra_scatter": {
+    "0.0": {
+      "evolution": 0.0,
+      "parameters": [
+        0.15757739818151068,
+        0.8819660112501051,
+        0.6832515355732429,
+        0.03866085651446762,
+        0.3143005684718965,
+        0.8185034233468034,
+        1.1887284511094758
+      ],
+      "amplitudes": [
+        5.342566636508166e-18,
+        0.0,
+        25.574607675965122,
+        1.0468905114917632e-18,
+        0.0,
+        0.0,
+        1.2843135035798385e-19,
+        6.779256856775786,
+        4.112953798340369,
+        2.405568438201476,
+        0.6380795077271957,
+        0.0
+      ],
+      "chi2": 132.24064360970578,
+      "reduced_chi2": 0.5533081322581832,
+      "linear_constraints_satisfied": true,
+      "nonlinear_optimizer_success": true,
+      "passes_conditional_adequacy": true
+    },
+    "-0.5": {
+      "evolution": -0.5,
+      "parameters": [
+        0.15623195969293002,
+        0.7339324603471697,
+        0.5074087863801972,
+        0.11275525282979432,
+        0.32867717582163497,
+        0.8358774134825443,
+        1.295174903030289
+      ],
+      "amplitudes": [
+        0.0,
+        0.0,
+        2.5277581485374467,
+        5.836006971283676e-16,
+        16.95164655518814,
+        0.2013731276082838,
+        0.0,
+        9.34465043962483,
+        3.7039783480872743,
+        2.029088915400399,
+        0.9325288159575633,
+        0.0
+      ],
+      "chi2": 135.07054988229945,
+      "reduced_chi2": 0.5651487442774036,
+      "linear_constraints_satisfied": true,
+      "nonlinear_optimizer_success": true,
+      "passes_conditional_adequacy": true
+    },
+    "-1.0": {
+      "evolution": -1.0,
+      "parameters": [
+        0.15264988278826264,
+        0.6174083460377107,
+        0.623670479350886,
+        0.1261366483524096,
+        0.31904380059436677,
+        0.834858795260349,
+        1.0000000111254737
+      ],
+      "amplitudes": [
+        0.0,
+        0.0,
+        0.0,
+        3.285308372278983e-17,
+        3.531049911751857e-15,
+        18.43727281226713,
+        0.0,
+        7.644671945169131,
+        5.23278812368601,
+        0.0722065738474531,
+        1.031646056843854,
+        0.0
+      ],
+      "chi2": 152.63907503593177,
+      "reduced_chi2": 0.6386572177235639,
+      "linear_constraints_satisfied": true,
+      "nonlinear_optimizer_success": true,
+      "passes_conditional_adequacy": true
+    }
+  },
+  "conditional_curve_labels": [
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 0
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 1
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 2
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 3
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 4
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 5
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 6
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 7
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 8
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 0
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 1
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 2
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 3
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 4
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 5
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 6
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 7
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 8
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 0
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 1
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 2
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 3
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 4
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 5
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 6
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 7
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 8
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 0
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 1
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 2
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 3
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 4
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 5
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 6
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 7
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 8
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 0
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 1
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 2
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 3
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 4
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 5
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 6
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 7
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 8
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 0
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 1
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 2
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 3
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 4
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 5
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 6
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 7
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 8
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 0
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 1
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 2
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 3
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 4
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 5
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 6
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 7
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 8
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.0,
+      "profile_solution": 0
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.0,
+      "profile_solution": 1
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.0,
+      "profile_solution": 2
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.0,
+      "profile_solution": 3
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.0,
+      "profile_solution": 4
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.0,
+      "profile_solution": 5
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.0,
+      "profile_solution": 6
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.0,
+      "profile_solution": 7
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.0,
+      "profile_solution": 8
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 0
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 1
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 2
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 3
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 4
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 5
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 6
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 7
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 8
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 0
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 1
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 2
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 3
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 4
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 5
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 6
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 7
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 8
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 0
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 1
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 2
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 3
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 4
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 5
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 6
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 7
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 8
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 0
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 1
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 2
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 3
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 4
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 5
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 6
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 7
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 8
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 0
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 1
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 2
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 3
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 4
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 5
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 6
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 7
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 8
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 0
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 1
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 2
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 3
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 4
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 5
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 6
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 7
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 8
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 0
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 1
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 2
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 3
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 4
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 5
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 6
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 7
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 8
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 0
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 1
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 2
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 3
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 4
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 5
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 6
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 7
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 8
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 2.0,
+      "year": 2028.0,
+      "profile_solution": 1
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 2.0,
+      "year": 2028.0,
+      "profile_solution": 2
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 2.0,
+      "year": 2028.0,
+      "profile_solution": 3
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 2.0,
+      "year": 2028.0,
+      "profile_solution": 4
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 2.0,
+      "year": 2028.0,
+      "profile_solution": 5
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 2.0,
+      "year": 2028.0,
+      "profile_solution": 6
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 2.0,
+      "year": 2028.0,
+      "profile_solution": 7
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 2.0,
+      "year": 2028.0,
+      "profile_solution": 8
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 2.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 1
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 2.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 2
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 2.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 3
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 2.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 4
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 2.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 5
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 2.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 6
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 2.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 7
+    },
+    {
+      "evolution": -0.5,
+      "future_driver_factor": 2.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 8
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 0
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 1
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 2
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 3
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 4
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 5
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 6
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 7
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2027.495890410959,
+      "profile_solution": 8
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 0
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 1
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 2
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 3
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 4
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 5
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 6
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 7
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.0,
+      "profile_solution": 8
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 0
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 1
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 2
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 3
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 4
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 5
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 6
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 7
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 0.5,
+      "year": 2028.4945355191257,
+      "profile_solution": 8
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 0
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 1
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 2
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 3
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 4
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 5
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 6
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 7
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2027.495890410959,
+      "profile_solution": 8
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 0
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 1
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 2
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 3
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 4
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 5
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 6
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 7
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 8
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 0
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 1
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 2
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 3
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 4
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 5
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 6
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 7
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 8
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 0
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 1
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 2
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 3
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 4
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 5
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 6
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 7
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 2.0,
+      "year": 2027.495890410959,
+      "profile_solution": 8
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.0,
+      "profile_solution": 1
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.0,
+      "profile_solution": 2
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.0,
+      "profile_solution": 3
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.0,
+      "profile_solution": 4
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.0,
+      "profile_solution": 5
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.0,
+      "profile_solution": 6
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.0,
+      "profile_solution": 7
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.0,
+      "profile_solution": 8
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 1
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 2
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 3
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 4
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 5
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 6
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 7
+    },
+    {
+      "evolution": -1.0,
+      "future_driver_factor": 2.0,
+      "year": 2028.4945355191257,
+      "profile_solution": 8
+    }
+  ],
+  "forecast_date_range": [
+    "2027-07-01",
+    "2028-06-30"
+  ],
+  "future_illumination_factors": [
+    0.5,
+    1.0,
+    2.0
+  ],
+  "extra_scatter_warning": "5% added independently to every point is an explicit sensitivity assumption, not a measured calibration covariance or validation of the physical model. Envelopes are conditional scenario ranges, not posterior credible intervals.",
+  "historical_W3_W4_constraint": "Nuclear band flux in 2010 <= 1.2 times total-source archival values (23.52,74.81 mJy); 20% is conservative calibration/colour slack, not a measured error.",
+  "energy_constraint": "Dust luminosity does not exceed monochromatic heating luminosity at sampled fitted-history levels; necessary but not sufficient for radiative-transfer consistency.",
+  "curves_at_rest_um": {
+    "6.0": {
+      "0.0": [
+        6.681873381099423,
+        18.948114356172805
+      ],
+      "-0.5": [
+        6.818116397970403,
+        19.279290320109837
+      ],
+      "-1.0": [
+        7.100449679729038,
+        18.111682791121755
+      ]
+    },
+    "9.7": {
+      "0.0": [
+        2.884540406331551,
+        71.49775017341123
+      ],
+      "-0.5": [
+        2.97958530014825,
+        62.52097093503387
+      ],
+      "-1.0": [
+        3.113887883037693,
+        65.00222450479941
+      ]
+    },
+    "12.0": {
+      "0.0": [
+        1.9294515936288636,
+        24.72704161418141
+      ],
+      "-0.5": [
+        1.9998485977018177,
+        27.626943761189683
+      ],
+      "-1.0": [
+        2.0858438839435456,
+        27.436969315268353
+      ]
+    },
+    "18.0": {
+      "0.0": [
+        1.149178175119265,
+        35.30172689370576
+      ],
+      "-0.5": [
+        1.1944570100407812,
+        40.80392005089666
+      ],
+      "-1.0": [
+        1.2407459357475954,
+        36.38694481269198
+      ]
+    }
+  },
+  "whole_spectrum_counterexamples": [
+    {
+      "evolution": -0.5,
+      "year": 2028.0,
+      "future_factor_both": 1.0,
+      "valid": true,
+      "fixed_amplitudes": [
+        0.0,
+        0.0,
+        3.7683123539279113,
+        1.4837059872684817,
+        5.261561090816609,
+        6.8895804444310675,
+        0.15208915094722097,
+        8.712452451930378,
+        1.5846384315361706,
+        2.957565730685709,
+        1.1524073507527422e-17,
+        1.726696488969869e-17
+      ],
+      "fixed_existing_data_chi2": 206.58795368262435,
+      "rms_fractional_mismatch": 0.0008555380642774903,
+      "maximum_fractional_mismatch": 0.002626959941891771,
+      "independent_64_node_rms_fractional_mismatch": 0.004953040798504428,
+      "independent_64_node_maximum_fractional_mismatch": 0.008446688165152705
+    },
+    {
+      "evolution": -1.0,
+      "year": 2028.0,
+      "future_factor_both": 1.0,
+      "valid": true,
+      "fixed_amplitudes": [
+        0.0,
+        1.0174237250425657e-18,
+        6.626766715605912e-16,
+        0.0,
+        5.417092218389477,
+        7.814490038954262,
+        0.18374291878516322,
+        6.782076675624052,
+        2.9580132397037495,
+        2.1964622326857386,
+        1.813266286490186e-15,
+        0.0
+      ],
+      "fixed_existing_data_chi2": 189.5042657378914,
+      "rms_fractional_mismatch": 0.0015373974485296863,
+      "maximum_fractional_mismatch": 0.00369896965106542,
+      "independent_64_node_rms_fractional_mismatch": 0.0022445113992166947,
+      "independent_64_node_maximum_fractional_mismatch": 0.0043645747500570264
+    }
+  ],
+  "numerical_checks": {
+    "0.0": {
+      "max_fractional_32_to_64": 0.0028777230011686195,
+      "rms_fractional_32_to_64": 0.001266407220680985
+    },
+    "-0.5": {
+      "max_fractional_32_to_64": 0.002729140614468939,
+      "rms_fractional_32_to_64": 0.0010043180939491476
+    },
+    "-1.0": {
+      "max_fractional_32_to_64": 0.003066328242039784,
+      "rms_fractional_32_to_64": 0.0010537577934289267
+    }
+  },
+  "angular_quadrature_nodes": 32,
+  "analysis_script_sha256": "6668652ec379b4bb32e92edddf6d1a6157e28f17b159beb60cc7cd65b804d5fd",
+  "constant_unit_illumination_fixed_equals_evolving": true
+}

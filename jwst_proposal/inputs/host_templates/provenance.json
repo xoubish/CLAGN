@@ -1,0 +1,24 @@
+{
+  "url": "https://www.iasf-milano.inaf.it/~polletta/templates/data/swire_library.tar.gz",
+  "library_sha256": "34cce03a16fde1b3f0da0a39b84ac38ba5c1d526697200d72beed0fed3f9b48c",
+  "units": "Wavelength Angstrom; F_lambda normalised at 5500 Angstrom, per library documentation",
+  "reference": "Polletta et al. 2007 ApJ 663 81",
+  "files": [
+    {
+      "file": "Ell13_template_norm.sed",
+      "sha256": "fb0f39665cef012cc5a9a763132c42358b19a18e69a9b40a3b6a5f83bdb72ba3"
+    },
+    {
+      "file": "Ell2_template_norm.sed",
+      "sha256": "a8f278c7a4a8689507dc203c1947fe11f2c27877a58cf41d3d0a3fecab4caa0e"
+    },
+    {
+      "file": "Ell5_template_norm.sed",
+      "sha256": "f984b8d9cd9d679fc2043dfa084662904792ca7ddf81f24403b9f234635984d3"
+    },
+    {
+      "file": "S0_template_norm.sed",
+      "sha256": "3388dc5d26d7621a0547f476491871296734cfe8a3de8e8b45c40512f9795456"
+    }
+  ]
+}

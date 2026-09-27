@@ -28,7 +28,9 @@ def main():
     if len(completed) + len(scheduled) != len(rows):
         raise ValueError('Unrecognized NGPS status; review the observing summary')
     summary = dict(
-        selection='Agreed working design: 24 AGN, 12 fading and 12 rising; individual source audit pending.',
+        selection='Agreed working design: 24 AGN at z<0.3, 12 fading and 12 rising; P9694 replaces P1823 as a history-selected addition outside the original manifold regions; individual source audit pending.',
+        redshift_range=[min(float(r['z']) for r in rows), max(float(r['z']) for r in rows)],
+        both_silicate_peaks_within_mrs=all(4.9 < 9.7*(1+float(r['z'])) < 18*(1+float(r['z'])) < 27.9 for r in rows),
         source='inputs/jwst_sample_cycle6.csv',
         source_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),
         instrument='MIRI/MRS', visits_per_target=1, total=len(rows),
@@ -46,7 +48,7 @@ def main():
                       family=row['family'], reversal=row['reversal'] == 'True') for row in rows],
         history_classifications_validated=False, response_phase_coverage_validated=False,
         statistical_power_validated=False,
-        timing_note='Existing CSV estimates are provisional. Every warm delay implies ten times the hot delay; that assumption requires validation.',
+        timing_note='Existing nonempty CSV timing estimates are provisional and assume warm delays ten times hot delays. P9694 timing/lag fields are blank pending a source-specific estimate; P1823 values were not inherited.',
     )
     (INPUTS / 'selection_summary.json').write_text(json.dumps(summary, indent=2)+'\n')
     print(f'Working sample: {len(rows)} targets, 12 fading + 12 rising; '

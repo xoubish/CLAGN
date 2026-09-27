@@ -4,13 +4,13 @@ Open **clagn24_miri_draft.aptx** in APT 2026.5.1 or later. APT 2026.5.1 has succ
 
 ## Current budget and configuration
 
-The final online planning run gives **67.33 charged hours** in the timing JSON.
-APT rounds its saved proposal-summary request upward to **67.4 hours**, matching
+The final online planning run gives **67.00 charged hours** in the timing JSON.
+APT rounds its saved proposal-summary request upward to **67.0 hours**, matching
 the proposal text. The program remains Medium. All **48 visits** have current,
 nonempty scheduling windows from constraint generator 19.0.1.
 
-Source-plus-sky photon collection totals **17.29 hours**; APT's science-duration
-accounting gives 17.33 hours. Acquisition and operational overheads are included
+Source-plus-sky photon collection totals **17.00 hours**; APT's science-duration
+accounting gives 17.03 hours. Acquisition and operational overheads are included
 in the charged total. All four MRS channels are simultaneous.
 
 | Setting | Default groups | Integrations per dither | Dithers | On-source time |
@@ -19,25 +19,24 @@ in the charged total. All four MRS channels are simultaneous.
 | B | 60 | 1 | 4 | 666.0 s |
 | C | 27 | 1 | 4 | 299.7 s |
 
-- R06 uses **80 groups in B (888.0 s)**; R01/P1823 uses **75 groups in A (832.5 s)**.
+- R06 uses **80 groups in B (888.0 s)**. R01/P9694 uses the default 27/60/27 sequence.
   Each matching sky uses the same exposure sequence.
 - MIRI/MRS FULL/FASTR1 on both detectors, all channels, four-point point-source
   science dithers, no simultaneous imaging. Background targets are extended,
   use four-point extended-source dithers, and have no acquisition.
-- Science acquisitions use F560W/FAST/4 groups for four sources,
-  FND/FAST/10 groups for eight, and FND/FASTGRPAVG/10 groups for twelve.
+- Science acquisitions use F560W/FAST/4 groups for three sources,
+  FND/FAST/10 groups for nine, and FND/FASTGRPAVG/10 groups for twelve.
   Recipes and tested flux brackets are in `../review/acquisition_recipes.csv`
   and `../review/README.md`. FASTGRPAVG coadds four frames per group.
-- Selected sky positions and sample coordinates are unchanged by this review.
+- R01 is P9694 at z = 0.2377224; its new reviewed sky is 120 arcsec away at PA 340 degrees.
   See `sky_fields/README.md` for the completed catalog/image checks.
 - Remaining source-model assumptions and the nine extended-host acquisition
   centering checks are explicit in the technical review. Individual nuclear
   fluxes and sample-wide sensitivity have not all been measured/validated.
 - Administrative/PI fields are blank. The proposal has not been submitted.
 
-The preceding sky-reviewed budget was 66.59 hours. The technical fixes add
-0.74 charged hours. Earlier versions remain under `work/before_technical_review/`,
-`work/before_sky_review/` and `work/pre_visit_planner/`.
+Before replacing P1823 with P9694 the charged budget was 67.33 hours. The revised online run gives 67.00 hours. That version is preserved in `../../archive/jwst_cleanup_20260926.zip::apt/work/before_p9694_replacement/`. Earlier versions remain under `../../archive/jwst_cleanup_20260926.zip::apt/work/before_technical_review/`,
+`../../archive/jwst_cleanup_20260926.zip::apt/work/before_sky_review/` and `../../archive/jwst_cleanup_20260926.zip::apt/work/pre_visit_planner/`.
 
 ## Files
 

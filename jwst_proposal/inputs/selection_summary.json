@@ -1,7 +1,12 @@
 {
-  "selection": "Agreed working design: 24 AGN, 12 fading and 12 rising; individual source audit pending.",
+  "selection": "Agreed working design: 24 AGN at z<0.3, 12 fading and 12 rising; P9694 replaces P1823 as a history-selected addition outside the original manifold regions; individual source audit pending.",
+  "redshift_range": [
+    0.0142,
+    0.295
+  ],
+  "both_silicate_peaks_within_mrs": true,
   "source": "inputs/jwst_sample_cycle6.csv",
-  "source_sha256": "ddd2d652b5772fa43f4fc95858b0332273d5b4eddfb64b9ca1eb6ba776e10609",
+  "source_sha256": "448434474515b8ca6714871253f1e32db5ef742b456110089fc5dbaf19e15745",
   "instrument": "MIRI/MRS",
   "visits_per_target": 1,
   "total": 24,
@@ -145,8 +150,8 @@
     },
     {
       "id": "R01",
-      "target": "J162039.13+430814.6",
-      "internal_id": "P1823",
+      "target": "J004607.98+090720.9",
+      "internal_id": "P9694",
       "family": "rise",
       "reversal": false
     },
@@ -231,5 +236,5 @@
   "history_classifications_validated": false,
   "response_phase_coverage_validated": false,
   "statistical_power_validated": false,
-  "timing_note": "Existing CSV estimates are provisional. Every warm delay implies ten times the hot delay; that assumption requires validation."
+  "timing_note": "Existing nonempty CSV timing estimates are provisional and assume warm delays ten times hot delays. P9694 timing/lag fields are blank pending a source-specific estimate; P1823 values were not inherited."
 }

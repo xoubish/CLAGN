@@ -2,7 +2,8 @@
 
 Reproducible optically thin shell calculation with published grain efficiencies.
 This is a controlled physical illustration, not a posterior predictive spectrum.
-See inputs/fig2_diagnostics_provenance.json for assumptions and numerical checks.
+See inputs/fig3_dust_evolution_provenance.json for assumptions and numerical checks.
+Running this script generates both the AGN-memory Figure 2 and dust-evolution Figure 3.
 """
 import csv
 import gzip
@@ -161,57 +162,56 @@ def draw_cartoon(ax, ratio):
         # The same central luminosity is used in both hypotheses of each column.
         draw_black_hole(ax, x, bright=ratio > 1)
         ax.text(x, .64, 'Evolving' if moving else 'Fixed', ha='center',
-                color=color, fontsize=10.5)
+                color=color, fontsize=11.5)
 
 
-def main():
+def main(output_stem='fig3_dust_evolution'):
+    with (INPUTS/'jwst_sample_cycle6.csv').open() as handle:
+        sample = list(csv.DictReader(handle))
+    redshifts = np.array([float(row['z']) for row in sample])
+    zmin, zmax = float(redshifts.min()), float(redshifts.max())
+    # Intersection, not union, of the nominal rest-frame MRS intervals.
+    mrs_observed = [4.9, 27.9]
+    common_rest = [mrs_observed[0]/(1+zmin), mrs_observed[1]/(1+zmax)]
+    assert len(sample) == 24 and zmax < .3
+    assert common_rest[0] < 9.7 < 18. < common_rest[1]
     plt.rcParams.update({'font.family': 'serif', 'font.serif': ['Times New Roman'],
-                         'font.size': 11, 'axes.labelsize': 11, 'axes.titlesize': 12,
-                         'xtick.labelsize': 10, 'ytick.labelsize': 10,
+                         'font.size': 12, 'axes.labelsize': 12, 'axes.titlesize': 13,
+                         'xtick.labelsize': 11, 'ytick.labelsize': 11,
                          'pdf.fonttype': 42, 'axes.spines.top': False,
                          'axes.spines.right': False})
-    fig = plt.figure(figsize=(6.5, 4.65))
-    grid = fig.add_gridspec(2, 2, height_ratios=[1.15, 1.65], hspace=.18, wspace=.12,
-                           left=.105, right=.99, bottom=.22, top=.90)
+    fig = plt.figure(figsize=(7.6, 4.05))
+    grid = fig.add_gridspec(2, 2, height_ratios=[.22, .39], hspace=.16, wspace=.13,
+                           left=.105, right=.985, bottom=.145, top=.86)
     calculations, checks, rows = [], [], []
     raw_models = [spectra(4.), spectra(.25)]
     models = [match_hot_luminosity(f, e) for f, e, _ in raw_models]
     for i, (ratio, title) in enumerate([(4., r'Rising: $L\,\times\,4$'), (.25, r'Fading: $L\,/\,4$')]):
         cartoon = fig.add_subplot(grid[0, i])
         draw_cartoon(cartoon, ratio)
-        cartoon.set_title(title, fontsize=12, fontweight='bold', pad=6)
+        cartoon.set_title(title, fontsize=13, fontweight='bold', pad=4)
         residual = fig.add_subplot(grid[1, i])
         f, e, mass_scale = models[i]
         raw_fixed, raw_evolved, equilibrium_error = raw_models[i]
         norm = np.interp(12., WAVE, f)
-        # Warm-continuum diagnostic and broad silicate bands, all at rest wavelength.
-        residual.axvspan(2., 4., color='#dbe8ef', alpha=.5, lw=0, zorder=0)
-        residual.axvspan(8., 13., color='#ddd4b6', alpha=.23, lw=0, zorder=0)
+        # Feature positions orient the reader; no decorative shading or PAH ticks.
         for center in [9.7, 18.]:
-            residual.axvline(center, color='#9b782d', lw=.8, ls=':', ymax=.87)
+            residual.axvline(center, color='#9b782d', lw=.85, ls=':', ymax=.80)
             residual.text(center, .98, f'{center:g} µm', transform=residual.get_xaxis_transform(),
-                          ha='center', va='top', color='#87631c', fontsize=10)
-        # PAH ticks identify contaminants to fit, not synthetic PAH detections.
-        for w in [6.2, 7.7, 11.3]:
-            residual.plot([w, w], [.02, .055], transform=residual.get_xaxis_transform(),
-                    color='#54806a', lw=1.1)
+                          ha='center', va='top', color='#87631c', fontsize=11)
         log_ratio = np.log10(e/f)
         percent_difference = 100*(e/f-1)
-        residual.axhline(0, color=BLUE, lw=.8)
-        residual.plot(WAVE, percent_difference, color=ORANGE, lw=1.8, ls='--')
-        residual.fill_between(WAVE, 0, percent_difference, color=ORANGE, alpha=.17, linewidth=0)
+        residual.axhline(0, color=BLUE, lw=1.1)
+        residual.text(24., 3., 'Delayed fixed dust', ha='right', va='bottom',
+                      color=BLUE, fontsize=11)
+        residual.plot(WAVE, percent_difference, color=ORANGE, lw=2.5, ls='--')
+        label_y = float(np.max(percent_difference[(WAVE >= 16.) & (WAVE <= 24.)])) + 4.
+        residual.text(24., label_y, 'Evolving dust', ha='right', va='bottom',
+                      color=ORANGE, fontsize=11)
         residual.set(xlim=(2, 24.5), ylim=(-48, 67), yticks=[-40, -20, 0, 20, 40], xticks=[3, 5, 10, 15, 20])
         contrast18 = float(np.interp(18., WAVE, percent_difference))
-        residual.plot(18., contrast18, 'o', color=ORANGE, ms=3)
-        residual.annotate(f'{contrast18:+.0f}%', xy=(18., contrast18),
-                          xytext=(14., 48 if i == 0 else -42), fontsize=12, fontweight='bold',
-                          color=ORANGE, arrowprops=dict(arrowstyle='-', lw=.7, color=ORANGE))
-        if i == 1:
-            residual.annotate('Overlap', xy=(9.7, float(np.interp(9.7, WAVE, percent_difference))),
-                              xytext=(6., 24), fontsize=9, color='#555555',
-                              arrowprops=dict(arrowstyle='-', lw=.7, color='#555555'))
         if i == 0:
-            residual.set_ylabel(r'Difference / fixed (%)')
+            residual.set_ylabel('Difference from fixed dust (%)')
         else:
             residual.tick_params(labelleft=False)
         f_hi, e_hi, _ = spectra(ratio, n_shells=4000)
@@ -223,18 +223,13 @@ def main():
                                  percent_difference_at_rest_18um=contrast18,
                                  normalization='same scale for both curves: fixed Fnu at 12um = 1'))
         rows.extend(zip([ratio]*len(WAVE), WAVE, f/norm, e/norm, log_ratio))
-    fig.text(.55, .125, r'Rest wavelength ($\mu$m)', ha='center', fontsize=11)
-    fig.legend(handles=[
-        Patch(facecolor='#dbe8ef', alpha=.5, label='Hot-dust anchor'),
-        Patch(facecolor='#ddd4b6', alpha=.23, label='Warm-dust region'),
-        Patch(facecolor=ORANGE, alpha=.17, label='Model difference'),
-    ], loc='lower center', bbox_to_anchor=(.55, .025), ncol=3,
-        frameon=False, fontsize=10, handlelength=1.35, handleheight=1.,
-        handletextpad=.45, columnspacing=1.2)
-    fig.savefig(HERE/'fig2_diagnostics.pdf')
-    fig.savefig(HERE/'fig2_diagnostics.png', dpi=220)
+    fig.text(.545, .97, 'Models matched to equal 2–4 µm luminosity',
+             ha='center', va='center', fontsize=12)
+    # Both hypotheses are labelled directly beside their curves in each panel.
+    fig.text(.545, .035, r'Rest wavelength ($\mu$m)', ha='center', fontsize=12)
+    fig.savefig(HERE/f'{output_stem}.pdf')
     plt.close(fig)
-    with (INPUTS/'fig2_diagnostics_spectra.csv').open('w') as handle:
+    with (INPUTS/f'{output_stem}_spectra.csv').open('w') as handle:
         writer = csv.writer(handle)
         writer.writerow(['luminosity_ratio', 'rest_um', 'fixed_Fnu_relative',
                          'evolving_Fnu_relative', 'log10_evolving_over_fixed'])
@@ -258,20 +253,35 @@ def main():
                      'No fit to actual light curves or near-IR spectra; cannot establish indistinguishable existing-data fits.',
                      'No posterior predictive uncertainty or population power calculation.',
                      'Residual signs are specific to this boundary prescription, not universal rising/fading signatures.',
-                     'PAH positions marked only; no invented PAH fluxes.',
-                     'Cartoons show boundary motion only; dust dot counts, outer radii and brightness are schematic.',
+                     'Cartoons illustrate the prescribed boundary motion; dot counts and sizes are schematic, not quantitative dust-mass measurements.',
                      'No ETC error bars are plotted on this figure.'],
         opacities={name:dict(url='https://www.astro.princeton.edu/~draine/dust/diel/'+name,
                            sha256=hashlib.sha256((INPUTS/'dust_opacity'/name).read_bytes()).hexdigest())
                    for name in ['Sil_21.gz', 'Gra_21.gz']},
         opacity_reference='Laor & Draine 1993, ApJ 402, 441; Draine & Lee 1984, ApJ 285, 89.',
-        wavelength_axis='Rest-frame model wavelengths; no target-specific coverage claimed.',
+        wavelength_axis='Rest-frame model wavelengths; common sample coverage is shown in Figure 2.',
+        sample_coverage=dict(targets=len(sample), redshift_range=[zmin,zmax],
+            mrs_observed_um=mrs_observed, common_rest_um=common_rest,
+            silicate_peaks_observed_ranges_um={str(w):[w*(1+zmin),w*(1+zmax)] for w in [9.7,18.]},
+            source='https://jwst-docs.stsci.edu/jwst-mid-infrared-instrument/miri-observing-modes/miri-medium-resolution-spectroscopy',
+            meaning='Intersection of nominal wavelength ranges; not a uniform-sensitivity limit or claim of full broad-feature wing coverage.',
+            sample_sha256=hashlib.sha256((INPUTS/'jwst_sample_cycle6.csv').read_bytes()).hexdigest()),
         actual_targets_fitted=[], calculations=calculations,
         numerical_checks=checks, no_change_and_pre_echo_equal=True,
-        presentation='Compact cartoons and fractional differences, with panel labels only; explanation in proposal caption.')
-    (INPUTS/'fig2_diagnostics_provenance.json').write_text(json.dumps(provenance, indent=2)+'\n')
+        plotted_ordinate=dict(formula='100 * (Fnu_evolving - Fnu_fixed) / Fnu_fixed',
+            units='percent', positive='evolving model has greater flux density',
+            negative='evolving model has lower flux density', zero='same flux density',
+            normalization='Equal integrated rest 2–4 micron luminosities'),
+        presentation='Simple fixed/evolving boundary cartoons above two enlarged residual panels, with Delayed fixed dust and Evolving dust labelled directly beside their curves; one short equal-2–4-micron normalization note above the panels, with the figure title supplied by its caption. No separate legend, percentage callouts, spectral shading, PAH ticks or coverage rulers; equation retained in caption.')
+    provenance['figure'] = f'{output_stem}.pdf'
+    provenance['science_question'] = 'Does delayed heating suffice, or is additional dust evolution required?'
+    (INPUTS/f'{output_stem}_provenance.json').write_text(json.dumps(provenance, indent=2)+'\n')
     print(json.dumps(dict(checks=checks), indent=2))
 
 
 if __name__ == '__main__':
+    # Keep the physical functions above importable by the P9694 audit.
+    # Generate the primary AGN-memory schematic and secondary physical illustration.
+    from make_fig2_memory import main as memory_figure
+    memory_figure()
     main()
