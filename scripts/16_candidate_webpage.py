@@ -1,6 +1,6 @@
 """Build the provisional manifold candidate explorer, with explicit public fields.
 
-Writes public/local candidate payloads; 51_observer_page.py renders the observer pages.
+Writes public/local JSON payloads only; 51_observer_page.py renders docs/index.html.
 Collaboration review: git-ignored reselection directory only. Never publish it.
 Input tables must describe the same snapshot; this does not run the old scheduler.
 """
@@ -320,13 +320,6 @@ def main():
                         run=(packet or {}).get('run',{}),sequence_rows=public_sequence_rows,reserved=(packet or {}).get('reserved',{}),files=files_public,
                         backup_policy=(packet or {}).get('backup_policy',{}),backups=[b for b in backup_rows if b['name'] in public_backup_names],
                        access='public',nights=nights,manifold=manifold,targets=items))
-    # Reuse the existing calibrated display units and light-curve/spectrum renderers.
-    charts=OLD.TEMPLATE[OLD.TEMPLATE.index('function mjdToYear'):OLD.TEMPLATE.index('/* ---------- manifold thumbnail')]
-    charts+='\n'+(ROOT/'web/candidate_spectra.js').read_text()
-    template=(ROOT/'web/candidate_review_template.html').read_text()
-    def html_for(value):
-        encoded=json.dumps(native(value),separators=(',',':'),allow_nan=False).replace('<','\\u003c')
-        return template.replace('__CHART_FUNCTIONS__',charts).replace('__PAYLOAD__',encoded)
     # Objects selected using internal-only identities or brightness remain local.
     public_payload=json.loads(json.dumps(payload))
     public_payload['targets']=[t for t in public_payload['targets'] if t['name'] in public_names]
@@ -335,10 +328,8 @@ def main():
             t['prepared_nights']=[w['night'] for w in t['nights']]
     for night in public_payload['nights']:
         public_payload['nights'][night]['count']=sum(any(w['night']==night for w in t['nights']) for t in public_payload['targets'])
-    page=html_for(public_payload)
-    assert 'proprietary' not in page and 'SDSS-V internal' not in page
-    # Pages retired 2026-09-21: this script now supplies data; 51_observer_page.py renders the single page.
-    (OUT/'candidate_review_public_legacy.html').write_text(page)
+    encoded_public=json.dumps(native(public_payload),separators=(',',':'),allow_nan=False)
+    assert 'proprietary' not in encoded_public and 'SDSS-V internal' not in encoded_public
     # Complete metadata remains in the ignored local research directory.
     private=json.loads(json.dumps(payload))
     private['access']='collaboration'
@@ -363,14 +354,13 @@ def main():
         if target['name'] in science:
             target['science']=science[target['name']]
         reconcile_spectral_dates(target)
-    (OUT/'candidate_review_local.html').write_text(html_for(private))  # legacy light explorer, kept for the science-review links
     (OUT/'candidate_payload_local.json').write_text(json.dumps(native(private),separators=(',',':'),allow_nan=False))
     (OUT/'candidate_payload_public.json').write_text(json.dumps(native(public_payload),separators=(',',':'),allow_nan=False))
     public_items=public_payload['targets']
     counts=dict(objects=len(items),public_objects=len(public_items),public_multiple=sum(t['n_spec']>=2 for t in public_items),
                 public_spectra_plotted=sum(bool(t['spec']) for t in public_items),ztf_curves=sum(bool(t['ztf']) for t in items),
                 wise_curves=sum(bool(t['wise']) for t in items),cutouts=sum(bool(t['cut']) for t in items),
-                public_bytes=len(page.encode()),night_counts={n:v['count'] for n,v in nights.items()},
+                public_payload_bytes=len(encoded_public.encode()),night_counts={n:v['count'] for n,v in nights.items()},
                 public_spectral_traces=sum(len((t['spec'] or {}).get('epochs',[])) for t in public_items),
                 local_spectral_traces=sum(len((t['spec'] or {}).get('epochs',[])) for t in private['targets']),
                 local_targets_with_spectra=sum(bool(t['spec']) for t in private['targets']))

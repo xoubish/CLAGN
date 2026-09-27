@@ -1,6 +1,6 @@
 # Palomar CLAGN observing project
 
-Start with **[Observing files](observing/README.md)** for the September 23 sequence, NGPS CSVs, candidate pages, and visibility plots for all three nights.
+Start with **[Observing files](observing/README.md)** for the new October 26–27 target packet (40 science targets per night, including JWST coverage), the September 23 sequence, NGPS CSVs, and visibility plots.
 
 | Folder | Contents |
 | --- | --- |
@@ -9,7 +9,7 @@ Start with **[Observing files](observing/README.md)** for the September 23 seque
 | [scripts/](scripts/README.md) | Selection, acquisition, geometry, sensitivity, and page-building code. |
 | [data/](data/README.md) | Catalogues, manifold model, spectra, light curves, imaging caches, and private working tables. |
 | [docs/](docs/README.md) | Public website served by GitHub Pages. |
-| [web/](web/README.md) | Page templates, shared spectral plotting code, and generated public page copies. |
+| [web/](web/README.md) | Source templates and shared plotting code for the single observer page. |
 | [reference/](reference/README.md) | Manifold paper, data-access document, and links to cached NGPS documentation. |
 | [research/](research/README.md) | Original AGNzoo work, science notebooks, and background notes. |
 | code_src/ | Shared light-curve/manifold library; retained at this path for the saved model and existing imports. |
@@ -21,10 +21,11 @@ Python entry points now live in `scripts/`. From the project directory, for exam
 
 ```sh
 /opt/anaconda3/bin/python scripts/16_candidate_webpage.py
+/opt/anaconda3/bin/python scripts/51_observer_page.py
 /opt/anaconda3/bin/python -m unittest discover -s tests -v
 ```
 
-The page command rebuilds the current candidate explorer from cached tables. It does not commit, push, or publish. Rebuilding the September packet is a separate action; see the script guide.
+The first command rebuilds cached data payloads; the second renders the single observer page. It does not commit, push, or publish. Rebuilding the September packet is a separate action; see the script guide.
 
 The full bright-parent W1 acquisition and continuation pipeline were still running during the September 20 cleanup. Check the [live pipeline status](data/reselection_2026-09-20/completion_pipeline_status.json); the curated September sequence remains separate from that automatic rebuild.
 

@@ -151,7 +151,7 @@ def build():
     plans=revision['plans'];slots=revision['slots'];windows=revision['windows']
     targets=pd.read_csv(OUT/'compact_review_objects.csv').set_index('name',drop=False)
     science=pd.read_csv(OUT/'three_night_review/science_and_sensitivity.csv').set_index('name')
-    local_data=payload(OUT/'candidate_review_local.html');public_data=payload(ROOT/'docs/index.html')
+    local_data=json.loads((OUT/'candidate_payload_local.json').read_text());public_data=payload(ROOT/'docs/index.html')
     public_names={t['name'] for t in public_data['targets']};public_targets={t['name']:t for t in public_data['targets']}
     original={v[0]:v for v in ORIGINAL_PRIMARY};protected=set(revision['protected']);added=set(revision['promoted']);user_pick=bool(revision.get('user_selection'))
     sequence_choices=revision['sequence']
@@ -279,7 +279,7 @@ def build():
     packet=dict(backup_policy=backup_selection.POLICY, night='2026-09-23',timezone='PDT (UTC-07:00)',run=run,primaries=primaries,backups=backups,sequence=sequence,
         conditional=[],settings=S,reserved=revision['reserved'],promoted=revision['promoted'],protected=revision['protected'],
         user_selection=revision.get('user_selection'),demoted=revision.get('demoted',[]),waived_rules=revision.get('waived_rules',{}),
-        original_primaries=revision['original_primaries'],files=files,public_files=public_files,full_page='observer_page_local.html',
+        original_primaries=revision['original_primaries'],files=files,public_files=public_files,full_page='../../docs/index.html',
         status=f"Fixed {S['exposures']}x{S['seconds_each']}s science sequence with a {S['slit_arcsec']}arcsec slit and {S['binspat']}x{S['binspect']} binning; existing order preserved and revalidated with corrected slot S/N; inspect fields and quicklook data on the night.")
     (DEST/'packet.json').write_text(json.dumps(packet,indent=2))
     print(pd.read_csv(DEST/'sep23_sequence.csv').to_string(index=False),flush=True)
@@ -320,7 +320,7 @@ def main():
     report+=('Use the primary CSV in order. Up to two backups per primary: public spectroscopic quasars with r<19 (latest available ZTF median, otherwise archival), Moon separation >40 degrees and airmass <1.5 throughout the full visit at Palomar. Each inherits the exact exposure count and duration of its primary, including overhead. Literature/Zeltyn regions rank first, followed by labelled on/off neighbour fraction, Balmer coverage and brightness. A public spectral reference and predicted S/N >=5 are required. Qualifying backups and their CSV appear on both pages. If fewer than two qualify, show the shortfall without relaxing the constraints. A target can appear for several slots; choose the row for the slot being replaced and skip any target already observed. '
              'Never append the entire backup list to an automatic run. Standard exposure settings require saturation checks. Inspect the slit field and Quicklook data; only add exposures if the remaining schedule permits; ambiguous broad-line states remain unclassified.\n\n')
     report+='Public primary identities and telescope settings are retained, including private-reference primaries. Private-reference S/N and science derivatives are omitted from the public payload and download. Local CSVs retain the complete information. SDSS-V spectra remain available on the local page. The manifold is a selection prior, not a forecast of the current state.\n\n'
-    report+='[Observer page](../../data/reselection_2026-09-20/observer_page_local.html) · [NGPS primary sequence](sep23_primaries_ngps.csv) · [NGPS backups](sep23_backups_ngps.csv) · [Detailed timing](sep23_sequence.csv) · [Per-slot S/N table](snr5_slot_table.csv)\n\n'
+    report+='[Observer page](../../docs/index.html) · [NGPS primary sequence](sep23_primaries_ngps.csv) · [NGPS backups](sep23_backups_ngps.csv) · [Detailed timing](sep23_sequence.csv) · [Per-slot S/N table](snr5_slot_table.csv)\n\n'
     report+=pd.read_csv(DEST/'sep23_sequence.csv').to_markdown(index=False)
     report+='\n\nFormat checked against https://caltechopticalobservatories.github.io/NGPS/users-manual/target-lists.html and https://caltechopticalobservatories.github.io/NGPS/users-manual/quick-start.html. CSV imports have not been exercised on the observatory installation.\n'
     (DEST/'README.md').write_text(report)

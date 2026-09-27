@@ -1,5 +1,13 @@
 # Observing files
 
+## October 26–27, 2026 — 40 science targets per night
+
+- **[October targets on the observer page](../docs/index.html#october)** — proposed ordered lists for 80 distinct targets, with JWST labels, science reasons, cached brightness, full-visit geometry, and flags.
+- **[Packet notes and downloads](oct26_27_2026/README.md)** — NGPS science/standard/backup CSVs, timing tables, schedule PDFs, and selection rationale.
+- **[JWST coverage audit](oct26_27_2026/jwst_coverage.csv)** — 23 of the current proposal's 24 targets scheduled in October; Moon-blocked P11530 retains its September spectrum.
+
+Uses the September experience: **2×300 s, 1.5″ slit, 2×3 binning, 2-minute total overhead, Moon ≥40° throughout each visit**. Each night has 480 minutes of science, 20 minutes reserved for standards, and approximately 114–115 minutes spare. Ordinary targets have X≤1.8; mandatory JWST targets may use X≤2.0. Faint JWST exceptions and archival brightness dates are explicit. Rebuild with `scripts/53_october_observing_packet.py`; this proposed packet is separate from the historical September sequence and the older all-night pool lists below.
+
 ## Science reassessment — discussion, not a replacement queue
 
 - [Local science review](science_review/index.html) — 38 comparison targets with optical/IR light curves and dated Balmer profiles, including available SDSS-V spectra.
@@ -10,10 +18,10 @@ This review reopens the projected parent without protecting previous primaries. 
 
 ## September 23, 2026 — first half-night
 
-- **[Observer page](../data/reselection_2026-09-20/observer_page_local.html)** — the single page for the run (dark night-sheet style): About this run, the September 23 sequence with timeline, table, per-slot backups and CSV downloads, and the candidate pool for all three nights with visibility charts, summary table and one card per target (geometry per night, light curves, complete spectra, 40″ image, manifold). Local copy with collaboration data; the public copy is `docs/index.html`. Rebuild after calculation changes: `30` → `31` → `39` → `41` → `40` → `16` → `51`. For presentation only, use `16` → `51`.
+- **[Observer page](../docs/index.html)** — the single page for the run (dark night-sheet style): About this run, the September 23 sequence with timeline, table, per-slot backups and CSV downloads, and the candidate pool for all three nights with visibility charts, summary table and one card per target (geometry per night, light curves, public spectra, 40″ image, manifold). The only observer webpage is `docs/index.html`; private collaboration data remain in local source files. Rebuild after calculation changes: `30` → `31` → `39` → `41` → `40` → `16` → `51`. For presentation only, use `16` → `51`.
 - **[NGPS primary CSV](sep23_primaries_ngps.csv)** — 14 science targets plus two standards, in observing order.
 - **[NGPS backup CSV](sep23_backups_ngps.csv)** — two replacement choices per primary slot, also available on the public page. Public spectroscopic quasars with r <19 (latest cached ZTF median, otherwise archival), Moon >40° and X <1.5 throughout the primary's full 2/3/4×300 s visit plus overhead at Palomar. Literature/Zeltyn manifold regions rank first. Each has an accepted public reference spectrum and predicted continuum S/N ≥5 for that exact visit. Names can recur for different slots; use the matching row and skip objects already observed. Do not run the whole backup list. If a future rebuild finds fewer than two, it displays the shortfall without relaxing the cuts.
-- **[Full-pool NGPS lists](pool/README.md)** — `pool/ngps_pool_sep23.csv`, `ngps_pool_oct26.csv`, `ngps_pool_oct27.csv`: every candidate observable that night in first-observable order, same setting, with the role (PRIMARY, BACKUP, RESERVE, POOL) and first start in the Note and windows, predicted S/N, brightness and the science question in the Comment. Reserves beyond the primaries and backups; load rows deliberately. Also downloadable from the local observer page.
+- **[Full-pool NGPS lists](pool/README.md)** — `pool/ngps_pool_sep23.csv`, `ngps_pool_oct26.csv`, `ngps_pool_oct27.csv`: every candidate observable that night in first-observable order, same setting, with the role (PRIMARY, BACKUP, RESERVE, POOL) and first start in the Note and windows, predicted S/N, brightness and the science question in the Comment. Reserves beyond the primaries and backups; load rows deliberately. Also downloadable from the observer page.
 - [Detailed timing CSV](sep23/sep23_sequence.csv) · [Per-slot S/N table](sep23/snr5_slot_table.csv) · [Packet notes](sep23/README.md) · [Selection record](sep23/user_selection.json)
 - Headerless coordinate CSVs: [primary science targets](sep23/sep23_primaries_ngps_coordinates.csv) (standards excluded) · [backups](sep23/sep23_backups_ngps_coordinates.csv). These contain only name, RA and DEC, in the same order and coordinate format as the full lists. Each full-pool list also has a `_coordinates.csv` version.
 - Working tools, not observer pages: `scripts/45_sep23_decision_page.py` rebuilds the decision board used to choose the primaries on 2026-09-21 (its earlier output is archived); `sep23/sep23_decision_table.csv` keeps the board's comparison table.
@@ -34,8 +42,8 @@ Standards use initial settings of 2×60 s for P330E and 2×10 s for BD+28 4211 w
 | October 26 | [PNG](visibility/oct26_visibility.png) | [PDF](visibility/oct26_visibility.pdf) |
 | October 27 | [PNG](visibility/oct27_visibility.png) | [PDF](visibility/oct27_visibility.pdf) |
 
-Blue shades show the preferred X≤1.5 windows, extensions to X≤1.8, and fallback windows to X≤2.0. These are availability plots; the September primary packet gives the actual sequence. October observing sequences have not been frozen into equivalent packets.
+Blue shades show the preferred X≤1.5 windows, extensions to X≤1.8, and fallback windows to X≤2.0. These are older availability plots. Use the October packet above for the new 12-minute visits, JWST additions, and proposed October sequences.
 
-The files in `visibility/` link to the live generated plots, so rebuilding them updates these views without duplicating files. The packet and these links are local and git-ignored. Public versions of the pages remain under `docs/`.
+The files in `visibility/` link to the live generated plots, so rebuilding them updates these views without duplicating files. The packet and these links are local and git-ignored. The single observer webpage is `docs/index.html`.
 
 The two NGPS CSVs are directly accessible in `observing/`. They link to the canonical files in `observing/sep23/`, so rebuilding the packet keeps them current.

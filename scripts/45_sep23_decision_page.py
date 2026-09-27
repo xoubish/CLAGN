@@ -45,7 +45,7 @@ def main():
     opts = json.loads((OUT/'airmass_options.json').read_text())
     targets = pd.read_csv(OUT/'compact_review_objects.csv').set_index('name', drop=False)
     science = pd.read_csv(OUT/'three_night_review/science_and_sensitivity.csv').set_index('name')
-    local = payload(OUT/'candidate_review_local.html')
+    local = json.loads((OUT/'candidate_payload_local.json').read_text())
     public_names = {t['name'] for t in payload(ROOT/'docs/index.html')['targets']}
     by_name = {t['name']: t for t in local['targets']}
     names = [n for n in plan['slots'] if n in by_name]

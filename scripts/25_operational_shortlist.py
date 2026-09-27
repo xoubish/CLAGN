@@ -14,8 +14,7 @@ OUT = ROOT / 'data/reselection_2026-09-20'
 
 
 def main():
-    page = (OUT / 'candidate_review_local.html').read_text()
-    payload = json.loads(re.search(r'<script id="candidate-data" type="application/json">(.*?)</script>', page, re.S).group(1))
+    payload = json.loads((OUT/'candidate_payload_local.json').read_text())
     rows = []
     for target in payload['targets']:
         window = next((w for w in target['nights'] if w['night'] == 'sep23'), None)

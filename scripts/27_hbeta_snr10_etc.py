@@ -23,8 +23,7 @@ MODEL = importlib.import_module('22_september_etc')
 
 def main():
     DEST.mkdir(exist_ok=True)
-    page = (OUT / 'candidate_review_local.html').read_text()
-    data = json.loads(re.search(r'<script id="candidate-data" type="application/json">(.*?)</script>', page, re.S).group(1))
+    data = json.loads((OUT/'candidate_payload_local.json').read_text())
     targets = [t for t in data['targets'] if any(w['night'] == 'sep23' for w in t['nights'])]
     for channel, noise, scale in zip(MODEL.CFG.channels, [2.8, 7.8, 3.7, 4.6], [.193, .189, .186, .186]):
         MODEL.CFG.readnoise[channel] = noise * u.count / u.pix

@@ -152,8 +152,7 @@ def load_ztf(name):
                 out[key] = np.column_stack([mjd, sub[mcol].to_numpy(float), err])
             if out:
                 return out
-    text = (OUT/'candidate_review_local.html').read_text()
-    data = json.loads(re.search(r'<script id="candidate-data" type="application/json">(.*?)</script>', text, re.S).group(1))
+    data = json.loads((OUT/'candidate_payload_local.json').read_text())
     for target in data['targets']:
         if target['name'] == name:
             return {band: np.asarray(v, float) for band, v in (target.get('ztf') or {}).items() if v}

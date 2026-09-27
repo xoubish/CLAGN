@@ -91,7 +91,7 @@ def main():
     report='# Completed-parent prepared review\n\n'+datetime.now(timezone.utc).isoformat()+'\n\n'
     report+='The W1 acquisition/projection batches for the current bright, observable parent are complete. Invalid or unmatched histories remain in the projection audit. Final broad-line classification, science weights and the observing sequence still require review. No files were committed, pushed or published.\n\n'
     report+=summary.to_markdown(index=False)+'\n\n'
-    report+='[Complete local page](candidate_review_local.html) · [Prepared targets](compact_review_objects.csv) · [Acquisition audit](prepared_acquisition_audit.csv) · [Science and sensitivity](three_night_review/science_and_sensitivity.csv)\n\n'
+    report+='[Observer page](../../docs/index.html) · [Prepared targets](compact_review_objects.csv) · [Acquisition audit](prepared_acquisition_audit.csv) · [Science and sensitivity](three_night_review/science_and_sensitivity.csv)\n\n'
     report+='Acquisition summary (empty or failed archive results are retained explicitly):\n\n```json\n'+json.dumps(audit,indent=2)+'\n```\n'
     (OUT/'FULL_PARENT_COMPLETION.md').write_text(report)
     state('Prepared review rebuilt; inspect acquisition audit for archive limitations',complete_parent_acquisition=True,targets=len(targets),committed=False,pushed=False)

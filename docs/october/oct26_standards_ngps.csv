@@ -1,0 +1,3 @@
+NAME,RA,DECL,SLITWIDTH,EXPTIME,NEXP,BINSPAT,BINSPECT,SLITANGLE,AIRMASS_MAX,NOTE,COMMENT
+BD+28 4211,21:51:11.022,+28:51:50.37,SET 1.5,SET 10,2,2,3,PA,1.8,STD 19:25,10 min reserved. Starting exposure estimate; inspect all four channels and adjust before repeat. V=10.579999923706056; X<=1.02
+Feige 34,10:39:36.736,+43:06:09.21,SET 1.5,SET 20,2,2,3,PA,1.8,STD 05:28,10 min reserved. Starting exposure estimate; inspect all four channels and adjust before repeat. V=11.140000343322754; X<=1.37

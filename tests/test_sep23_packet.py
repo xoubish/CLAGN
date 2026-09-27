@@ -156,7 +156,7 @@ class SeptemberPacketTests(unittest.TestCase):
         def payload(path):
             return json.loads(re.search(r'<script id="candidate-data" type="application/json">(.*?)</script>', path.read_text(), re.S).group(1))
         primaries = self.packet['primaries']
-        for path, private in [(ROOT/'docs/index.html', False), (ROOT/'data/reselection_2026-09-20/observer_page_local.html', True)]:
+        for path, private in [(ROOT/'docs/index.html', False)]:
             page = payload(path)
             public_names = {t['name'] for t in payload(ROOT/'docs/index.html')['targets']}
             expected = {v['name'] for v in primaries if private or v['name'] in public_names}

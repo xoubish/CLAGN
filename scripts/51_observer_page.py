@@ -1,8 +1,8 @@
 """The single observer page, in the dark night-sheet style.
 
 Reads the candidate payloads written by 16_candidate_webpage.py (which now only supplies data),
-the September plan and packet, and renders one page per access level: the local collaboration
-copy with complete spectra, and the public copy for GitHub Pages. Both carry public backups and their CSV. Sections:
+the September plan and packet, and renders only docs/index.html. Private source
+payloads remain local data inputs, not a second website. Sections:
 About this run, the September 23 sequence (timeline, table, backups, CSV downloads), the
 candidate pool for all three nights (visibility chart, summary table) and one card per target
 with geometry, light curves, spectra, image and manifold position. Stable target numbers are
@@ -16,10 +16,10 @@ import importlib
 import pandas as pd
 from slit_preview import previews
 from observed_ngps import build_observed, add_observed
+from october_web import attach_october
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT/'data/reselection_2026-09-20'
-DEST_LOCAL = OUT/'observer_page_local.html'
 DEST_PUBLIC = ROOT/'docs/index.html'
 
 
@@ -92,7 +92,6 @@ def main():
     charts += '\n'+(ROOT/'web/candidate_spectra.js').read_text()
     charts=charts.replace("e.src==='DESI'?'var(--desi)':'var(--sdss)'", "e.src==='NGPS'?'#ff9b54':e.src==='DESI'?'var(--desi)':'var(--sdss)'")
     template = (ROOT/'web/observer_page_template.html').read_text()
-    slots = sep23_slots()
     public_slots = sep23_slots(public=True)
     local = json.loads((OUT/'candidate_payload_local.json').read_text())
     observed=build_observed()
@@ -113,21 +112,17 @@ def main():
             keep.update({k: sci.get(k) for k in PUBLIC_SCIENCE_IF_PUBLIC_REFERENCE if k in sci})
         keep['reference_private'] = bool(sci.get('reference_private'))
         public_science[t['name']] = {k: (None if isinstance(v, float) and v != v else v) for k, v in keep.items()}
-    for source, dest, private in [(OUT/'candidate_payload_local.json', DEST_LOCAL, True), (OUT/'candidate_payload_public.json', DEST_PUBLIC, False)]:
-        payload = prepare(json.loads(source.read_text()), slots if private else public_slots, None if private else public_plans, None if private else public_science, slit_previews)
-        add_observed(payload,observed,dest)
-        if private:
-            # Full-pool lists (52_pool_csv.py) as extra downloads on the local copy only: they include private-identity targets.
-            for pool in sorted((ROOT/'observing/pool').glob('ngps_pool_*.csv')):
-                payload['files'][pool.name] = pool.read_text()
-        encoded = json.dumps(payload, separators=(',', ':'), allow_nan=False).replace('<', '\\u003c')
-        page = template.replace('__PAYLOAD__', encoded).replace('__CHART_FUNCTIONS__', charts).replace('__FIELD_FUNCTIONS__', (ROOT/'web/observer_fields.js').read_text())
-        if not private:
-            assert 'proprietary' not in page and 'SDSS-V internal' not in page
-            public_names = {t['name'] for t in payload['targets']}
-            assert all(b['name'] in public_names for b in payload['backups'])
-        dest.write_text(page)
-        print(f"{dest.relative_to(ROOT)}: {len(payload['targets'])} targets, {len(payload['sep23_sequence'])} sequence entries, {len(page)/1e6:.1f} MB")
+    payload = prepare(json.loads((OUT/'candidate_payload_public.json').read_text()), public_slots, public_plans, public_science, slit_previews)
+    add_observed(payload,observed,DEST_PUBLIC)
+    attach_october(payload,False,{t['name'] for t in local['targets'] if not t.get('science',{}).get('reference_private')})
+    encoded = json.dumps(payload, separators=(',', ':'), allow_nan=False).replace('<', '\\u003c')
+    page = template.replace('__PAYLOAD__', encoded).replace('__CHART_FUNCTIONS__', charts).replace('__FIELD_FUNCTIONS__', (ROOT/'web/observer_fields.js').read_text())
+    page=page.replace('__OCTOBER_FUNCTIONS__',(ROOT/'web/observer_october.js').read_text())
+    assert 'proprietary' not in page and 'SDSS-V internal' not in page
+    public_names = {t['name'] for t in payload['targets']}
+    assert all(b['name'] in public_names for b in payload['backups'])
+    DEST_PUBLIC.write_text(page)
+    print(f"{DEST_PUBLIC.relative_to(ROOT)}: {len(payload['targets'])} targets, {len(payload['sep23_sequence'])} sequence entries, {len(page)/1e6:.1f} MB")
 
 
 if __name__ == '__main__':
