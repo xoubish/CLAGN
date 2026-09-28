@@ -1,0 +1,33 @@
+{
+  "interpretation": "Conditional linear-filter history contrasts, not fitted dust spectra or probabilities.",
+  "kernels": [
+    "exponential mean tau",
+    "uniform delays 0 to 2 tau"
+  ],
+  "mean_lags_rest_yr": [
+    0.5,
+    1,
+    2,
+    3,
+    5,
+    10,
+    20
+  ],
+  "dates": [
+    "2027-07-01",
+    "2028-01-01",
+    "2028-06-30"
+  ],
+  "host_min_fractions": [
+    0,
+    0.5,
+    0.8
+  ],
+  "anchors": [
+    "last bin",
+    "last 400-day median substituted at final observed bin"
+  ],
+  "extrapolation": "constant before first measurement and after final measurement",
+  "excluded": "Unknown UV conversion, nonlinear dust response, actual warm geometry, covering factors, optical host measurements, SPHEREx for remaining 23, future variability and calibration covariance.",
+  "warning": "The 0.24 dex line is only a scale comparison: these optical/W1 filters do not directly predict the warm-continuum observable."
+}

@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "targets": 24,
+  "bands_per_target": 4,
+  "conditional_scenarios": 18144,
+  "atlas_pages": 4,
+  "constant_driver_and_exponential_quadrature_checks": "Passed in response_stress_test.py",
+  "source_and_pdf_unchanged": true,
+  "calibrated_miri_forecast_established": false
+}

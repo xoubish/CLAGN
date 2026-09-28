@@ -1,5 +1,13 @@
 # Focused technical and editorial review — 26 September 2026
 
+**Literature update, 27 September:** the [citation review](literature_search_20260927.md)
+documents 14 added papers and their claim-level support. The current proposal
+has 50 references, with numbering reconciled throughout the text and captions.
+The technical review below records the earlier checks; the citation additions do
+not change their scope or resolve the outstanding target-level validation.
+
+**History audit, 27 September:** [measured curves for all 24 targets](history_audit/README.md) now document the sample variability, reversals, optical gaps, and conditional response tests. These do not establish a calibrated warm-continuum detection forecast.
+
 The proposal and saved APT file now request **67.0 hours**; the timing export
 contains **67.00 charged hours**. APT rounds the proposal summary upward to a tenth.
 The program has 24 MIRI/MRS targets (12 fading, 12 rising), 24 matching sky visits,

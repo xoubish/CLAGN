@@ -1,0 +1,9 @@
+{
+  "id": "R03",
+  "collection": "ztf_dr24",
+  "ra": 161.77151,
+  "dec": 54.734966,
+  "queried_utc": "2026-09-28T01:48:57.984389+00:00",
+  "status": "downloaded",
+  "bytes": 47841
+}

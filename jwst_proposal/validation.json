@@ -1,6 +1,6 @@
 {
   "version": "Scientific editorial revision",
-  "built_at_utc": "2026-09-27T02:25:56.131838+00:00",
+  "built_at_utc": "2026-09-28T02:10:40.422141+00:00",
   "source": "proposal.tex",
   "pdf": "proposal.pdf",
   "build_command": "make -C jwst_proposal",
@@ -42,8 +42,8 @@
   "history_classifications_validated": false,
   "response_phase_coverage_validated": false,
   "quantitative_dust_model_discrimination_validated": false,
-  "source_sha256": "8906c30dbf7f6fb77a801836f3979da715e984bfa90634095816b46ae438cb59",
-  "pdf_sha256": "9f7b85fa38d62ab77cc33b1f74a6fb804e1b9fed2c43bd5f608c53cfd32d4f66",
+  "source_sha256": "21ef6c914ce0aaa4475afe7aab01c1bf8b1693ac1d830adeedf92d2a5a56e51a",
+  "pdf_sha256": "d9ea70f0009925526bb367c52086b18b2b405cc734abf5fbbb772d4f561c9131",
   "style_sha256": "d5e8b0c1133974ac9eaa6cc27213794ceec297337c69f2ec13254a10684fdd08",
   "style_unchanged": true,
   "figure1": "fig1_connected.pdf",
@@ -131,23 +131,21 @@
   "technical_review": "review/README.md",
   "technical_consistency": "review/consistency.json",
   "bibliography_audit": "review/reference_audit.csv",
-  "bibliography_entries_checked": 36,
+  "bibliography_entries_checked": 50,
   "anonymous_text_screen_passed": true,
   "template_version_statement_present": true,
   "AI_use_disclosure_present": true,
   "figure1_caption": "Identical dashed pooled fit over optical/SPHEREx overlap; model-dependent colour temperature ~1200 K; native flux scales.",
-  "sample_selection_wording": "ZTF/WISE history-selected sample, primarily through a low-dimensional variability map; P9694 presented as a rising example.",
+  "sample_selection_wording": "Measured approximately decade-long W1/W2 coverage and W1 95th-to-5th-percentile total-flux ratios of 1.3\u20132.3 added from the 24-target audit. Rising/fading labels explicitly describe selection histories; full multiband histories include reversals. Manifold citation retained.",
   "figure1_display_width_textwidth": 0.91,
   "sample_precision_in_proposal": true,
   "figure2_noise_comparison": "../archive/jwst_cleanup_20260926.zip::review/figure2_precision_comparison.json",
   "figure2_model_scope_in_text": "Illustrative exponential continuum response with arbitrary times and amplitudes; no detection forecast.",
   "dedicated_sky_rationale": "Preserves extended host emission for decomposition around the compact nucleus, avoiding its inclusion in an on-source background estimate.",
-  "latest_wording_revision": "Integrated sample sensitivity into the primary comparison, connected uncertainty treatment to the relevant measurements, and smoothed transitions and model-scope language.",
+  "latest_wording_revision": "Added measured sample-history evidence and made the rising\u2013fading offset a summary comparison within the full-history analysis; no empirical detection forecast claimed.",
   "latest_visual_review_pages": [
     2,
-    3,
-    4,
-    5
+    3
   ],
   "latest_figure1_trial": "Optical mean curve and clearer SPHEREx markers adopted; prior figure in ../archive/jwst_cleanup_20260926.zip::review/local_backups/p9694_before_optical_mean/.",
   "reference_access_dates_removed": true,
@@ -164,7 +162,7 @@
     4.831394202326957,
     21.544401544401545
   ],
-  "joint_silicate_test": "Continuum-normalised strengths and profiles fitted jointly; models must reproduce both features and intervening continuum; reference 24.",
+  "joint_silicate_test": "Continuum-normalised strengths and profiles fitted jointly; models must reproduce both features and intervening continuum; references 26--28 in the current proposal.",
   "figure2_percentage_interpretation": null,
   "figure2_noise_comparison_in_proposal": false,
   "figure2_response_formula": "1 + (L_past-1)*exp(-1/tau(lambda)); phenomenological and schematic",
@@ -190,7 +188,7 @@
   "APT_title_abstract_updated": true,
   "APT_observation_scheduling_xml_unchanged": true,
   "scientific_editorial_review": "../archive/jwst_cleanup_20260926.zip::review/scientific_editorial_review.md",
-  "bibliography_verification_scope": "Prior metadata audit retained; 11 retained references rechecked for scientific relevance or instrument coverage; all 36 citation numbers and entries reconciled.",
+  "bibliography_verification_scope": "Previous bibliographic audit retained; 14 new papers checked against primary articles/abstracts and publication metadata; four existing papers rechecked for claim support; all 50 references and citation numbers reconciled.",
   "figure3_presentation": "Caption supplies title; one short normalization note above fixed/evolving cartoons; Delayed fixed dust and Evolving dust labelled beside their curves.",
   "figure_clarity_revision": {
     "backup": "../archive/jwst_cleanup_20260926.zip::review/local_backups/before_figure_clarity_20260926_182336",
@@ -200,5 +198,14 @@
     "figure3_spectra_csv_unchanged": true,
     "figure3_display_width_textwidth": 1.0
   },
-  "figure3_model_explanation_in_text": true
+  "figure3_model_explanation_in_text": true,
+  "literature_review": "review/literature_search_20260927.md",
+  "literature_review_added_references": 14,
+  "all_references_linked": true,
+  "linked_bibliography_entries": 50,
+  "reference_links_verified_in_pdf": true,
+  "reference_link_update_preserves_pdf_text": true,
+  "history_audit": "review/history_audit/README.md",
+  "history_audit_photometry_targets": 24,
+  "history_audit_result": "All 24 have measured ZTF and W1/W2 histories; historical family labels do not consistently describe later states. Conditional response-filter experiments do not establish a calibrated 0.24-dex warm-continuum separation. Remaining 23 SPHEREx spectra are not on this computer (user confirmed)."
 }

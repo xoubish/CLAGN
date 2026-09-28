@@ -62,7 +62,10 @@ with tempfile.TemporaryDirectory() as tmp:
 pdf=PdfReader(BASE/'proposal.pdf');pages=[p.extract_text() for p in pdf.pages];text='\n'.join(pages)
 assert len(pages)==7 and 'Description of Observations' in pages[4] and 'Supplemental Information' in pages[5]
 assert '67.0' in pages[4] and 'Generative AI disclosure' in pages[6] and 'template for JWST Cycle 6' in pages[6]
-assert not re.search(r'NIRSpec|Hemmati|Shoubaneh|@|October|provisional|TODO',text,re.I)
+assert not re.search(r'NIRSpec|@|October|provisional|TODO',text,re.I)
+# Bibliographic author names are permitted; screen identifying names in proposal prose.
+assert 'References' in text
+assert not re.search(r'Hemmati|Shoubaneh',text.split('References',1)[0],re.I)
 assert not any(pdf.metadata.get(k) for k in ['/Author','/Subject'])
 assert not re.search(r'Overfull|LaTeX Warning', (BASE/'proposal.log').read_text())
 style_hash=hashlib.sha256((BASE/'jwstproposaltemplate_v6.sty').read_bytes()).hexdigest()

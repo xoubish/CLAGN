@@ -16,6 +16,7 @@ per target. The PDF has five core pages and seven pages overall.
 | `fig1_connected.pdf`, `fig2_diagnostics.pdf`, `fig3_dust_evolution.pdf` | Figures used by LaTeX |
 | [inputs/](inputs/) | Saved figure data, models and provenance |
 | [review/README.md](review/README.md) | Technical checks and supporting analyses |
+| [review/literature_search_20260927.md](review/literature_search_20260927.md) | Literature search and support for the 14 added references |
 | [apt/README.md](apt/README.md) | APT setup, accepted sky fields and timing reports |
 | [etc/LOCAL_SETUP.md](etc/LOCAL_SETUP.md) | ETC calculations and local runtime |
 | [duplication/README.md](duplication/README.md) | Duplication search |

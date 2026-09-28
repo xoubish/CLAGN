@@ -1,0 +1,110 @@
+[
+  {
+    "id": "F01",
+    "collection": "ztf_dr24",
+    "ra": 119.89561,
+    "dec": 32.362025,
+    "queried_utc": "2026-09-28T01:48:57.984074+00:00",
+    "status": "downloaded",
+    "bytes": 84206
+  },
+  {
+    "id": "F09",
+    "collection": "ztf_dr24",
+    "ra": 128.9116,
+    "dec": -4.0882,
+    "queried_utc": "2026-09-28T01:48:57.984209+00:00",
+    "status": "cached",
+    "bytes": 268938
+  },
+  {
+    "id": "F11",
+    "collection": "ztf_dr24",
+    "ra": 352.63458333,
+    "dec": -2.4625,
+    "queried_utc": "2026-09-28T01:48:57.984279+00:00",
+    "status": "cached",
+    "bytes": 223745
+  },
+  {
+    "id": "F12",
+    "collection": "ztf_dr24",
+    "ra": 74.66791667,
+    "dec": -21.99194444,
+    "queried_utc": "2026-09-28T01:48:57.984361+00:00",
+    "status": "cached",
+    "bytes": 140155
+  },
+  {
+    "id": "R03",
+    "collection": "ztf_dr24",
+    "ra": 161.77151,
+    "dec": 54.734966,
+    "queried_utc": "2026-09-28T01:48:57.984389+00:00",
+    "status": "downloaded",
+    "bytes": 47841
+  },
+  {
+    "id": "R06",
+    "collection": "ztf_dr24",
+    "ra": 129.61042,
+    "dec": 37.318528,
+    "queried_utc": "2026-09-28T01:48:57.984522+00:00",
+    "status": "downloaded",
+    "bytes": 40556
+  },
+  {
+    "id": "R07",
+    "collection": "ztf_dr24",
+    "ra": 152.970765,
+    "dec": 54.701781,
+    "queried_utc": "2026-09-28T01:48:57.984535+00:00",
+    "status": "cached",
+    "bytes": 897033
+  },
+  {
+    "id": "R08",
+    "collection": "ztf_dr24",
+    "ra": 147.1601,
+    "dec": 40.5121,
+    "queried_utc": "2026-09-28T01:48:57.984587+00:00",
+    "status": "downloaded",
+    "bytes": 65893
+  },
+  {
+    "id": "R09",
+    "collection": "ztf_dr24",
+    "ra": 103.956358,
+    "dec": 40.000323,
+    "queried_utc": "2026-09-28T01:49:11.725822+00:00",
+    "status": "cached",
+    "bytes": 555805
+  },
+  {
+    "id": "R10",
+    "collection": "ztf_dr24",
+    "ra": 291.625904,
+    "dec": 41.5513839,
+    "queried_utc": "2026-09-28T01:49:11.725975+00:00",
+    "status": "cached",
+    "bytes": 983438
+  },
+  {
+    "id": "R11",
+    "collection": "ztf_dr24",
+    "ra": 297.30708333,
+    "dec": -18.78777778,
+    "queried_utc": "2026-09-28T01:49:11.726014+00:00",
+    "status": "cached",
+    "bytes": 234387
+  },
+  {
+    "id": "R12",
+    "collection": "ztf_dr24",
+    "ra": 303.746925,
+    "dec": 25.383657,
+    "queried_utc": "2026-09-28T01:49:11.726046+00:00",
+    "status": "cached",
+    "bytes": 595131
+  }
+]
