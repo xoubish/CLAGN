@@ -5,6 +5,13 @@ Run `scripts/16_candidate_webpage.py` to assemble the two candidate payloads,
 then `scripts/51_observer_page.py` to build the only observer webpage, `docs/index.html`.
 The JSON payloads remain separate data inputs; neither creates another webpage.
 
+
+`observer_tabs.js` controls the six tabs (All, Sep23-targets, Observed, Oct26,
+Oct27, About). `scripts/observer_tabs.py` creates the complete catalogue and the
+five tab CSVs under `docs/targets/`. Each target tab shows exactly one CSV button;
+About has none. Night standards and backups are notes within their respective
+tab. The All catalogue includes the prepared pool plus the added October targets.
+
 The October section is supplied by `scripts/october_web.py` and rendered by
 `observer_october.js`. Rebuild its observing packet with
 `scripts/53_october_observing_packet.py`, then run `scripts/51_observer_page.py`.

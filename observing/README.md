@@ -2,7 +2,7 @@
 
 ## October 26–27, 2026 — 40 science targets per night
 
-- **[October targets on the observer page](../docs/index.html#october)** — proposed ordered lists for 80 distinct targets, with JWST labels, science reasons, cached brightness, full-visit geometry, and flags.
+- **[October targets on the observer page](../docs/index.html#oct26)** — proposed ordered lists for 80 distinct targets, with JWST labels, science reasons, cached brightness, full-visit geometry, and flags.
 - **[Packet notes and downloads](oct26_27_2026/README.md)** — NGPS science/standard/backup CSVs, timing tables, schedule PDFs, and selection rationale.
 - **[JWST coverage audit](oct26_27_2026/jwst_coverage.csv)** — 23 of the current proposal's 24 targets scheduled in October; Moon-blocked P11530 retains its September spectrum.
 
