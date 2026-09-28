@@ -94,7 +94,7 @@
     "zero": "same flux density",
     "normalization": "Equal integrated rest 2\u20134 micron luminosities"
   },
-  "presentation": "Simple fixed/evolving boundary cartoons above two enlarged residual panels, with Delayed fixed dust and Evolving dust labelled directly beside their curves; one short equal-2\u20134-micron normalization note above the panels, with the figure title supplied by its caption. No separate legend, percentage callouts, spectral shading, PAH ticks or coverage rulers; equation retained in caption.",
+  "presentation": "Fixed/evolving boundary cartoons above two residual panels. The ordinate explicitly gives the evolving-to-fixed model ratio minus unity in percent. A neutral zero line is labelled Equal spectra; dashed curves are labelled Evolution: brighter/fainter according to the warm contrast. Shading identifies the primary rest 8\u201313 micron diagnostic band. Equal-2\u20134-micron normalization is stated above the panels; no detection or calibration band is plotted.",
   "figure": "fig3_dust_evolution.pdf",
   "science_question": "Does delayed heating suffice, or is additional dust evolution required?"
 }

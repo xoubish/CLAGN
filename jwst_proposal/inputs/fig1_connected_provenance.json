@@ -10,14 +10,14 @@
           "mjd": 58424.0,
           "date": "2018-11-02",
           "label": "2018",
-          "color": "#5ba3d0",
+          "color": "#2878a5",
           "in_lightcurve_window": true
         },
         {
           "mjd": 59501.28895499,
           "date": "2021-10-14",
           "label": "2021",
-          "color": "#084a91",
+          "color": "#7654a2",
           "in_lightcurve_window": true
         },
         {
@@ -36,6 +36,8 @@
       "spherex_dates": [
         {
           "label": "Jul 2025",
+          "display_label": "S1: Jul 2025",
+          "visit_id": "S1",
           "color": "#2878a5",
           "median_mjd": 60864.730249,
           "start_mjd": 60857.125666,
@@ -43,6 +45,8 @@
         },
         {
           "label": "Dec 2025\u2013Jan 2026",
+          "display_label": "S2: Dec 2025\u2013Jan 2026",
+          "visit_id": "S2",
           "color": "#a14c7d",
           "median_mjd": 61039.650689,
           "start_mjd": 61028.101917,
@@ -50,6 +54,8 @@
         },
         {
           "label": "Jun\u2013Jul 2026",
+          "display_label": "S3: Jun\u2013Jul 2026",
+          "visit_id": "S3",
           "color": "#27836c",
           "median_mjd": 61225.365721,
           "start_mjd": 61218.985904,
@@ -71,216 +77,493 @@
         "result": "review/p9694_hot_dust/mean_fit.json",
         "curve": "inputs/P9694_spherex_mean_fit.csv",
         "temperature_K": 1167.0129871783115,
-        "label": "Mean fit: model-dependent colour temperature ~1200 K",
+        "label": "Mean continuum across visits",
         "model": "Pooled host + fixed-slope disc + blackbody; same continuum at all visits",
         "n_fit": 209,
         "interpretation": "Single inverse-variance-weighted continuum across July 2025\u2013July 2026; all amplitudes, slope and temperature shared. Line bands excluded; native points remain unbinned and unscaled. Conditional colour temperature, not a physical single-temperature dust distribution or instantaneous spectrum."
       },
-      "w2": {
-        "raw_exposures": 272,
-        "accepted_exposures": 263,
+      "ztf": {
+        "g": {
+          "release_exposures": 606,
+          "release_nights": 506,
+          "release_last_mjd": 60969.3283681,
+          "alert_objects": [
+            "ZTF18abqlyix"
+          ],
+          "alert_matched_exposures": 264,
+          "alert_minus_release_offset_mag": -0.026322199999999185,
+          "alert_nights_after_release": 17,
+          "alert_last_mjd": 61286.35991899995
+        },
+        "r": {
+          "release_exposures": 757,
+          "release_nights": 556,
+          "release_last_mjd": 60969.2789583,
+          "alert_objects": [
+            "ZTF18abqlyix"
+          ],
+          "alert_matched_exposures": 214,
+          "alert_minus_release_offset_mag": 0.029465549999999396,
+          "alert_nights_after_release": 4,
+          "alert_last_mjd": 61206.46586810006
+        },
+        "method": "Nightly medians of the ZTF public release, extended by ALeRCE alert photometry.\n\n    Public release: IRSA light-curve service rows with catflags==0, one median per\n    night and band. Alerts: ALeRCE detections with corrected magnitudes (reference\n    flux added), not flagged dubious, deduplicated by candid. Alert magnitudes are\n    shifted by the median (alert - release) difference of same-exposure matches,\n    then only nights after the public release are kept."
+      },
+      "wise": {
+        "inputs": [
+          "figure_allwise_mep_exposures.csv",
+          "figure_neowise_exposures.csv"
+        ],
+        "raw_exposures": {
+          "NEOWISE": 272,
+          "AllWISE": 23
+        },
+        "accepted_exposures": {
+          "NEOWISE": 263,
+          "AllWISE": 22
+        },
         "visits": [
           {
+            "visit": 308,
+            "survey": "AllWISE",
+            "mjd": 55384.5259067,
+            "n": 12,
+            "W1": {
+              "mag": 11.7185,
+              "mag_err": 0.007065285941161306,
+              "flux_mjy": 6.357945169339395,
+              "flux_err_mjy": 0.04137349424542317
+            },
+            "W2": {
+              "mag": 10.6585,
+              "mag_err": 0.00948790108191579,
+              "flux_mjy": 9.366779471459633,
+              "flux_err_mjy": 0.08185328691431669
+            }
+          },
+          {
+            "visit": 309,
+            "survey": "AllWISE",
+            "mjd": 55560.9508785,
+            "n": 10,
+            "W1": {
+              "mag": 11.744499999999999,
+              "mag_err": 0.015028919948635365,
+              "flux_mjy": 6.207500715098692,
+              "flux_err_mjy": 0.08592513625268468
+            },
+            "W2": {
+              "mag": 10.737,
+              "mag_err": 0.01884660220744903,
+              "flux_mjy": 8.713453049843881,
+              "flux_err_mjy": 0.15125127334247307
+            }
+          },
+          {
             "visit": 315,
+            "survey": "NEOWISE",
             "mjd": 56658.57181870499,
-            "mag": 10.8235,
-            "mag_err": 0.006695224060540813,
-            "flux_mjy": 8.046190218942991,
-            "flux_err_mjy": 0.04961706730739091,
-            "n": 10
+            "n": 10,
+            "W1": {
+              "mag": 11.8885,
+              "mag_err": 0.005324517703475315,
+              "flux_mjy": 5.436467276648081,
+              "flux_err_mjy": 0.026660772784421787
+            },
+            "W2": {
+              "mag": 10.8235,
+              "mag_err": 0.006695224060540813,
+              "flux_mjy": 8.046190218942991,
+              "flux_err_mjy": 0.04961706730739091
+            }
           },
           {
             "visit": 316,
+            "survey": "NEOWISE",
             "mjd": 56846.79122127,
-            "mag": 10.844,
-            "mag_err": 0.012102058602683872,
-            "flux_mjy": 7.895693757873834,
-            "flux_err_mjy": 0.08800862322530828,
-            "n": 11
+            "n": 11,
+            "W1": {
+              "mag": 11.911,
+              "mag_err": 0.0104346054461304,
+              "flux_mjy": 5.324965253478904,
+              "flux_err_mjy": 0.051176253670921976
+            },
+            "W2": {
+              "mag": 10.844,
+              "mag_err": 0.012102058602683872,
+              "flux_mjy": 7.895693757873834,
+              "flux_err_mjy": 0.08800862322530828
+            }
           },
           {
             "visit": 317,
+            "survey": "NEOWISE",
             "mjd": 57025.522233655,
-            "mag": 10.8535,
-            "mag_err": 0.01148370547618047,
-            "flux_mjy": 7.826909197458157,
-            "flux_err_mjy": 0.08278430766011033,
-            "n": 12
+            "n": 12,
+            "W1": {
+              "mag": 11.8995,
+              "mag_err": 0.006068411358923523,
+              "flux_mjy": 5.381666463732429,
+              "flux_err_mjy": 0.030079282384920525
+            },
+            "W2": {
+              "mag": 10.8535,
+              "mag_err": 0.01148370547618047,
+              "flux_mjy": 7.826909197458157,
+              "flux_err_mjy": 0.08278430766011033
+            }
           },
           {
             "visit": 318,
+            "survey": "NEOWISE",
             "mjd": 57208.49866787,
-            "mag": 10.837,
-            "mag_err": 0.0073357677990584505,
-            "flux_mjy": 7.946763629676429,
-            "flux_err_mjy": 0.053692243554036935,
-            "n": 11
+            "n": 11,
+            "W1": {
+              "mag": 11.907,
+              "mag_err": 0.009445317673536268,
+              "flux_mjy": 5.344619332381409,
+              "flux_err_mjy": 0.04649529712395616
+            },
+            "W2": {
+              "mag": 10.837,
+              "mag_err": 0.0073357677990584505,
+              "flux_mjy": 7.946763629676429,
+              "flux_err_mjy": 0.053692243554036935
+            }
           },
           {
             "visit": 319,
+            "survey": "NEOWISE",
             "mjd": 57384.73915724,
-            "mag": 10.8095,
-            "mag_err": 0.007704009056858475,
-            "flux_mjy": 8.15061342424226,
-            "flux_err_mjy": 0.057833937345124244,
-            "n": 12
+            "n": 12,
+            "W1": {
+              "mag": 11.861,
+              "mag_err": 0.008607873631012135,
+              "flux_mjy": 5.57592313429685,
+              "flux_err_mjy": 0.044206724898666054
+            },
+            "W2": {
+              "mag": 10.8095,
+              "mag_err": 0.007704009056858475,
+              "flux_mjy": 8.15061342424226,
+              "flux_err_mjy": 0.057833937345124244
+            }
           },
           {
             "visit": 320,
+            "survey": "NEOWISE",
             "mjd": 57575.57956878,
-            "mag": 10.815,
-            "mag_err": 0.008136843404431925,
-            "flux_mjy": 8.10942936695485,
-            "flux_err_mjy": 0.06077457541623815,
-            "n": 11
+            "n": 11,
+            "W1": {
+              "mag": 11.867,
+              "mag_err": 0.009186267257617797,
+              "flux_mjy": 5.545194429076009,
+              "flux_err_mjy": 0.04691714045981678
+            },
+            "W2": {
+              "mag": 10.815,
+              "mag_err": 0.008136843404431925,
+              "flux_mjy": 8.10942936695485,
+              "flux_err_mjy": 0.06077457541623815
+            }
           },
           {
             "visit": 321,
+            "survey": "NEOWISE",
             "mjd": 57743.903116065005,
-            "mag": 10.822500000000002,
-            "mag_err": 0.009129377021445496,
-            "flux_mjy": 8.053604447858856,
-            "flux_err_mjy": 0.06771846703083184,
-            "n": 12
+            "n": 12,
+            "W1": {
+              "mag": 11.867,
+              "mag_err": 0.007740414494621933,
+              "flux_mjy": 5.545194429076009,
+              "flux_err_mjy": 0.039532718119019095
+            },
+            "W2": {
+              "mag": 10.822500000000002,
+              "mag_err": 0.009129377021445496,
+              "flux_mjy": 8.053604447858856,
+              "flux_err_mjy": 0.06771846703083184
+            }
           },
           {
             "visit": 322,
+            "survey": "NEOWISE",
             "mjd": 57939.79204411,
-            "mag": 10.831,
-            "mag_err": 0.00707819056281474,
-            "flux_mjy": 7.99080063507983,
-            "flux_err_mjy": 0.052094062440476596,
-            "n": 11
+            "n": 11,
+            "W1": {
+              "mag": 11.859,
+              "mag_err": 0.006743454369998191,
+              "flux_mjy": 5.58620383025168,
+              "flux_err_mjy": 0.03469563828278451
+            },
+            "W2": {
+              "mag": 10.831,
+              "mag_err": 0.00707819056281474,
+              "flux_mjy": 7.99080063507983,
+              "flux_err_mjy": 0.052094062440476596
+            }
           },
           {
             "visit": 323,
+            "survey": "NEOWISE",
             "mjd": 58104.63708948,
-            "mag": 10.8,
-            "mag_err": 0.009796029076134529,
-            "flux_mjy": 8.222242766982902,
-            "flux_err_mjy": 0.0741849897455934,
-            "n": 12
+            "n": 12,
+            "W1": {
+              "mag": 11.8215,
+              "mag_err": 0.004737701565842817,
+              "flux_mjy": 5.782515136359169,
+              "flux_err_mjy": 0.025232492843085787
+            },
+            "W2": {
+              "mag": 10.8,
+              "mag_err": 0.009796029076134529,
+              "flux_mjy": 8.222242766982902,
+              "flux_err_mjy": 0.0741849897455934
+            }
           },
           {
             "visit": 324,
+            "survey": "NEOWISE",
             "mjd": 58306.47145223,
-            "mag": 10.768,
-            "mag_err": 0.009451701897130797,
-            "flux_mjy": 8.468184184979977,
-            "flux_err_mjy": 0.0737184153716773,
-            "n": 19
+            "n": 19,
+            "W1": {
+              "mag": 11.753,
+              "mag_err": 0.007284574874420865,
+              "flux_mjy": 6.15909323305002,
+              "flux_err_mjy": 0.041323459251031126
+            },
+            "W2": {
+              "mag": 10.768,
+              "mag_err": 0.009451701897130797,
+              "flux_mjy": 8.468184184979977,
+              "flux_err_mjy": 0.0737184153716773
+            }
           },
           {
             "visit": 325,
+            "survey": "NEOWISE",
             "mjd": 58465.38581382,
-            "mag": 10.72,
-            "mag_err": 0.007726361316252251,
-            "flux_mjy": 8.850958316676614,
-            "flux_err_mjy": 0.0629855591533541,
-            "n": 13
+            "n": 13,
+            "W1": {
+              "mag": 11.708,
+              "mag_err": 0.00785204995802268,
+              "flux_mjy": 6.419730226066388,
+              "flux_err_mjy": 0.046427522846887996
+            },
+            "W2": {
+              "mag": 10.72,
+              "mag_err": 0.007726361316252251,
+              "flux_mjy": 8.850958316676614,
+              "flux_err_mjy": 0.0629855591533541
+            }
           },
           {
             "visit": 326,
+            "survey": "NEOWISE",
             "mjd": 58671.00555575,
-            "mag": 10.718,
-            "mag_err": 0.007748417373603144,
-            "flux_mjy": 8.867277410245684,
-            "flux_err_mjy": 0.06328182300728598,
-            "n": 10
+            "n": 10,
+            "W1": {
+              "mag": 11.7055,
+              "mag_err": 0.01765448519592306,
+              "flux_mjy": 6.434529232633351,
+              "flux_err_mjy": 0.10462790186274214
+            },
+            "W2": {
+              "mag": 10.718,
+              "mag_err": 0.007748417373603144,
+              "flux_mjy": 8.867277410245684,
+              "flux_err_mjy": 0.06328182300728598
+            }
           },
           {
             "visit": 327,
+            "survey": "NEOWISE",
             "mjd": 58832.351964235,
-            "mag": 10.682500000000001,
-            "mag_err": 0.006038925840722649,
-            "flux_mjy": 9.162000169113183,
-            "flux_err_mjy": 0.05095956027945894,
-            "n": 12
+            "n": 12,
+            "W1": {
+              "mag": 11.6905,
+              "mag_err": 0.007068092466105285,
+              "flux_mjy": 6.524042450822457,
+              "flux_err_mjy": 0.042471214548364264
+            },
+            "W2": {
+              "mag": 10.682500000000001,
+              "mag_err": 0.006038925840722649,
+              "flux_mjy": 9.162000169113183,
+              "flux_err_mjy": 0.05095956027945894
+            }
           },
           {
             "visit": 328,
+            "survey": "NEOWISE",
             "mjd": 59035.18991612,
-            "mag": 10.7635,
-            "mag_err": 0.016032881037375005,
-            "flux_mjy": 8.503354705842616,
-            "flux_err_mjy": 0.12556758614100808,
-            "n": 10
+            "n": 10,
+            "W1": {
+              "mag": 11.748999999999999,
+              "mag_err": 0.011821837092978906,
+              "flux_mjy": 6.181826020703654,
+              "flux_err_mjy": 0.06730966493852608
+            },
+            "W2": {
+              "mag": 10.7635,
+              "mag_err": 0.016032881037375005,
+              "flux_mjy": 8.503354705842616,
+              "flux_err_mjy": 0.12556758614100808
+            }
           },
           {
             "visit": 329,
+            "survey": "NEOWISE",
             "mjd": 59196.547927039996,
-            "mag": 10.7295,
-            "mag_err": 0.005145565154525738,
-            "flux_mjy": 8.773851820941145,
-            "flux_err_mjy": 0.041581395188773566,
-            "n": 12
+            "n": 12,
+            "W1": {
+              "mag": 11.759,
+              "mag_err": 0.006755321760953294,
+              "flux_mjy": 6.1251506990825,
+              "flux_err_mjy": 0.03810996043541531
+            },
+            "W2": {
+              "mag": 10.7295,
+              "mag_err": 0.005145565154525738,
+              "flux_mjy": 8.773851820941145,
+              "flux_err_mjy": 0.041581395188773566
+            }
           },
           {
             "visit": 330,
+            "survey": "NEOWISE",
             "mjd": 59402.33104742,
-            "mag": 10.735,
-            "mag_err": 0.010554099470936936,
-            "flux_mjy": 8.72951861591511,
-            "flux_err_mjy": 0.08485689931127256,
-            "n": 11
+            "n": 11,
+            "W1": {
+              "mag": 11.738,
+              "mag_err": 0.010025364161369229,
+              "flux_mjy": 6.244774754803153,
+              "flux_err_mjy": 0.057662386819433434
+            },
+            "W2": {
+              "mag": 10.735,
+              "mag_err": 0.010554099470936936,
+              "flux_mjy": 8.72951861591511,
+              "flux_err_mjy": 0.08485689931127256
+            }
           },
           {
             "visit": 331,
+            "survey": "NEOWISE",
             "mjd": 59563.45338653,
-            "mag": 10.695,
-            "mag_err": 0.008913058022415283,
-            "flux_mjy": 9.057123620424235,
-            "flux_err_mjy": 0.0743520092553354,
-            "n": 15
+            "n": 15,
+            "W1": {
+              "mag": 11.689,
+              "mag_err": 0.00861780553201929,
+              "flux_mjy": 6.5330619775922045,
+              "flux_err_mjy": 0.05185482201365952
+            },
+            "W2": {
+              "mag": 10.695,
+              "mag_err": 0.008913058022415283,
+              "flux_mjy": 9.057123620424235,
+              "flux_err_mjy": 0.0743520092553354
+            }
           },
           {
             "visit": 332,
+            "survey": "NEOWISE",
             "mjd": 59766.6047428,
-            "mag": 10.7,
-            "mag_err": 0.014676401236384773,
-            "flux_mjy": 9.015509917392764,
-            "flux_err_mjy": 0.12186684050730201,
-            "n": 11
+            "n": 11,
+            "W1": {
+              "mag": 11.671,
+              "mag_err": 0.015524806858727536,
+              "flux_mjy": 6.64227387110608,
+              "flux_err_mjy": 0.09497704737097398
+            },
+            "W2": {
+              "mag": 10.7,
+              "mag_err": 0.014676401236384773,
+              "flux_mjy": 9.015509917392764,
+              "flux_err_mjy": 0.12186684050730201
+            }
           },
           {
             "visit": 333,
+            "survey": "NEOWISE",
             "mjd": 59927.80520094,
-            "mag": 10.643,
-            "mag_err": 0.01108611612163767,
-            "flux_mjy": 9.501458929975582,
-            "flux_err_mjy": 0.09701645442149175,
-            "n": 13
+            "n": 13,
+            "W1": {
+              "mag": 11.611,
+              "mag_err": 0.005438140213822894,
+              "flux_mjy": 7.019671327977294,
+              "flux_err_mjy": 0.035159513673026055
+            },
+            "W2": {
+              "mag": 10.643,
+              "mag_err": 0.01108611612163767,
+              "flux_mjy": 9.501458929975582,
+              "flux_err_mjy": 0.09701645442149175
+            }
           },
           {
             "visit": 334,
+            "survey": "NEOWISE",
             "mjd": 60130.72108177,
-            "mag": 10.635,
-            "mag_err": 0.05152181680502164,
-            "flux_mjy": 9.571726825176935,
-            "flux_err_mjy": 0.45421047380872553,
-            "n": 13
+            "n": 13,
+            "W1": {
+              "mag": 11.587,
+              "mag_err": 0.012428555736702727,
+              "flux_mjy": 7.176567570141801,
+              "flux_err_mjy": 0.08215105073666633
+            },
+            "W2": {
+              "mag": 10.635,
+              "mag_err": 0.05152181680502164,
+              "flux_mjy": 9.571726825176935,
+              "flux_err_mjy": 0.45421047380872553
+            }
           },
           {
             "visit": 335,
+            "survey": "NEOWISE",
             "mjd": 60292.07615,
-            "mag": 10.586,
-            "mag_err": 0.012750390345613113,
-            "flux_mjy": 10.013601296566547,
-            "flux_err_mjy": 0.11759516237648523,
-            "n": 11
+            "n": 11,
+            "W1": {
+              "mag": 11.554,
+              "mag_err": 0.009019414410484199,
+              "flux_mjy": 7.398041756465823,
+              "flux_err_mjy": 0.06145692124404776
+            },
+            "W2": {
+              "mag": 10.586,
+              "mag_err": 0.012750390345613113,
+              "flux_mjy": 10.013601296566547,
+              "flux_err_mjy": 0.11759516237648523
+            }
           },
           {
             "visit": 336,
+            "survey": "NEOWISE",
             "mjd": 60497.77276059,
-            "mag": 10.622,
-            "mag_err": 0.018061986421973014,
-            "flux_mjy": 9.687022209689994,
-            "flux_err_mjy": 0.16115043677644444,
-            "n": 11
+            "n": 11,
+            "W1": {
+              "mag": 11.543,
+              "mag_err": 0.007401304778660816,
+              "flux_mjy": 7.473375057957192,
+              "flux_err_mjy": 0.050944903823581335
+            },
+            "W2": {
+              "mag": 10.622,
+              "mag_err": 0.018061986421973014,
+              "flux_mjy": 9.687022209689994,
+              "flux_err_mjy": 0.16115043677644444
+            }
           }
-        ]
+        ],
+        "zero_magnitude_jy": {
+          "W1": 309.54,
+          "W2": 171.787
+        },
+        "calibration_source": "https://irsa.ipac.caltech.edu/data/WISE/docs/release/All-Sky/expsup/sec4_4h.html",
+        "method": "Visit medians of AllWISE (2010-2011) and NEOWISE (2014-2024) exposures.\n\n    Both bands use one method: quality frames (AllWISE qi_fact>0, NEOWISE\n    qual_frame>0), W1/W2 contamination flags '00', moon flag '00', finite magnitudes\n    and positive errors in both bands, separation<3 arcsec, visit=round(MJD/180) and\n    at least three exposures. Median magnitude and MJD per visit; approximate median\n    error 1.2533*sample_std/sqrt(n). Zero magnitudes from the AllWISE explanatory\n    supplement; no colour correction or absolute calibration error added."
       },
-      "w2_visits_displayed": 20,
+      "wise_visits_displayed": 24,
       "spherex_rows": 289,
       "spherex_plotted": 289,
       "spherex_intervals": [
@@ -308,7 +591,18 @@
           ],
           "observed_um": [
             0.34645298111208
-          ]
+          ],
+          "label_displaced": true
+        },
+        {
+          "label": "[Ne V]",
+          "members": [
+            "[Ne V]"
+          ],
+          "observed_um": [
+            0.424148900644
+          ],
+          "label_displaced": false
         },
         {
           "label": "[O II]",
@@ -317,7 +611,48 @@
           ],
           "observed_um": [
             0.46131052552608004
-          ]
+          ],
+          "label_displaced": true
+        },
+        {
+          "label": "[Ne III]",
+          "members": [
+            "[Ne III]"
+          ],
+          "observed_um": [
+            0.4789812406864
+          ],
+          "label_displaced": true
+        },
+        {
+          "label": "H\u03b4",
+          "members": [
+            "H\u03b4"
+          ],
+          "observed_um": [
+            0.5078238857736
+          ],
+          "label_displaced": false
+        },
+        {
+          "label": "H\u03b3",
+          "members": [
+            "H\u03b3"
+          ],
+          "observed_um": [
+            0.5373794589632
+          ],
+          "label_displaced": false
+        },
+        {
+          "label": "He II",
+          "members": [
+            "He II"
+          ],
+          "observed_um": [
+            0.5801229643248
+          ],
+          "label_displaced": true
         },
         {
           "label": "H\u03b2",
@@ -326,7 +661,8 @@
           ],
           "observed_um": [
             0.6018647960032
-          ]
+          ],
+          "label_displaced": true
         },
         {
           "label": "[O III]",
@@ -337,7 +673,28 @@
           "observed_um": [
             0.6139468232108,
             0.6198810832576
-          ]
+          ],
+          "label_displaced": true
+        },
+        {
+          "label": "He I",
+          "members": [
+            "He I 5876"
+          ],
+          "observed_um": [
+            0.7274453484296
+          ],
+          "label_displaced": false
+        },
+        {
+          "label": "[O I]",
+          "members": [
+            "[O I]"
+          ],
+          "observed_um": [
+            0.78001835000304
+          ],
+          "label_displaced": false
         },
         {
           "label": "H\u03b1",
@@ -346,7 +703,20 @@
           ],
           "observed_um": [
             0.8125164844263999
-          ]
+          ],
+          "label_displaced": false
+        },
+        {
+          "label": "[S II]",
+          "members": [
+            "[S II] 6716",
+            "[S II] 6731"
+          ],
+          "observed_um": [
+            0.8315378022696001,
+            0.8333176470807999
+          ],
+          "label_displaced": false
         }
       ],
       "spherex_line_markers": [
@@ -357,7 +727,32 @@
           ],
           "observed_um": [
             0.8125164844263999
-          ]
+          ],
+          "label_displaced": false
+        },
+        {
+          "label": "[S III]",
+          "members": [
+            "[S III] 9069",
+            "[S III] 9531"
+          ],
+          "observed_um": [
+            1.122750366264,
+            1.1799455183679999
+          ],
+          "label_displaced": false
+        },
+        {
+          "label": "He I, Pa\u03b3",
+          "members": [
+            "He I",
+            "Pa\u03b3"
+          ],
+          "observed_um": [
+            1.34082467592,
+            1.35419207784
+          ],
+          "label_displaced": false
         },
         {
           "label": "Pa\u03b2",
@@ -366,7 +761,8 @@
           ],
           "observed_um": [
             1.58700766128
-          ]
+          ],
+          "label_displaced": false
         },
         {
           "label": "Pa\u03b1",
@@ -375,13 +771,24 @@
           ],
           "observed_um": [
             2.32147213344
-          ]
+          ],
+          "label_displaced": false
+        },
+        {
+          "label": "Br\u03b3",
+          "members": [
+            "Br\u03b3"
+          ],
+          "observed_um": [
+            2.68103049064
+          ],
+          "label_displaced": false
         }
       ]
     }
   ],
   "spectral_flux": "Observed Fnu mJy; no inter-epoch renormalisation; NGPS P330E",
-  "layout": "Single P9694 example: enlarged light-curve panels above full-width optical and SPHEREx spectra; five optical and three infrared line labels",
+  "layout": "Full-proposal-width P9694 figure with enlarged type; optical years above ZTF, labelled SPHEREx visits above WISE, and full-width spectra with matching date keys; thirteen optical and six infrared line labels",
   "lightcurve_panel_height_fraction": 0.155,
   "manifold_shown": false,
   "optical_flux_limits_mjy": [
@@ -409,19 +816,22 @@
   "source_heading_shown": false,
   "history_heading_shown": false,
   "outer_box_shown": false,
-  "lightcurve_year_limits": [
-    2015,
-    2028
+  "ztf_year_limits": [
+    2017.0,
+    2027.3
+  ],
+  "wise_year_limits": [
+    2010,
+    2027.3
   ],
   "wise_bands": [
     "W1",
     "W2"
   ],
-  "spectral_time_markers": "Both light curves: dashed lines at every optical epoch within the displayed window; dotted lines at each SPHEREx visit median MJD and shaded visit date ranges. Colors match the date keys above the spectra.",
-  "wise_w2_input": "figure_neowise_exposures.csv",
-  "wise_w2_method": "NEOWISE visit=round(MJD/180); qual_frame>0; first two cc_flags=00; finite W1/W2 magnitudes and errors; positive W2 error; separation<3 arcsec; at least 3 exposures. Median magnitude and MJD; approximate median error=1.2533*sample_std(mag)/sqrt(n). Convert flux and propagate statistical error; no color correction or absolute calibration error added.",
-  "wise_w2_zero_mag_jy": 171.787,
-  "wise_calibration_source": "https://irsa.ipac.caltech.edu/data/WISE/docs/release/All-Sky/expsup/sec4_4h.html",
+  "ztf_markers": "Filled dots: nightly medians of the public release. Open circles: ALeRCE alert nights after the public release, shifted onto the release system.",
+  "wise_markers": "One visit series per band from the same AllWISE+NEOWISE method; open circles W1, open squares W2.",
+  "spectral_time_markers": "ZTF: dashed optical-epoch lines with explicit year callouts. WISE: dotted SPHEREx visit median dates connected to S1/S2/S3 callouts; visit ranges (14-18 days) are not shaded because they would be narrower than the line. Colors and visit IDs match the spectral date keys.",
+  "lightcurve_fetch_script": "fetch_fig1_lightcurves.py",
   "line_marker_interpretation": "Expected redshifted positions, not fitted detections; labels may be displaced for readability",
   "line_wavelength_sources": {
     "optical": "https://classic.sdss.org/dr6/algorithms/linestable.php",

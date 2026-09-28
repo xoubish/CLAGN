@@ -197,21 +197,25 @@ def main(output_stem='fig3_dust_evolution'):
         # Feature positions orient the reader; no decorative shading or PAH ticks.
         for center in [9.7, 18.]:
             residual.axvline(center, color='#9b782d', lw=.85, ls=':', ymax=.80)
-            residual.text(center, .98, f'{center:g} µm', transform=residual.get_xaxis_transform(),
-                          ha='center', va='top', color='#87631c', fontsize=11)
+            residual.text(center, 1.025, f'{center:g} µm', transform=residual.get_xaxis_transform(),
+                          ha='center', va='bottom', color='#87631c', fontsize=11)
         log_ratio = np.log10(e/f)
         percent_difference = 100*(e/f-1)
-        residual.axhline(0, color=BLUE, lw=1.1)
-        residual.text(24., 3., 'Delayed fixed dust', ha='right', va='bottom',
-                      color=BLUE, fontsize=11)
+        residual.axvspan(8, 13, color='#eef0f2', zorder=0)
+        residual.text(10.5, -45, '8–13 µm', ha='center', va='bottom',
+                      color='#59636b', fontsize=10.5)
+        residual.axhline(0, color='#66717a', lw=1.1)
+        residual.text(24., 3., 'Equal spectra', ha='right', va='bottom',
+                      color='#59636b', fontsize=11.5)
         residual.plot(WAVE, percent_difference, color=ORANGE, lw=2.5, ls='--')
         label_y = float(np.max(percent_difference[(WAVE >= 16.) & (WAVE <= 24.)])) + 4.
-        residual.text(24., label_y, 'Evolving dust', ha='right', va='bottom',
-                      color=ORANGE, fontsize=11)
+        residual.text(24., label_y,
+                      'Evolution: brighter' if i == 0 else 'Evolution: fainter',
+                      ha='right', va='bottom', color=ORANGE, fontsize=11.5)
         residual.set(xlim=(2, 24.5), ylim=(-48, 67), yticks=[-40, -20, 0, 20, 40], xticks=[3, 5, 10, 15, 20])
         contrast18 = float(np.interp(18., WAVE, percent_difference))
         if i == 0:
-            residual.set_ylabel('Difference from fixed dust (%)')
+            residual.set_ylabel('100 × (evolving / fixed − 1) [%]')
         else:
             residual.tick_params(labelleft=False)
         f_hi, e_hi, _ = spectra(ratio, n_shells=4000)
@@ -225,7 +229,7 @@ def main(output_stem='fig3_dust_evolution'):
         rows.extend(zip([ratio]*len(WAVE), WAVE, f/norm, e/norm, log_ratio))
     fig.text(.545, .97, 'Models matched to equal 2–4 µm luminosity',
              ha='center', va='center', fontsize=12)
-    # Both hypotheses are labelled directly beside their curves in each panel.
+    # The dashed curve is a model ratio; the neutral zero line means equal spectra.
     fig.text(.545, .035, r'Rest wavelength ($\mu$m)', ha='center', fontsize=12)
     fig.savefig(HERE/f'{output_stem}.pdf')
     plt.close(fig)
@@ -272,7 +276,7 @@ def main(output_stem='fig3_dust_evolution'):
             units='percent', positive='evolving model has greater flux density',
             negative='evolving model has lower flux density', zero='same flux density',
             normalization='Equal integrated rest 2–4 micron luminosities'),
-        presentation='Simple fixed/evolving boundary cartoons above two enlarged residual panels, with Delayed fixed dust and Evolving dust labelled directly beside their curves; one short equal-2–4-micron normalization note above the panels, with the figure title supplied by its caption. No separate legend, percentage callouts, spectral shading, PAH ticks or coverage rulers; equation retained in caption.')
+        presentation='Fixed/evolving boundary cartoons above two residual panels. The ordinate explicitly gives the evolving-to-fixed model ratio minus unity in percent. A neutral zero line is labelled Equal spectra; dashed curves are labelled Evolution: brighter/fainter according to the warm contrast. Shading identifies the primary rest 8–13 micron diagnostic band. Equal-2–4-micron normalization is stated above the panels; no detection or calibration band is plotted.')
     provenance['figure'] = f'{output_stem}.pdf'
     provenance['science_question'] = 'Does delayed heating suffice, or is additional dust evolution required?'
     (INPUTS/f'{output_stem}_provenance.json').write_text(json.dumps(provenance, indent=2)+'\n')

@@ -1,8 +1,8 @@
 {
   "figure": "fig2_diagnostics.pdf",
   "generator": "make_fig2_memory.py",
-  "scope": "Conceptual AGN-memory experiment; not target spectra, measured lags, a dust radiative-transfer calculation or a population-power forecast.",
-  "presentation": "Four panels in one horizontal row with larger labels, wider continuum panel, and an explicit equilibrium-at-current-power label on the unity baseline; cartoons stacked within panel A.",
+  "scope": "Illustrative delayed-heating calculation for a fixed dust distribution; not target spectra, measured lags or a population-power forecast. Panels B and C share the shell model, grain properties and step history of Figure 3 (make_fig2_diagnostics.py).",
+  "presentation": "A: cartoons of equal current power with different histories. B: fixed-distribution spectrum divided by equilibrium at the current power at two event ages. C: log10 ratio of 8-13 um luminosity to equilibrium against event age for four step amplitudes, with the planned 12-target mean precision. D: MRS PSF against exponential hosts of fixed physical size.",
   "actual_targets_fitted": [],
   "sample_z_range": [
     0.0142,
@@ -13,38 +13,141 @@
     21.544401544401545
   ],
   "panel_a": {
-    "current_luminosity": 1,
-    "past_rising": 0.35,
-    "past_fading": 1.8,
-    "event_time": -1,
-    "observation_time": 0,
-    "time_units": "arbitrary",
-    "cartoons": "Same central-engine brightness, hot inner rim, outer dust geometry and clump count. Outer dust brightness alone differs to depict delayed illumination; not destruction/formation or a calculated equal-arrival-time surface. Miniature histories are qualitative."
+    "cartoons": "Same central-engine brightness, hot inner rim, outer dust geometry and clump count; outer dust brightness alone differs to depict delayed illumination. Step histories are qualitative; the dot marks the observation."
   },
   "panel_b": {
-    "formula": "1 + (L_past - 1) * exp(-1/tau(lambda))",
-    "assumed_tau": "0.08 * (lambda_rest_um / 2)**1.6 in arbitrary time units",
-    "assumptions": "Unit-gain exponential linear response; increasing delay with wavelength imposed for illustration. Ratios and amplitudes are not target predictions.",
-    "ordinate": "Continuum divided by the equilibrium prediction at the same current nuclear luminosity; unity is equilibrium.",
-    "miri_shading": "Common nominal rest-frame coverage for the actual sample; not a sensitivity boundary."
+    "model": "make_fig2_diagnostics.spectra(ratio, age)[0] (fixed distribution) divided by the same at age 1e5 (equilibrium at the new luminosity)",
+    "luminosity_ratios": [
+      4.0,
+      0.25
+    ],
+    "ages_initial_silicate_Rin_over_c": [
+      3.0,
+      10.0
+    ],
+    "ordinate": "Fnu divided by the equilibrium Fnu at the current power; unity is equilibrium.",
+    "shading": "Light: common nominal rest-frame MRS coverage for the sample. Dark: the 8-13 um diagnostic band. Gold dotted: 9.7 and 18 um.",
+    "assumptions": "Optically thin isotropic shells, dM/dlnr proportional to r to 100 initial silicate inner radii, 0.1 um silicate/graphite grains, uniform echo delays on [0, 2r/c]. Amplitudes are illustrative."
   },
-  "panel_c": "Arbitrary linear continuum plus Gaussian emission features at 9.7 and 18 microns; illustrates joint fitting, not a predicted feature ratio or unique geometry.",
-  "panel_d": "Arbitrary narrow and broad Gaussian spatial components; illustrates point-source/extended decomposition, not resolved torus imaging or a guaranteed host-free spectrum.",
+  "panel_c": {
+    "quantity": "log10 of the 8-13 um luminosity of the delayed fixed-distribution spectrum over its equilibrium value at the current power",
+    "luminosity_ratios": [
+      4.0,
+      2.0,
+      0.5,
+      0.25
+    ],
+    "age_grid": [
+      0.5,
+      0.5732910777287524,
+      0.6573253196067889,
+      0.7536774817915453,
+      0.8641531515923343,
+      0.9908225831981345,
+      1.13605949311929,
+      1.3025855423486759,
+      1.4935213388139277,
+      1.7124449158790513,
+      1.9634587827508483,
+      2.2512668032784364,
+      2.581262343812916,
+      2.959629341970304,
+      3.3934581902715886,
+      3.890878606256521,
+      4.461211978985095,
+      5.11514604681757,
+      5.864935179840022,
+      6.724630020119523,
+      7.710340783122885,
+      8.840539154424945,
+      10.136404439087018,
+      11.622220450357418,
+      13.325830575173097,
+      15.279159544143495,
+      17.51881168370315,
+      20.086756861354484,
+      23.031116978242643,
+      26.40706774750739,
+      30.27787265724937,
+      34.716068494016845,
+      39.8048246428802,
+      45.63950163664157,
+      52.32943816054682,
+      60.0
+    ],
+    "offsets_dex": {
+      "4.0": {
+        "1": -0.3241326231263837,
+        "3": -0.17223367232877634,
+        "10": -0.05207558089228096,
+        "30": -0.012014656181763575
+      },
+      "2.0": {
+        "1": -0.17451834184782972,
+        "3": -0.0935326421085347,
+        "10": -0.02739971519785405,
+        "30": -0.005898843871181805
+      },
+      "0.5": {
+        "1": 0.20217280288612033,
+        "3": 0.11823510997784038,
+        "10": 0.03610603749104429,
+        "30": 0.0069128396083849445
+      },
+      "0.25": {
+        "1": 0.43016351473608394,
+        "3": 0.2701967166981664,
+        "10": 0.08952323371278632,
+        "30": 0.016894136377538792
+      }
+    },
+    "precision_band": {
+      "half_width_dex": 0.05773502691896258,
+      "formula": "scatter/sqrt(n)",
+      "scatter_dex": 0.2,
+      "n": 12,
+      "meaning": "\u00b11 sigma of one 12-target group mean for the planning scatter quoted in the text; the rising-fading difference has 0.408*s = 0.082 dex."
+    },
+    "age_units": "Initial silicate inner-radius light-crossing times; the conversion to years depends on each target luminosity and is not drawn."
+  },
+  "panel_d": {
+    "psf_fwhm_arcsec": 0.436,
+    "psf_relation": "FWHM = 0.033*lambda_um + 0.106 arcsec",
+    "psf_reference": "Law et al. 2023, AJ 166, 45, https://doi.org/10.3847/1538-3881/acdddc",
+    "wavelength_um": 10.0,
+    "nucleus": "Gaussian with that FWHM, peak-normalised",
+    "hosts": [
+      {
+        "z": 0.11905,
+        "kpc_per_arcsec": 2.220526386701052,
+        "half_light_arcsec": 1.3510310068672415
+      },
+      {
+        "z": 0.295,
+        "kpc_per_arcsec": 4.5440295751219155,
+        "half_light_arcsec": 0.6602069705762227
+      }
+    ],
+    "host_profile": "Exponential, I proportional to exp(-1.678 r/r_e), peak-normalised; half-light radius 3 kpc proper",
+    "cosmology": "astropy Planck18",
+    "field": "MIRI MRS channel 2 field of view 4.0 x 4.8 arcsec (JDox); dashed lines at \u00b12.0 arcsec",
+    "meaning": "Shows the angular contrast between an unresolved nucleus and a typical host, not a measured MRS PSF or resolved torus imaging."
+  },
   "limitations": [
     "No unique accretion-history recovery.",
-    "No proof that fixed and evolving dust can be distinguished.",
-    "No validated signal amplitude or sample discrimination forecast.",
+    "Fixed-distribution model only; Figure 3 addresses dust evolution.",
+    "Amplitudes depend on the assumed radial dust distribution and grain mix; they are not target predictions.",
+    "Ages are in model units; the light-year scale of R_in varies across the sample.",
     "Long-wavelength response may average over epochs before the observed light curves."
   ],
   "references": [
-    "https://doi.org/10.3847/1538-4357/abee14",
-    "https://arxiv.org/abs/1909.11101",
-    "https://arxiv.org/abs/0903.2422",
-    "https://arxiv.org/abs/2504.01103",
+    "https://doi.org/10.1051/0004-6361/201117750",
+    "https://doi.org/10.3847/1538-4357/ab6aa1",
+    "https://doi.org/10.1086/172149",
+    "https://doi.org/10.3847/1538-3881/acdddc",
     "https://jwst-docs.stsci.edu/jwst-mid-infrared-instrument/miri-observing-modes/miri-medium-resolution-spectroscopy"
   ],
-  "generator_sha256": "cf8e4ed0a826fcfbb110a88240cdd1a98307dbb677e94da44b451aef678ef68b",
+  "generator_sha256": "d7659dc699cc2e0d68e80cb9d239792686d996112e32832641eab98a43964902",
   "sample_sha256": "448434474515b8ca6714871253f1e32db5ef742b456110089fc5dbaf19e15745",
-  "previous_figure": "../archive/jwst_cleanup_20260926.zip::review/local_backups/fig2_before_agn_memory/",
-  "previous_spectra": "inputs/fig2_diagnostics_spectra.csv (legacy fixed/evolving illustration; not plotted here)"
+  "previous_figure": "review/local_backups/fig2_schematic_20260928/ (all-schematic version replaced 2026-09-28)"
 }

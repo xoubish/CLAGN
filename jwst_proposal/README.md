@@ -48,7 +48,10 @@ and the three figure PDFs. Select `proposal.tex` as the main document.
 ## Scientific inputs
 
 Figure 1 uses the P9694 light curves, optical spectra and all 289 supplied
-SPHEREx measurements. The dashed curve is the pooled host + disc + blackbody
+SPHEREx measurements. The ZTF public release, the ALeRCE alert extension to
+2026 September and the AllWISE 2010--2011 epochs are downloaded into `inputs/`
+by `fetch_fig1_lightcurves.py` (last run 2026-09-28); the cached NEOWISE
+exposures are unchanged. Both WISE bands use one visit-median method. The dashed curve is the pooled host + disc + blackbody
 fit, with a model-dependent colour temperature near 1200 K. Its inputs and
 masks are recorded in `inputs/fig1_connected_provenance.json` and
 [the fit report](review/p9694_hot_dust/README.md).
