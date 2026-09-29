@@ -22,3 +22,17 @@ __pycache__/
 
 # Local visual comparisons and reversible figure trials.
 /review/local_backups/
+
+# SPHEREx query/download cache, per-image restart records, and diagnostic FITS.
+# Curated spectra in inputs/ and analysis summaries in review/ remain versioned.
+/local_data/*
+!/local_data/README.md
+
+# Accepted Figure 2 assets stay versionable; intermediate rendering stays local.
+!/review/fig2_three_panel/fig2_three_panel_draft.pdf
+/review/fig2_three_panel/build/
+/review/fig2_three_panel/panel_a/
+
+# Rendered paper pages and literature comparison previews are local scratch.
+# Source URLs, download manifests and reading notes remain versioned.
+/review/miri_literature/**/*.png

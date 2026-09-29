@@ -1,0 +1,16 @@
+{
+  "current_targets": 24,
+  "replacement_candidates": 34,
+  "current_review_counts": {
+    "exclude_from_clean_core": 13,
+    "hold": 7,
+    "priority": 3,
+    "priority_with_downturn": 1
+  },
+  "replacement_review_counts": "{('fade', 'exclude_from_clean_core'): 2, ('fade', 'priority'): 5, ('fade', 'reserve'): 13, ('rise', 'exclude_from_clean_core'): 1, ('rise', 'priority'): 3, ('rise', 'reserve'): 10}",
+  "priority_replacements": 8,
+  "timing_rows": 2784,
+  "passed": true,
+  "meaning": "Bookkeeping and numerical checks only; not validated MIRI detectability.",
+  "source_script_sha256": "aeba0c3fa56b044d5d957550cac28b0bca02483ba9f16993d49c8bebe2553c97"
+}

@@ -1,0 +1,175 @@
+{
+  "scope": "Conditional R01 mock-MIRI refits and measurement precision.\n\nThis does not validate the shell physics or infer a dust mechanism. Historical\nfits require an assumed 5% extra scatter. Forecast date, illumination and each\nfamily's nonlinear parameters are held fixed; shell weights are refitted.\n",
+  "n_bins": 174,
+  "year": 2028.0,
+  "future_driver_factor": 1.0,
+  "seed": 96942026,
+  "truth_eta": -0.5,
+  "truth_diagnostics": [
+    2.3179477455043604e-12,
+    0.9448022579780645,
+    0.0940395203269213
+  ],
+  "measurement_quantiles_16_50_84": [
+    [
+      2.1896547766806892e-12,
+      0.8763842496912957,
+      0.05569082935262306
+    ],
+    [
+      2.317173891861339e-12,
+      0.9456959148509103,
+      0.09420013235477709
+    ],
+    [
+      2.4398043075930485e-12,
+      1.0315838552322618,
+      0.13257287885509525
+    ]
+  ],
+  "measurement_std": [
+    1.2471820344450434e-13,
+    0.08197297845957502,
+    0.04123969318663281
+  ],
+  "statistical_std": [
+    7.147398659396452e-15,
+    0.022650639887132503,
+    0.037120550957170054
+  ],
+  "fitted_families": {
+    "0.0": {
+      "eta": 0.0,
+      "chi2_history": 292.7817598512187,
+      "chi2_miri": 152.695046750012,
+      "valid": true,
+      "amplitudes": [
+        0.11580487862128809,
+        3.7509042731733e-17,
+        0.0,
+        2.424055858367571,
+        15.13271277390184,
+        1.0964847977506282e-15,
+        4.097083528811738e-18,
+        8.784233653902781,
+        2.1926930915234437,
+        2.3738664082865495,
+        0.0,
+        0.05225123779896619
+      ],
+      "parameters": [
+        0.15757739818151068,
+        0.8819660112501051,
+        0.6832515355732429,
+        0.03866085651446762,
+        0.3143005684718965,
+        0.8185034233468034,
+        1.1887284511094758
+      ],
+      "nuisance_standard_deviations": [
+        -0.01735631778422091,
+        -0.09846257368782539,
+        -0.5452267384079756
+      ],
+      "diagnostics": [
+        2.370561937284635e-12,
+        0.9591268137801511,
+        0.09564194414241751
+      ]
+    },
+    "-0.5": {
+      "eta": -0.5,
+      "chi2_history": 215.46818158870605,
+      "chi2_miri": 152.96240422017348,
+      "valid": true,
+      "amplitudes": [
+        2.0854450047680587e-18,
+        0.46015100891514416,
+        0.0,
+        0.18090022601979566,
+        18.13403275516252,
+        1.2290601755910036,
+        3.0335983212024084e-18,
+        9.325419734362068,
+        4.654669114793055,
+        0.2965447070882318,
+        1.670057840756476,
+        0.0
+      ],
+      "parameters": [
+        0.15623195969293002,
+        0.7339324603471697,
+        0.5074087863801972,
+        0.11275525282979432,
+        0.32867717582163497,
+        0.8358774134825443,
+        1.295174903030289
+      ],
+      "nuisance_standard_deviations": [
+        -0.010157131958587839,
+        -0.161798670451527,
+        -0.621683513809625
+      ],
+      "diagnostics": [
+        2.3772603843398547e-12,
+        0.9534019230691689,
+        0.09350122704954604
+      ]
+    },
+    "-1.0": {
+      "eta": -1.0,
+      "chi2_history": 292.78175986975106,
+      "chi2_miri": 165.55805777518,
+      "valid": true,
+      "amplitudes": [
+        0.0,
+        5.944618288877629e-16,
+        5.548541745277018,
+        1.7837394951135777e-16,
+        0.0,
+        16.77808124637974,
+        0.0,
+        9.345216603905564,
+        4.846710157506474,
+        3.2025008127041293e-17,
+        0.9170613934965369,
+        0.0
+      ],
+      "parameters": [
+        0.15264988278826264,
+        0.6174083460377107,
+        0.623670479350886,
+        0.1261366483524096,
+        0.31904380059436677,
+        0.834858795260349,
+        1.0000000111254737
+      ],
+      "nuisance_standard_deviations": [
+        2.1217911494043613,
+        0.810659492400497,
+        -0.8700995840568408
+      ],
+      "diagnostics": [
+        2.2611060650935586e-12,
+        0.9391856974368912,
+        0.09657098716731823
+      ]
+    }
+  },
+  "maximum_fractional_quadrature_change": 0.0011423187568548876,
+  "assumptions": {
+    "statistical": "S/N 50 through rest 12 um, interpolating to 30 at 18 um; assumed throughout bins",
+    "calibration_scale_fraction": 0.03,
+    "calibration_tilt": "3% coefficient times ln(lambda/12)/ln(22/6)",
+    "host_residual": "200 K Fnu proportional to lambda^-4.5/(exp(hc/lambda kT)-1); 10% of flux at 12 um",
+    "historical_extra_scatter_fraction": 0.05,
+    "silicate_indices": "Natural log of flux / local power law through 6,14 or 14,21 um; not full decomposition"
+  },
+  "limitations": [
+    "No complete torus library; nonlinear parameters fixed to historical optima.",
+    "No model-selection significance or sample-wide recovery forecast follows.",
+    "Quoted errors are conditional measurement precision, excluding uncertainty in physical interpretation.",
+    "The assumed host shape does not span every compact host or PAH contribution."
+  ],
+  "source_sha256": "45d97c2afdc12e1e98863a5ec914f9ac9d8d19b89773443313e70fde89839518"
+}

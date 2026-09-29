@@ -1,0 +1,32 @@
+{
+  "baseline_2x300": {
+    "feasible": true,
+    "status": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "selected": 88,
+    "shortlist_count": 12,
+    "omitted_existing": [],
+    "shortlist_reserved_minutes": 144,
+    "shortlist_max_airmass": 1.7814057242410628,
+    "shortest_moon_separation": 40.041838759943694,
+    "solver_gap": 0.0
+  },
+  "snr5_bright_sky": {
+    "feasible": true,
+    "status": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "selected": 87,
+    "shortlist_count": 12,
+    "omitted_existing": [
+      "P22470"
+    ],
+    "shortlist_reserved_minutes": 228,
+    "shortlist_max_airmass": 1.973223915268518,
+    "shortest_moon_separation": 40.009103902465036,
+    "solver_gap": 0.0
+  },
+  "exposure_case_failures": [
+    "P20778"
+  ],
+  "normalization": "Flat fnu near observed Hbeta, AB magnitude equal to last cached r; optimistic for some blue continua/host profiles. No actual 2026 brightness assumed for replacements.",
+  "settings": "2 exposures; slit 1.5 arcsec; spatial x spectral binning 2x3; no slicer; zenith seeing 1.3 arcsec; 2 min empirical visit overhead.",
+  "geometry": "Topocentric unrefracted AltAz, 30-second sampling, builtin ephemeris, bundled IERS extrapolation; Moon>=40 deg, X<=2 for shortlist. Two standards/night reserved."
+}

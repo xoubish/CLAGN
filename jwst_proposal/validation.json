@@ -23,7 +23,9 @@
     "Reconcile individual nuclear flux/host assumptions with source data; focused ETC tests do not establish every target or wavelength.",
     "Complete APT administrative fields and final submission checks.",
     "Estimate P9694 event dates and dust lags; R01 timing fields intentionally blank after replacement.",
-    "Establish expected history-dependent signal and sample-level discrimination after intrinsic scatter and nuisance uncertainties."
+    "Establish expected history-dependent signal and sample-level discrimination after intrinsic scatter and nuisance uncertainties.",
+    "Transfer revised apt_title_abstract.txt wording to the saved APT project.",
+    "Resolve R12 crowded-field SPHEREx extraction; proposal uses its WISE constraint."
   ],
   "APT_visit_planner_validated": true,
   "ETC_all_targets_validated": false,
@@ -52,24 +54,9 @@
     "R10",
     "R12"
   ],
-  "version": "Proposal: spectrum-led MIRI science figure",
-  "built_at_utc": "2026-09-29T04:40:21.022176+00:00",
+  "version": "Three-panel literature Figure 2 integrated; body, caption and citations reconciled; source-only revision",
   "source": "proposal.tex",
-  "pdf": "proposal.pdf",
-  "build_command": "make -C jwst_proposal",
-  "build_success": true,
-  "pages": 7,
-  "core_pages": [
-    1,
-    2,
-    3,
-    4,
-    5
-  ],
-  "within_required_sections_page_limit": true,
-  "layout_warnings": [],
-  "source_sha256": "a706a4454501d98f7589430e23f7e0237ca33dfbd66a022779f847104b1983ba",
-  "pdf_sha256": "0fffdc9aab0db3abca2bca349b519239bfd0e8deaa02b03970dc1e59068e000a",
+  "source_sha256": "e62dbba5c6c07849aef466934fab2ae2b35f57715e7b6821523713eea66bdb24",
   "style_sha256": "d5e8b0c1133974ac9eaa6cc27213794ceec297337c69f2ec13254a10684fdd08",
   "style_unchanged": true,
   "figures": [
@@ -88,7 +75,7 @@
   ],
   "figure1_measurement_loaders_and_epoch_selection_unchanged": true,
   "figure1_provenance": "inputs/fig1_targets_provenance.json",
-  "figure2_status": "Single illustrative spectrum with diagnostic locations; memory and quantitative boundary-evolution panels. Differences at 12 and 18 microns labelled; physics unchanged.",
+  "figure2_status": "Installed published examples: NGC 7469 spectral decomposition, NGC 6552 central/surrounding separation, and NGC 4151 delayed infrared response. Caption and generator updated.",
   "figure2_provenance": "inputs/fig2_miri_provenance.json",
   "forecast": "inputs/warm_response_forecast_summary.json",
   "forecast_full_model_discrimination_validated": false,
@@ -103,10 +90,40 @@
   },
   "visual_review_pages": [
     2,
-    4
+    3,
+    4,
+    5
   ],
-  "revision_notes": "review/combined_figure_revision.md",
-  "previous_validation": "older/before_spectrum_comparison_cleanup/validation.json",
+  "revision_notes": "review/fig2_three_panel/README.md",
+  "previous_validation": "older/before_literature_figure2_20260929.zip::validation.json",
   "old_drafts": "older/README.md",
-  "anonymous_text_screen_passed": true
+  "anonymous_text_screen_passed": true,
+  "measurement_plan": "review/mrs_measurement_plan.md",
+  "last_compiled_build": {
+    "built_at_utc": "2026-09-29T05:16:20.094413+00:00",
+    "pdf": "proposal.pdf",
+    "build_command": "make -C jwst_proposal",
+    "build_success": true,
+    "pages": 7,
+    "core_pages": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "within_required_sections_page_limit": true,
+    "layout_warnings": [],
+    "pdf_sha256": "f40ff5547913c1c89a7467a847bdd2f3ca05ffbe740c0b8893cd7d7f795f2892"
+  },
+  "proposal_pdf_present": false,
+  "current_source_layout_validated": false,
+  "figure2_validation": "review/fig2_three_panel/checks.json",
+  "figure2_scope": "Literature demonstrations of diagnostic possibilities; no target-level prediction of component fractions, resolved scales or lags.",
+  "spherex_targets_with_usable_measurements": 23,
+  "spherex_download_complete": true,
+  "apt_abstract_text_synchronized": false,
+  "historical_mock_figure_validation": "review/measurement_focus_checks.json",
+  "visual_review_scope": "Listed visual_review_pages refer to the previous compiled build; current source pagination is unvalidated.",
+  "figure2_text_consistency_checked": true
 }

@@ -1,0 +1,66 @@
+{
+  "template": "Ell5",
+  "converged": true,
+  "reduced_chi2": 3.393173030643624,
+  "dof": 226,
+  "supplied_error_adequacy_p": 5.077748060766873e-60,
+  "host_rest16_mjy": 2.3068767300733053,
+  "visits": [
+    {
+      "visit": 0,
+      "mjd": 60867.316566687,
+      "first_mjd": 60860.454646212,
+      "last_mjd": 60878.387339106,
+      "n_used": 83,
+      "temperature_K": 1127.4313841066564,
+      "dust_2um_mjy": 1.2951074791400268,
+      "bolometric_proxy": 1.4854895708787421,
+      "log_bolometric_error": 0.032122632641357715,
+      "temperature_at_bound": false
+    },
+    {
+      "visit": 1,
+      "mjd": 61042.701080159,
+      "first_mjd": 61031.359535298,
+      "last_mjd": 61051.459691872,
+      "n_used": 80,
+      "temperature_K": 1117.2081718111754,
+      "dust_2um_mjy": 1.330513791106473,
+      "bolometric_proxy": 1.5601223660268098,
+      "log_bolometric_error": 0.03201432465752406,
+      "temperature_at_bound": false
+    },
+    {
+      "visit": 2,
+      "mjd": 61234.736025344,
+      "first_mjd": 61226.585736965,
+      "last_mjd": 61239.617848817,
+      "n_used": 73,
+      "temperature_K": 1073.54229553823,
+      "dust_2um_mjy": 1.0970423489106822,
+      "bolometric_proxy": 1.4256376463564193,
+      "log_bolometric_error": 0.03280419794971825,
+      "temperature_at_bound": false
+    }
+  ],
+  "log_bolometric_covariance": [
+    [
+      0.0010318635278116202,
+      7.554018854282528e-08,
+      1.251399339377731e-07
+    ],
+    [
+      7.554018854268188e-08,
+      0.0010249169832773528,
+      7.940326209815073e-07
+    ],
+    [
+      1.251399339377916e-07,
+      7.940326209814423e-07,
+      0.001076115403124299
+    ]
+  ],
+  "jacobian_rank": 10,
+  "n_parameters": 10,
+  "cache_key": "b384dfb7f6796444ee06944669cbd9cd95bbf5d3897ac6099b98e35b0d6617e7"
+}

@@ -1,0 +1,14 @@
+{
+  "source": "proposal.tex",
+  "source_sha256": "e62dbba5c6c07849aef466934fab2ae2b35f57715e7b6821523713eea66bdb24",
+  "figure": "fig2_miri.pdf",
+  "figure_label": "fig:diagnostics",
+  "all_cross_references_resolve": true,
+  "caption_matches": true,
+  "all_50_references_cited_in_order": true,
+  "figure_sources_match_caption": true,
+  "conditional_precision_calculation_separate_from_figure": true,
+  "proposal_pdf_compiled": false,
+  "manual_page_breaks": "Only the boundary before Supplemental Information remains.",
+  "figure2_float_placement": "!tbp"
+}

@@ -1,0 +1,174 @@
+{
+  "archive": "older/figure2_trials_20260929.zip",
+  "archive_verified": true,
+  "archived_files": [
+    {
+      "path": "review/fig2_two_panel/README.md",
+      "bytes": 2285,
+      "sha256": "77be8d387cca002d62923c4e19fb325e1a31e554b81ac3dfd1c741b203718c83"
+    },
+    {
+      "path": "review/fig2_two_panel/caption.tex",
+      "bytes": 1285,
+      "sha256": "98956bf168d3837a1ee4a195c77f03d60f29c814a7b354e7239abc974332135b"
+    },
+    {
+      "path": "review/fig2_two_panel/checks.json",
+      "bytes": 1092,
+      "sha256": "8cb2b5d457fca35bfd04b60696e351d7dde65fd31b3deb6832bfb98c82dec94d"
+    },
+    {
+      "path": "review/fig2_two_panel/companion_layout.pdf",
+      "bytes": 33866,
+      "sha256": "577fcb740b70b803f016da09aa4d5e5c28fc647fc0d8c8f185a9d2f9797dd097"
+    },
+    {
+      "path": "review/fig2_two_panel/displayed_mock_points.csv",
+      "bytes": 5290,
+      "sha256": "ab303194d9f01b65f4d4e8759c5474b169fbc40a865dc4d863d4c15331279af9"
+    },
+    {
+      "path": "review/fig2_two_panel/explored_prediction_range.csv",
+      "bytes": 9976,
+      "sha256": "829b8f2e76d9f78eedcfbb59944a082509f71a9f4bdec674ad698ccb579a1cce"
+    },
+    {
+      "path": "review/fig2_two_panel/fig2_two_panel_draft.pdf",
+      "bytes": 1087420,
+      "sha256": "de4a0a6beffc4e89d1ec9c97e3cf10f813132eabd9191aa3ac3f2a19de2fa1fa"
+    },
+    {
+      "path": "review/fig2_two_panel/fig2_two_panel_draft.png",
+      "bytes": 245844,
+      "sha256": "6b5285cd6077b00d69b80d6e3f5d095f77d06852186b277e0980e24ba8d63702"
+    },
+    {
+      "path": "review/fig2_six_panel/README.md",
+      "bytes": 4340,
+      "sha256": "e17ce0c668476dbab676f3c87d00cb13c1d6219f6dd6742308861db59b551d95"
+    },
+    {
+      "path": "review/fig2_six_panel/caption.tex",
+      "bytes": 1734,
+      "sha256": "cdc873a516c40edd1c9c0dcb2e91de4307a4988d8fc8df90f6075e6dcc0ecaf1"
+    },
+    {
+      "path": "review/fig2_six_panel/checks.json",
+      "bytes": 1134,
+      "sha256": "267f5de67cfb7a48a04d5c6bbae2f0fa26b6f27449d38c7c24f971baa37bcbdc"
+    },
+    {
+      "path": "review/fig2_six_panel/conditional_components.csv",
+      "bytes": 28076,
+      "sha256": "bab987b08dae6c51309692647b2cd658da74c07545b38dba1a5d62514235ba95"
+    },
+    {
+      "path": "review/fig2_six_panel/fig2_six_panel_draft.pdf",
+      "bytes": 966328,
+      "sha256": "bc2b68bfcfb0a58afddb85d0106799958dedb93283ffc1de576f45f79d2866c8"
+    },
+    {
+      "path": "review/fig2_six_panel/fig2_six_panel_draft.png",
+      "bytes": 649581,
+      "sha256": "40746529a733e6ed54e2e876190d2fa3d17926ed4533d323335df139e45bde31"
+    },
+    {
+      "path": "review/fig2_six_panel/layout_without_literature.pdf",
+      "bytes": 59172,
+      "sha256": "3040b930ff208f2950a5da4d0505175ac98d9c4392b038d0d5bca080cd1abbe1"
+    },
+    {
+      "path": "review/fig2_spatial_pair/README.md",
+      "bytes": 1683,
+      "sha256": "f8528d5683e608fb0319e38fa7127bec7b9ca42b45c5e5ec88079fec15f1b73d"
+    },
+    {
+      "path": "review/fig2_spatial_pair/caption.tex",
+      "bytes": 1216,
+      "sha256": "d2a62d91a04df2328ca1fd0c22743389defef50abb23810218b0b0d25ea69ece"
+    },
+    {
+      "path": "review/fig2_spatial_pair/checks.json",
+      "bytes": 1884,
+      "sha256": "d4092fccdd3cd6d8c68dc9b8bb2f72c0acc2c9b73643840abd22235638d7d811"
+    },
+    {
+      "path": "review/fig2_spatial_pair/fig2_spatial_pair_draft.pdf",
+      "bytes": 1445630,
+      "sha256": "4c988d4b857702cfc43ec77cb6f048617022c20c760d191312f3a93efe80bf70"
+    },
+    {
+      "path": "review/fig2_spatial_pair/fig2_spatial_pair_draft.png",
+      "bytes": 376539,
+      "sha256": "a2f1a3a2aa520161558f36ae9a98e46ff92fb747bcbef6345cca76ce81fcf36b"
+    },
+    {
+      "path": "review/fig2_spatial_pair/layout.pdf",
+      "bytes": 14240,
+      "sha256": "06b0cdf34ada4f45f56dce6dd364a1d69a775f98468f98b7c1b33899e6331561"
+    },
+    {
+      "path": "review/make_fig2_two_panel.py",
+      "bytes": 5097,
+      "sha256": "db1cfa79fef3b3cc0a70f44b7b1cdac86ad7439c8c0362f2d2e98b6891277b75"
+    },
+    {
+      "path": "review/make_fig2_six_panel.py",
+      "bytes": 13339,
+      "sha256": "e85acf64c9d916d01d452129785be9e4a84ff7dd54f9c34dd322f0eb627e9dc3"
+    },
+    {
+      "path": "review/make_fig2_spatial_pair.py",
+      "bytes": 4072,
+      "sha256": "de1c9a37205b6faf06f4979d4cb831c113ff0597a9009c7b55a00b565197f9b6"
+    },
+    {
+      "path": "review/fig2_miri_preview.png",
+      "bytes": 300456,
+      "sha256": "993f7313fc1f501b5ef82034b7401c02a80c0b68b2b8adc75a37ee4302f09c32"
+    },
+    {
+      "path": "review/fig2_three_panel/fig2_three_panel_stacked.pdf",
+      "bytes": 1916288,
+      "sha256": "d8987c3cd923b9c890ca2357647085993e61bd2cbc04a042cd1db915e8b440f6"
+    },
+    {
+      "path": "review/fig2_three_panel/fig2_three_panel_stacked.png",
+      "bytes": 508639,
+      "sha256": "2e0676c8c5fe1194701689393cf2064f987648f388476cd9f11f160708bf2b5b"
+    }
+  ],
+  "spherex_cache": {
+    "old": "review/spherex_sample",
+    "new": "local_data/spherex/sample",
+    "files": 6166,
+    "bytes": 33117260,
+    "sha256": "be0b24f61fe26c979be9d912c911a9689ecf55343b413d66d5cbe33d0e772c90"
+  },
+  "diagnostic_fits": [
+    {
+      "file": "level2_2026W17_2A_0297_2D4_spx_l2b-v24-2026-118.fits",
+      "sha256": "d9dbe674780dac48deff00ced96e9d7833f04edbbe04478bbaa71682c93e3fea",
+      "bytes": 5063040
+    },
+    {
+      "file": "level2_2025W17_4B_0100_4D1_spx_l2b-v20-2025-241.fits",
+      "sha256": "31cb709a47a082c5b33334a68a7dc833e21f57f5056e84e40777d1b8af6b0da5",
+      "bytes": 5060160
+    },
+    {
+      "file": "level2_2025W44_2B_0472_1D6_spx_l2b-v20-2025-307.fits",
+      "sha256": "0b33b1e45fbd9501c91ed063177e47ef309b9a5405e1e57c1b027beef8b9e4e6",
+      "bytes": 5060160
+    }
+  ],
+  "current_figure": "review/fig2_three_panel",
+  "proposal_source_unchanged": true,
+  "verification": {
+    "all_24_target_fingerprints_unchanged": true,
+    "current_figure_preview_identical": true,
+    "ignored_local_data_files": 6169,
+    "raw_cache_tracked_files": 0,
+    "final_figure_assets_versionable": true
+  }
+}

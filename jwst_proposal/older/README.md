@@ -1,7 +1,27 @@
 # Superseded proposal material
 
-The active proposal is [../proposal.pdf](../proposal.pdf).
+The active proposal source is [../proposal.tex](../proposal.tex); no compiled
+proposal PDF is maintained.
 
+- `before_literature_figure2_20260929.zip`: previous installed mock Figure 2,
+  its generator and provenance, and the proposal source and README before
+  installing the accepted three-panel literature figure. Also retains the
+  previous validation metadata.
+
+- `figure2_trials_20260929.zip`: local-only archive of the superseded two-panel,
+  six-panel, spatial-pair and stacked layouts, their trial generators, and the
+  previous mock-figure preview. Original paths are relative to `jwst_proposal/`;
+  extract into a separate directory for review. All archive members were verified
+  against SHA-256 hashes before removing the loose files. See
+  [the manifest](../review/cleanup_20260929.json). The accepted current design is
+  [here](../review/fig2_three_panel/README.md).
+
+- `before_readable_checkpoint/`: the workflow figure and proposal before returning
+  to the measured R01 spectrum plus conditional MIRI scenarios; includes both
+  figure PDFs, generator, style file and prior validation.
+- `before_measurement_workflow/`: the last spectrum-plus-model-comparison
+  figure, source, PDF, generator, numerical inputs and metadata before replacing
+  it with the measurement-to-science workflow.
 - `before_spectrum_comparison_cleanup/`: the spectrum-led version with both
   model spectra overlaid, before moving the comparison entirely to panel C.
 - `before_spectrum_figure/`: the two-panel combined figure and proposal before

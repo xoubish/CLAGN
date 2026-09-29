@@ -1,0 +1,13 @@
+{
+  "source": "proposal.tex",
+  "figure": "fig2_miri.pdf",
+  "figure1_unchanged": true,
+  "illustrative_nuclear_spectrum_unchanged": true,
+  "visual_review_pages": [
+    3,
+    4
+  ],
+  "five_core_pages": true,
+  "archive": "older/before_measurement_workflow",
+  "measurement_mapping": "review/mrs_measurement_plan.md"
+}

@@ -1,0 +1,240 @@
+[
+  {
+    "id": "F01",
+    "source": "review/spherex_sample/F01/*.json",
+    "snapshot_sha256": "3811ca00397319ca2529243bdae9666efa2cf660a8d328539600ff3426981a76",
+    "download_complete": true,
+    "requested": 263,
+    "accepted": 257,
+    "quality_rejected": 6,
+    "invalid_accepted": 11
+  },
+  {
+    "id": "F02",
+    "source": "review/spherex_sample/F02/*.json",
+    "snapshot_sha256": "06bb057ead4144be2c50edb293240a62e5a8f80e02336d51f6af3ec5ad43f6dd",
+    "download_complete": true,
+    "requested": 406,
+    "accepted": 390,
+    "quality_rejected": 16,
+    "invalid_accepted": 16
+  },
+  {
+    "id": "F03",
+    "source": "review/spherex_sample/F03/*.json",
+    "snapshot_sha256": "09f64a01856d852ffddc030c35f4de4038c3f3bd33624495b96e04bfc056cb35",
+    "download_complete": false,
+    "requested": 346,
+    "accepted": 332,
+    "quality_rejected": 12,
+    "error": 2,
+    "invalid_accepted": 16
+  },
+  {
+    "id": "F04",
+    "source": "inputs/spherex_extracted/F04.csv",
+    "snapshot_sha256": "12d21ad229ce5a28387885aa69a90656c09d57bb813e992a3046491f247c51ea",
+    "download_complete": true,
+    "requested": 338,
+    "accepted": 338,
+    "invalid_accepted": 12
+  },
+  {
+    "id": "F05",
+    "source": "review/spherex_sample/F05/*.json",
+    "snapshot_sha256": "5cbc1ad9e623f411f55a118e424161d6fbe670d67e11c5fc467c18867edc1bd6",
+    "download_complete": true,
+    "requested": 235,
+    "accepted": 228,
+    "quality_rejected": 7,
+    "invalid_accepted": 10
+  },
+  {
+    "id": "F06",
+    "source": "inputs/spherex_extracted/F06.csv",
+    "snapshot_sha256": "625c4b7a001475176583238dfbffefcfa9b5b434882cd3378c3c7221f57f4adb",
+    "download_complete": true,
+    "requested": 331,
+    "accepted": 331,
+    "invalid_accepted": 18
+  },
+  {
+    "id": "F07",
+    "source": "review/spherex_sample/F07/*.json",
+    "snapshot_sha256": "924d5498401ed5793d19f88716d9f035c797ed990cf9566b14d0b0e2e3c6ac70",
+    "download_complete": true,
+    "requested": 348,
+    "accepted": 341,
+    "quality_rejected": 7,
+    "invalid_accepted": 18
+  },
+  {
+    "id": "F08",
+    "source": "review/spherex_sample/F08/*.json",
+    "snapshot_sha256": "16ba0fa32f9512b7ffacedf61e83a6b5f8be4309a5d4a3d5466767f63d361857",
+    "download_complete": true,
+    "requested": 287,
+    "accepted": 277,
+    "quality_rejected": 10,
+    "invalid_accepted": 6
+  },
+  {
+    "id": "F09",
+    "source": "review/spherex_sample/F09/*.json",
+    "snapshot_sha256": "3a803c8123a77fd92abaf4a638cf90b3a44e798b86a6a4bff9b82dd5ec110490",
+    "download_complete": true,
+    "requested": 247,
+    "accepted": 243,
+    "quality_rejected": 4,
+    "invalid_accepted": 10
+  },
+  {
+    "id": "F10",
+    "source": "review/spherex_sample/F10/*.json",
+    "snapshot_sha256": "844d2b761ff5b9c68bbd96cabd0d833cd12e3feeac7c6f62ad6d6ec038e7c1b4",
+    "download_complete": true,
+    "requested": 254,
+    "accepted": 246,
+    "quality_rejected": 8,
+    "invalid_accepted": 9
+  },
+  {
+    "id": "F11",
+    "source": "review/spherex_sample/F11/*.json",
+    "snapshot_sha256": "bd9e3bcdafbda96f3bbc97c3b116a420f9622065417e98e866053e123b539410",
+    "download_complete": false,
+    "requested": 399,
+    "accepted": 367,
+    "quality_rejected": 31,
+    "error": 1,
+    "invalid_accepted": 10
+  },
+  {
+    "id": "F12",
+    "source": "review/spherex_sample/F12/*.json",
+    "snapshot_sha256": "df81bcfbca932c747176d9affa37291eb8339f03e1480e3e299420e1aae3e8be",
+    "download_complete": true,
+    "requested": 238,
+    "accepted": 236,
+    "quality_rejected": 2,
+    "invalid_accepted": 15
+  },
+  {
+    "id": "R01",
+    "source": "inputs/spaxel_scryer_P9694_ra11p5333_dec9p1225_cleaned.csv",
+    "snapshot_sha256": "f4c392054f1db1c60a346c76e2d241fbe9b4200a4a41d5d50b1d3e5f4117ae23",
+    "download_complete": true,
+    "requested": 289,
+    "accepted": 289,
+    "invalid_accepted": 0
+  },
+  {
+    "id": "R02",
+    "source": "review/spherex_sample/R02/*.json",
+    "snapshot_sha256": "7416a3ee5a44bfacf41dbbf9548284b3871d0ecb72beaf8b2d07b7b94215bdc3",
+    "download_complete": true,
+    "requested": 310,
+    "accepted": 304,
+    "quality_rejected": 6,
+    "invalid_accepted": 15
+  },
+  {
+    "id": "R03",
+    "source": "review/spherex_sample/R03/*.json",
+    "snapshot_sha256": "6bafbe0ce3fa9aec9235c7225aec6901414dbcf79d2500e4ac1b1e487e4b775c",
+    "download_complete": true,
+    "requested": 254,
+    "accepted": 250,
+    "quality_rejected": 4,
+    "invalid_accepted": 13
+  },
+  {
+    "id": "R04",
+    "source": "review/spherex_sample/R04/*.json",
+    "snapshot_sha256": "b03ab829ff700061361114d7fcc343cd036ca304027c33140c72b815d5f4409c",
+    "download_complete": true,
+    "requested": 230,
+    "accepted": 221,
+    "quality_rejected": 9,
+    "invalid_accepted": 9
+  },
+  {
+    "id": "R05",
+    "source": "review/spherex_sample/R05/*.json",
+    "snapshot_sha256": "83c4ff2941575a06c626303939ed1574d768d45a8488b3a01c6e6e9c31912f10",
+    "download_complete": true,
+    "requested": 301,
+    "accepted": 298,
+    "quality_rejected": 3,
+    "invalid_accepted": 18
+  },
+  {
+    "id": "R06",
+    "source": "review/spherex_sample/R06/*.json",
+    "snapshot_sha256": "9f1fb479e97f88234256ad2c74137d35fab5ce168c8154295bde4dd1658e8a4f",
+    "download_complete": true,
+    "requested": 257,
+    "accepted": 248,
+    "quality_rejected": 9,
+    "invalid_accepted": 14
+  },
+  {
+    "id": "R07",
+    "source": "review/spherex_sample/R07/*.json",
+    "snapshot_sha256": "2dd1eefe2542a438e22da80095973de8acb5124bb25a484cb43f68044cc108fb",
+    "download_complete": true,
+    "requested": 248,
+    "accepted": 243,
+    "quality_rejected": 5,
+    "invalid_accepted": 16
+  },
+  {
+    "id": "R08",
+    "source": "review/spherex_sample/R08/*.json",
+    "snapshot_sha256": "4f30462d420b0f9162f2cb8cb16d3a9fec3185ee9359879eebf42354fe3bbe28",
+    "download_complete": true,
+    "requested": 253,
+    "accepted": 248,
+    "quality_rejected": 5,
+    "invalid_accepted": 14
+  },
+  {
+    "id": "R09",
+    "source": "review/spherex_sample/R09/*.json",
+    "snapshot_sha256": "c746ab6f38414c22045e5cabb9b472eafcf681a01cd4df58b7d2b03c7c9e71cb",
+    "download_complete": true,
+    "requested": 255,
+    "accepted": 226,
+    "quality_rejected": 29,
+    "invalid_accepted": 18
+  },
+  {
+    "id": "R10",
+    "source": "review/spherex_sample/R10/*.json",
+    "snapshot_sha256": "275b6558b7363661072dcdf6b790cd39703579e00512aa96d6f75ee754774f95",
+    "download_complete": true,
+    "requested": 423,
+    "quality_rejected": 277,
+    "accepted": 146,
+    "invalid_accepted": 7
+  },
+  {
+    "id": "R11",
+    "source": "review/spherex_sample/R11/*.json",
+    "snapshot_sha256": "4adde16fb64669646b02ae69ff614540038d60ac76be9ff565ffe9984e787956",
+    "download_complete": true,
+    "requested": 232,
+    "quality_rejected": 142,
+    "accepted": 90,
+    "invalid_accepted": 3
+  },
+  {
+    "id": "R12",
+    "source": "review/spherex_sample/R12/*.json",
+    "snapshot_sha256": "bcc1af39ba3a035f9ce3512435bada29ea9549ae0811b2d8c7d228874da46d03",
+    "download_complete": true,
+    "requested": 295,
+    "quality_rejected": 295,
+    "invalid_accepted": 0
+  }
+]

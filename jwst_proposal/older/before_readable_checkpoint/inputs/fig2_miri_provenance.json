@@ -1,0 +1,36 @@
+{
+  "figure": "fig2_miri.pdf",
+  "generator": "make_fig2_miri.py",
+  "status": "Measurement-to-inference workflow, not a forecast or simulated MRS observation.",
+  "spatial_schematic": "Dimensionless Gaussian nucleus (sigma=.43) plus extended host (amplitude=.42, sigma=1.55); arbitrary illustrative shape, not a calibrated MRS PSF or fitted target.",
+  "spectrum": "Unchanged optically thin shell calculation; delayed fixed dust after a fourfold rise at age 10 initial silicate Rin/c; normalized at rest 5 micron. Used only to locate continuum and feature observables.",
+  "diagnostic_markers": {
+    "PAH_rest_um": [
+      6.2,
+      7.7,
+      11.3
+    ],
+    "NeVI_rest_um": 7.65,
+    "NeV_rest_um": 14.32,
+    "interpretation": "Positions only; no PAH or ionic line emission synthesized."
+  },
+  "mrs_common_rest_um": [
+    4.831394202326957,
+    21.544401544401545
+  ],
+  "science_tests": {
+    "memory": "Warm change and excess/deficit relative to current power, versus direction/amplitude/event age.",
+    "evolution": "Joint continuum/silicate residuals relative to delayed fixed-dust models across allowed geometries."
+  },
+  "measurements": [
+    "nuclear 8\u201313 micron continuum luminosity",
+    "continuum levels and slopes",
+    "paired silicate strengths and profiles",
+    "PAH fluxes and equivalent widths",
+    "Ne V/VI and H2 fluxes or limits",
+    "spatial extent and nuclear fraction"
+  ],
+  "analysis_plan": "review/mrs_measurement_plan.md",
+  "sample_sha256": "448434474515b8ca6714871253f1e32db5ef742b456110089fc5dbaf19e15745",
+  "model_sha256": "df35b6754a504d46674aabb5442c57f36dade4d1e99a53b6fce2be61c5f95027"
+}

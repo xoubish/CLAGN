@@ -1,0 +1,37 @@
+{
+  "selected_indices": [
+    40,
+    39
+  ],
+  "conditional_models": 27,
+  "observables": [
+    "Fnu14/Fnu4",
+    "Fnu22/Fnu14",
+    "S9.7_local",
+    "S18_local"
+  ],
+  "feature_definition": "S=ln(Fnu/Fnu_local). Log-linear baselines through rest 6 and 14 microns for 9.7; 14 and 22 microns for 18. Illustrative contrast indices, not full nuclear/host/feature decomposition.",
+  "scope": "Same saved spectra as previous preview. Diagnostic points are predictions, not measurements. All models use the same forecast date and future driver factor. Neither color denotes dust evolution.",
+  "selected": [
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 4.0,
+      "F14_over_F4": 0.16357659729456886,
+      "F22_over_F14": 0.673462122966288,
+      "S9_7_local": -0.014953061961388063,
+      "S18_local": -0.03818342162760972
+    },
+    {
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 3.0,
+      "F14_over_F4": 0.9206840960397861,
+      "F22_over_F14": 0.59774811100064,
+      "S9_7_local": 1.9482373162818696,
+      "S18_local": 0.391891410303216
+    }
+  ]
+}

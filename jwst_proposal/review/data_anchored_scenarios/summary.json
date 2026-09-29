@@ -1,0 +1,58 @@
+{
+  "targets_measured": 24,
+  "available_spherex_extractions": [
+    "F04",
+    "F06",
+    "R01"
+  ],
+  "available_ngps_reductions": [
+    "F02",
+    "F04",
+    "F06",
+    "F07",
+    "R01"
+  ],
+  "target_optical_spectra_available": 37,
+  "W1_p95_over_p05_range": [
+    1.3038819101640737,
+    2.2909348211403944
+  ],
+  "r01_latest3_over_2010": {
+    "W1": 1.1824968703831071,
+    "W2": 1.0774571314563668
+  },
+  "scenario_scope": "Two endpoints of archived fixed-dust shell profiles at 2028.0 with identical unit future driver. Conditional on an assumed additional 5% independent scatter; neither is an evolution-exclusive outcome.",
+  "scenarios": [
+    {
+      "label": "weak_warm",
+      "archive_curve_index": 40,
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 4,
+      "Fnu_rest12_mjy": 2.1012028034195875,
+      "Fnu_rest18_mjy": 1.29541786386167,
+      "integrated_8_13_observed_erg_s_cm2": 3.507692521203578e-13
+    },
+    {
+      "label": "strong_warm",
+      "archive_curve_index": 39,
+      "evolution": 0.0,
+      "future_driver_factor": 1.0,
+      "year": 2028.0,
+      "profile_solution": 3,
+      "Fnu_rest12_mjy": 22.996433764229288,
+      "Fnu_rest18_mjy": 10.99727906314095,
+      "integrated_8_13_observed_erg_s_cm2": 5.093275345360672e-12
+    }
+  ],
+  "contrast_8_13": 14.520301635825938,
+  "historical_fit_scope": "Existing optical/WISE/SPHEREx shell fits; not newly refitted here. Primary fits fail supplied-error adequacy; scenario families use explicit extra scatter. See existing predictivity audit.",
+  "source_hashes": {
+    "inputs/jwst_sample_cycle6.csv": "448434474515b8ca6714871253f1e32db5ef742b456110089fc5dbaf19e15745",
+    "review/history_audit/binned_measurements.csv": "8894827b921376cb1f30798861bb3176a97fc6416ac842f399d63e714dd84931",
+    "inputs/sample_allwise_psd.csv": "22c4c34f78edcc07596f7969268242795c963a95e205c85c2d31e7d5aa91fc3b",
+    "review/p9694_predictivity/conditional_curves.npz": "980848c3a0a59e4b1f507005b56ebdd066988724cf47c7450a1043e2c797df62",
+    "review/p9694_predictivity/adequacy_and_forecasts.json": "c6d75f623828936291dc188bd43e86577871cbf0564c41d29c2d97623903688a"
+  }
+}

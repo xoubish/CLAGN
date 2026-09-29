@@ -1,10 +1,16 @@
 # Palomar CLAGN observing project
 
+**Current JWST proposal for Overleaf: [jwst_proposal/proposal.tex](jwst_proposal/proposal.tex).**
+Use it with [Figure 1](jwst_proposal/fig1_targets.pdf),
+[Figure 2](jwst_proposal/fig2_miri.pdf), and
+[the template style](jwst_proposal/jwstproposaltemplate_v6.sty).
+Earlier `.tex` files under `jwst_proposal/older/` are archived drafts.
+
 Start with **[Observing files](observing/README.md)** for the new October 26–27 target packet (40 science targets per night, including JWST coverage), the September 23 sequence, NGPS CSVs, and visibility plots.
 
 | Folder | Contents |
 | --- | --- |
-| [jwst_proposal/](jwst_proposal/README.md) | Editable JWST Cycle 6 proposal, compiled PDF, figures, and portable figure inputs. |
+| [jwst_proposal/](jwst_proposal/README.md) | Current JWST Cycle 6 `.tex`, figure PDFs, and supporting inputs; no compiled proposal PDF is maintained. |
 | [observing/](observing/README.md) | Current September primary/backup packet and links to the three visibility plots. Local observing products are git-ignored. |
 | [scripts/](scripts/README.md) | Selection, acquisition, geometry, sensitivity, and page-building code. |
 | [data/](data/README.md) | Catalogues, manifold model, spectra, light curves, imaging caches, and private working tables. |

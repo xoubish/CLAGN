@@ -1,0 +1,10 @@
+{
+  "targets": 24,
+  "curves": 384,
+  "endpoints": 48,
+  "each_target_contributes_once_to_each_band": true,
+  "endpoint_extrema_checked": true,
+  "all_shaded_quantiles_checked": true,
+  "normalization_checked": true,
+  "visual_review": true
+}

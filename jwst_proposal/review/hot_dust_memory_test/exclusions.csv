@@ -1,0 +1,10 @@
+id,band,reason,template
+F01,r,insufficient last-year optical bins/span,
+R03,r,insufficient last-year optical bins/span,
+R06,r,insufficient last-year optical bins/span,
+R10,,fewer than two adequately covered spectral visits,Ell5
+R10,,fewer than two adequately covered spectral visits,S0
+R11,,fewer than two adequately covered spectral visits,Ell5
+R11,,fewer than two adequately covered spectral visits,S0
+R12,,fewer than two adequately covered spectral visits,Ell5
+R12,,fewer than two adequately covered spectral visits,S0

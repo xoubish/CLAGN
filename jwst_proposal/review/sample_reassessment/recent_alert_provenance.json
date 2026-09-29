@@ -1,0 +1,15 @@
+{
+  "inputs": {
+    "jwst_proposal/inputs/lightcurves/F02_ztf_irsa.csv": "138ccf096782ab8c39d258eec682187d24e0eb709885fd4f025db1ab4a2d8e31",
+    "jwst_proposal/inputs/lightcurves/F02_alerce.csv": "e655b44555ba7f57929dc8c84fe059f0d912f2e5faaebdd26bc2becd3894896c",
+    "jwst_proposal/inputs/lightcurves/F04_ztf_irsa.csv": "03b9d4571b4d4da0512180e7e2c8d7203c64552eed478d63907e3cd2691e7839",
+    "jwst_proposal/inputs/lightcurves/F04_alerce.csv": "c934eccf0ce9976c746cf27961f441b088e4815ecd216145124f340f9cceb3de",
+    "jwst_proposal/inputs/lightcurves/F06_ztf_irsa.csv": "958322e48af9f2e7e9993ef8cc4810a0ee68f78bb0ff3bc58c999f2dba9e397c",
+    "jwst_proposal/inputs/lightcurves/F06_alerce.csv": "4af880705cf4ca69ec5303f40cc51aac60887815518ad4db17802f3c2b6b7e63",
+    "jwst_proposal/inputs/lightcurves/F07_ztf_irsa.csv": "de66ce625b32e2357f5e9d0512005244e37e5630c1a7a3462f1b62c826aa36b7",
+    "jwst_proposal/inputs/lightcurves/F07_alerce.csv": "88cea8c26fb57ad0a067a6a5d6dfefbb151f6164bbc2d8f99e9c50ab9b9e5103",
+    "jwst_proposal/inputs/lightcurves/R01_ztf_irsa.csv": "9e79ee69bc155e7c1d0987937052b9ebb39fca48fd20c1972ebede2fd1fe35f6",
+    "jwst_proposal/inputs/lightcurves/R01_alerce.csv": "964df4a5fae4ec9e19cd1b122e5c42511482a5be74345e2a4f234b6449b120d8"
+  },
+  "method": "Figure 1 IRSA nightly medians and post-IRSA corrected alerts, offset matching where >=5 pairs; 90-day medians with >=3 nights. Different bin weights/object handling from original single-OID audit; for sensitivity only."
+}

@@ -1,0 +1,10 @@
+{
+  "protected_files_unchanged": true,
+  "sha256": {
+    "proposal.tex": "80ab3a9453de9f605183638ace99a0d71adbea49c6ca242ef53fe7fbdf636e67",
+    "fig2_miri.pdf": "8e5aa9ec0d2a9d172e24a2a46786603789808b1f4d0f80e49e5d75dff7c4ab81",
+    "make_fig2_miri.py": "4f8101ecd996dc0999c733ff6fc240d3bac65238ae5987482907820626139273"
+  },
+  "source_figures": 6,
+  "proposal_pdf_compiled": false
+}

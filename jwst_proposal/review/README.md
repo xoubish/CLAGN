@@ -1,4 +1,15 @@
-# Focused technical and editorial review — 26 September 2026
+# Review and supporting analyses
+
+Current working products:
+
+- [Accepted three-panel Figure 2](fig2_three_panel/README.md): PDF, preview,
+  caption, and reproduction instructions. Older layout trials are archived in
+  `../older/figure2_trials_20260929.zip`.
+- [SPHEREx retrieval](SPHEREX.md): completed cache in the Git-ignored
+  `../local_data/spherex/` directory; [sample analysis](spherex_sample_review/README.md).
+- [Cleanup manifest](cleanup_20260929.json): verified archive members and data moves.
+
+## Focused technical and editorial review — 26 September 2026
 
 **Literature update, 27 September:** the [citation review](literature_search_20260927.md)
 documents 14 added papers and their claim-level support. The current proposal

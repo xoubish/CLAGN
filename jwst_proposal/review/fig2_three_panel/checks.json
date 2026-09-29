@@ -1,0 +1,36 @@
+{
+  "protected_files_unchanged": true,
+  "sha256": {
+    "proposal.tex": "cb050a77dbadf4bfdc62c5a579cd49c189c315efd621234403579f0d654a7437",
+    "fig2_miri.pdf": "fa93ffcbb4e1482919eaea22f50c4e606ceab954efba173e9b317a93579ef241",
+    "review/fig2_three_panel/panel_a/literature_with_our_leverage.pdf": "5c65329bd6825d7a4fcd7a0221af44b994f153370cd58d60a3a70a50b51640d7"
+  },
+  "layout": "Three panels in one horizontal row with equal content heights and centered titles; source aspect ratios preserved.",
+  "panel_height_inches": 4.4,
+  "panel_widths_inches": [
+    6.016758241758242,
+    5.000000000000001,
+    8.274489795918369
+  ],
+  "panel_b_source": "https://arxiv.org/abs/2504.01103",
+  "panel_b_source_version": "14 April 2026",
+  "panel_c_source": "https://arxiv.org/abs/2011.07638",
+  "panel_c_figure": 15,
+  "panel_c_pdf_page": 19,
+  "panel_c_crop": [
+    0.081,
+    0.077,
+    0.558,
+    0.273
+  ],
+  "panel_c_time_axis": "Original observed calendar years for NGC 4151, relocated below both light curves at the original horizontal positions.",
+  "panel_c_content": "Optical B-band, N-band data and fitted reverberation model; complete 20\u201324 and 34\u201337 micron series and labels omitted for clarity.",
+  "panel_c_omitted_vector_operations": {
+    "S": 7,
+    "Do": 9,
+    "Tj": 14
+  },
+  "panel_c_simplified_annotation": "Fitted delay \u2248 8 yr; smoothing window \u2248 14 yr. Rounded from original 2914 and 5263 days; amplitude, constant offset, and chi-square omitted.",
+  "interpretation": "Empirical time-response precedent; no lag values or calendar windows transferred to our sample.",
+  "proposal_pdf_compiled": false
+}

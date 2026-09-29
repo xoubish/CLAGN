@@ -1,0 +1,113 @@
+{
+  "targets": 24,
+  "family_counts": {
+    "fade": 12,
+    "rise": 12
+  },
+  "instrument": "MIRI/MRS",
+  "science_visits_per_target": 1,
+  "sky_visits_per_target": 1,
+  "total_visits": 48,
+  "requested_category": "Medium",
+  "charged_time_h": 67.0,
+  "ETC_APT_validated": false,
+  "submission_ready": false,
+  "authoritative_sample": "inputs/jwst_sample_cycle6.csv",
+  "history_classifications_validated": false,
+  "response_phase_coverage_validated": false,
+  "quantitative_dust_model_discrimination_validated": false,
+  "pending": [
+    "Review all 24 source identities, classifications and histories.",
+    "Validate event intervals, nuclear luminosities and dust-delay estimates.",
+    "Confirm nuclear centering suitability for the nine AllWISE-extended hosts listed in review/README.md.",
+    "Reconcile individual nuclear flux/host assumptions with source data; focused ETC tests do not establish every target or wavelength.",
+    "Complete APT administrative fields and final submission checks.",
+    "Estimate P9694 event dates and dust lags; R01 timing fields intentionally blank after replacement.",
+    "Establish expected history-dependent signal and sample-level discrimination after intrinsic scatter and nuisance uncertainties."
+  ],
+  "APT_visit_planner_validated": true,
+  "ETC_all_targets_validated": false,
+  "timing_status": "Revised P9694 science/sky pair and standard A exposure passed online APT Visit Planner for all 48 visits; 67.00 charged hours, 67.0-hour saved request.",
+  "focused_ETC_checks_completed": true,
+  "focused_checks_scope": "Representative source spectra, adopted background, independent spectral-sample errors; no full-sample nuclear SED/host-noise validation.",
+  "technical_review": "review/README.md",
+  "technical_consistency": "review/consistency.json",
+  "duplication_check": {
+    "date": "2026-09-26",
+    "targets": 24,
+    "radius_arcsec": 120,
+    "matches": 0,
+    "includes_planned": true,
+    "audit": "duplication/screening_summary.json",
+    "positive_control_passed": true
+  },
+  "acquisition_morphology_review_pending": [
+    "F08",
+    "F09",
+    "F10",
+    "F11",
+    "F12",
+    "R08",
+    "R09",
+    "R10",
+    "R12"
+  ],
+  "version": "Proposal: MRS measurements to science workflow",
+  "built_at_utc": "2026-09-29T04:46:04.530192+00:00",
+  "source": "proposal.tex",
+  "pdf": "proposal.pdf",
+  "build_command": "make -C jwst_proposal",
+  "build_success": true,
+  "pages": 7,
+  "core_pages": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "within_required_sections_page_limit": true,
+  "layout_warnings": [],
+  "source_sha256": "d3ada0cd1b76e2ef7333dc0eebb00dfe4bf6301e328da907c9256be4b9f15f2f",
+  "pdf_sha256": "a22e56226c87923edb96766bf6548991a7e12cddcf9ccbddc263c845e7fea4c6",
+  "style_sha256": "d5e8b0c1133974ac9eaa6cc27213794ceec297337c69f2ec13254a10684fdd08",
+  "style_unchanged": true,
+  "figures": [
+    "fig1_targets.pdf",
+    "fig2_miri.pdf"
+  ],
+  "figure1_targets": [
+    "F06",
+    "F04",
+    "R01"
+  ],
+  "figure1_spherex_point_counts": [
+    313,
+    326,
+    289
+  ],
+  "figure1_measurement_loaders_and_epoch_selection_unchanged": true,
+  "figure1_provenance": "inputs/fig1_targets_provenance.json",
+  "figure2_status": "MRS extraction, observable inventory, historical comparison, and memory/evolution tests; explicit supporting obscuration and host/gas science. Spatial sketch labelled schematic, nuclear spectrum illustrative; no model-discrimination forecast plotted.",
+  "figure2_provenance": "inputs/fig2_miri_provenance.json",
+  "forecast": "inputs/warm_response_forecast_summary.json",
+  "forecast_full_model_discrimination_validated": false,
+  "science_questions": [
+    "How strongly does the warm spectrum remember the nuclear history?",
+    "Does the dust boundary move, or only its temperature?"
+  ],
+  "measurement_definition": "Fit 2010 W3/W4 and MRS through their bandpasses; use the rest 8\u201313 micron spectrum to test the delayed fixed-distribution prediction.",
+  "nominal_line_coverage_counts": {
+    "NeV_24.3um": 13,
+    "OIV_25.9um": 9
+  },
+  "visual_review_pages": [
+    3,
+    4
+  ],
+  "revision_notes": "review/combined_figure_revision.md",
+  "previous_validation": "older/before_measurement_workflow/validation.json",
+  "old_drafts": "older/README.md",
+  "anonymous_text_screen_passed": true,
+  "measurement_plan": "review/mrs_measurement_plan.md"
+}

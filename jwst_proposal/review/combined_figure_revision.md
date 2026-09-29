@@ -57,3 +57,41 @@ The caption and provenance distinguish the single spectrum from the model
 comparison. The preceding version is in
 `older/before_spectrum_comparison_cleanup/`. Page 4 was visually reviewed;
 the five-core-page consistency audit passed.
+
+## Measurement-to-science workflow
+
+Figure 2 is now organized around the analysis of the proposed cubes. The full
+measurement inventory and scientific mapping are in `mrs_measurement_plan.md`.
+A labelled spatial schematic shows nuclear/host decomposition; a nuclear
+spectrum locates continuum and spectral diagnostics. Observable cards feed
+each target's historical record and two science branches: current-power
+spectral memory and delayed fixed-dust versus evolving-distribution fits.
+The supporting obscuration/excitation and host-gas tests are explicit.
+
+No toy model separation is used as evidence of detectability in this figure.
+The previous version is preserved in `older/before_measurement_workflow/`.
+The first analysis paragraph and caption now describe the same measurements.
+The history-driven forecast paragraph is unchanged. Figure 1 is byte-for-byte
+unchanged. The spectrum is numerically identical to the preceding fixed-dust
+illustration; the spatial profile is a dimensionless schematic, not an empirical
+PSF or a simulation of a target.
+
+Pages 3 and 4 were rendered and reviewed. The build and consistency audit pass
+with five core pages and seven total pages. The official style is unchanged.
+
+
+## Readable working draft: R01 data and MIRI scenarios
+
+Replaced the workflow figure with the measured R01 spectrum and the previously
+reviewed conditional warm spectra, plus continuum/silicate diagnostic planes.
+Figure 1 remains byte-for-byte unchanged. The active Figure 2 generator now
+reproduces this selection from saved data and curves. Both colored endpoints
+are fixed distributions (archive indices 40 and 39); gray model symbols include
+fixed and evolving cases. The 2028 epoch, future driver factor of one, and
+assumed extra 5% historical scatter are explicit in the caption/provenance.
+This is an illustration of the spectral information MIRI supplies, not a
+validated separation of physical mechanisms or a confidence region.
+
+Shortened the ensemble forecast and connected the analysis text to the actual
+Figure 2. Preserved the scientific validation flags and archived the previous
+active draft under `older/before_readable_checkpoint/`.

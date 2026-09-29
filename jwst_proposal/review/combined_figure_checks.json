@@ -1,22 +1,22 @@
 {
-  "figure1_unchanged": true,
   "source": "proposal.tex",
   "figure": "fig2_miri.pdf",
-  "numerical_checks": [
-    {
-      "luminosity_ratio": 4.0,
-      "max_evolution_curve_change_doubling_grid_percentage_points": 0.0016828266696133909
-    },
-    {
-      "luminosity_ratio": 0.25,
-      "max_evolution_curve_change_doubling_grid_percentage_points": 0.5437150617196185
-    }
+  "figure1_unchanged": true,
+  "saved_r01_spectra_unchanged": true,
+  "diagnostic_values_match_reviewed_preview": true,
+  "highlighted_model_indices": [
+    40,
+    39
   ],
+  "both_highlighted_models_fixed_dust": true,
+  "conditional_models": 27,
   "visual_review_pages": [
-    4
+    2,
+    3,
+    4,
+    5
   ],
   "five_core_pages": true,
-  "previous_response_curves_unchanged": true,
-  "spectrum_ratio_matches_panel_C": true,
-  "archive": "older/before_spectrum_figure"
+  "archive": "older/before_readable_checkpoint",
+  "measurement_mapping": "review/mrs_measurement_plan.md"
 }

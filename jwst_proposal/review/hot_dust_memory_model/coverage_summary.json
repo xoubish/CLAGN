@@ -1,0 +1,13 @@
+{
+  "scope": "Coverage audit of existing 90-day optical bins; not an audit of all available raw photometry. Uniform kernel [0,2tau]; uses SPHEREx visit midpoint only.",
+  "spherex_visits": 60,
+  "latest_visit_after_last_g_bin": 23,
+  "bracketed_visits": {
+    "('g', 0.25)": 10,
+    "('g', 0.5)": 10,
+    "('g', 1.0)": 10,
+    "('r', 0.25)": 13,
+    "('r', 0.5)": 13,
+    "('r', 1.0)": 13
+  }
+}

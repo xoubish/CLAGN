@@ -1,0 +1,45 @@
+{
+  "spherex": [
+    {
+      "kind": "SPHEREx synthetic W1",
+      "visit": 1,
+      "label": "Jul 2025",
+      "mjd": 60859.67283336735,
+      "year": 2025.5032132421024,
+      "flux_mjy": 7.595333493044053,
+      "error_mjy": 0.1544282908545608,
+      "statistical_error_mjy": 0.02779410870102025,
+      "calibration_error_mjy": 0.15190649932697645,
+      "response_coverage": 0.9999999344509639,
+      "n_measurements": 95
+    },
+    {
+      "kind": "SPHEREx synthetic W1",
+      "visit": 2,
+      "label": "Dec 2025\u2013Jan 2026",
+      "mjd": 61042.79728882744,
+      "year": 2026.0049240789792,
+      "flux_mjy": 7.88907529806599,
+      "error_mjy": 0.16006180268037967,
+      "statistical_error_mjy": 0.02692407135857945,
+      "calibration_error_mjy": 0.15778109854723069,
+      "response_coverage": 0.9999999341311401,
+      "n_measurements": 100
+    },
+    {
+      "kind": "SPHEREx synthetic W1",
+      "visit": 3,
+      "label": "Jun\u2013Jul 2026",
+      "mjd": 61221.32762000968,
+      "year": 2026.4940482739992,
+      "flux_mjy": 8.028929560518428,
+      "error_mjy": 0.1630745646355898,
+      "statistical_error_mjy": 0.02842204257495088,
+      "calibration_error_mjy": 0.16057864467903207,
+      "response_coverage": 0.9999999341257705,
+      "n_measurements": 94
+    }
+  ],
+  "spherex_method": "Piecewise-linear native Fnu integrated against W1 photon response / wavelength; flat-Fnu band average. Supplied measurement errors plus fully correlated within-visit calibration term.",
+  "reference": "https://irsa.ipac.caltech.edu/data/WISE/docs/release/All-Sky/expsup/sec4_4h.html"
+}

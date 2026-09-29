@@ -1,48 +1,16 @@
 {
-  "figure": "fig2_miri.pdf",
   "generator": "make_fig2_miri.py",
-  "status": "Illustrative shell calculation; no observed target fits or detection significance.",
-  "physics": "Unchanged make_fig2_diagnostics.py; optically thin silicate/graphite shells.",
-  "age_initial_silicate_Rin_over_c": 10.0,
-  "panel_A": "Illustrative delayed fixed-dust spectrum for a fourfold rising event, normalized at rest 5 micron. Only this spectrum is displayed; the model comparison is quantified in C.",
-  "panel_B": "Fixed distribution with delayed heating divided by its current-power equilibrium, for fourfold rises and fades.",
-  "panel_C": "100*(evolving/fixed-1) for the same rising example as A; displayed over common MRS coverage. Boundary adjusts immediately as changed illumination arrives. Sign depends on this prescription and normalization.",
-  "diagnostic_markers": {
-    "PAH_rest_um": [
-      6.2,
-      7.7,
-      11.3
-    ],
-    "NeVI_rest_um": 7.65,
-    "NeV_rest_um": 14.32,
-    "interpretation": "Positions only; no PAH or ionic emission synthesized, no detection claim."
-  },
-  "coverage": {
-    "mrs_common_rest_um": [
-      4.831394202326957,
-      21.544401544401545
-    ],
-    "spherex_common_rest_upper_um": 3.8610038610038613,
-    "note": "Intersection across actual sample redshifts, nominal wavelength limits only. SPHEREx extends to shorter wavelengths than displayed."
-  },
-  "normalization_note": "Matching one hot-band luminosity does not establish identical near-IR spectra.",
-  "host_note": "Spatial/PAH payoff is labelled; host emission is not simulated in these curves.",
-  "sample_sha256": "448434474515b8ca6714871253f1e32db5ef742b456110089fc5dbaf19e15745",
-  "model_sha256": "df35b6754a504d46674aabb5442c57f36dade4d1e99a53b6fce2be61c5f95027",
-  "calculations": [
-    {
-      "luminosity_ratio": 4.0,
-      "hot_luminosity_amplitude_scale": 1.6593137439649153,
-      "equilibrium_relative_error": 3.1086244689504383e-15,
-      "memory_ratio_at_12um": 0.8451508699122402,
-      "evolution_percent_at_12um": 20.106858737467984
-    },
-    {
-      "luminosity_ratio": 0.25,
-      "hot_luminosity_amplitude_scale": 0.6099444030198311,
-      "equilibrium_relative_error": 3.219646771412954e-15,
-      "memory_ratio_at_12um": 1.3109424559430651,
-      "evolution_percent_at_12um": -18.745113164381724
-    }
-  ]
+  "figure_type": "Published spectral, spatial and temporal examples",
+  "source_pdf": "review/fig2_three_panel/fig2_three_panel_draft.pdf",
+  "source_sha256": "5937f91e6d471a271e5e00c1dc892ffaba529ee524e01666502b810c939289c4",
+  "caption": "review/fig2_three_panel/caption.tex",
+  "panel_a_source": "https://arxiv.org/abs/2402.17479",
+  "panel_a_figure": 8,
+  "panel_b_source": "https://arxiv.org/abs/2504.01103",
+  "panel_b_figure": 4,
+  "panel_c_source": "https://arxiv.org/abs/2011.07638",
+  "panel_c_figure": 15,
+  "checks": "review/fig2_three_panel/checks.json",
+  "interpretation": "Published diagnostic precedents, not target predictions or a lag measurement from the proposed single visit.",
+  "proposal_pdf_compiled": false
 }

@@ -1,0 +1,83 @@
+[
+  {
+    "file": "program_3696.pdf",
+    "url": "https://www.stsci.edu/jwst/phase2-public/3696.pdf",
+    "final_url": "https://www.stsci.edu/jwst/phase2-public/3696.pdf",
+    "bytes": 60943,
+    "sha256": "c9efbdc4fe01dc096e12d00a5458fa416e7700e3cab30f82d548c3515f54da79",
+    "status": "downloaded"
+  },
+  {
+    "file": "program_8245.pdf",
+    "url": "https://www.stsci.edu/jwst/phase2-public/8245.pdf",
+    "final_url": "https://www.stsci.edu/jwst/phase2-public/8245.pdf",
+    "bytes": 23562,
+    "sha256": "c983541809005bbd899b08aba3fff96a7dbf6cb2ee06b8c13dc8e9ceb1fa8a6a",
+    "status": "downloaded"
+  },
+  {
+    "file": "masterson_2503.08647.pdf",
+    "url": "https://arxiv.org/pdf/2503.08647v2",
+    "final_url": "https://arxiv.org/pdf/2503.08647v2",
+    "bytes": 11029706,
+    "sha256": "4f99fe707a2b90f5537160dde13d045d6cb544c12c50b5f06cd5a25d1e2c3f7f",
+    "status": "downloaded"
+  },
+  {
+    "file": "sanchez_saez_2607.00921.pdf",
+    "url": "https://arxiv.org/pdf/2607.00921v1",
+    "final_url": "https://arxiv.org/pdf/2607.00921v1",
+    "bytes": 2514876,
+    "sha256": "0d9722ce5f31303a7836480117377332f96d2589e98d7fbba3ef8ff62b44c8d8",
+    "status": "downloaded"
+  },
+  {
+    "file": "program_1670.pdf",
+    "url": "https://www.stsci.edu/jwst/phase2-public/1670.pdf",
+    "bytes": 91403,
+    "sha256": "73322a09b7b1f8a1551f3a8acefec8d649d9f4badb8245d9bac6e4de66357aeb",
+    "status": "cached"
+  },
+  {
+    "file": "program_1328.pdf",
+    "url": "https://www.stsci.edu/jwst/phase2-public/1328.pdf",
+    "bytes": 146955,
+    "sha256": "ad752fc9b7847a23ae7d32cbec36334843ef119b64830a3d4765e82e8c8ea5eb",
+    "status": "cached"
+  },
+  {
+    "file": "program_2016.pdf",
+    "url": "https://www.stsci.edu/jwst/phase2-public/2016.pdf",
+    "bytes": 129303,
+    "sha256": "267fd45b816943dea1349dae2617673c525b35f4c9b9e223fbc37d049ca2a6bf",
+    "status": "cached"
+  },
+  {
+    "file": "ramos_almeida_2512.02629.pdf",
+    "url": "https://arxiv.org/pdf/2512.02629",
+    "bytes": 7735797,
+    "sha256": "e0c1b6387af481bb74138610f424dc906473db2cda595aac0d8ea0e00c51eb7d",
+    "status": "cached"
+  },
+  {
+    "file": "gonzalez_martin_2504.01103.pdf",
+    "url": "https://arxiv.org/pdf/2504.01103",
+    "bytes": 12132198,
+    "sha256": "e78f755fe1cdaa15db1224566a701174365457ba8652c1ba3e196a4a7da74080",
+    "status": "cached"
+  },
+  {
+    "file": "donnan_2402.17479.pdf",
+    "url": "https://arxiv.org/pdf/2402.17479",
+    "bytes": 6795128,
+    "sha256": "4fa59de1cf9ca28b2c35441d3780059489221b600c7b9977507ce3e595c88995",
+    "status": "cached"
+  },
+  {
+    "file": "armus_2209.13125.pdf",
+    "url": "https://arxiv.org/pdf/2209.13125",
+    "bytes": 1241882,
+    "sha256": "767fceaf47037d3d93402b217b3cd4685de1c42bf6775b2c0f2e8342f861f13a",
+    "status": "cached"
+  }
+]

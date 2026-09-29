@@ -1,0 +1,22 @@
+{
+  "figure1_unchanged": true,
+  "source": "proposal.tex",
+  "figure": "fig2_miri.pdf",
+  "numerical_checks": [
+    {
+      "luminosity_ratio": 4.0,
+      "max_evolution_curve_change_doubling_grid_percentage_points": 0.0016828266696133909
+    },
+    {
+      "luminosity_ratio": 0.25,
+      "max_evolution_curve_change_doubling_grid_percentage_points": 0.5437150617196185
+    }
+  ],
+  "visual_review_pages": [
+    4
+  ],
+  "five_core_pages": true,
+  "previous_response_curves_unchanged": true,
+  "spectrum_ratio_matches_panel_C": true,
+  "archive": "older/before_spectrum_figure"
+}

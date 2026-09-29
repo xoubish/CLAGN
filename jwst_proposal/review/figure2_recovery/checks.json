@@ -1,0 +1,14 @@
+{
+  "checked_utc": "2026-09-29T18:58:28.159492+00:00",
+  "source_braces_balanced": true,
+  "proposal_pdf_absent": true,
+  "figure_pages": 1,
+  "sample_sha256": "448434474515b8ca6714871253f1e32db5ef742b456110089fc5dbaf19e15745",
+  "requested_hours_unchanged": true,
+  "old_significances_removed": true,
+  "figure_render_visually_reviewed": true,
+  "layout_not_compiled": true,
+  "source_word_change": -6,
+  "all_mock_fits_valid": true,
+  "maximum_fractional_quadrature_change": 0.0011423187568548876
+}

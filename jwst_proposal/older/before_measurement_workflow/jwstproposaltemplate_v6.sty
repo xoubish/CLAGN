@@ -1,0 +1,1010 @@
+%   jwstproposaltemplate_v6.sty      (Be sure to use this name when saving the file!)
+%
+%   Style file for JWST proposals
+%
+%
+%   03/27/2026
+%
+%
+%   Pages 1-X. The "General Questions" responses.  Scientific
+%           justification and so on.  Allowed to spill over onto
+%           a further pages.
+%
+%
+% 02/19/2026 RCL: explicitly set page size and font family
+% 03/27/2026 RCL: changed "Technical Justification" to "Description of Observations"
+\usepackage[letterpaper]{geometry}
+\usepackage{mathptmx}
+\hyphenpenalty=1000
+\tolerance=10000
+
+\def\thiscycle{6}
+
+%
+%
+% \begin{macro}{\bottomcaption}
+%    The user-commands |\topcaption| and |\bottomcaption| set the
+%    boolean  |@topcaption| to determine where to put the
+%    tablecaption. The default  is to put the caption on the top of
+%    the table 
+%    \begin{macrocode}
+%    \begin{macrocode}
+\newif\if@topcaption \@topcaptiontrue
+\def\topcaption{\@topcaptiontrue\tablecaption}
+\def\bottomcaption{\@topcaptionfalse\tablecaption}
+%    \end{macrocode}
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+%
+% \begin{macro}{\tablecaption}
+%    This command has to function exactly like |\caption| does except
+%    it has to store its argument (and the optional argument) for
+%    later processing \emph{within} the supertabular environment. 
+%
+%    \begin{macrocode}
+%\long\def\tablecaption{%
+%  \refstepcounter{table} \@dblarg{\@xtablecaption}}
+%\long\def\@xtablecaption[#1]#2{%
+%  \long\gdef\@process@tablecaption{\@stcaption{table}[#1]{#2}}}
+%\global\let\@process@tablecaption\relax
+%
+%   Captions need to be 12pt. 
+%
+\long\def\@makecaption#1#2{%
+  \vskip 10pt
+  \sbox\@tempboxa{\normalsize #1: #2}%
+  \ifdim \wd\@tempboxa >\hsize
+    \normalsize #1: #2\par
+  \else
+    \global \@minipagefalse
+    \hbox to\hsize{\hfil\box\@tempboxa\hfil}%
+  \fi
+  \vskip 10pt}
+%    \end{macrocode}
+% \end{macro}
+%
+% This is a redefinition of LaTeX's \@caption, \@makecaption is
+% called within a group so as not to return to \normalsize globally.
+% also a fix is made for the `feature' of the \@makecaption of 
+% article.sty and friends that a caption ALWAYS gets a \vskip 10pt 
+% at the top and NONE at the bottom. If a user wants to precede his 
+% table with a caption this results in a collision.
+%
+%    \begin{macrocode}
+\long\def\@stcaption#1[#2]#3{\par%
+  \addcontentsline{\csname ext@#1\endcsname}{#1}%
+                  {\protect\numberline{%
+                      \csname the#1\endcsname}{\ignorespaces #2}}
+  \begingroup
+    \@parboxrestore
+    \normalsize
+    \if@topcaption \vskip -10pt \fi
+    \@makecaption{\csname fnum@#1\endcsname}{\ignorespaces #3}\par
+    \if@topcaption \vskip 10pt \fi
+  \endgroup}
+%    \end{macrocode}
+%
+%    |\tablehead| activates the new tabular |\cr| commands.
+%    \begin{macrocode}
+\newcommand\tablehead[1]{\gdef\@tablehead{#1}}
+\tablehead{}
+\newcommand\tablefirsthead[1]{\gdef\@table@first@head{#1}}
+%    \end{macrocode}
+%
+%
+%    If the user uses an extra amount of tabular-data (like
+%    \|multicolumn|) in |\tabletail| \TeX\ starts looping because of
+%    the definition of |\nextline|. So make |\\| act like just a |\cr|
+%    inside this tail to prevent the loop.  Save and restore the value
+%    of |\\|
+%
+%    \begin{macrocode}
+\newcommand\tabletail[1]{%
+  \gdef\@tabletail{%
+    \noalign{%
+      \global\let\@savcr=\\
+      \global\let\\=\cr}%
+    #1%
+    \noalign{\global\let\\=\@savcr}}}
+\tabletail{}
+\newcommand\tablelasttail[1]{\gdef\@table@last@tail{#1}}
+%    \end{macrocode}
+%
+%  \begin{macro}{\sttraceon}
+% \changes{v3.7b}{1994/05/16}{Added macro}
+%  \begin{macro}{\sttraceoff}
+% \changes{v3.7b}{1994/05/16}{Added macro}
+%    There now is a possiblity to follow the decisions supertabular
+%    makes about breaking the tabular. This has to be enabled when
+%    converting this file with \texttt{docstrip} to a \texttt{.sty}
+%    file. 
+%    \begin{macrocode}
+%<tracing>\newif\if@st@trace
+%<tracing>\newcommand\sttraceon{\@st@tracetrue}
+%<tracing>\newcommand\sttraceoff{\@st@tracefalse}
+%<tracing>\newif\if@st@trace
+%    \end{macrocode}
+%    The default is to turn tracing off
+%    \begin{macrocode}
+%<tracing>\sttraceoff
+%    \end{macrocode}
+%  \end{macro}
+%  \end{macro}
+%
+%  \begin{macro}{\@sttrace}
+%    A macro that gets the trace message as its argument
+%    \begin{macrocode}
+%<tracing>\newcommand\@sttrace[1]{\if@st@trace\typeout{ST trace: #1}\fi}
+%    \end{macrocode}
+%  \end{macro}
+%
+%  \begin{macro}{\page@left}
+% \changes{v3.7b}{1994/05/16}{Renamed from \cmd\maxsize}
+%    This register holds the estimate of the amount of space left over
+%    on the current page. This is used in the decision when to start a
+%    new page.
+%    \begin{macrocode}
+\newdimen\page@left
+%    \end{macrocode}
+%  \end{macro}
+%
+%    \begin{macrocode}
+\newdimen\actsize            % actual pagesize
+\newdimen\@tailht            % height of table tail (if any)
+\newdimen\parboxheight       % height plus depth of a parbox-argument
+\newdimen\addspace           % stores the value of \\[#1]
+\newdimen\midlineheight      % estimated size of a normal line
+\newdimen\pargcorrection     % to set page height tolerance if p-arg
+\newdimen\computedimens      % computation variable
+\newbox\tabparbox
+%    \end{macrocode}
+%
+%  \begin{macro}{\@stabularcr}
+%  \begin{macro}{\@sxtabularcr}
+%    These are redefinitions of |\@tabularcr| and |\@xtabularcr|. This
+%    is needed to include |\nextline| in the definition of
+%    |\@xtabularcr|. 
+%
+%    All redefined macros have names that are similar to the original
+%    names, except with a leading 's'
+%    \begin{macrocode}
+\def\@stabularcr{{\ifnum0=`}\fi\@ifstar{\@sxtabularcr}{\@sxtabularcr}}
+\def\@sxtabularcr{%
+  \@ifnextchar[{\@sargtabularcr}{\ifnum0=`{\fi}\cr\nextline}}
+%    \end{macrocode}
+%  \end{macro}
+%  \end{macro}
+%
+%    \begin{macrocode}
+\def\@sargtabularcr[#1]{%
+  \ifnum0=`{\fi}%
+  \ifdim #1>\z@
+    \unskip\@sxargarraycr{#1}
+  \else 
+    \@syargarraycr{#1}%
+  \fi}
+%    \end{macrocode}
+%
+%    In this case we need to copy the value of the optional argument
+%    of |\\| in our private register |\addspace|.
+%    \begin{macrocode}
+\def\@sxargarraycr#1{%
+  \@tempdima #1\advance\@tempdima \dp \@arstrutbox
+  \vrule \@height\z@ \@depth\@tempdima \@width\z@ \cr
+  \noalign{\global\addspace=#1}\nextline}
+%    \end{macrocode}
+%
+%    Here we need to insert |\nextline|
+%    \begin{macrocode}
+\def\@syargarraycr#1{\cr\noalign{\vskip #1\global\addspace=#1}\nextline}
+%    \end{macrocode}
+%
+%    The macros that deal with parbox columns need to be redefined,
+%    because we need to know the size of the parbox. Also the maximum
+%    size of the tabular on this page is shrunk somewhat.
+%    \begin{macrocode}
+\def\@sstartpbox#1{%
+  \global\advance\page@left by -\pargcorrection
+  \global\pargcorrection=0pt
+%    \end{macrocode}
+%    To achieve our goal we need to save the text in box.
+%    \begin{macrocode}
+  \setbox\tabparbox\vtop\bgroup\hsize#1\@arrayparboxrestore}
+%    \end{macrocode}
+%
+%    \begin{macrocode}
+\def\@sastartpbox#1{%
+  \bgroup\hsize#1%
+  \global\advance\page@left by -\pargcorrection
+  \global\pargcorrection=0pt
+  \setbox\tabparbox\vtop\bgroup\hsize#1\@arrayparboxrestore}
+%    \end{macrocode}
+%
+% 11/03/92 JB: The following change didn't find its way into the
+%              \@sendpbox command. This caused a difference in 
+%              linespacing between a supertabular and a normal 
+%              tabular.
+% \def\@endpbox{\unskip\strut\par\egroup\hfil}
+% % 14 Jan 89: Def of \@endpbox changed from
+% %    \def\@endpbox{\par\vskip\dp\@arstrutbox\egroup\hfil}
+% % so vertical spacing works out right if the last line of a `p' 
+% % entry has a descender.
+%    \begin{macrocode}
+\def\@sendpbox{%
+  \unskip\strut\par\egroup
+  \computedimens=\ht\tabparbox
+  \advance\computedimens by \dp\tabparbox
+  \ifnum\parboxheight<\computedimens
+    \global\parboxheight=\computedimens
+  \fi
+  \computedimens=\z@
+  \box\tabparbox\hfil}
+\def\@saendpbox{%
+  \unskip\strut\par\egroup
+  \computedimens=\ht\tabparbox
+  \advance\computedimens by \dp\tabparbox
+  \ifnum\parboxheight<\computedimens
+    \global\parboxheight=\computedimens
+  \fi
+  \computedimens=\z@
+  \unvbox\tabparbox\egroup}
+%    \end{macrocode}
+%
+%         %%%%  Here start really new supertabular commands   %%%%
+%
+% \begin{macro}{\calmidlineheight}
+%    Estimates the height of normal line taking |\arraystretch| into
+%    account.
+%    \begin{macrocode}
+\def\calmidlineheight{%
+  \midlineheight=\arraystretch \baslineskp
+  \global\advance\midlineheight by 1\p@
+%<tracing>  \@sttrace{Average line height:\the\midlineheight}%
+  \global\pargcorrection=4\midlineheight
+%<tracing>  \@sttrace{Correction for p columns: \the\pargcorrection}%
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@calfirstpageht}
+% \changes{v3.7a}{1993/04/05}{Renamed from \cmd\calpage}
+%    Estimates the space left on the current page and decides whether
+%    the tabular can be started on this page or on a new page.
+%    \begin{macrocode}
+\def\@calfirstpageht{%
+%<tracing>  \@sttrace{Calculating height of tabular on first page}
+%    \end{macrocode}
+%    The \TeX\ register |\pagetotal| contains the height of the page
+%    sofar, the \LaTeX\ register |\@colroom| contains the height of
+%    the column.
+%    \begin{macrocode}
+  \global\actsize\pagetotal
+  \global\page@left\@colroom
+%<tracing>  \@sttrace{pagetotal = \the\pagetotal; 
+%<tracing>            page@left = \the\page@left}%
+%    \end{macrocode}
+%    When we are in twocolumn mode \TeX\ may still be collecting
+%    material for the first column although there seems to be no space
+%    left. In this case we have to check against two times |\page@left|.
+%    \begin{macrocode}
+  \if@twocolumn
+%<tracing>    \@sttrace{two column mode}%
+    \if@firstcolumn
+%<tracing>     \@sttrace{First column}%
+      \ifnum\actsize > \page@left 
+        \global\maxsize=2\page@left
+        \ifnum\actsize > \page@left
+          \newpage\@calnextpageht
+%<tracing>          \@sttrace{starting new page}%
+        \else
+%    \end{macrocode}
+%    In this case we're in the second column, so we have to compensate
+%    for the material in the first column.
+%    \begin{macrocode}
+%<tracing>     \@sttrace{Second column}%
+          \global\advance\page@left -\actsize
+          \global\advance\page@left -\@colroom
+        \fi
+      \fi
+    \fi
+  \else
+%    \end{macrocode}
+%    In one column mode there is a simple decision.
+%    \begin{macrocode}
+%<tracing>    \@sttrace{one column mode}%
+    \ifnum\actsize > \page@left
+%<tracing>      \@sttrace{starting new page}%
+      \newpage\@calnextpageht
+%    \end{macrocode}
+%    When we are not starting a new page subtract the size of the
+%    material already on it from the available space.
+%    \begin{macrocode}
+    \else
+      \global\advance\page@left by -\actsize
+      \global\actsize\z@
+    \fi
+  \fi
+%    \end{macrocode}
+%    To decide when to start a new page, we need to know the vertical
+%    size of the tail of the table.
+%    \begin{macrocode}
+  \ifx\empty\@tabletail
+    \@tailht=\z@
+  \else
+    \setbox\@tempboxa=\vbox{\@arrayparboxrestore%
+      \expandafter\tabular\expandafter{\tableformat}
+        \@tabletail\endtabular}
+    \@tailht=\ht\@tempboxa\advance\@tailht\dp\@tempboxa
+  \fi
+%    \end{macrocode}
+%    We add the average height of a line to this because when we
+%    decide to continue the tabular we need to have enough space left
+%    for one line an the tail.
+%    \begin{macrocode}
+  \advance\@tailht by \midlineheight
+%<tracing>  \@sttrace{Height of tail: \the\@tailht}
+%<tracing>  \@sttrace{Maximum height of tabular: \the\page@left}
+}
+                             % Here is the definition of supertabular
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\@calnextpageht}
+% \changes{v3.7a}{1993/04/05}{Macro added}
+%    This calculates the maximum height of the tabular on all
+%    subsequent pages of the supertabular environment. The correction
+%    for parbox columns is somewhat smaller then on the first page of
+%    the environment
+%    \begin{macrocode}
+\def\@calnextpageht{%
+%<tracing>  \@sttrace{Calculating height of tabular on next page}
+  \global\page@left\@colroom
+  \global\pargcorrection=2\midlineheight
+%<tracing>  \@sttrace{Correction for p columns: \the\pargcorrection}%
+  \global\actsize=\z@
+%<tracing>  \@sttrace{Maximum height of tabular: \the\page@left}
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\supertabular}
+%    We start by saving the preamble of the tabular in a macro.
+%    \begin{macrocode}
+\def\supertabular#1 {%
+  \def\tableformat{#1}
+%<tracing>  \@sttrace{Starting a new supertabular}
+%    \end{macrocode}
+%    Then remember that this is not a \textsf{supertabular*}
+%    environment.
+%    \begin{macrocode}
+  \global\starfalse
+%    \end{macrocode}
+%    If the caption should come at the top we insert it here.
+%    \begin{macrocode}
+  \if@topcaption \@process@tablecaption \fi
+%    \end{macrocode}
+%    Save the original definition of |\\|.
+%    \begin{macrocode}
+  \global\let\@oldcr=\\
+%    \end{macrocode}
+%    Save the current value of |\baselineskip|, as we need it in the
+%    calculation of the average height of a line. 
+%    \begin{macrocode}
+  \def\baslineskp{\baselineskip}%
+  \calmidlineheight
+  \@calfirstpageht
+%    \end{macrocode}
+%    We have to check whether \texttt{array.sty} was loaded, because
+%    some of the internal macros have different names.
+%    \begin{macrocode}
+  \ifx\undefined\@classix
+%    \end{macrocode}
+%    Save old |\@tabularcr| and insert the definition of
+%    |\@stabularcr|. 
+%    \begin{macrocode}
+      \let\@@tabularcr\@tabularcr
+      \let\@tabularcr\@stabularcr
+%    \end{macrocode}
+%    Activate the new parbox algorithm.
+%    \begin{macrocode}
+      \let\@@startpbox=\@sstartpbox
+      \let\@@endpbox=\@sendpbox
+  \else
+%    \end{macrocode}
+%    When \texttt{array.sty} was loaded things are a bit different.
+%    \begin{macrocode}
+      \let\@@tabularcr\@arraycr
+      \let\@arraycr\@stabularcr
+      \let\org@startpbox=\@startpbox
+      \let\org@endpbox=\@endpbox
+      \let\@startpbox=\@sastartpbox
+      \let\@endpbox=\@saendpbox
+  \fi
+%    \end{macrocode}
+%
+%    Moved the check for the use of \tablefirsthead to befor the 
+%    start of the tabular environment in order to make the \futurelet 
+%    inside \hline do its work correctly (15.02.91)
+%
+%    Check if the head of the table should be different for the first
+%    and subsequent pages.
+%    \begin{macrocode}
+    \ifx\@table@first@head\undefined
+        \let\@@tablehead=\@tablehead
+    \else
+        \let\@@tablehead=\@table@first@head
+    \fi
+%    \end{macrocode}
+%    Finally start a normal \textsf{tabular} environment.
+%    \begin{macrocode}
+    \expandafter\tabular\expandafter{\tableformat}
+    \@@tablehead}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\endsupertabular}
+%    This closes the environment.
+%    \begin{macrocode}
+\def\endsupertabular{%
+  \ifx\@table@last@tail\undefined
+    \@tabletail
+  \else
+    \@table@last@tail
+  \fi
+  \endtabular
+%    \end{macrocode}
+%    Restore the original definition of |\@tabularcr|
+%    \begin{macrocode}
+  \ifx\undefined\@classix
+    \let\@tabularcr\@@tabularcr
+  \else
+    \let\@arraycr\@@tabularcr
+    \let\@startpbox=\org@startpbox
+    \let\@endpbox=\org@endpbox
+  \fi
+%    \end{macrocode}
+%    Check if we have to insert a caption and restore to default
+%    behaviour of putting captions at the top.
+%    \begin{macrocode}
+  \if@topcaption
+  \else
+    \@process@tablecaption
+    \@topcaptiontrue
+  \fi
+%    \end{macrocode}
+%
+%    Restore the meaning of |\\| to the one it had before the start
+%    of this environment. Also re-initialize some control-sequences
+%
+%    \begin{macrocode}
+  \global\let\\=\@oldcr
+  \let\@table@first@head\undefined
+  \let\@table@last@tail\undefined
+  \global\let\@process@tablecaption\relax
+%<tracing>  \@sttrace{Ended a supertabular}
+  }
+%    \end{macrocode}
+% \end{macro}
+%
+%  \begin{macro}{\ifstar}
+%    This switch is used in the internal macros to remember which
+%    kind of environment was started.
+%    \begin{macrocode}
+\newif\ifstar
+%    \end{macrocode}
+%  \end{macro}
+%
+%  \begin{macro}{\tabularwidth}
+%    For the \textsf{supertabular*} environment it is necessary to
+%    store the intended width of the tabular.
+%    \begin{macrocode}
+\newdimen\tabularwidth
+%    \end{macrocode}
+%  \end{macro}
+%
+% \begin{macro}{\supertabular*}
+%    We start by saving the intended width and the preamble of the
+%    \textsf{tabular*}.
+%    \begin{macrocode}
+\@namedef{supertabular*}#1#2 {%
+%<tracing>  \@sttrace{Starting a new supertabular*}
+  \def\tableformat{#2}
+  \tabularwidth=#1
+  \global\startrue
+%    \end{macrocode}
+%    If the caption should come at the top we insert it here.
+%    \begin{macrocode}
+    \if@topcaption\@process@tablecaption\fi
+%    \end{macrocode}
+%    Save the original definition of |\\|.
+%    \begin{macrocode}
+  \global\let\@oldcr=\\
+%    \end{macrocode}
+%    Save the current value of |\baselineskip|, as we need it in the
+%    calculation of the average height of a line. 
+%    \begin{macrocode}
+    \def\baslineskp{\baselineskip}%
+    \calmidlineheight
+    \@calfirstpageht
+%    \end{macrocode}
+%    We have to check whether \texttt{array.sty} was loaded, because
+%    some of the internal macros have different names.
+%    \begin{macrocode}
+    \ifx\undefined\@classix
+%    \end{macrocode}
+%    Save old |\@tabularcr| and insert the definition of
+%    |\@stabularcr|. 
+%    \begin{macrocode}
+      \let\@@tabularcr\@tabularcr
+      \let\@tabularcr\@stabularcr
+%    \end{macrocode}
+%    Activate the new parbox algorithm
+%    \begin{macrocode}
+      \let\@@startpbox=\@sstartpbox
+      \let\@@endpbox=\@sendpbox
+    \else
+%    \end{macrocode}
+%    When \texttt{array.sty} was loaded things are a bit different.
+%    \begin{macrocode}
+      \let\@@tabularcr\@arraycr
+      \let\@arraycr\@stabularcr
+      \let\org@startpbox=\@startpbox
+      \let\org@endpbox=\@endpbox
+      \let\@startpbox=\@sastartpbox
+      \let\@endpbox=\@saendpbox
+    \fi
+%    \end{macrocode}
+%
+%    Check if the head of the table should be different for the first
+%    and subsequent pages.
+%    \begin{macrocode}
+    \ifx\@table@first@head\undefined
+        \let\@@tablehead\@tablehead
+    \else
+        \let\@@tablehead\@table@first@head
+    \fi
+%    \end{macrocode}
+%    Finally start a normal \textsf{tabular*} environment.
+%    \begin{macrocode}
+    \expandafter\csname tabular*\expandafter\endcsname
+    \expandafter{\expandafter\tabularwidth\expandafter}%
+    \expandafter{\tableformat}%
+    \@@tablehead}%
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\endsupertabular*}
+%    This closes the environment.
+%    \begin{macrocode}
+\@namedef{endsupertabular*}{%
+  \ifx\@table@last@tail\undefined
+    \@tabletail
+  \else
+    \@table@last@tail
+  \fi
+  \csname endtabular*\endcsname
+%    \end{macrocode}
+%    Restore the old definition of |\@tabularcr|.
+%    \begin{macrocode}
+  \ifx\undefined\@classix
+    \let\@tabularcr\@@tabularcr
+  \else
+    \let\@arraycr\@@tabularcr
+    \let\@startpbox=\org@startpbox
+    \let\@endpbox=\org@endpbox
+  \fi
+%    \end{macrocode}
+%    Check if we have to insert a caption and restore to default
+%    behaviour of putting captions at the top.
+%    \begin{macrocode}
+  \if@topcaption
+  \else
+    \@process@tablecaption
+    \@topcaptiontrue
+  \fi
+%    \end{macrocode}
+%
+%    Restore the meaning of |\\| to the one it had before the start
+%    of this environment. Also re-initialize some control-sequences
+%
+%    \begin{macrocode}
+  \global\let\\=\@oldcr
+  \let\@table@first@head\undefined
+  \let\@table@last@tail\undefined
+  \global\let\@process@tablecaption\relax
+%<tracing>  \@sttrace{Ended a supertabular*}
+    }
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\nextline}
+%    This macro is called by each |\\| inside the tabular environment.
+%    It updates the estimate of the amount of space left on the
+%    current page and starts a new page if necessary.
+%    \begin{macrocode}
+\def\nextline{%
+  \noalign{%
+    \ifnum\parboxheight<\midlineheight
+%    \end{macrocode}
+%    If there is a non-empty line, but an empty parbox, then
+%    |\parboxheight| might be non-zero, but too small thereby breaking
+%    the algorithm. Therefore we estimate the height of the line to be
+%    |\midlineheight| in this case.
+%    \begin{macrocode}
+      \global\advance\page@left -\midlineheight
+%    \end{macrocode}
+%    |\addspace| is the value of the optional argument of |\\|.
+%    \begin{macrocode}
+      \global\advance\page@left -\addspace
+    \else
+%    \end{macrocode}
+%    When the parbox was not empty we take into account its height
+%    (plus a bit extra).
+%    \begin{macrocode}
+%<tracing>     \@sttrace{Added par box with height \the\parboxheight}%
+      \global\advance\page@left -\parboxheight
+      \global\advance\page@left -0.1\parboxheight
+      \global\parboxheight\z@
+    \fi
+    \global\addspace=\z@
+%<tracing>    \@sttrace{Space left for tabular: \the\page@left}
+  }
+%    \end{macrocode}
+%    When there is not enough space left we start a new page.
+%    \begin{macrocode}
+  \ifnum\page@left<\@tailht
+    \st@newpage
+  \else
+%    \end{macrocode}
+%    
+%    This line is necessary because the tablehead has to be inserted
+%    *after* the |\if\else\fi|-clause. For this purpose |\st@next| is
+%    used. In the middle of tableprocessing it shoud be an *empty*
+%    macro (*not* |\relax|).  (15.2.91)
+%    \begin{macrocode}
+    \noalign{\global\let\st@next\@empty}%
+  \fi\st@next}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\st@newpage}
+% \changes{v3.7b}{1994/05/16}{Added macro, split off from
+%    \cmd\nextline}
+%    This macro performs the actions necessary to start a new page.
+%    \begin{macrocode}
+\def\st@newpage{%
+%<tracing>  \noalign{\@sttrace{Starting new page, writing tail}}
+%    \end{macrocode}
+%    Output |\tabletail|, close the tabular environment, output all
+%    material and start a fresh new page.
+%    \begin{macrocode}
+  \@tabletail
+  \ifstar
+    \csname endtabular*\endcsname
+  \else
+    \endtabular
+  \fi
+%  \if@twocolumn
+%    \if@firstcolumn
+%      \newpage\@calnextpageht
+%      \global\actsize=\z@
+%    \else
+%      \newpage\@calnextpageht
+%    \fi
+%  \else
+    \newpage\@calnextpageht
+%  \fi
+  \let\st@next\@tablehead
+%<tracing>  \@sttrace{writing head}
+  \ifstar
+    \expandafter\csname tabular*\expandafter\endcsname
+    \expandafter{\expandafter\tabularwidth\expandafter}%
+    \expandafter{\tableformat}%
+  \else
+    \expandafter\tabular\expandafter{\tableformat}%
+  \fi}
+%    \end{macrocode}
+%
+%   end of supertabular.sty
+
+%   EPS FIGURE SUPPORT
+%
+%   We will support the incorporation of PostScript figures in
+%   the manner of AASTeX.  This means we will assume the presence
+%   of the Rokicki dvips package, and use specials with that
+%   syntax.  So, taken from aaspp.sty:
+%
+% Include Rokicki's epsf.sty file explicitly.
+% 
+\@ifundefined{epsfbox}{\input{epsf.sty}}{\relax}
+% 
+% Simplified EPS inclusion macros so we can see how
+% this goes...  These are layered on Rokicki's dvips
+% material, and are dependent on the author's use of
+% that DVI driver.
+% 
+%    \plotone{EPSFILE} \plottwo{EPSFILE}{EPSFILE}
+%    \plotfiddle{EPSFILE}{VSIZE}{ROT}{HSF}{VSF}{HTRANS}{VTRANS}
+% 
+% \plotone inserts the plot in a space that is
+% \columnwidth wide; the plot is scaled so the
+% horizontal dimension fits in the text width, and the
+% vertical dimension is scaled to maintain the aspect
+% ratio.  \plottwo inserts two plots next to each other
+% in one \columnwidth, sort of like "two-up" mode.
+% 
+%    EPSFILE    name of file with EPS
+% 
+% The following arguments are for the \plotfiddle macro
+% which formats the \special itself, prepares vspace,
+% etc.  This completely bypasses Rokicki's macros that
+% attempt to rationalize the EPS BoundingBox with the
+% LaTeX page dimensions.
+% 
+%
+%    VSIZE      vertical white space to allow for plot
+%    ROT        rotation angle
+%    HSF        horiz scale factor
+%    VSF        vert scale factor
+%    HTRANS     horiz translation
+%    VTRANS     vert translation
+% 
+%\epsfverbosetrue
+% 
+% From Jeannette, to be in AASTeX version 4.0
+% 
+\def\eps@scaling{.95}
+\def\epsscale#1{\gdef\eps@scaling{#1}}
+\def\plotone#1{\centering \leavevmode
+    \epsfxsize=\eps@scaling\columnwidth \epsfbox{#1}}
+\def\plottwo#1#2{\centering \leavevmode
+    \epsfxsize=.45\columnwidth \hbox{\epsfbox{#1}} \hfil
+    \epsfxsize=.45\columnwidth \epsfbox{#2}}
+\def\plotfiddle#1#2#3#4#5#6#7{\centering \leavevmode
+    \vbox to#2{\rule{0pt}{#2}}
+    \special{psfile=#1 voffset=#7 hoffset=#6 vscale=#5 hscale=#4 angle=#3}}
+
+%   PAGE LAYOUT
+%
+%   Hopefully, everything will fit on an A4
+%   page, although the right margin may be a bit cramped.
+%
+\headheight 40pt
+\headsep 30pt
+\oddsidemargin 0pt
+\parindent 2em
+\topmargin -33pt
+\textwidth 6.5in
+\textheight 8.5in
+\raggedbottom
+
+%   TABLE JUSTIFICATION
+%
+%   Here is the magic code from Chris Biemesderfer allowing p boxes 
+%   in tables NOT be right justified.  The difference from the
+%   definition of @arrayparboxrestore in latex.tex is changing
+%   \rightskip and \@rightskip from zero to \@flushglue.
+%
+\def\@arrayparboxrestore{\let\par\@@par
+    \let\-\@dischyph \let\'\@acci \let\`\@accii \let\=\@acciii
+    \parindent\z@ \parskip\z@ \everypar{}\linewidth\hsize
+    \@totalleftmargin\z@ \leftskip\z@
+    \rightskip\@flushglue \@rightskip\@flushglue
+    \parfillskip\@flushglue \lineskip\normallineskip
+    \baselineskip\normalbaselineskip\sloppy}
+
+%   FOOTNOTES
+%
+%   Changes for footnotes.  The observation summary and 
+%   investigator list tables are set within minipages to keep 
+%   the footnotes close to the table, if they are used.  Set 
+%   \footins to 0pt to keep them REALLY close.
+%
+\def\thefootnote{\arabic{footnote}}
+\def\thempfootnote{\arabic{mpfootnote}}
+\let\footnotesize\small
+\let\footnoterule\relax
+\skip\@mpfootins 0pt plus 4pt minus 2pt
+
+%   CAPTIONS
+%
+%   Captions need to be 12pt. 
+%
+\long\def\@makecaption#1#2{%
+  \vskip 10pt
+  \sbox\@tempboxa{\normalsize #1: #2}%
+  \ifdim \wd\@tempboxa >\hsize
+    \normalsize #1: #2\par
+  \else
+    \global \@minipagefalse
+    \hbox to\hsize{\hfil\box\@tempboxa\hfil}%
+  \fi
+  \vskip 10pt}
+
+%   SECTIONING COMMANDS
+%
+%   It would be nice to allow proposers to use sectioning commands
+%   when composing long replies---in the scientific justification,
+%   for example.  Make sure they are less conspicuous than the
+%   headers for each question.
+%
+\def\section{\@startsection {section}{1}{\z@}{-3.5ex plus -1ex minus 
+ -.2ex}{2.3ex plus .2ex}{\normalsize\bf}}
+\def\subsection{\@startsection{subsection}{2}{\z@}{-3.25ex plus -1ex minus 
+ -.2ex}{1.5ex plus .2ex}{\normalsize\it}}
+\def\subsubsection{\@startsection{subsubsection}{3}{\z@}{-3.25ex plus
+ -1ex minus -.2ex}{1.5ex plus .2ex}{\normalsize}}
+
+
+%       GENERAL FORM
+%
+%       Define macros to print out little section headers for
+%       each of the questions that appear in this part of the
+%       form.  Each calls \markanswer, which puts a big black
+%       box in the left margin.  Reset the section counter,
+%       so that if the proposer used sectioning commands in
+%       an answer, they start at 1 again in the next answer.
+%       As in LaTeX, suppress the indentation of the first
+%       paragraph following a header.
+%
+% 02/19/2026 RCL: removed deprecated section headings wrt JWST
+%
+\def\markanswer#1{%
+    \vskip 12pt
+    \setcounter{section}{0}
+    {\noindent\kern -24pt\vrule width10pt height10pt
+     \hskip 12pt\large\bf #1}
+    \par\nobreak\vskip 12pt\@afterindentfalse
+    \@afterheading}
+    
+    
+\def\markanswernobox#1{%
+    \vskip 12pt
+    \setcounter{section}{0}
+    {\noindent\kern -14pt%\vrule width10pt height10pt
+     \hskip 12pt\large\bf #1}
+    \par\nobreak\vskip 12pt\@afterindentfalse
+    \@afterheading}    
+%
+    \def\coresections{%
+    \markanswernobox{Core Sections}}
+\def\scientificjustification{%
+    \markanswer{Scientific Justification (required for all)}}
+\def\descriptionofobservations{%
+    \markanswer{Description of Observations (required for all GO and Survey)}}
+\def\analysisplan{%
+    \markanswer{Analysis Plan (required for all AR and Calibration GO)}}
+    \def\supplementalinformation{%
+    \markanswernobox{Supplemental Information}}
+\def\specialreq{%
+    \markanswer{Special Requirements (if any)}}
+\def\coordinatedobs{%
+    \markanswer{Justify Coordinated Parallel Observations (if any)}}
+\def\duplications{%
+    \markanswer{Justify Duplications (if any)}}
+\def\coordinatedotherfacilities{%
+	\markanswer{Justify Coordinated Observations with Other Facilities (if any)}}
+\def\references{%
+	\markanswer{References}}
+\def\templateversion{%
+	{\footnotesize{\textit{\\ Created using the STScI \LaTeX\ template for JWST Cycle \thiscycle.}}}}
+%% DD proposal-specific commands
+\def\ddrationaletime{%
+    \markanswer{Rationale for DD Program}} 
+\def\ddscientificjustification{%
+    \markanswer{Scientific Justification}}
+\def\dddescriptionofobservations{%
+    \markanswer{Description of Observations}}
+
+%       ABBREVIATIONS
+%
+%       Special symbols of astronomical interest.  
+%
+%       These came from Howard Bond, I think, by way 
+%       of the STScI preprint style:
+%
+\def\ang{\AA}               %Angstrom unit
+\def\degpoint{\mbox{$^\circ\mskip-7.0mu.\,$}}
+\def\halpha{\mbox{H$\alpha$}}
+\def\hbeta{\mbox{H$\beta$}}
+\def\hgamma{\mbox{H$\gamma$}}
+\def\kms{\,km~s$^{-1}$}      % note leading thinspace
+\def\lya{\mbox{Ly$\alpha$}}
+\def\lyb{\mbox{Ly$\beta$}}
+\def\minpoint{\mbox{$'\mskip-4.7mu.\mskip0.8mu$}}
+\def\mv{\mbox{$m_{_V}$}}
+\def\Mv{\mbox{$M_{_V}$}}
+\def\peryr{\mbox{$\>\rm yr^{-1}$}}
+\def\secpoint{\mbox{$''\mskip-7.6mu.\,$}}
+\def\sqdeg{\mbox{${\rm deg}^2$}}
+\def\squig{\sim\!\!}
+%\def\subsun{\mbox{$_{\twelvesy\odot}$}}
+\def\subsun{\mbox{$_{\normalsize\odot}$}}
+%
+%   These are from AASTeX, with notes:
+%
+%   Handy little things everybody works out for themselves
+%   anyway.  Many of these come from Springer's A&A
+%   package, and some were contributed by Francois
+%   Schweizer at DTM.  You can go berserk making these
+%   up, especially when you start getting into the
+%   composite ones.  We have tried to select a tractable
+%   number that were useful, and somewhat difficult to get
+%   right because fussy kerning or some such is required.
+%   Most can be used in or out of math mode with impunity;
+%   \alt and \agt are relations and can only be used in
+%   math mode.
+% 
+\def\deg{\hbox{$^\circ$}}
+\def\sun{\hbox{$\odot$}}
+\def\earth{\hbox{$\oplus$}}
+\def\lesssim{\mathrel{\hbox{\rlap{\hbox{%
+ \lower4pt\hbox{$\sim$}}}\hbox{$<$}}}}
+\def\gtrsim{\mathrel{\hbox{\rlap{\hbox{%
+ \lower4pt\hbox{$\sim$}}}\hbox{$>$}}}}
+\def\sq{\hbox{\rlap{$\sqcap$}$\sqcup$}}
+\def\arcmin{\hbox{$^\prime$}}
+\def\arcsec{\hbox{$^{\prime\prime}$}}
+\def\fd{\hbox{$.\!\!^{\rm d}$}}
+\def\fh{\hbox{$.\!\!^{\rm h}$}}
+\def\fm{\hbox{$.\!\!^{\rm m}$}}
+\def\fs{\hbox{$.\!\!^{\rm s}$}}
+\def\fdg{\hbox{$.\!\!^\circ$}}
+\def\farcm{\hbox{$.\mkern-4mu^\prime$}}
+\def\farcs{\hbox{$.\!\!^{\prime\prime}$}}
+\def\fp{\hbox{$.\!\!^{\scriptscriptstyle\rm p}$}}
+\def\micron{\hbox{$\mu$m}}
+% 
+% For Springer A&A compliance...
+\let\la=\lesssim                
+\let\ga=\gtrsim
+%
+% 
+%    Permit author to typeset "case" fractions.  This is
+%    sometimes wanted in displayed equations, during which
+%    LaTeX will set fractions specified as \frac{x}{y}
+%    as "built-up" fractions (numerator and denominator
+%    at body text size).
+% 
+\def\case#1#2{\hbox{$\frac{#1}{#2}$}}
+% 
+%    Permit author to typeset fractions set with solidus
+%    where the size is reduced and the numerals are
+%    oriented diagonally.  Note that this is different from
+%    a "shilled" fraction, which the author can produce
+%    without any special formatting markup.  Define markup
+%    shorthands for several common fractions using solidus.
+% 
+\def\slantfrac#1#2{\hbox{$\,^#1\!/_#2$}}
+\def\onehalf{\slantfrac{1}{2}}
+\def\onethird{\slantfrac{1}{3}}
+\def\twothirds{\slantfrac{2}{3}}
+\def\onequarter{\slantfrac{1}{4}}
+\def\threequarters{\slantfrac{3}{4}}
+% 
+\def\ubvr{\hbox{$U\!BV\!R$}}            % UBVR system
+\def\ub{\hbox{$U\!-\!B$}}               % U-B
+\def\bv{\hbox{$B\!-\!V$}}               % B-V
+\def\vr{\hbox{$V\!-\!R$}}               % V-R
+\def\ur{\hbox{$U\!-\!R$}}               % U-R
+% 
+%   Notation for atomic species (ionization levels).  The
+%   ionization state is specified as the second argument,
+%   and should be given as a numeral.  The macro has to
+%   expand the numeric state into the proper notation
+%   for the publication (roman, numeric, plus signs, etc.)
+%
+%    \ion{ELEMENT}{IONIZATION STATE}
+% 
+\def\ion#1#2{#1$\;${\small\rm\@Roman{#2}}\relax}
+% 
+%   Centered ellipsis for use in tables (for unknown
+%   values).  \nodata is generalized markup for this
+%   notion: format of null-valued entries in tables is
+%   style-specific.
+% 
+%\def\cellipsis{\hfill$\cdots$\hfill}
+\def\nodata{\multicolumn{1}{c}{$\cdots$}}
+%
+%       End of stuff from AASTeX
