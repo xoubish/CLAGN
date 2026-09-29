@@ -1,0 +1,37 @@
+{
+  "figure": "fig2_miri.pdf",
+  "generator": "make_fig2_miri.py",
+  "status": "Illustrative shell calculation; no observed target fits or detection significance.",
+  "physics": "Unchanged make_fig2_diagnostics.py; optically thin silicate/graphite shells.",
+  "age_initial_silicate_Rin_over_c": 10.0,
+  "panel_A": "Fixed distribution with delayed heating divided by its current-power equilibrium.",
+  "panel_B": "100*(evolving/fixed-1); evolving amplitude matched to fixed integrated rest 2\u20134 micron luminosity. Boundary adjusts immediately as changed illumination arrives. Signs depend on this prescription and normalization.",
+  "coverage": {
+    "mrs_common_rest_um": [
+      4.831394202326957,
+      21.544401544401545
+    ],
+    "spherex_common_rest_upper_um": 3.8610038610038613,
+    "note": "Intersection across actual sample redshifts, nominal wavelength limits only."
+  },
+  "normalization_note": "Matching one hot-band luminosity does not establish identical near-IR spectra.",
+  "host_note": "Spatial/PAH payoff is labelled; host emission is not simulated in these curves.",
+  "sample_sha256": "448434474515b8ca6714871253f1e32db5ef742b456110089fc5dbaf19e15745",
+  "model_sha256": "df35b6754a504d46674aabb5442c57f36dade4d1e99a53b6fce2be61c5f95027",
+  "calculations": [
+    {
+      "luminosity_ratio": 4.0,
+      "hot_luminosity_amplitude_scale": 1.6593137439649153,
+      "equilibrium_relative_error": 3.1086244689504383e-15,
+      "memory_ratio_at_12um": 0.8451508699122402,
+      "evolution_percent_at_12um": 20.106858737467984
+    },
+    {
+      "luminosity_ratio": 0.25,
+      "hot_luminosity_amplitude_scale": 0.6099444030198311,
+      "equilibrium_relative_error": 3.219646771412954e-15,
+      "memory_ratio_at_12um": 1.3109424559430651,
+      "evolution_percent_at_12um": -18.745113164381724
+    }
+  ]
+}

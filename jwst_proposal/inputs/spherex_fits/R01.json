@@ -1,0 +1,26 @@
+{
+  "temperature_K": 1167.0132904906284,
+  "temperature_1sigma_K": [
+    1162.0132904906284,
+    1172.0132904906284
+  ],
+  "amplitudes_mjy": [
+    2.6134973829893497,
+    0.016299260999491416,
+    3.3367029789519096
+  ],
+  "amplitude_order": [
+    "host_rest1.6um",
+    "disc_rest1um",
+    "dust_rest2um"
+  ],
+  "chi2": 704.235730125028,
+  "n_used": 209,
+  "n_total": 289,
+  "dof": 205,
+  "alpha": 0.3333333333333333,
+  "host_template": "Ell5",
+  "mask_velocity": 0.02,
+  "source": "inputs/spaxel_scryer_P9694_ra11p5333_dec9p1225_cleaned.csv",
+  "z": 0.2377224
+}

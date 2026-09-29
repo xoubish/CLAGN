@@ -70,7 +70,7 @@ assert not any(pdf.metadata.get(k) for k in ['/Author','/Subject'])
 assert not re.search(r'Overfull|LaTeX Warning', (BASE/'proposal.log').read_text())
 style_hash=hashlib.sha256((BASE/'jwstproposaltemplate_v6.sty').read_bytes()).hexdigest()
 assert style_hash=='d5e8b0c1133974ac9eaa6cc27213794ceec297337c69f2ec13254a10684fdd08'
-result=dict(checked_at_utc=datetime.now(timezone.utc).isoformat(),passed=True,
+result=dict(checked_at_utc=datetime.now(timezone.utc).isoformat(),passed=True,proposal='proposal.pdf',
  observations=48,science_targets=24,science_sky_pairs=24,all_groups_and_acquisitions_match=True,
  generator_inventory_matches=True,apt_xml_matches_archive=True,abstract_matches=True,
  charged_time_h=timing['charged_time'],requested_time_h=request,science_duration_h=timing['science_time'],

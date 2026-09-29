@@ -1,7 +1,7 @@
 """Forecast the 2028 warm-dust flux of each target from its own recorded history.
 
 For every target the W1 history (AllWISE 2010, NEOWISE 2014-2024) is taken as the
-nuclear heating history, normalised to the 2010 AllWISE epoch. The optically thin
+basis for a nuclear heating proxy, normalised to the 2010 AllWISE epoch. The optically thin
 shell model of make_fig2_diagnostics.py is then driven by that history under three
 hypotheses and evaluated at the AllWISE W3 epoch (2010) and at the MIRI epoch:
 
@@ -9,11 +9,10 @@ hypotheses and evaluated at the AllWISE W3 epoch (2010) and at the MIRI epoch:
   delayed   fixed dust distribution with light-travel delays (memory)
   evolving  delayed, and the inner boundary follows L^1/2 as illumination arrives
 
-The observable is log10 of the nuclear 12-um (observed W3) flux at the MIRI epoch
-relative to 2010. AllWISE 2010 anchors each object, so no equilibrium covering
-factor is needed; the hypotheses differ only through the history. Assumptions:
-constant heating before the first W1 point and after the last one; W1 host light
-is not removed (amplitudes are lower bounds); the model unit R_in,Si/c equals
+The planning observable is log10 of monochromatic observed-frame nuclear 12-um flux at the MIRI epoch
+relative to 2010, a proxy for the proposed bandpass-integrated W3 comparison.
+AllWISE anchors each object under a shared spectral/host model. Assumptions:
+constant heating before the first W1 point and after the last one; the model unit R_in,Si/c equals
 6.0 K-band lags (the model's silicate/graphite inner-radius ratio) with the
 K-band lag from the sample table (Koshida et al. 2014 relation); rest-frame delays
 are stretched by (1+z) on the observed time axis. A constant host
@@ -195,7 +194,7 @@ def main():
               f"per-object >3sigma: memory {summary[name]['n_memory_over_3sigma']}, evolution {summary[name]['n_evolution_over_3sigma']}; mean error {err:.3f}")
     (INPUTS/'warm_response_forecast_summary.json').write_text(json.dumps(dict(
         summary=summary, host_estimate=f'AllWISE W1-W2 two-component mix, AGN {AGN_W1W2}, host {HOST_W1W2} (Vega), clipped to [0,0.9]',
-        sigma_per_object='sqrt((0.4*w3sigmpro)^2 + 0.03^2 + sigma_host^2) dex, sigma_host from +-0.15 in the W1 host fraction through the no-memory prediction; common-mode calibration cancels in the sign-weighted mean',
+        sigma_per_object='sqrt((0.4*w3sigmpro)^2 + 0.03^2 + sigma_host^2) dex, sigma_host from +-0.15 in the W1 host fraction through the no-memory prediction; opposite signs suppress common-mode calibration; cancellation is incomplete when sign weights do not sum to zero',
         scale_factors=SCALE_FACTORS, rin_si_over_rin_gra=RIN_SI_OVER_RIN_GRA, driver_gamma=DRIVER_GAMMA,
         n_pair_over_3sigma_measurement_only=int((table[['log_ratio_instant','log_ratio_delayed','log_ratio_evolving']].max(axis=1)
             -table[['log_ratio_instant','log_ratio_delayed','log_ratio_evolving']].min(axis=1)

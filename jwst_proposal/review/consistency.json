@@ -1,6 +1,7 @@
 {
-  "checked_at_utc": "2026-09-28T16:16:48.046742+00:00",
+  "checked_at_utc": "2026-09-29T04:40:03.116424+00:00",
   "passed": true,
+  "proposal": "proposal.pdf",
   "observations": 48,
   "science_targets": 24,
   "science_sky_pairs": 24,

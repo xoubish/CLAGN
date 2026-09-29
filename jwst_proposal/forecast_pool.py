@@ -16,7 +16,7 @@ import make_fig2_diagnostics as shell
 S = '/private/tmp/claude-502/-Users-shemmati-Desktop-CLAGN/3bcb6145-cee1-4816-b434-a34bd415e899/scratchpad'
 
 
-def main(pool_csv=f'{S}/pool_eligible.csv', allwise_csv=f'{S}/pool_allwise.csv', visits_csv='../data/neowise_visits_poolall.csv'):
+def main(pool_csv=f'{S}/pool_eligible.csv', allwise_csv=f'{S}/pool_allwise.csv', visits_csv='../data/neowise_visits_poolall.csv', out_name='pool_forecast.csv'):
     grains = {g['name']: g for g in shell.GRAINS}
     F.RIN_SI_OVER_RIN_GRA = grains['Sil_21.gz']['inner_radius']/grains['Gra_21.gz']['inner_radius']
     F.DRIVER_GAMMA = F.hot_response_exponent()
@@ -62,7 +62,7 @@ def main(pool_csv=f'{S}/pool_eligible.csv', allwise_csv=f'{S}/pool_allwise.csv',
             print(len(rows), 'done', flush=True)
     out = pd.DataFrame(rows)
     out['signif_meas'] = out['spread']/out['sigma_meas']; out['signif_total'] = out['spread']/out['sigma_total']
-    out.to_csv(F.INPUTS/'pool_forecast.csv', index=False)
+    out.to_csv(F.INPUTS/out_name, index=False)
     print('pool forecast rows', len(out))
 
 

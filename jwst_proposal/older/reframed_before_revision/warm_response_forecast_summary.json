@@ -1,0 +1,42 @@
+{
+  "summary": {
+    "baseline": {
+      "mean_memory_signal_dex": 0.06202987087576464,
+      "mean_evolution_signal_dex": 0.050840854229988,
+      "mean_error_dex": 0.013772020376489195,
+      "memory_sigma": 4.504050181457652,
+      "evolution_sigma": 3.6916046331720938,
+      "n_memory_over_3sigma": 0,
+      "n_evolution_over_3sigma": 0
+    },
+    "short": {
+      "mean_memory_signal_dex": 0.03742360409463741,
+      "mean_evolution_signal_dex": 0.05386009646419839,
+      "mean_error_dex": 0.013772020376489195,
+      "memory_sigma": 2.717364850732057,
+      "evolution_sigma": 3.91083479342982,
+      "n_memory_over_3sigma": 0,
+      "n_evolution_over_3sigma": 0
+    },
+    "long": {
+      "mean_memory_signal_dex": 0.08628598433653824,
+      "mean_evolution_signal_dex": 0.043844226226424386,
+      "mean_error_dex": 0.013772020376489195,
+      "memory_sigma": 6.265310533800889,
+      "evolution_sigma": 3.1835725643619246,
+      "n_memory_over_3sigma": 4,
+      "n_evolution_over_3sigma": 0
+    }
+  },
+  "host_estimate": "AllWISE W1-W2 two-component mix, AGN 1.0, host 0.05 (Vega), clipped to [0,0.9]",
+  "sigma_per_object": "sqrt((0.4*w3sigmpro)^2 + 0.03^2 + sigma_host^2) dex, sigma_host from +-0.15 in the W1 host fraction through the no-memory prediction; common-mode calibration cancels in the sign-weighted mean",
+  "scale_factors": {
+    "baseline": 1.0,
+    "short": 0.5,
+    "long": 2.0
+  },
+  "rin_si_over_rin_gra": 5.974496580477405,
+  "driver_gamma": 0.8558707837048407,
+  "n_pair_over_3sigma_measurement_only": 12,
+  "n_pair_over_3sigma_total": 5
+}

@@ -29,7 +29,7 @@
     }
   },
   "host_estimate": "AllWISE W1-W2 two-component mix, AGN 1.0, host 0.05 (Vega), clipped to [0,0.9]",
-  "sigma_per_object": "sqrt((0.4*w3sigmpro)^2 + 0.03^2 + sigma_host^2) dex, sigma_host from +-0.15 in the W1 host fraction through the no-memory prediction; common-mode calibration cancels in the sign-weighted mean",
+  "sigma_per_object": "sqrt((0.4*w3sigmpro)^2 + 0.03^2 + sigma_host^2) dex, sigma_host from +-0.15 in the W1 host fraction through the no-memory prediction; opposite signs suppress common-mode calibration; cancellation is incomplete when sign weights do not sum to zero",
   "scale_factors": {
     "baseline": 1.0,
     "short": 0.5,

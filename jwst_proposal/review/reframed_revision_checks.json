@@ -1,0 +1,21 @@
+{
+  "checked_at_utc": "2026-09-29T04:22:27.719262+00:00",
+  "measurement_loader_ast_equal": true,
+  "figure1_spherex_points": [
+    313,
+    326,
+    289
+  ],
+  "saved_ensemble_forecast_csv_unchanged": true,
+  "saved_forecast_curves_unchanged": true,
+  "forecast_summary_statistics_verified": true,
+  "nominal_line_coverage_verified": true,
+  "example_spectrum_uses_saved_driver_gamma": true,
+  "style_unchanged": true,
+  "pages": 7,
+  "core_pages": 5,
+  "visual_review_pages": [
+    2,
+    4
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "generator": "make_fig1_five.py stack",
+  "targets": [
+    {
+      "id": "F06",
+      "optical_epochs": [
+        "2019",
+        "2024",
+        "2025",
+        "2026 NGPS"
+      ],
+      "spherex_points": 313,
+      "expected_lines": [
+        "H\u03b1",
+        "H\u03b2",
+        "Mg II",
+        "Pa\u03b1",
+        "Pa\u03b2",
+        "[O III]"
+      ]
+    },
+    {
+      "id": "F04",
+      "optical_epochs": [
+        "2014",
+        "2024",
+        "2026 NGPS"
+      ],
+      "spherex_points": 326,
+      "expected_lines": [
+        "H\u03b1",
+        "H\u03b2",
+        "Mg II",
+        "Pa\u03b1",
+        "Pa\u03b2",
+        "[O III]"
+      ]
+    },
+    {
+      "id": "R01",
+      "optical_epochs": [
+        "2018",
+        "2026 NGPS"
+      ],
+      "spherex_points": 289,
+      "expected_lines": [
+        "H\u03b1",
+        "H\u03b2",
+        "Mg II",
+        "Pa\u03b1",
+        "Pa\u03b2",
+        "[O III]"
+      ]
+    }
+  ],
+  "presentation": "Three examples with smaller cutouts, enlarged axes and legends, six selected line identifications, and unchanged epoch selection and flux normalization."
+}

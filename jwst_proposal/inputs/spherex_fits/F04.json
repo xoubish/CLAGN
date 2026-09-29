@@ -1,0 +1,26 @@
+{
+  "temperature_K": 1108.8523688114226,
+  "temperature_1sigma_K": [
+    1108.8523688114226,
+    1108.8523688114226
+  ],
+  "amplitudes_mjy": [
+    2.305456438135415,
+    0.0,
+    1.249512920544655
+  ],
+  "amplitude_order": [
+    "host_rest1.6um",
+    "disc_rest1um",
+    "dust_rest2um"
+  ],
+  "chi2": 974.2460603630293,
+  "n_used": 236,
+  "n_total": 326,
+  "dof": 232,
+  "alpha": 0.3333333333333333,
+  "host_template": "Ell5",
+  "mask_velocity": 0.02,
+  "source": "inputs/spherex_extracted/F04.csv",
+  "z": 0.1486
+}

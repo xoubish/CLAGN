@@ -1,8 +1,8 @@
 {
   "figure": "fig2_diagnostics.pdf",
   "generator": "make_fig2_memory.py",
-  "scope": "Illustrative delayed-heating calculation for a fixed dust distribution; not target spectra, measured lags or a population-power forecast. Panels B and C share the shell model, grain properties and step history of Figure 3 (make_fig2_diagnostics.py).",
-  "presentation": "A: cartoons of equal current power with different histories. B: fixed-distribution spectrum divided by equilibrium at the current power at two event ages. C: log10 ratio of 8-13 um luminosity to equilibrium against event age for four step amplitudes, with the planned 12-target mean precision. D: MRS PSF against exponential hosts of fixed physical size.",
+  "scope": "Illustrative delayed-heating calculation for a fixed dust distribution; not target spectra, measured lags or a population-power forecast. Panels B and C use make_fig2_diagnostics.py; the target-history forecast uses the same grain model with recorded illumination histories.",
+  "presentation": "A: cartoons of equal current power with different histories. B: fixed-distribution spectrum divided by equilibrium at the current power at two event ages. C: log10 ratio of 8-13 um luminosity to equilibrium against event age for four step amplitudes. D: MRS PSF against exponential hosts of fixed physical size.",
   "actual_targets_fitted": [],
   "sample_z_range": [
     0.0142,
@@ -101,13 +101,6 @@
         "30": 0.016894136377538792
       }
     },
-    "precision_band": {
-      "half_width_dex": 0.05773502691896258,
-      "formula": "scatter/sqrt(n)",
-      "scatter_dex": 0.2,
-      "n": 12,
-      "meaning": "\u00b11 sigma of one 12-target group mean for the planning scatter quoted in the text; the rising-fading difference has 0.408*s = 0.082 dex."
-    },
     "age_units": "Initial silicate inner-radius light-crossing times; the conversion to years depends on each target luminosity and is not drawn."
   },
   "panel_d": {
@@ -147,7 +140,7 @@
     "https://doi.org/10.3847/1538-3881/acdddc",
     "https://jwst-docs.stsci.edu/jwst-mid-infrared-instrument/miri-observing-modes/miri-medium-resolution-spectroscopy"
   ],
-  "generator_sha256": "d7659dc699cc2e0d68e80cb9d239792686d996112e32832641eab98a43964902",
+  "generator_sha256": "b24957cd40fd0150b16ac5150b8f73f2fcf94edde9e2b3a9720bfe0008202dc8",
   "sample_sha256": "448434474515b8ca6714871253f1e32db5ef742b456110089fc5dbaf19e15745",
   "previous_figure": "review/local_backups/fig2_schematic_20260928/ (all-schematic version replaced 2026-09-28)"
 }
