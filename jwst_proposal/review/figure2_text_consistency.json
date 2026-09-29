@@ -1,6 +1,6 @@
 {
   "source": "proposal.tex",
-  "source_sha256": "e62dbba5c6c07849aef466934fab2ae2b35f57715e7b6821523713eea66bdb24",
+  "source_sha256": "b5b015efccee3734e175778a84d49e6238262da2b5bc6878a1719c9c0738262c",
   "figure": "fig2_miri.pdf",
   "figure_label": "fig:diagnostics",
   "all_cross_references_resolve": true,
