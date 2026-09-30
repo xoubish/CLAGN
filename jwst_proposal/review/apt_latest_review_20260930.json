@@ -1,0 +1,60 @@
+{
+  "reviewed_file": "apt/clagn24_miri_draft.aptx.2026_09_30_02_59.aptbackup.2026_09_30_03_29.aptbackup.2026_09_30_19_02.aptbackup",
+  "sha256": "64565a2271e0d0b140fa9236195c7b9eb690ac3a084a29273a1b824381a598a8",
+  "proposal_id": 14740,
+  "saved_submission_receipt": "14740-2",
+  "saved_submission_utc": "2026-09-30 19:02:07",
+  "scope": "Read-only review of saved APT, local timing/ETC/morphology records and attached/preview PDFs; no new online Visit Planner or ETC run.",
+  "observations": 48,
+  "science_targets": 24,
+  "linked_equal_depth_sky_pairs": 24,
+  "configuration_matches_inventory_and_tested_acquisitions": true,
+  "observing_configuration_and_targets_unchanged_from_main_aptx": true,
+  "max_target_coordinate_difference_from_inputs_arcsec": 0.06868641936753235,
+  "default_groups_ABC": [
+    27,
+    60,
+    27
+  ],
+  "R06_groups_ABC": [
+    27,
+    80,
+    27
+  ],
+  "charged_hours": 67.0,
+  "integration_source_plus_sky_hours": 16.99557831111111,
+  "timing_export_science_hours": 17.03,
+  "cached_scheduling": {
+    "old_proposal_00000": {
+      "visits": 48,
+      "up_to_date": true,
+      "nonempty_windows": true
+    },
+    "assigned_proposal_14740": {
+      "visits": 48,
+      "up_to_date": false,
+      "nonempty_windows": true
+    }
+  },
+  "ta_model_min_snr": 51.78614984141239,
+  "ta_model_max_saturation_fraction": 0.5670089947587205,
+  "unresolved_acquisition_centering_targets": [
+    "F08",
+    "F09",
+    "F10",
+    "F11",
+    "F12",
+    "R08",
+    "R09",
+    "R10",
+    "R12"
+  ],
+  "saved_submission_diagnostic": "Target acquisition feasibility reminder repeated for 24 science targets; ETC justification supplied; saved submission succeeded.",
+  "attachment_matches_preview_science_pages": true,
+  "attachment_pages": 7,
+  "core_pages": 5,
+  "explicit_channel4C_statement_present": true,
+  "caption_difference": "Attached PDF ends with across a larger sample; workspace caption explicitly names 24 nuclei with recorded rises, declines, flares, and recoveries.",
+  "minor_team_expertise_wording": "Could specify SPHEREx spectra for 23 targets and WISE constraints for the crowded target.",
+  "recommendation": "Keep observing design. Refresh Visit Planner for assigned ID and finish acquisition centroid suitability checks. No APT files modified."
+}

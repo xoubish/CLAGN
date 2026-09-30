@@ -1,20 +1,23 @@
 {
   "protected_files_unchanged": true,
   "sha256": {
-    "proposal.tex": "1e6e53a96d20c0a776900f883343a96104d3673a6b66a0384e65c4db5583b901",
-    "fig2_miri.pdf": "119ac115660485a3b25c6e281666248fb82830497d500ef94900d14f903d1431",
-    "review/fig2_three_panel/panel_a/literature_with_our_leverage.pdf": "342eb72b2f31c417bcd6972b5446319265207927a81f561bdbdec6c60cc6af24"
+    "proposal.tex": "8e81bc46310698a2afc569b58cbcc205f9194243dd40ccddaa8901515b66fe0b",
+    "fig2_miri.pdf": "63609ee271c3ff9a8b3af7b0060937656c5345841c510c374b3a82f3302a5061",
+    "review/fig2_three_panel/panel_a/literature_with_our_leverage.pdf": "ec299d944b4c5da6a9216c6a586d8297c90e684ff9c61d65f6a28762e0b57b52"
   },
-  "layout": "Three panels in one horizontal row with equal content heights and centered titles; source aspect ratios preserved.",
+  "layout": "Two rows: full-width vector spectrum above spatial and temporal panels; lower source aspect ratios preserved.",
+  "figure_width_inches": 13.71448979591837,
+  "figure_height_inches": 10.766061224489798,
+  "top_panel": "Digitized NGC 7469 spectrum, freshly plotted with vector axes and labels; see panel_a/checks.json.",
   "panel_height_inches": 4.4,
   "panel_widths_inches": [
-    6.016758241758242,
+    10.79245283018868,
     5.000000000000001,
     8.274489795918369
   ],
   "panel_b_source": "https://arxiv.org/abs/2504.01103v2",
   "panel_b_source_version": "arXiv v2 submitted 13 April 2026; PDF compiled 14 April 2026",
-  "source_embedding": "Only cropped figure pixels, losslessly compressed; no full literature pages or hidden source text.",
+  "source_embedding": "Vector top panel; losslessly compressed cropped lower figures. No full literature pages or hidden source text.",
   "source_crop_dpi": 600,
   "panel_c_source": "https://arxiv.org/abs/2011.07638",
   "panel_c_figure": 15,

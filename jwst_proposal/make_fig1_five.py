@@ -121,7 +121,7 @@ def spectra(tid, z):
     fs = f.copy(); fs[good] = gaussian_filter1d(f[good], 4.)
     from astropy.io import fits
     mjd = fits.getheader(NGPS/f'{internal}.fits', 1).get('MJD', 61307.)
-    epochs.append(dict(label='2026 NGPS', mjd=float(mjd), wave_um=w/1e4, mjy=flam_to_mjy(w, fs), color=orange, ngps=True))
+    epochs.append(dict(label='2026', mjd=float(mjd), wave_um=w/1e4, mjy=flam_to_mjy(w, fs), color=orange, ngps=True))
     return epochs
 
 

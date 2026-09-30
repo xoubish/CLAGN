@@ -1,0 +1,92 @@
+{
+  "source": "https://arxiv.org/abs/2402.17479",
+  "figure": "Figure 8, NGC 7469 nucleus",
+  "source_sha256": "4fa59de1cf9ca28b2c35441d3780059489221b600c7b9977507ce3e595c88995",
+  "method": "Native pixels; logarithmic-axis calibration; colour traces and column-median black spectrum trace.",
+  "data": "inputs/fig2_ngc7469_digitized.csv",
+  "data_sha256": "517229947f2f2c91faf3f386391adc34f84a011bc807b3ab9f9783d68486cd4d",
+  "x_tick_pixels": [
+    3307.5,
+    3462.5,
+    3576.5,
+    3731.5,
+    3936.5
+  ],
+  "wavelength_ticks_um": [
+    1.5,
+    3.0,
+    5.0,
+    10.0,
+    25.0
+  ],
+  "y_tick_pixels": [
+    248.5,
+    424.5,
+    599.5
+  ],
+  "flux_ticks_jy": [
+    1.0,
+    0.1,
+    0.01
+  ],
+  "x_tick_max_residual_pixels": 0.1195037421221059,
+  "y_tick_max_residual_pixels": 0.3333333333334281,
+  "traced_columns": {
+    "continuum": 629,
+    "warm": 289,
+    "hot": 482,
+    "observed": 653
+  },
+  "original_data_samples": false,
+  "observed_display": "Dark unconnected dots, every second extracted column; raw CSV unchanged.",
+  "channel_bars_observed_um": [
+    [
+      4.9,
+      7.65
+    ],
+    [
+      7.51,
+      11.7
+    ],
+    [
+      11.55,
+      17.98
+    ],
+    [
+      17.7,
+      27.9
+    ]
+  ],
+  "channel_bars_source_redshift": 0.0163,
+  "channel_bars_rest_um": [
+    [
+      4.821411000688774,
+      7.527304929646759
+    ],
+    [
+      7.389550329627078,
+      11.512348715930335
+    ],
+    [
+      11.364754501623537,
+      17.691626488241663
+    ],
+    [
+      17.4161172882023,
+      27.452523861064645
+    ]
+  ],
+  "redshift_source": "https://www.aanda.org/articles/aa/pdf/2021/05/aa39291-20.pdf",
+  "observed_spectrum_instruments": [
+    "JWST NIRSpec IFU",
+    "JWST MIRI MRS"
+  ],
+  "spherex_bar": "Comparison access at the same source redshift; not an input to the published spectrum.",
+  "channel_source": "https://jwst-docs.stsci.edu/jwst-mid-infrared-instrument/miri-observing-modes/miri-medium-resolution-spectroscopy",
+  "interpretation": "Digitized published example, not target predictions. Hot/warm dash gaps interpolated and pixel steps smoothed with a 17-pixel quadratic Savitzky-Golay filter; no extrapolation. PAH ticks mark positions.",
+  "protected_sha256": {
+    "proposal.tex": "8e81bc46310698a2afc569b58cbcc205f9194243dd40ccddaa8901515b66fe0b",
+    "fig2_miri.pdf": "63609ee271c3ff9a8b3af7b0060937656c5345841c510c374b3a82f3302a5061"
+  },
+  "active_proposal_unchanged": true
+}

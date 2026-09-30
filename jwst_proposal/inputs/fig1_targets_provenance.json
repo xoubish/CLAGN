@@ -7,7 +7,7 @@
         "2019",
         "2024",
         "2025",
-        "2026 NGPS"
+        "2026"
       ],
       "spherex_points": 313,
       "expected_lines": [
@@ -24,7 +24,7 @@
       "optical_epochs": [
         "2014",
         "2024",
-        "2026 NGPS"
+        "2026"
       ],
       "spherex_points": 326,
       "expected_lines": [
@@ -40,7 +40,7 @@
       "id": "R01",
       "optical_epochs": [
         "2018",
-        "2026 NGPS"
+        "2026"
       ],
       "spherex_points": 289,
       "expected_lines": [

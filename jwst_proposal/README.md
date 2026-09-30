@@ -1,12 +1,12 @@
 # JWST Cycle 6 proposal
 
 The current draft is **[proposal.tex](proposal.tex)** for editing in Overleaf.
-The compiled proposal PDF was removed at the user's request; do not rebuild it
-as part of routine edits. Figure PDFs remain required Overleaf assets.
+Rebuild `proposal.pdf` after every proposal edit, as requested by the user on
+September 30. Run `make` from this folder. Figure PDFs remain required Overleaf assets.
 It requests 67.0 hours for 24 AGN with rises, declines, flares and recoveries,
 with one MIRI/MRS science visit and a linked sky visit per target.
-The last compiled attachment had five core pages and seven pages overall;
-the current source's pagination has not been rechecked.
+A September 30 no-PDF LaTeX check retained five core pages after the co-I
+clarity edits and two-row Figure 2; subsequent edits now receive a full PDF build.
 
 ## Working files
 
@@ -14,7 +14,7 @@ the current source's pagination has not been rechecked.
 | --- | --- |
 | `proposal.tex` | Current source for Overleaf |
 | `fig1_targets.pdf` | Three measured histories: F06, F04 and R01 |
-| `fig2_miri.pdf` | Adopted three-panel literature figure: dust components, spatial separation and delayed response |
+| `fig2_miri.pdf` | Two-row literature figure: spectrum and MRS channels above spatial separation and delayed response |
 | [review/fig2_three_panel/](review/fig2_three_panel/README.md) | Adopted Figure 2 preview, caption, sources and reproduction instructions |
 | [inputs/jwst_sample_cycle6.csv](inputs/jwst_sample_cycle6.csv) | Authoritative sample |
 | [apt/clagn24_miri_draft.aptx](apt/clagn24_miri_draft.aptx) | APT project; 48 visits |
@@ -52,7 +52,8 @@ NGPS P330E spectra and SPHEREx for F06, F04 and R01. Its display inventory is in
 All previously selected optical epochs and SPHEREx points remain plotted.
 
 Figure 2 presents three published examples demonstrating the methods and physical
-basis of the experiment: spectral decomposition (NGC 7469), central/surrounding
+basis of the experiment: a digitized spectrum and decomposition redrawn at full
+width (NGC 7469), central/surrounding
 separation (NGC 6552), and a delayed infrared response (NGC 4151). The accepted
 PDF is installed as `fig2_miri.pdf`, and its caption is in `proposal.tex`.
 The examples do not predict component fractions, resolved scales or lags for

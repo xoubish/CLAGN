@@ -1,0 +1,14 @@
+{
+  "core_pages": 5,
+  "total_pages": 7,
+  "latex_passes": 2,
+  "latex_mode": "pdflatex -draftmode, no proposal PDF generated",
+  "overfull_boxes": false,
+  "caption_matches_source": true,
+  "figure_references_consistent": true,
+  "top_panel_vector_text_verified": true,
+  "source_sha256": "6a9b2b8523c379399ffd746e417de96522a3241d5eee356332d47877ef68dc55",
+  "figure_sha256": "9376d41e38353990217df7a5a42efd1fda4bfa8d1c7ece3af9e339ca269c7983",
+  "float_too_large": false,
+  "figure_width_fraction": 0.93
+}

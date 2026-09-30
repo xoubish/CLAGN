@@ -1,4 +1,4 @@
-"""Arrange three literature examples at equal height and native aspect ratios.
+"""Arrange a literature spectrum above spatial and temporal examples.
 
 Panel C is the optical and infrared portion of Lyu & Rieke Figure 15.
 It is not a lag forecast or a monitoring plan for our sample.
@@ -85,7 +85,7 @@ replacement.set_data(stream.get_data())
 paper['/Resources']['/XObject'][NameObject('/Im15')]=replacement
 # Trim exterior whitespace; retain labels, scale bars, and original aspect ratios.
 crop=(.081,.077,.558,.273)
-sources=[(left,(.035,.045,.94,.955)),(spatial,(0,0,1,1)),(paper,crop)]
+sources=[(left,(0,0,1,1)),(spatial,(0,0,1,1)),(paper,crop)]
 common_height=4.4
 widths=[common_height*float(p.mediabox.width)*(c[2]-c[0])/
         (float(p.mediabox.height)*(c[3]-c[1])) for p,c in sources]
@@ -93,11 +93,11 @@ gap=.28;margin=.08;bottom=.08
 total_width=sum(widths)+2*gap+2*margin;total_height=5.0
 starts=[margin,margin+widths[0]+gap,margin+widths[0]+gap+widths[1]+gap]
 fig=plt.figure(figsize=(total_width,total_height))
-for x,w,title in zip(starts,widths,['A  Separating hot and warm dust',
-                                   'B  Isolating the central emission',
-                                   'C  Reading the dust’s memory']):
+for x,w,title in zip(starts,widths,['Separating hot and warm dust',
+                                   'Isolating the central emission',
+                                   'Reading the dust’s memory']):
     fig.text((x+w/2)/total_width,.956,title,ha='center',va='center',
-             fontsize=12,weight='bold',color='#283542')
+             fontsize=16,weight='bold',color='#283542')
 fig.savefig(BUILD/'layout.pdf');plt.close(fig)
 dest=PdfReader(BUILD/'layout.pdf').pages[0]
 calendar_crop_top=.0925
@@ -150,15 +150,36 @@ fig.text((starts[2]+widths[2]*(year_centers[2]/612-crop[0])/(crop[2]-crop[0]))/t
          fontsize=12,fontfamily='DejaVu Serif')
 fig.savefig(BUILD/'identifications.pdf',transparent=True);plt.close(fig)
 dest.merge_page(PdfReader(BUILD/'identifications.pdf').pages[0])
-writer=PdfWriter();writer.add_page(dest);writer.write(OUT/'fig2_three_panel_draft.pdf')
+# Reflow the spectrum above the spatial and temporal panels, as requested.
+# The new top panel remains vector artwork at full row width; only the two
+# published lower panels are rendered as cropped images.
+reflow_width=widths[1]+widths[2]+gap+2*margin
+spectrum_width=reflow_width-2*margin
+spectrum_height=spectrum_width*float(left.mediabox.height)/float(left.mediabox.width)
+row_gap=.24
+reflow_height=total_height+spectrum_height+row_gap
+fig=plt.figure(figsize=(reflow_width,reflow_height))
+fig.savefig(BUILD/'two_row_layout.pdf');plt.close(fig)
+reflow=PdfReader(BUILD/'two_row_layout.pdf').pages[0]
+vector_scale=spectrum_width*72/float(left.mediabox.width)
+reflow.merge_transformed_page(left,Transformation().scale(vector_scale)
+                              .translate(margin*72,(total_height+row_gap)*72))
+for i,x in [(1,margin),(2,margin+widths[1]+gap)]:
+    panel_crop=(starts[i]/total_width,0,(starts[i]+widths[i])/total_width,1)
+    insert(reflow,dest,panel_crop,
+           (x/reflow_width,0,
+            widths[i]/reflow_width,total_height/reflow_height))
+writer=PdfWriter();writer.add_page(reflow);writer.write(OUT/'fig2_three_panel_draft.pdf')
 subprocess.run(['pdftoppm','-scale-to','2800','-png','-singlefile',str(OUT/'fig2_three_panel_draft.pdf'),
                 str(OUT/'fig2_three_panel_draft')],check=True,stderr=subprocess.DEVNULL)
 after={str(p.relative_to(BASE)):hashlib.sha256(p.read_bytes()).hexdigest() for p in protected};assert before==after
 (OUT/'checks.json').write_text(json.dumps(dict(protected_files_unchanged=True,sha256=after,
-    layout='Three panels in one horizontal row with equal content heights and centered titles; source aspect ratios preserved.',
+    layout='Two rows: full-width vector spectrum above spatial and temporal panels; lower source aspect ratios preserved.',
+    figure_width_inches=reflow_width,figure_height_inches=reflow_height,
+    top_panel='Digitized NGC 7469 spectrum, freshly plotted with vector axes and labels; see panel_a/checks.json.',
     panel_height_inches=common_height,panel_widths_inches=widths,
     panel_b_source='https://arxiv.org/abs/2504.01103v2',panel_b_source_version='arXiv v2 submitted 13 April 2026; PDF compiled 14 April 2026',
-    source_embedding='Only cropped figure pixels, losslessly compressed; no full literature pages or hidden source text.',
+    source_embedding='Vector top panel; losslessly compressed cropped lower figures. No full literature pages or hidden source text.',
     source_crop_dpi=600,
     panel_c_source='https://arxiv.org/abs/2011.07638',panel_c_figure=15,panel_c_pdf_page=19,
     panel_c_crop=crop,panel_c_time_axis='Original observed calendar years for NGC 4151, relocated below both light curves at the original horizontal positions.',
