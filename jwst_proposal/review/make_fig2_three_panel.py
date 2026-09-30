@@ -13,7 +13,8 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 from pypdf import PdfReader,PdfWriter,Transformation
-from pypdf.generic import RectangleObject, ContentStream, DecodedStreamObject, NameObject
+from pypdf.generic import ContentStream, DecodedStreamObject, NameObject
+from pdf_figure_crop import cropped_figure
 
 BASE=Path(__file__).resolve().parents[1];HERE=BASE/'review'
 OUT=HERE/'fig2_three_panel';OUT.mkdir(exist_ok=True)
@@ -27,11 +28,11 @@ def insert(dest,original,crop,place):
     if '/Annots' in src:del src['/Annots']
     sw,sh=float(src.mediabox.width),float(src.mediabox.height)
     l,t,r,b=crop;x0,y0,x1,y1=l*sw,(1-b)*sh,r*sw,(1-t)*sh
-    src.cropbox=RectangleObject((x0,y0,x1,y1));src.trimbox=RectangleObject((x0,y0,x1,y1))
+    src=cropped_figure(src,(l*sw,t*sh,r*sw,b*sh))
     dw,dh=float(dest.mediabox.width),float(dest.mediabox.height)
     x,y,w,h=place;x*=dw;y*=dh;w*=dw;h*=dh
     scale=min(w/(x1-x0),h/(y1-y0))
-    dest.merge_transformed_page(src,Transformation().translate(-x0,-y0).scale(scale)
+    dest.merge_transformed_page(src,Transformation().scale(scale)
                                 .translate(x+(w-(x1-x0)*scale)/2,y+(h-(y1-y0)*scale)/2))
 
 plt.rcParams.update({'font.family':'DejaVu Sans','pdf.fonttype':42})
@@ -156,7 +157,9 @@ after={str(p.relative_to(BASE)):hashlib.sha256(p.read_bytes()).hexdigest() for p
 (OUT/'checks.json').write_text(json.dumps(dict(protected_files_unchanged=True,sha256=after,
     layout='Three panels in one horizontal row with equal content heights and centered titles; source aspect ratios preserved.',
     panel_height_inches=common_height,panel_widths_inches=widths,
-    panel_b_source='https://arxiv.org/abs/2504.01103',panel_b_source_version='14 April 2026',
+    panel_b_source='https://arxiv.org/abs/2504.01103v2',panel_b_source_version='arXiv v2 submitted 13 April 2026; PDF compiled 14 April 2026',
+    source_embedding='Only cropped figure pixels, losslessly compressed; no full literature pages or hidden source text.',
+    source_crop_dpi=600,
     panel_c_source='https://arxiv.org/abs/2011.07638',panel_c_figure=15,panel_c_pdf_page=19,
     panel_c_crop=crop,panel_c_time_axis='Original observed calendar years for NGC 4151, relocated below both light curves at the original horizontal positions.',
     panel_c_content='Optical B-band, N-band data and fitted reverberation model; complete 20–24 and 34–37 micron series and labels omitted for clarity.',

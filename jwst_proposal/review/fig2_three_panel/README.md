@@ -23,6 +23,17 @@ Do not compile the proposal PDF during routine figure edits.
 The caption records these adaptations and connects the examples to our experiment.
 Panel A uses rest wavelengths; panel B retains observed wavelengths.
 
+Source figure regions are rendered at 600 dpi and embedded as losslessly
+compressed cropped images before assembly. Full source pages, off-crop text,
+and tables are not embedded. Final titles and panel B/C identifications remain
+searchable text. This is implemented in `../pdf_figure_crop.py`.
+
+Panel B uses [arXiv v2](https://arxiv.org/abs/2504.01103v2), submitted in April
+2026, of the [2025 paper](https://doi.org/10.1093/mnras/staf573). The 2026
+preprint header does not identify a different publication. The published
+[2026 correction](https://doi.org/10.1093/mnras/stag1045) concerns an omitted
+acknowledgement. Reference [28] records both the publication and revised source.
+
 ## Reproduction
 
 From the repository root, with the saved literature PDFs available:

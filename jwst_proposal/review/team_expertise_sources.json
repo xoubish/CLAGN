@@ -1,0 +1,33 @@
+{
+  "checked": "2026-09-29",
+  "roles_are_proposed_not_verified_commitments": true,
+  "sources": {
+    "guidance": "https://jwst-docs.stsci.edu/jppom/jwst-proposal-level-information",
+    "Shoubaneh Hemmati": [
+      "https://assets.science.nasa.gov/content/dam/science/astro/programs/physics-of-the-cosmos/fornax/documents/papers/Hemmati_2026_ApJ_998_130.pdf"
+    ],
+    "Irene Shivaei": [
+      "https://cab.inta-csic.es/en/personal/irene-shivaei/",
+      "https://arxiv.org/abs/2609.29955"
+    ],
+    "George Helou": [
+      "https://arxiv.org/abs/0704.1765",
+      "https://ned.ipac.caltech.edu/level5/Helou2/Helou3_4.html"
+    ],
+    "Jessica Krick": [
+      "https://www.ipac.caltech.edu/publication/2021AJ....161..177K",
+      "https://arxiv.org/abs/1205.4047"
+    ],
+    "Andreas Faisst": [
+      "https://spherex.caltech.edu/page/science-team",
+      "https://sites.astro.caltech.edu/~afaisst/"
+    ],
+    "David Shupe": [
+      "https://web.ipac.caltech.edu/staff/fmasci/ztf/masci_pasadena_08.01.17.pdf"
+    ],
+    "Yu-Heng Lin": [
+      "https://arxiv.org/abs/2111.03678",
+      "https://astro.caltech.edu/~afaisst/researchgroup.htm"
+    ]
+  }
+}

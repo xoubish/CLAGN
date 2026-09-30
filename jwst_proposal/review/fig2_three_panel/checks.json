@@ -1,9 +1,9 @@
 {
   "protected_files_unchanged": true,
   "sha256": {
-    "proposal.tex": "cb050a77dbadf4bfdc62c5a579cd49c189c315efd621234403579f0d654a7437",
-    "fig2_miri.pdf": "fa93ffcbb4e1482919eaea22f50c4e606ceab954efba173e9b317a93579ef241",
-    "review/fig2_three_panel/panel_a/literature_with_our_leverage.pdf": "5c65329bd6825d7a4fcd7a0221af44b994f153370cd58d60a3a70a50b51640d7"
+    "proposal.tex": "1e6e53a96d20c0a776900f883343a96104d3673a6b66a0384e65c4db5583b901",
+    "fig2_miri.pdf": "119ac115660485a3b25c6e281666248fb82830497d500ef94900d14f903d1431",
+    "review/fig2_three_panel/panel_a/literature_with_our_leverage.pdf": "342eb72b2f31c417bcd6972b5446319265207927a81f561bdbdec6c60cc6af24"
   },
   "layout": "Three panels in one horizontal row with equal content heights and centered titles; source aspect ratios preserved.",
   "panel_height_inches": 4.4,
@@ -12,8 +12,10 @@
     5.000000000000001,
     8.274489795918369
   ],
-  "panel_b_source": "https://arxiv.org/abs/2504.01103",
-  "panel_b_source_version": "14 April 2026",
+  "panel_b_source": "https://arxiv.org/abs/2504.01103v2",
+  "panel_b_source_version": "arXiv v2 submitted 13 April 2026; PDF compiled 14 April 2026",
+  "source_embedding": "Only cropped figure pixels, losslessly compressed; no full literature pages or hidden source text.",
+  "source_crop_dpi": 600,
   "panel_c_source": "https://arxiv.org/abs/2011.07638",
   "panel_c_figure": 15,
   "panel_c_pdf_page": 19,

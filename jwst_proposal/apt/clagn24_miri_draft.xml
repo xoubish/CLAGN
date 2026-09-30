@@ -6,26 +6,160 @@
     <ProposalInformation>
         <ProposalPhase>Draft</ProposalPhase>
         <Title>Does an AGN's infrared spectrum remember its accretion history?</Title>
-        <Abstract>An AGN can fade while its warm dust still responds to an earlier bright state; after brightening, the dust can lag behind the new nuclear power. We request 67.0 hours of MIRI/MRS spectroscopy of 24 AGN at z&lt;0.3, divided into 12 fading and 12 rising sources, to measure the amplitude and persistence of this spectral imprint and test its physical origin. Every target has ZTF/WISE light curves, SPHEREx spectra and multi-epoch optical spectroscopy, including 2026 Palomar/NGPS spectra. These records constrain the nuclear history and hot-dust response. MIRI adds the warm continuum, both silicate features and spatial constraints on host emission. Our primary measurement is the nuclear 8-13 micron continuum excess or deficit relative to equilibrium at current power, and its dependence on change direction, amplitude and event age. We will account for luminosity, geometry, extinction and host light, then test whether delayed heating of fixed dust suffices or whether the dust distribution must evolve. One MIRI epoch per target samples different response stages across the ensemble. The programme will measure, or bound, the bias from recent variability when equilibrium infrared templates are used to infer nuclear power and dust covering factor in strongly variable AGN.</Abstract>
-        <ProposalID>0</ProposalID>
+        <Abstract>An AGN can fade while its warm dust still responds to an earlier bright state; after brightening, the dust can lag behind the new nuclear power. How long does this infrared memory persist, and does dust replenish after the nucleus fades? We request 67.0 hours of MIRI/MRS spectroscopy of 24 AGN at z&lt;0.3 with recorded rises, declines, flares and recoveries. ZTF/WISE monitoring, SPHEREx measurements and multi-epoch optical spectroscopy connect nuclear activity to hot dust. MIRI supplies the warm continuum, both silicate profiles, and PAH and spatial diagnostics that constrain host emission. We will jointly fit the spectra and activity histories, anchored by 2010 W3/W4 photometry, to test whether warm spectra depend on prior illumination at comparable current nuclear power. Delayed heating and cooling of a fixed dust distribution is the null model. Fading and recovering sources test whether dust replenishment or redistribution is required, with rising sources providing the comparison. One MIRI visit per target constrains response models across the ensemble. The results will bound permitted dust evolution and establish when recent activity causes mid-infrared emission to misrepresent the current nucleus, accounting for uncertainties in illumination, geometry, host light and calibration.</Abstract>
         <ProposalCategory>GO</ProposalCategory>
         <ProposalSize>MEDIUM</ProposalSize>
         <ProprietaryPeriod>C[12 Months]</ProprietaryPeriod>
-        <ScientificCategory>Galaxies and the Intergalactic Medium</ScientificCategory>
+        <ScientificCategory>Supermassive Black Holes and Active Galaxies</ScientificCategory>
+        <SecondaryScientificCategory>Interstellar Gas and Dust</SecondaryScientificCategory>
+        <ScienceKeyword>AGN host galaxies</ScienceKeyword>
+        <ScienceKeyword>Interstellar dust</ScienceKeyword>
+        <ScienceKeyword>Quasars</ScienceKeyword>
         <Cycle>6</Cycle>
         <ChargedTime>67.0</ChargedTime>
         <ParallelNextCycle>false</ParallelNextCycle>
         <ParallelThirdCycle>false</ParallelThirdCycle>
         <NoSimilarSubmissions>false</NoSimilarSubmissions>
+        <PdfAttachment>/Users/shemmati/Desktop/CLJWST.pdf</PdfAttachment>
+        <ObservingDescription>We request 67.0 hours of MIRI Medium Resolution Spectroscopy (MRS) for 24 nearby (z &lt; 0.3) changing-look and strongly variable AGN with recorded rises, declines, flares and recoveries. Each nucleus will be observed once in all three MRS grating settings, providing approximately 4.9–27.9 micron coverage of the warm continuum, both silicate features, PAH bands and diagnostic emission lines. Science observations use nuclear target acquisition, four-point dithers and FULL/FASTR1 readout. The requested continuum sensitivity is S/N = 50 per R = 100 bin near rest-frame 5 and 12 microns and S/N = 30 near 18 microns. The faintest W3 target, J083826.50+371906.7, receives additional exposure in setting B.
+Each science visit has an equal-depth observation of a nearby blank-sky field selected using WISE and 2MASS data. Separate sky observations preserve extended host emission for spatial and spectral decomposition. Sky visits use four-point extended-source dithers without target acquisition. Each science/sky pair is linked as a consecutive, noninterruptible sequence to provide a contemporaneous background. The programme comprises 24 science and 24 sky visits, with 17.00 hours of science-plus-sky integration and 67.0 hours total charged time. No fixed-date constraints, coordinated parallels or joint-facility time are requested.</ObservingDescription>
+        <TeamExpertise>Our team combines expertise in AGN variability, infrared dust diagnostics, JWST spectroscopy, and survey calibration. 
+
+PI Shoubaneh Hemmati has developed machine-learning analyses of multiband AGN light curves and will coordinate sample characterization, reconstruction of activity histories, and the joint tests of dust memory and evolution. 
+
+Irene Shivaei brings experience from the JWST/MIRI development and commissioning teams and direct MIRI/MRS analysis of PAH emission through PAHSPECS; she will guide MRS reduction, spectral decomposition, and interpretation of resolved host dust. 
+
+George Helou brings extensive experience in infrared emission, dust heating, and separating star-formation and AGN contributions, supporting the physical interpretation of the warm continuum and aromatic features.
+
+Jessica Krick brings Spitzer/IRAC calibration expertise, including infrared photometry of JWST calibration stars, and will support photometric consistency checks and assessment of background and calibration uncertainties. 
+
+Andreas Faisst combines SPHEREx pipeline and dust-modeling experience with leadership of JWST galaxy surveys; he will support SPHEREx spectral validation and joint modeling of nuclear and host emission. 
+
+David Shupe brings survey-pipeline experience in ZTF astrometric calibration, source matching, and relative photometry, supporting light-curve quality control and reproducible analysis.
+
+ Yu-Heng Lin brings experience in quasar spectroscopy and emission-line diagnostics and will contribute to optical spectral-state measurements and comparison with the infrared diagnostics. 
+
+These complementary contributions cover the path from calibrated observations and activity histories to tests of delayed heating and dust replenishment.</TeamExpertise>
         <PrincipalInvestigator>
             <InvestigatorAddress>
+                <UniqueID>13014</UniqueID>
+                <Country>USA</Country>
+                <Institution>California Institute of Technology</Institution>
+                <USState>CA</USState>
                 <ESAMember>false</ESAMember>
                 <CSAMember>false</CSAMember>
+                <FirstName>Shoubaneh</FirstName>
+                <Honorific>Dr.</Honorific>
+                <LastName>Hemmati</LastName>
                 <Retired>false</Retired>
             </InvestigatorAddress>
             <Contact>true</Contact>
             <GTOTimeSource></GTOTimeSource>
         </PrincipalInvestigator>
+        <CoInvestigator>
+            <CoPI>false</CoPI>
+            <InvestigatorAddress>
+                <UniqueID>6699</UniqueID>
+                <Country>USA</Country>
+                <Institution>California Institute of Technology</Institution>
+                <USState>CA</USState>
+                <ESAMember>false</ESAMember>
+                <CSAMember>false</CSAMember>
+                <FirstName>George</FirstName>
+                <Honorific>Dr.</Honorific>
+                <LastName>Helou</LastName>
+                <Retired>false</Retired>
+            </InvestigatorAddress>
+            <AdminUSPI>false</AdminUSPI>
+            <Contact>false</Contact>
+        </CoInvestigator>
+        <CoInvestigator>
+            <CoPI>false</CoPI>
+            <InvestigatorAddress>
+                <UniqueID>8648</UniqueID>
+                <Country>USA</Country>
+                <Institution>California Institute of Technology</Institution>
+                <USState>CA</USState>
+                <ESAMember>false</ESAMember>
+                <CSAMember>false</CSAMember>
+                <FirstName>Jessica</FirstName>
+                <Honorific>Dr.</Honorific>
+                <LastName>Krick</LastName>
+                <Retired>false</Retired>
+            </InvestigatorAddress>
+            <AdminUSPI>false</AdminUSPI>
+            <Contact>false</Contact>
+        </CoInvestigator>
+        <CoInvestigator>
+            <CoPI>false</CoPI>
+            <InvestigatorAddress>
+                <UniqueID>11938</UniqueID>
+                <Country>USA</Country>
+                <Institution>California Institute of Technology</Institution>
+                <USState>CA</USState>
+                <ESAMember>false</ESAMember>
+                <CSAMember>false</CSAMember>
+                <FirstName>Andreas</FirstName>
+                <Honorific>Dr.</Honorific>
+                <LastName>Faisst</LastName>
+                <MiddleInitial>L</MiddleInitial>
+                <Retired>false</Retired>
+            </InvestigatorAddress>
+            <AdminUSPI>false</AdminUSPI>
+            <Contact>false</Contact>
+        </CoInvestigator>
+        <CoInvestigator>
+            <CoPI>false</CoPI>
+            <InvestigatorAddress>
+                <UniqueID>17041</UniqueID>
+                <Country>ESP</Country>
+                <Institution>Centro de Astrobiologia - CAB</Institution>
+                <USState>Madrid</USState>
+                <ESAMember>true</ESAMember>
+                <CSAMember>false</CSAMember>
+                <FirstName>Irene</FirstName>
+                <Honorific>Dr.</Honorific>
+                <LastName>Shivaei</LastName>
+                <Retired>false</Retired>
+            </InvestigatorAddress>
+            <AdminUSPI>false</AdminUSPI>
+            <Contact>false</Contact>
+        </CoInvestigator>
+        <CoInvestigator>
+            <CoPI>false</CoPI>
+            <InvestigatorAddress>
+                <UniqueID>9423</UniqueID>
+                <Country>USA</Country>
+                <Institution>Caltech/IPAC</Institution>
+                <USState>CA</USState>
+                <ESAMember>false</ESAMember>
+                <CSAMember>false</CSAMember>
+                <FirstName>David</FirstName>
+                <Honorific>Dr.</Honorific>
+                <LastName>Shupe</LastName>
+                <MiddleInitial>L</MiddleInitial>
+                <Retired>false</Retired>
+            </InvestigatorAddress>
+            <AdminUSPI>false</AdminUSPI>
+            <Contact>false</Contact>
+        </CoInvestigator>
+        <CoInvestigator>
+            <CoPI>false</CoPI>
+            <InvestigatorAddress>
+                <UniqueID>39413</UniqueID>
+                <Country>USA</Country>
+                <Institution>California Institute of Technology</Institution>
+                <USState>CA</USState>
+                <ESAMember>false</ESAMember>
+                <CSAMember>false</CSAMember>
+                <FirstName>Yu-Heng</FirstName>
+                <Honorific>Dr.</Honorific>
+                <LastName>Lin</LastName>
+                <Retired>false</Retired>
+            </InvestigatorAddress>
+            <AdminUSPI>false</AdminUSPI>
+            <Contact>false</Contact>
+        </CoInvestigator>
         <TargetOfOpportunityActivations/>
     </ProposalInformation>
     <Targets>
@@ -42,6 +176,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>NO</Extended>
             <Category>Galaxy</Category>
+            <Keywords>Active galactic nuclei</Keywords>
             <EquatorialCoordinates Value="07 59 34.9500 +32 21 43.30">
                 <RAUncertainty>
                     <Value></Value>
@@ -68,6 +203,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>YES</Extended>
             <Category>Calibration</Category>
+            <Keywords>Telescope/sky background</Keywords>
             <EquatorialCoordinates Value="07 59 39.6840 +32 19 59.37">
                 <RAUncertainty>
                     <Value></Value>
@@ -94,6 +230,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>NO</Extended>
             <Category>Galaxy</Category>
+            <Keywords>Active galactic nuclei</Keywords>
             <EquatorialCoordinates Value="00 33 52.7100 +20 21 4.10">
                 <RAUncertainty>
                     <Value></Value>
@@ -120,6 +257,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>YES</Extended>
             <Category>Calibration</Category>
+            <Keywords>Telescope/sky background</Keywords>
             <EquatorialCoordinates Value="00 33 56.8310 +20 21 19.63">
                 <RAUncertainty>
                     <Value></Value>
@@ -146,6 +284,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>NO</Extended>
             <Category>Galaxy</Category>
+            <Keywords>Active galactic nuclei</Keywords>
             <EquatorialCoordinates Value="10 53 25.4100 +30 24 19.30">
                 <RAUncertainty>
                     <Value></Value>
@@ -172,6 +311,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>YES</Extended>
             <Category>Calibration</Category>
+            <Keywords>Telescope/sky background</Keywords>
             <EquatorialCoordinates Value="10 53 33.4960 +30 24 28.44">
                 <RAUncertainty>
                     <Value></Value>
@@ -198,6 +338,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>NO</Extended>
             <Category>Galaxy</Category>
+            <Keywords>Active galactic nuclei</Keywords>
             <EquatorialCoordinates Value="00 53 46.1600 +22 32 22.40">
                 <RAUncertainty>
                     <Value></Value>
@@ -224,6 +365,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>YES</Extended>
             <Category>Calibration</Category>
+            <Keywords>Telescope/sky background</Keywords>
             <EquatorialCoordinates Value="00 53 43.9190 +22 30 26.49">
                 <RAUncertainty>
                     <Value></Value>
@@ -250,6 +392,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>NO</Extended>
             <Category>Galaxy</Category>
+            <Keywords>Active galactic nuclei</Keywords>
             <EquatorialCoordinates Value="08 53 59.0600 +21 28 3.40">
                 <RAUncertainty>
                     <Value></Value>
@@ -276,6 +419,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>YES</Extended>
             <Category>Calibration</Category>
+            <Keywords>Telescope/sky background</Keywords>
             <EquatorialCoordinates Value="08 54 1.2850 +21 29 59.31">
                 <RAUncertainty>
                     <Value></Value>
@@ -302,6 +446,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>NO</Extended>
             <Category>Galaxy</Category>
+            <Keywords>Active galactic nuclei</Keywords>
             <EquatorialCoordinates Value="01 25 58.0600 +15 18 13.70">
                 <RAUncertainty>
                     <Value></Value>
@@ -328,6 +473,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>YES</Extended>
             <Category>Calibration</Category>
+            <Keywords>Telescope/sky background</Keywords>
             <EquatorialCoordinates Value="01 25 55.1270 +15 18 56.13">
                 <RAUncertainty>
                     <Value></Value>
@@ -354,6 +500,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>NO</Extended>
             <Category>Galaxy</Category>
+            <Keywords>Active galactic nuclei</Keywords>
             <EquatorialCoordinates Value="23 44 33.0900 +26 00 38.90">
                 <RAUncertainty>
                     <Value></Value>
@@ -380,6 +527,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>YES</Extended>
             <Category>Calibration</Category>
+            <Keywords>Telescope/sky background</Keywords>
             <EquatorialCoordinates Value="23 44 38.1330 +26 01 10.59">
                 <RAUncertainty>
                     <Value></Value>
@@ -406,6 +554,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>NO</Extended>
             <Category>Galaxy</Category>
+            <Keywords>Active galactic nuclei</Keywords>
             <EquatorialCoordinates Value="10 44 27.7400 +27 18 6.50">
                 <RAUncertainty>
                     <Value></Value>
@@ -432,6 +581,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>YES</Extended>
             <Category>Calibration</Category>
+            <Keywords>Telescope/sky background</Keywords>
             <EquatorialCoordinates Value="10 44 32.0880 +27 18 22.02">
                 <RAUncertainty>
                     <Value></Value>
@@ -458,6 +608,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>NO</Extended>
             <Category>Galaxy</Category>
+            <Keywords>Active galactic nuclei</Keywords>
             <EquatorialCoordinates Value="08 35 38.7800 -04 05 17.50">
                 <RAUncertainty>
                     <Value></Value>
@@ -484,6 +635,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>YES</Extended>
             <Category>Calibration</Category>
+            <Keywords>Telescope/sky background</Keywords>
             <EquatorialCoordinates Value="08 35 34.7700 -04 05 17.50">
                 <RAUncertainty>
                     <Value></Value>
@@ -510,6 +662,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>NO</Extended>
             <Category>Galaxy</Category>
+            <Keywords>Active galactic nuclei</Keywords>
             <EquatorialCoordinates Value="08 53 37.2600 +01 43 3.60">
                 <RAUncertainty>
                     <Value></Value>
@@ -536,6 +689,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>YES</Extended>
             <Category>Calibration</Category>
+            <Keywords>Telescope/sky background</Keywords>
             <EquatorialCoordinates Value="08 53 30.9130 +01 42 19.22">
                 <RAUncertainty>
                     <Value></Value>
@@ -562,6 +716,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>NO</Extended>
             <Category>Galaxy</Category>
+            <Keywords>Active galactic nuclei</Keywords>
             <EquatorialCoordinates Value="23 30 32.3000 -02 27 45.00">
                 <RAUncertainty>
                     <Value></Value>
@@ -588,6 +743,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>YES</Extended>
             <Category>Calibration</Category>
+            <Keywords>Telescope/sky background</Keywords>
             <EquatorialCoordinates Value="23 30 29.2970 -02 26 27.06">
                 <RAUncertainty>
                     <Value></Value>
@@ -614,6 +770,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>NO</Extended>
             <Category>Galaxy</Category>
+            <Keywords>Active galactic nuclei</Keywords>
             <EquatorialCoordinates Value="04 58 40.3000 -21 59 31.00">
                 <RAUncertainty>
                     <Value></Value>
@@ -640,6 +797,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>YES</Extended>
             <Category>Calibration</Category>
+            <Keywords>Telescope/sky background</Keywords>
             <EquatorialCoordinates Value="04 58 35.4470 -22 00 51.43">
                 <RAUncertainty>
                     <Value></Value>
@@ -666,6 +824,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>NO</Extended>
             <Category>Galaxy</Category>
+            <Keywords>Active galactic nuclei</Keywords>
             <EquatorialCoordinates Value="00 46 7.9766 +09 07 20.95">
                 <RAUncertainty>
                     <Value></Value>
@@ -692,6 +851,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>YES</Extended>
             <Category>Calibration</Category>
+            <Keywords>Telescope/sky background</Keywords>
             <EquatorialCoordinates Value="00 46 5.2050 +09 09 13.71">
                 <RAUncertainty>
                     <Value></Value>
@@ -718,6 +878,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>NO</Extended>
             <Category>Galaxy</Category>
+            <Keywords>Active galactic nuclei</Keywords>
             <EquatorialCoordinates Value="22 05 37.7100 -07 11 14.50">
                 <RAUncertainty>
                     <Value></Value>
@@ -744,6 +905,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>YES</Extended>
             <Category>Calibration</Category>
+            <Keywords>Telescope/sky background</Keywords>
             <EquatorialCoordinates Value="22 05 29.9220 -07 10 43.44">
                 <RAUncertainty>
                     <Value></Value>
@@ -770,6 +932,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>NO</Extended>
             <Category>Galaxy</Category>
+            <Keywords>Active galactic nuclei</Keywords>
             <EquatorialCoordinates Value="10 47 5.1600 +54 44 5.90">
                 <RAUncertainty>
                     <Value></Value>
@@ -796,6 +959,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>YES</Extended>
             <Category>Calibration</Category>
+            <Keywords>Telescope/sky background</Keywords>
             <EquatorialCoordinates Value="10 46 59.9610 +54 45 23.84">
                 <RAUncertainty>
                     <Value></Value>
@@ -822,6 +986,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>NO</Extended>
             <Category>Galaxy</Category>
+            <Keywords>Active galactic nuclei</Keywords>
             <EquatorialCoordinates Value="08 29 42.6700 +41 54 36.90">
                 <RAUncertainty>
                     <Value></Value>
@@ -848,6 +1013,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>YES</Extended>
             <Category>Calibration</Category>
+            <Keywords>Telescope/sky background</Keywords>
             <EquatorialCoordinates Value="08 29 33.3630 +41 53 36.88">
                 <RAUncertainty>
                     <Value></Value>
@@ -874,6 +1040,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>NO</Extended>
             <Category>Galaxy</Category>
+            <Keywords>Active galactic nuclei</Keywords>
             <EquatorialCoordinates Value="10 40 43.3900 +27 35 19.00">
                 <RAUncertainty>
                     <Value></Value>
@@ -900,6 +1067,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>YES</Extended>
             <Category>Calibration</Category>
+            <Keywords>Telescope/sky background</Keywords>
             <EquatorialCoordinates Value="10 40 40.1990 +27 34 36.57">
                 <RAUncertainty>
                     <Value></Value>
@@ -926,6 +1094,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>NO</Extended>
             <Category>Galaxy</Category>
+            <Keywords>Active galactic nuclei</Keywords>
             <EquatorialCoordinates Value="08 38 26.5000 +37 19 6.70">
                 <RAUncertainty>
                     <Value></Value>
@@ -952,6 +1121,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>YES</Extended>
             <Category>Calibration</Category>
+            <Keywords>Telescope/sky background</Keywords>
             <EquatorialCoordinates Value="08 38 22.6460 +37 19 45.26">
                 <RAUncertainty>
                     <Value></Value>
@@ -978,6 +1148,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>NO</Extended>
             <Category>Galaxy</Category>
+            <Keywords>Active galactic nuclei</Keywords>
             <EquatorialCoordinates Value="10 11 52.9800 +54 42 6.40">
                 <RAUncertainty>
                     <Value></Value>
@@ -1004,6 +1175,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>YES</Extended>
             <Category>Calibration</Category>
+            <Keywords>Telescope/sky background</Keywords>
             <EquatorialCoordinates Value="10 11 52.9800 +54 43 6.40">
                 <RAUncertainty>
                     <Value></Value>
@@ -1030,6 +1202,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>NO</Extended>
             <Category>Galaxy</Category>
+            <Keywords>Active galactic nuclei</Keywords>
             <EquatorialCoordinates Value="09 48 38.4200 +40 30 43.60">
                 <RAUncertainty>
                     <Value></Value>
@@ -1056,6 +1229,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>YES</Extended>
             <Category>Calibration</Category>
+            <Keywords>Telescope/sky background</Keywords>
             <EquatorialCoordinates Value="09 48 42.4500 +40 30 5.03">
                 <RAUncertainty>
                     <Value></Value>
@@ -1082,6 +1256,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>NO</Extended>
             <Category>Galaxy</Category>
+            <Keywords>Active galactic nuclei</Keywords>
             <EquatorialCoordinates Value="06 55 49.5300 +40 00 1.20">
                 <RAUncertainty>
                     <Value></Value>
@@ -1108,6 +1283,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>YES</Extended>
             <Category>Calibration</Category>
+            <Keywords>Telescope/sky background</Keywords>
             <EquatorialCoordinates Value="06 55 42.7480 +39 59 16.19">
                 <RAUncertainty>
                     <Value></Value>
@@ -1134,6 +1310,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>NO</Extended>
             <Category>Galaxy</Category>
+            <Keywords>Active galactic nuclei</Keywords>
             <EquatorialCoordinates Value="19 26 30.2200 +41 33 5.00">
                 <RAUncertainty>
                     <Value></Value>
@@ -1160,6 +1337,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>YES</Extended>
             <Category>Calibration</Category>
+            <Keywords>Telescope/sky background</Keywords>
             <EquatorialCoordinates Value="19 26 34.0530 +41 34 6.43">
                 <RAUncertainty>
                     <Value></Value>
@@ -1186,6 +1364,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>NO</Extended>
             <Category>Galaxy</Category>
+            <Keywords>Active galactic nuclei</Keywords>
             <EquatorialCoordinates Value="19 49 13.7000 -18 47 16.00">
                 <RAUncertainty>
                     <Value></Value>
@@ -1212,6 +1391,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>YES</Extended>
             <Category>Calibration</Category>
+            <Keywords>Telescope/sky background</Keywords>
             <EquatorialCoordinates Value="19 49 17.9090 -18 47 21.23">
                 <RAUncertainty>
                     <Value></Value>
@@ -1238,6 +1418,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>NO</Extended>
             <Category>Galaxy</Category>
+            <Keywords>Active galactic nuclei</Keywords>
             <EquatorialCoordinates Value="20 14 59.2600 +25 23 1.20">
                 <RAUncertainty>
                     <Value></Value>
@@ -1264,6 +1445,7 @@
             <ProperMotionNotApplicable>true</ProperMotionNotApplicable>
             <Extended>YES</Extended>
             <Category>Calibration</Category>
+            <Keywords>Telescope/sky background</Keywords>
             <EquatorialCoordinates Value="20 15 0.1280 +25 20 46.71">
                 <RAUncertainty>
                     <Value></Value>
@@ -6054,6 +6236,13 @@
         <HistoryEntry Date="Sat Sep 26 20:15:43 GMT 2026" APTVersion="Version 2026.5.1  " SchemaVersion="71" ProposalPhase="Draft" User="shemmati" Platform="Mac OS X - aarch64" FileLocation="/Users/shemmati/Desktop/CLAGN/jwst_proposal/apt/clagn24_miri_draft.aptx"/>
         <HistoryEntry Date="Sat Sep 26 21:29:19 GMT 2026" APTVersion="Version 2026.5.1  " SchemaVersion="71" ProposalPhase="Draft" User="shemmati" Platform="Mac OS X - aarch64" FileLocation="/Users/shemmati/Desktop/CLAGN/jwst_proposal/apt/clagn24_miri_draft.aptx"/>
         <HistoryEntry Date="Sat Sep 26 23:50:01 GMT 2026" APTVersion="Version 2026.5.1  " SchemaVersion="71" ProposalPhase="Draft" User="shemmati" Platform="Mac OS X - aarch64" FileLocation="/Users/shemmati/Desktop/CLAGN/jwst_proposal/apt/clagn24_miri_draft.aptx"/>
+        <HistoryEntry Date="Wed Sep 30 00:24:24 GMT 2026" APTVersion="Version 2026.5.1  " SchemaVersion="71" ProposalPhase="Draft" User="shemmati" Platform="Mac OS X - aarch64" FileLocation="/Users/shemmati/Desktop/CLAGN/jwst_proposal/apt/clagn24_miri_draft.aptx"/>
+        <HistoryEntry Date="Wed Sep 30 00:37:10 GMT 2026" APTVersion="Version 2026.5.1  " SchemaVersion="71" ProposalPhase="Draft" User="shemmati" Platform="Mac OS X - aarch64" FileLocation="/Users/shemmati/Desktop/CLAGN/jwst_proposal/apt/clagn24_miri_draft.aptx"/>
+        <HistoryEntry Date="Wed Sep 30 00:41:40 GMT 2026" APTVersion="Version 2026.5.1  " SchemaVersion="71" ProposalPhase="Draft" User="shemmati" Platform="Mac OS X - aarch64" FileLocation="/Users/shemmati/Desktop/CLAGN/jwst_proposal/apt/clagn24_miri_draft.aptx"/>
     </ProposalHistory>
-    <ToolData/>
+    <ToolData>
+        <ToolData Name="MSA Planning Tool">
+            <ToolValue Name="plans"></ToolValue>
+        </ToolData>
+    </ToolData>
 </JwstProposal>

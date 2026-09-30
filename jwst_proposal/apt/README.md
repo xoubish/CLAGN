@@ -33,7 +33,8 @@ in the charged total. All four MRS channels are simultaneous.
 - Remaining source-model assumptions and the nine extended-host acquisition
   centering checks are explicit in the technical review. Individual nuclear
   fluxes and sample-wide sensitivity have not all been measured/validated.
-- Administrative/PI fields are blank. The proposal has not been submitted.
+- PI, Co-I, category, keyword and PDF-attachment fields were filled in APT on 29 September 2026. The proposal has not been submitted.
+- 29 September 2026: the generated file carried `<ProposalID>0</ProposalID>`. APT read 0 as an already assigned number, put the Submission tool into resubmission mode and failed with `Proposal ID: 0 is too small. The legal range is 1 to 99999.` The element and the stale `SubmissionData` tool block were removed from the `.aptx` (schema allows the element to be absent; the file still validates against APT's `JwstDMSchema.xsd`). APT now assigns the number itself on the first Submit. The pre-fix file is kept at `work/before_id_fix/clagn24_miri_draft.aptx`. The same repair is available in the APT GUI as **Clear ID#** in the Submission window.
 
 Before replacing P1823 with P9694 the charged budget was 67.33 hours. The revised online run gives 67.00 hours. That version is preserved in `../../archive/jwst_cleanup_20260926.zip::apt/work/before_p9694_replacement/`. Earlier versions remain under `../../archive/jwst_cleanup_20260926.zip::apt/work/before_technical_review/`,
 `../../archive/jwst_cleanup_20260926.zip::apt/work/before_sky_review/` and `../../archive/jwst_cleanup_20260926.zip::apt/work/pre_visit_planner/`.

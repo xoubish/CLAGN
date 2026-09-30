@@ -1,0 +1,27 @@
+{
+  "source": "proposal.tex",
+  "source_sha256": "8ab1998e6f5507fdc3ddd56d039f1929ef06f079b3ee538ec777c722c97cec5f",
+  "date": "2026-09-29",
+  "decisions": {
+    "1": "Q1 asks how long memory persists; no claim to directly measure a warm/hot lag ratio or universal factor of ten from a single MRS epoch.",
+    "2": "0.014 dex is absent from current draft. Historical forecast estimated independent-error standard error of the sign-corrected sample mean, sqrt(sum(sigma_i^2))/N, not an individual-source flux error. Current flux/contrast estimates explicitly defined as conditional 1-sigma; contrasts use natural logarithms.",
+    "3": "Q2 emphasizes replenishment after fading, with rising sources as comparison. No claim that rises always move the boundary or Mrk 590 is the sole reformation measurement.",
+    "4": "Added Elitzur & Shlosman 2006 as reference 41; dusty wind motivates evolving dust supply, without asserting wind identification or a predicted transient recovery clock. Added model-dependent CLAGN implications.",
+    "5": "Synthetic observed-frame W3/W4 photometry uses WISE convention; constant host cancels only for matched spatial contributions. WISE constrains extended mid-IR light; optical/2MASS guide stellar morphology. Explicit aperture and calibration uncertainties.",
+    "6": "No sample revision; 24 targets and 67.0 hours retained. UGC 03601 is R09. Proposed net-change and W3-S/N cuts are not silently applied; full histories remain central. Exact reported 2008 IRS observation has not been independently verified."
+  },
+  "checks": {
+    "citation_order": true,
+    "references": 51,
+    "figure2_caption_matches": true,
+    "cross_references_resolve": true,
+    "tex_groups_and_environments_balanced": true,
+    "proposal_pdf_compiled": false
+  },
+  "sources": [
+    "https://arxiv.org/abs/1308.6517",
+    "https://arxiv.org/abs/2510.21395",
+    "https://doi.org/10.1086/508158",
+    "https://irsa.ipac.caltech.edu/data/WISE/docs/release/All-Sky/expsup/sec2_2a.html"
+  ]
+}

@@ -57,7 +57,10 @@ def main():
     add(info, 'Title', title_abstract.split('Title:\n', 1)[1].split('\n\nAbstract:', 1)[0].strip())
     abstract = title_abstract.split('Abstract:\n', 1)[1].strip()
     add(info, 'Abstract', abstract)
-    add(info, 'ProposalID', '0')
+    # Do not write ProposalID. APT treats any value, including 0, as an already
+    # assigned number, switches the Submission tool to resubmission mode and then
+    # rejects it ('Proposal ID: 0 is too small'). A new proposal omits the element;
+    # APT obtains the real number from STScI at first Submit (2026-09-29 fix).
     add(info, 'ProposalCategory', 'GO')
     add(info, 'ScientificCategory', 'Galaxies and the Intergalactic Medium')
     add(info, 'Cycle', '6')

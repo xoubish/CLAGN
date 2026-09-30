@@ -14,7 +14,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
 from pypdf import PdfReader,PdfWriter,Transformation
-from pypdf.generic import RectangleObject
+from pdf_figure_crop import cropped_figure
 
 BASE=Path(__file__).resolve().parents[1]
 OUT=BASE/'review/fig2_three_panel/panel_a';OUT.mkdir(parents=True,exist_ok=True)
@@ -39,7 +39,7 @@ if '/Annots' in source:del source['/Annots']
 pageheight=float(source.mediabox.height)
 crop=(421.,67.,550.,161.) # page points, top-down; excludes the old shared title
 x0,top,x1,bottom=crop;y0,y1=pageheight-bottom,pageheight-top
-source.cropbox=RectangleObject((x0,y0,x1,y1));source.trimbox=RectangleObject((x0,y0,x1,y1))
+source=cropped_figure(source,crop)
 width,height=6.6*72,4.8*72
 place=(.035,.005,.93,.93)
 px,py,pw,ph=np.array(place)*[width,height,width,height]
@@ -56,7 +56,7 @@ plt.rcParams.update({'font.family':'DejaVu Sans','pdf.fonttype':42})
 fig=plt.figure(figsize=(width/72,height/72))
 fig.savefig(OUT/'base.pdf');plt.close(fig)
 dest=PdfReader(OUT/'base.pdf').pages[0]
-dest.merge_transformed_page(source,Transformation().translate(-x0,-y0).scale(scale).translate(tx,ty))
+dest.merge_transformed_page(source,Transformation().scale(scale).translate(tx,ty))
 
 fig=plt.figure(figsize=(width/72,height/72))
 fig.patch.set_alpha(0)

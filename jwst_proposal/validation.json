@@ -54,9 +54,9 @@
     "R10",
     "R12"
   ],
-  "version": "Three-panel literature Figure 2 integrated; body, caption and citations reconciled; source-only revision",
+  "version": "Clarified optical epoch coverage and resolved host definition following Co-I comments; source-only revision",
   "source": "proposal.tex",
-  "source_sha256": "b5b015efccee3734e175778a84d49e6238262da2b5bc6878a1719c9c0738262c",
+  "source_sha256": "b70b595fc9a6e4f3de3067f047a9962de236cc34e294f54c490de3ae799127d7",
   "style_sha256": "d5e8b0c1133974ac9eaa6cc27213794ceec297337c69f2ec13254a10684fdd08",
   "style_unchanged": true,
   "figures": [
@@ -80,8 +80,8 @@
   "forecast": "inputs/warm_response_forecast_summary.json",
   "forecast_full_model_discrimination_validated": false,
   "science_questions": [
-    "How strongly does the warm spectrum remember the nuclear history?",
-    "Does the dust boundary move, or only its temperature?"
+    "How long does warm-dust memory persist?",
+    "Does dust replenish after the nucleus fades?"
   ],
   "measurement_definition": "Fit 2010 W3/W4 and MRS through their bandpasses; use the rest 8\u201313 micron spectrum to test the delayed fixed-distribution prediction.",
   "nominal_line_coverage_counts": {

@@ -1,0 +1,18 @@
+{
+  "source_pages_embedded": false,
+  "source_regions_rendered_before_embedding": true,
+  "crop_dpi": 600,
+  "compression": "lossless Flate",
+  "original_extracted_characters": 23142,
+  "current_extracted_characters": 242,
+  "hidden_paper_text_absent": true,
+  "panel_b_label": "Gonz\u00e1lez-Mart\u00edn et al. (2025)",
+  "panel_b_source": "https://arxiv.org/abs/2504.01103v2",
+  "panel_b_publication": "https://doi.org/10.1093/mnras/staf573",
+  "panel_b_correction": "https://doi.org/10.1093/mnras/stag1045",
+  "correction_scope": "Acknowledgements only",
+  "caption_matches": true,
+  "visual_review_passed": true,
+  "figure_sha256": "119ac115660485a3b25c6e281666248fb82830497d500ef94900d14f903d1431",
+  "proposal_pdf_compiled": false
+}

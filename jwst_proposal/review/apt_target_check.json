@@ -1,0 +1,338 @@
+{
+  "checked_at_utc": "2026-09-29T23:15:43.564792+00:00",
+  "apt_file": "jwst_proposal/apt/clagn24_miri_draft.aptx",
+  "apt_sha256": "967ef7d41950a96875578a0aaccda59e0179e467fd2cd0f645fc2c3bd7c20de6",
+  "sample": "inputs/jwst_sample_cycle6.csv",
+  "sample_sha256": "448434474515b8ca6714871253f1e32db5ef742b456110089fc5dbaf19e15745",
+  "sample_count": 24,
+  "science_target_count": 24,
+  "sky_target_count": 24,
+  "observation_count": 48,
+  "science_membership_matches": true,
+  "sky_membership_matches": true,
+  "archive_names_match": true,
+  "maximum_coordinate_difference_arcsec": 0.06868641763728431,
+  "all_have_one_science_observation": true,
+  "all_targets_have_one_observation": true,
+  "background_assignments_match": true,
+  "standalone_xml_matches": true,
+  "saved_charged_hours": 67.0,
+  "saved_title_matches_current_text": true,
+  "saved_abstract_matches_current_text": false,
+  "targets": [
+    {
+      "id": "F01",
+      "target": "J075934.95+322143.3",
+      "internal_id": "P14388",
+      "apt_archive_name": "J075934.95+322143.3",
+      "apt_coordinates": "07 59 34.9500 +32 21 43.30",
+      "decimal_separation_arcsec": 0.046696191948454244,
+      "sexagesimal_separation_arcsec": 0.0,
+      "science_observations": [
+        "1"
+      ],
+      "background_matches": true
+    },
+    {
+      "id": "F02",
+      "target": "J003352.71+202104.1",
+      "internal_id": "P9506",
+      "apt_archive_name": "J003352.71+202104.1",
+      "apt_coordinates": "00 33 52.7100 +20 21 4.10",
+      "decimal_separation_arcsec": 0.05802666759410654,
+      "sexagesimal_separation_arcsec": 0.0,
+      "science_observations": [
+        "3"
+      ],
+      "background_matches": true
+    },
+    {
+      "id": "F03",
+      "target": "J105325.40+302419.3",
+      "internal_id": "P24976",
+      "apt_archive_name": "J105325.40+302419.3",
+      "apt_coordinates": "10 53 25.4100 +30 24 19.30",
+      "decimal_separation_arcsec": 0.0657420786184137,
+      "sexagesimal_separation_arcsec": 0.0,
+      "science_observations": [
+        "5"
+      ],
+      "background_matches": true
+    },
+    {
+      "id": "F04",
+      "target": "J005346.16+223222.4",
+      "internal_id": "P10381",
+      "apt_archive_name": "J005346.16+223222.4",
+      "apt_coordinates": "00 53 46.1600 +22 32 22.40",
+      "decimal_separation_arcsec": 0.053556352675900865,
+      "sexagesimal_separation_arcsec": 0.0,
+      "science_observations": [
+        "7"
+      ],
+      "background_matches": true
+    },
+    {
+      "id": "F05",
+      "target": "J085359.05+212803.4",
+      "internal_id": "CLAGN_0816",
+      "apt_archive_name": "J085359.05+212803.4",
+      "apt_coordinates": "08 53 59.0600 +21 28 3.40",
+      "decimal_separation_arcsec": 0.06868641763728431,
+      "sexagesimal_separation_arcsec": 0.0,
+      "science_observations": [
+        "9"
+      ],
+      "background_matches": true
+    },
+    {
+      "id": "F06",
+      "target": "J012558.06+151813.7",
+      "internal_id": "P11530",
+      "apt_archive_name": "J012558.06+151813.7",
+      "apt_coordinates": "01 25 58.0600 +15 18 13.70",
+      "decimal_separation_arcsec": 0.029192611262155225,
+      "sexagesimal_separation_arcsec": 0.0,
+      "science_observations": [
+        "11"
+      ],
+      "background_matches": true
+    },
+    {
+      "id": "F07",
+      "target": "J234433.09+260038.9",
+      "internal_id": "P7837",
+      "apt_archive_name": "J234433.09+260038.9",
+      "apt_coordinates": "23 44 33.0900 +26 00 38.90",
+      "decimal_separation_arcsec": 0.04129998809965181,
+      "sexagesimal_separation_arcsec": 0.0,
+      "science_observations": [
+        "13"
+      ],
+      "background_matches": true
+    },
+    {
+      "id": "F08",
+      "target": "J104427.75+271806.3",
+      "internal_id": "CLAGN_0826",
+      "apt_archive_name": "J104427.75+271806.3",
+      "apt_coordinates": "10 44 27.7400 +27 18 6.50",
+      "decimal_separation_arcsec": 0.05694395307430954,
+      "sexagesimal_separation_arcsec": 0.0,
+      "science_observations": [
+        "15"
+      ],
+      "background_matches": true
+    },
+    {
+      "id": "F09",
+      "target": "NGC2617",
+      "internal_id": "CLAGN_0987",
+      "apt_archive_name": "NGC2617",
+      "apt_coordinates": "08 35 38.7800 -04 05 17.50",
+      "decimal_separation_arcsec": 0.06310073557938321,
+      "sexagesimal_separation_arcsec": 0.0,
+      "science_observations": [
+        "17"
+      ],
+      "background_matches": true
+    },
+    {
+      "id": "F10",
+      "target": "J085337.26+014303.6",
+      "internal_id": "J085337.26+014303.6",
+      "apt_archive_name": "J085337.26+014303.6",
+      "apt_coordinates": "08 53 37.2600 +01 43 3.60",
+      "decimal_separation_arcsec": 7.156248033292915e-13,
+      "sexagesimal_separation_arcsec": 0.0,
+      "science_observations": [
+        "19"
+      ],
+      "background_matches": true
+    },
+    {
+      "id": "F11",
+      "target": "J2330323-022745",
+      "internal_id": "CLAGN_0795",
+      "apt_archive_name": "J2330323-022745",
+      "apt_coordinates": "23 30 32.3000 -02 27 45.00",
+      "decimal_separation_arcsec": 1.19887918894435e-05,
+      "sexagesimal_separation_arcsec": 0.0,
+      "science_observations": [
+        "21"
+      ],
+      "background_matches": true
+    },
+    {
+      "id": "F12",
+      "target": "J0458403-215931",
+      "internal_id": "CLAGN_0801",
+      "apt_archive_name": "J0458403-215931",
+      "apt_coordinates": "04 58 40.3000 -21 59 31.00",
+      "decimal_separation_arcsec": 1.9488655672206847e-05,
+      "sexagesimal_separation_arcsec": 0.0,
+      "science_observations": [
+        "23"
+      ],
+      "background_matches": true
+    },
+    {
+      "id": "R01",
+      "target": "J004607.98+090720.9",
+      "internal_id": "P9694",
+      "apt_archive_name": "J004607.98+090720.9",
+      "apt_coordinates": "00 46 7.9766 +09 07 20.95",
+      "decimal_separation_arcsec": 0.004043630896395742,
+      "sexagesimal_separation_arcsec": 0.00404363089027,
+      "science_observations": [
+        "25"
+      ],
+      "background_matches": true
+    },
+    {
+      "id": "R02",
+      "target": "J220537.71-071114.5",
+      "internal_id": "CLAGN_0215",
+      "apt_archive_name": "J220537.71-071114.5",
+      "apt_coordinates": "22 05 37.7100 -07 11 14.50",
+      "decimal_separation_arcsec": 3.999999155857704e-06,
+      "sexagesimal_separation_arcsec": 0.0,
+      "science_observations": [
+        "27"
+      ],
+      "background_matches": true
+    },
+    {
+      "id": "R03",
+      "target": "J104705.16+544405.8",
+      "internal_id": "P24541",
+      "apt_archive_name": "J104705.16+544405.8",
+      "apt_coordinates": "10 47 5.1600 +54 44 5.90",
+      "decimal_separation_arcsec": 0.030557710606952358,
+      "sexagesimal_separation_arcsec": 0.0,
+      "science_observations": [
+        "29"
+      ],
+      "background_matches": true
+    },
+    {
+      "id": "R04",
+      "target": "J082942.66+415436.8",
+      "internal_id": "CLAGN_0030",
+      "apt_archive_name": "J082942.66+415436.8",
+      "apt_coordinates": "08 29 42.6700 +41 54 36.90",
+      "decimal_separation_arcsec": 0.037993443985718724,
+      "sexagesimal_separation_arcsec": 0.0,
+      "science_observations": [
+        "31"
+      ],
+      "background_matches": true
+    },
+    {
+      "id": "R05",
+      "target": "J104043.38+273518.9",
+      "internal_id": "CLAGN_0824",
+      "apt_archive_name": "J104043.38+273518.9",
+      "apt_coordinates": "10 40 43.3900 +27 35 19.00",
+      "decimal_separation_arcsec": 0.0480309073806992,
+      "sexagesimal_separation_arcsec": 0.0,
+      "science_observations": [
+        "33"
+      ],
+      "background_matches": true
+    },
+    {
+      "id": "R06",
+      "target": "J083826.50+371906.7",
+      "internal_id": "P17881",
+      "apt_archive_name": "J083826.50+371906.7",
+      "apt_coordinates": "08 38 26.5000 +37 19 6.70",
+      "decimal_separation_arcsec": 0.00957680237794369,
+      "sexagesimal_separation_arcsec": 0.0,
+      "science_observations": [
+        "35"
+      ],
+      "background_matches": true
+    },
+    {
+      "id": "R07",
+      "target": "J101152.98+544206.4",
+      "internal_id": "CLAGN_0045",
+      "apt_archive_name": "J101152.98+544206.4",
+      "apt_coordinates": "10 11 52.9800 +54 42 6.40",
+      "decimal_separation_arcsec": 0.03328939252471104,
+      "sexagesimal_separation_arcsec": 0.0,
+      "science_observations": [
+        "37"
+      ],
+      "background_matches": true
+    },
+    {
+      "id": "R08",
+      "target": "J094838.42+403043.7",
+      "internal_id": "CLAGN_0818",
+      "apt_archive_name": "J094838.42+403043.7",
+      "apt_coordinates": "09 48 38.4200 +40 30 43.60",
+      "decimal_separation_arcsec": 0.0606698505686607,
+      "sexagesimal_separation_arcsec": 0.0,
+      "science_observations": [
+        "39"
+      ],
+      "background_matches": true
+    },
+    {
+      "id": "R09",
+      "target": "UGC03601",
+      "internal_id": "CLAGN_0969",
+      "apt_archive_name": "UGC03601",
+      "apt_coordinates": "06 55 49.5300 +40 00 1.20",
+      "decimal_separation_arcsec": 0.05984758380029731,
+      "sexagesimal_separation_arcsec": 0.0,
+      "science_observations": [
+        "41"
+      ],
+      "background_matches": true
+    },
+    {
+      "id": "R10",
+      "target": "J19263018+4133053",
+      "internal_id": "CLAGN_0972",
+      "apt_archive_name": "J19263018+4133053",
+      "apt_coordinates": "19 26 30.2200 +41 33 5.00",
+      "decimal_separation_arcsec": 0.038562877395359636,
+      "sexagesimal_separation_arcsec": 0.0,
+      "science_observations": [
+        "43"
+      ],
+      "background_matches": true
+    },
+    {
+      "id": "R11",
+      "target": "J1949137-184716",
+      "internal_id": "CLAGN_0808",
+      "apt_archive_name": "J1949137-184716",
+      "apt_coordinates": "19 49 13.7000 -18 47 16.00",
+      "decimal_separation_arcsec": 1.3894620112809232e-05,
+      "sexagesimal_separation_arcsec": 0.0,
+      "science_observations": [
+        "45"
+      ],
+      "background_matches": true
+    },
+    {
+      "id": "R12",
+      "target": "J20145928+2523010",
+      "internal_id": "CLAGN_0973",
+      "apt_archive_name": "J20145928+2523010",
+      "apt_coordinates": "20 14 59.2600 +25 23 1.20",
+      "decimal_separation_arcsec": 0.044109545636301914,
+      "sexagesimal_separation_arcsec": 0.0,
+      "science_observations": [
+        "47"
+      ],
+      "background_matches": true
+    }
+  ],
+  "scope": "Read-only inventory and coordinate comparison of the saved APT archive. No scheduling or ETC recomputation.",
+  "target_inventory_passed": true
+}
