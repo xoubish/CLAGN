@@ -1,4 +1,4 @@
-"""One target-list download for each of the five target tabs."""
+"""Catalogue download under About plus one target list per observing tab."""
 import csv
 import io
 from pathlib import Path
@@ -20,18 +20,14 @@ def attach_tabs(payload):
     targets=payload['targets'];october=payload.get('october',{}).get('rows',[])
     inventory={t['name']:dict(name=t['name'],ra=t['ra'],dec=t['dec'],z=t.get('z'),
         r=t.get('science',{}).get('ztf_r_latest180_mag') or t.get('rmag'),
-        jwst_id='',jwst_target='',scheduled_night='',observed=bool(t.get('observed')),
+        target_label=t.get('jname',''),scheduled_night='',observed=bool(t.get('observed')),
         sep23=t['name'] in payload.get('sep23_sequence',{}),has_detail=True) for t in targets}
     for r in october:
         name=r['name']
         if name not in inventory:
             inventory[name]=dict(name=name,ra=float(r['ra']),dec=float(r['dec']),z=float(r['z']),
                 r=float(r['r_adopted']),observed=False,sep23=False,has_detail=False)
-        inventory[name].update(jwst_id=r['jwst_id'],jwst_target=r['jwst_target'],scheduled_night=r['night'])
-    # Include the September-only JWST member in the complete inventory's labels.
-    for r in payload.get('october',{}).get('jwst',[]):
-        if r['name'] in inventory:
-            inventory[r['name']].update(jwst_id=r['jwst_id'],jwst_target=r['target'])
+        inventory[name].update(target_label=r.get('target_label','') or inventory[name].get('target_label',''),scheduled_night=r['night'])
     inventory=sorted(inventory.values(),key=lambda t:t['ra'])
     pool=[]
     for r in inventory:

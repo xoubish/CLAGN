@@ -1,0 +1,58 @@
+// Execute the generated page's real JavaScript with a minimal DOM. Catch eager
+// rendering of the complete spectral catalogue, which previously froze All.
+const fs=require('fs'),vm=require('vm'),assert=require('assert'),path=require('path');
+const html=fs.readFileSync(path.join(__dirname,'../docs/index.html'),'utf8');
+const payload=html.match(/<script id="candidate-data" type="application\/json">([\s\S]*?)<\/script>/)[1];
+const ids=new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]));
+const elements=new Map();
+function element(id){
+  if(!ids.has(id)&&!elements.get('cards')?.innerHTML.includes(`id="${id}"`))return null;
+  if(!elements.has(id)){
+    const classes=new Set();
+    elements.set(id,{textContent:id==='candidate-data'?payload:'',innerHTML:'',value:'',dataset:{},
+      classList:{add(c){classes.add(c);},remove(c){classes.delete(c);},toggle(c,on){on?classes.add(c):classes.delete(c);},contains(c){return classes.has(c);}},
+      insertAdjacentHTML(position,s){this.innerHTML+=s;},setAttribute(){},addEventListener(){},scrollIntoView(){}});
+  }
+  return elements.get(id);
+}
+const document={getElementById:element,querySelectorAll:()=>[],querySelector:()=>({addEventListener(){}}),
+  addEventListener(){},documentElement:{dataset:{theme:'dark'}}};
+const location={hash:''};
+const context=vm.createContext({document,window:{addEventListener(){}},location,
+  history:{pushState(){},replaceState(){}},console,URL,Blob,setTimeout});
+const script=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)]
+  .map(m=>m[1]).filter(s=>!s.trimStart().startsWith('{')).join('\n');
+vm.runInContext(script,context);
+const evaluate=s=>vm.runInContext(s,context);
+assert.equal(evaluate('state.view'),'about');
+assert.equal(element('cards').innerHTML,'');
+assert.equal((element('table').innerHTML.match(/data-catalog-target=/g)||[]).length,evaluate('D.all_targets.length'));
+const nav=html.match(/<nav[\s\S]*?<\/nav>/)[0];
+assert.deepEqual([...nav.matchAll(/data-view="([^"]+)"/g)].map(m=>m[1]),['about','sep23','observed','oct26','oct27']);
+for(const [tab,count] of [['sep23',14],['observed',18],['oct26',40],['oct27',40],['about',0]]){
+  context.setView(tab);
+  assert.equal((element('cards').innerHTML.match(/<article /g)||[]).length,count,tab);
+}
+context.revealTarget('P9694');
+assert.equal((element('cards').innerHTML.match(/<article /g)||[]).length,1);
+assert(element('cards').innerHTML.includes('id="card-P9694"'));
+context.revealTarget('P8544');
+assert.equal((element('cards').innerHTML.match(/<article /g)||[]).length,1);
+assert(element('cards').innerHTML.includes('id="card-P8544"'));
+evaluate("state.q='p9694';refresh()");
+assert.equal((element('table').innerHTML.match(/data-catalog-target=/g)||[]).length,1);
+assert.equal((element('bigmap').innerHTML.match(/data-name=/g)||[]).length,
+  evaluate('D.targets.filter(t=>Number.isFinite(t.ux)&&Number.isFinite(t.uy)).length'));
+location.hash='#all';assert.equal(context.tabFromHash(),'about');
+location.hash='#pool';assert.equal(context.tabFromHash(),'about');
+console.log('PASS: default About, five tabs, complete catalogue and manifold, one target card at a time, search and legacy links.');
+
+for(const [night,n] of [['sep23',14],['oct26',40],['oct27',40]]){
+  assert.equal((context.renderVisibility(night).match(/data-visibility-target=/g)||[]).length,n);
+  assert(context.visibilityReadout(night,0).includes('0 of '+n));
+}
+evaluate("state.q='jp9694';refresh()");
+assert.equal((element('table').innerHTML.match(/data-catalog-target=/g)||[]).length,1);
+assert(element('table').innerHTML.includes('>JP9694</a>'));
+assert(element('cards').innerHTML.includes('id="card-P9694"') || element('cards').innerHTML==='');
+console.log('PASS: three visibility charts and both original and prefixed name search.');

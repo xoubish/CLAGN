@@ -1,15 +1,35 @@
 # Public observing website
 
-The single [observer page](index.html) has six tabs: **All · Sep23-targets · Observed · Oct26 · Oct27 · About**. The first five each contain exactly one target-list CSV button, with uppercase headers. About explains the science, selection rationale, observing setup, September experience and JWST coverage.
+The single [observer page](index.html) opens on **About**, followed by **Sep23-targets · Sep23-observed · Oct26 · Oct27**. About starts with the Palomar telescope photograph, followed by the complete available target manifold, a collapsible searchable catalogue and its CSV, then the science and observing notes. Each of the four night/history tabs contains one target-list CSV button, with uppercase headers.
 
-- **All:** 218 unique catalogue targets, including all 24 JWST proposal objects. The catalogue CSV uses default settings and is not an observing sequence.
+- **About:** the manifold shows all 198 targets with saved projections; the catalogue includes all 218 targets. Click a point or name to load one detailed card. The catalogue CSV uses default settings and is not an observing sequence.
 - **Sep23-targets:** the 14 planned science targets, with their original exposure settings. Standards and backup notes remain within the tab.
-- **Observed:** the 18 targets actually observed, in exposure order; the CSV is the actual observation log. Spectrum FITS downloads remain on the cards.
+- **Sep23-observed:** the 18 targets actually observed, in exposure order; the CSV is the actual observation log. Spectrum FITS downloads remain on the cards.
 - **Oct26 / Oct27:** 40 science targets per night, with one NGPS science CSV each. Standards and alternatives appear as notes rather than extra CSV buttons.
 
-The five current tab exports are in [targets/](targets/). Search filters the All table; its CSV always contains the complete catalogue. All six tabs stay on the same webpage.
+The **October 14 review** retains 40 targets per night and adds P8544 on
+October 27 at 3×300 s. All other October
+targets use 2×300 s. Default visits now reserve 14 minutes; P8544 reserves 20.
+September timestamps show a 4.4-minute median overhead, leaving only about
+34/29 minutes spare after the two nightly standards. The page and exports
+include dated brightness, optical-state science questions and timing flags.
 
-The orange **Observed · 18** tab ([direct view](index.html#observed)) shows the
+The five dataset exports are in [targets/](targets/). Search filters the catalogue under About; its CSV always contains the full catalogue, and the manifold keeps all available target positions visible. All five tabs stay on the same webpage. Legacy `#all` and `#pool` links open About; target links still open the selected card.
+
+Sep23-targets, Oct26 and Oct27 include queue-ordered visibility charts. Yellow
+marks full-visit starts at X≤1.5, blue X≤1.8, and purple X≤2 only when permitted
+for that target. Every colored start retains Moon separation ≥40° throughout
+the visit, including overhead, and avoids the reserved standards. Outlines show
+the planned visits. Move the time slider or click the chart to compare swaps;
+the right column reports full-visit maximum airmass and minimum Moon separation.
+These windows do not reserve other science visits, so swaps still require a
+queue-conflict check. Geometry uses a 30-second grid at Palomar.
+
+Selected targets use a J prefix on their existing names (for example JP9506).
+The page and CSV downloads use the same names; catalogue search also accepts
+the original aliases, and existing target links and spectral filenames remain valid.
+
+The orange **Sep23-observed · 18** tab ([direct view](index.html#observed)) shows the
 September 23 science targets in actual observing order, including backups. Each
 card has its P330E-calibrated NGPS 1D spectrum, selectable archival comparisons,
 actual exposure details, light curves, imaging and FITS downloads. The 18

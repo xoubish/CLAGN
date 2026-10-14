@@ -158,18 +158,24 @@ class SeptemberPacketTests(unittest.TestCase):
         primaries = self.packet['primaries']
         for path, private in [(ROOT/'docs/index.html', False)]:
             page = payload(path)
+            # Public labels may carry a J prefix; all historical settings and
+            # observing instructions must still match the original packet.
+            original_names = {v:k for k,v in page.get('display_names',{}).items()}
+            def original_csv(filename):
+                pattern = r'(?<![\w])('+'|'.join(map(re.escape,sorted(original_names,key=len,reverse=True)))+r')(?![\w])'
+                return re.sub(pattern,lambda m:original_names[m[0]],page['files'][filename]) if original_names else page['files'][filename]
             public_names = {t['name'] for t in payload(ROOT/'docs/index.html')['targets']}
             expected = {v['name'] for v in primaries if private or v['name'] in public_names}
             self.assertEqual(set(page['sep23_sequence']), expected)
             for name, s in page['sep23_sequence'].items():
                 v = next(x for x in primaries if x['name'] == name)
                 self.assertEqual((s['rank'], s['start_pdt'], s['exposures']), (v['rank'], v['start_pdt'], v['plan']['exposures']))
-            self.assertEqual(page['files']['sep23_primaries_ngps.csv'], self.packet['files' if private else 'public_files']['sep23_primaries_ngps.csv'])
+            self.assertEqual(original_csv('sep23_primaries_ngps.csv'), self.packet['files' if private else 'public_files']['sep23_primaries_ngps.csv'])
             if private:
                 self.assertEqual(page['files']['sep23_backups_ngps.csv'], (DEST/'sep23_backups_ngps.csv').read_text())
                 self.assertEqual(len(page['backups']), len(self.packet['backups']))
             else:
-                self.assertEqual(page['files']['sep23_backups_ngps.csv'], self.packet['public_files']['sep23_backups_ngps.csv'])
+                self.assertEqual(original_csv('sep23_backups_ngps.csv'), self.packet['public_files']['sep23_backups_ngps.csv'])
                 self.assertEqual(len(page['backups']), 2*len(primaries))
                 self.assertTrue(all(b['name'] in public_names for b in page['backups']))
                 self.assertNotIn('see the local page', path.read_text())

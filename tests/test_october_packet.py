@@ -42,12 +42,19 @@ class OctoberPacketTests(unittest.TestCase):
         for r in audit.itertuples():
             self.assertTrue(r.name in set(q.name) or r.observed_sep23)
         observed=set(pd.read_csv(ROOT/'sep23_data/reduction_20260924/products_p330e/target_summary.csv').NAME)
-        self.assertTrue((set(q.name)&observed)<=set(jwst.internal_id))
+        self.assertEqual(set(q.name)&observed, {'P7837','P9506','P10381','P9694','P8544'})
+        followup=q[q.name=='P8544'].iloc[0]
+        self.assertEqual(followup.night,'oct27')
+        self.assertEqual((followup.exposures,followup.visit_minutes),(3,20))
         windows=packet_csv('visibility_windows.csv')
         for name in set(audit.name)-set(q.name):
             self.assertFalse((windows.name==name).any())
-        for col,v in [('seconds_each',300),('exposures',2),('slit_arcsec',1.5),('binspat',2),('binspect',3),('visit_minutes',12)]:
+        for col,v in [('seconds_each',300),('slit_arcsec',1.5),('binspat',2),('binspect',3)]:
             self.assertTrue(q[col].eq(v).all(),col)
+        normal=q[q.name!='P8544']
+        self.assertTrue(normal.exposures.eq(2).all())
+        self.assertTrue(normal.visit_minutes.eq(14).all())
+        self.assertTrue((q.exposures*q.seconds_each/60+q.overhead_minutes).eq(q.visit_minutes).all())
 
     def test_no_overlap_or_twilight_overrun_and_time_budget(self):
         standards=packet_csv('standards.csv')
@@ -63,7 +70,10 @@ class OctoberPacketTests(unittest.TestCase):
                 self.assertGreaterEqual(a,previous)
                 self.assertLessEqual(b,pd.Timestamp(m['dawn_pdt']))
                 previous=b
-            self.assertAlmostEqual(gaps[gaps.night==night].minutes.sum()+500,m['minutes'],places=5)
+            for r in q.itertuples():
+                self.assertEqual((pd.Timestamp(r.end_pdt)-pd.Timestamp(r.start_pdt)).total_seconds()/60,r.visit_minutes)
+            self.assertAlmostEqual(gaps[gaps.night==night].minutes.sum()+q.visit_minutes.sum()+20,m['minutes'],places=5)
+            self.assertEqual(q.visit_minutes.sum(),m['science_minutes'])
 
     def test_upload_coordinates_and_independent_moon_frame(self):
         location=EarthLocation.from_geodetic(-116.865*u.deg,33.3563*u.deg,1712*u.m)
@@ -72,7 +82,7 @@ class OctoberPacketTests(unittest.TestCase):
                 rows=list(csv.DictReader(f))
             q=self.queue[self.queue.night==night]
             self.assertEqual([r['NAME'] for r in rows],q.name.tolist())
-            self.assertTrue(all(r['EXPTIME']=='SET 300' and r['NEXP']=='2' and r['SLITWIDTH']=='SET 1.5' and r['BINSPAT']=='2' and r['BINSPECT']=='3' for r in rows))
+            self.assertTrue(all(r['EXPTIME']=='SET 300' and r['NEXP']==('3' if r['NAME']=='P8544' else '2') and r['SLITWIDTH']=='SET 1.5' and r['BINSPAT']=='2' and r['BINSPECT']=='3' for r in rows))
             for upload,r in zip(rows,q.itertuples()):
                 coord=SkyCoord(upload['RA'],upload['DECL'],unit=(u.hourangle,u.deg))
                 original=SkyCoord(r.ra*u.deg,r.dec*u.deg)

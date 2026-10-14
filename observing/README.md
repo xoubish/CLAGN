@@ -6,7 +6,7 @@
 - **[Packet notes and downloads](oct26_27_2026/README.md)** — NGPS science/standard/backup CSVs, timing tables, schedule PDFs, and selection rationale.
 - **[JWST coverage audit](oct26_27_2026/jwst_coverage.csv)** — 23 of the current proposal's 24 targets scheduled in October; Moon-blocked P11530 retains its September spectrum.
 
-Uses the September experience: **2×300 s, 1.5″ slit, 2×3 binning, 2-minute total overhead, Moon ≥40° throughout each visit**. Each night has 480 minutes of science, 20 minutes reserved for standards, and approximately 114–115 minutes spare. Ordinary targets have X≤1.8; mandatory JWST targets may use X≤2.0. Faint JWST exceptions and archival brightness dates are explicit. Rebuild with `scripts/53_october_observing_packet.py`; this proposed packet is separate from the historical September sequence and the older all-night pool lists below.
+Reviewed **October 14** against the September spectra, raw timestamps and final JWST proposal; retain **40 targets per night** as requested. Normally **2×300 s + 4 minutes overhead**, 1.5″ slit, 2×3 binning and Moon ≥40° throughout each visit. **P8544 is added October 27 at 3×300 s in a 20-minute block**. September's median measured non-integration time was 4.4 minutes, so the old two-minute allowance is retired. Science visits occupy 560/566 minutes, standards reserve 20 minutes each night, and only **34/29 minutes remain**. Ordinary targets have X≤1.8; protected JWST targets may use X≤2.0. The proposal's 23 feasible objects are retained; the later exploratory replacement shortlist remains outside the upload lists. [Membership changes](oct26_27_2026/selection_decisions.csv) and [September follow-up decisions](oct26_27_2026/september_followup_decisions.csv) explain the choices. Rebuild with `scripts/53_october_observing_packet.py`, then `scripts/51_observer_page.py`.
 
 ## Science reassessment — discussion, not a replacement queue
 
@@ -42,7 +42,7 @@ Standards use initial settings of 2×60 s for P330E and 2×10 s for BD+28 4211 w
 | October 26 | [PNG](visibility/oct26_visibility.png) | [PDF](visibility/oct26_visibility.pdf) |
 | October 27 | [PNG](visibility/oct27_visibility.png) | [PDF](visibility/oct27_visibility.pdf) |
 
-Blue shades show the preferred X≤1.5 windows, extensions to X≤1.8, and fallback windows to X≤2.0. These are older availability plots. Use the October packet above for the new 12-minute visits, JWST additions, and proposed October sequences.
+Blue shades show the preferred X≤1.5 windows, extensions to X≤1.8, and fallback windows to X≤2.0. These are older availability plots. Use the October packet above for the reviewed 14-minute visits, the 20-minute P8544 follow-up, JWST additions, and October sequences.
 
 The files in `visibility/` link to the live generated plots, so rebuilding them updates these views without duplicating files. The packet and these links are local and git-ignored. The single observer webpage is `docs/index.html`.
 

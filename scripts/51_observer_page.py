@@ -18,6 +18,8 @@ from slit_preview import previews
 from observed_ngps import build_observed, add_observed
 from october_web import attach_october
 from observer_tabs import attach_tabs
+from observer_visibility import attach_visibility
+from observer_names import attach_names
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT/'data/reselection_2026-09-20'
@@ -117,10 +119,13 @@ def main():
     add_observed(payload,observed,DEST_PUBLIC)
     attach_october(payload,False,{t['name'] for t in local['targets'] if not t.get('science',{}).get('reference_private')})
     attach_tabs(payload)
+    attach_visibility(payload)
+    attach_names(payload)
     encoded = json.dumps(payload, separators=(',', ':'), allow_nan=False).replace('<', '\\u003c')
     page = template.replace('__PAYLOAD__', encoded).replace('__CHART_FUNCTIONS__', charts).replace('__FIELD_FUNCTIONS__', (ROOT/'web/observer_fields.js').read_text())
     page=page.replace('__OCTOBER_FUNCTIONS__',(ROOT/'web/observer_october.js').read_text())
     page=page.replace('__TAB_FUNCTIONS__',(ROOT/'web/observer_tabs.js').read_text())
+    page=page.replace('__VISIBILITY_FUNCTIONS__',(ROOT/'web/observer_visibility.js').read_text())
     assert 'proprietary' not in page and 'SDSS-V internal' not in page
     public_names = {t['name'] for t in payload['targets']}
     assert all(b['name'] in public_names for b in payload['backups'])
