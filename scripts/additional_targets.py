@@ -18,6 +18,9 @@ def attach_additional_targets(payload):
             review.setdefault('sources', []).extend(archive.pop('archive_sources'))
             target.update(archive)
         name = target['name']
+        from october_additions import DEFERRED
+        if name in DEFERRED:
+            target['archive_review']['note'] = DEFERRED[name] + ' ' + target['archive_review'].get('note', '')
         if name in targets:
             raise ValueError(f'Additional target duplicates an existing identity: {name}')
         # Protect against adding a known candidate under a different alias.

@@ -50,7 +50,10 @@ class OctoberPacketTests(unittest.TestCase):
         self.assertEqual((deeper.exposures,deeper.visit_minutes,deeper.airmass_limit),(4,26,1.5))
         self.assertEqual(q[q.name=='H5MUSES-327'].iloc[0].night,'oct26')
         self.assertNotIn('HUGC-03097',set(q.name))
-        self.assertTrue({'HNGC-1377','HIC-1953','HNGC-0814'}.issubset(set(q.name)))
+        self.assertEqual({n for n in q.name if n.startswith('H')}, {'H5MUSES-327','HIC-1953','HIRAS-F23290-1252'})
+        for name in ['HNGC-0814','HNGC-1377']:
+            self.assertNotIn(name,set(q.name))
+            self.assertNotIn(name,set(packet_csv('slot_backups.csv').name))
         windows=packet_csv('visibility_windows.csv')
         for name in set(audit.name)-set(q.name):
             self.assertFalse((windows.name==name).any())
