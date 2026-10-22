@@ -21,6 +21,8 @@ data/spectra_cache/
 data/spectra_dl/
 # NEOWISE Gator batch cache
 data/neowise_cache/
+# Public per-target archive downloads and derived reviews; reproducible via scripts.
+data/additional_targets/
 # scratch tables written by helper runs
 data/_*.csv
 # NED raw retry dumps (merged into literature_clagn.csv)

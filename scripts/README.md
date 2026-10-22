@@ -4,6 +4,14 @@ Run scripts from the project root, using `python scripts/<filename>.py`. Numbere
 
 ## Current observing workflow
 
+For the requested **H5MUSES-327** archive review, run `63_5muses327.py fetch`,
+the separate unWISE acquisition/projection commands documented in
+`data/additional_targets/H5MUSES-327/README.md`, then `63_5muses327.py analyze`
+and `51_observer_page.py`. The original W1 model is transformed without refitting.
+`additional_targets.py` adds its card and manifold point without changing either
+nightly queue. The installed Numba requires NumPy <2.3; use a compatible isolated
+environment for the projection if the main environment has a newer NumPy.
+
 | Scripts | Purpose |
 | --- | --- |
 | `15a`–`15c`, `32`, `34`, `36`, `37` | Broad parent, W1 acquisition/projection, rolling spectral identities, and completion pipeline. |
@@ -13,7 +21,7 @@ Run scripts from the project root, using `python scripts/<filename>.py`. Numbere
 | `16_candidate_webpage.py` | Assemble the candidate data payloads (`candidate_payload_local.json`, `candidate_payload_public.json`) with spectra, light curves, geometry, plans and the September packet; writes JSON data only; no additional webpage. |
 | `51_observer_page.py` | Render the single observer page from those payloads in the dark night-sheet template: `docs/index.html`, the only observer webpage. |
 | `52_pool_csv.py` | Full-pool NGPS target lists per night (`observing/pool/`): every observable candidate with the adopted setting, roles and first start in the Note; reserves beyond primaries and backups. |
-| `53_october_observing_packet.py` | Reviewed October 14: joint 40+40 allocation with 14-minute default visits (2×300 s + 4-minute base overhead), 1.5″ / 2×3, full-visit Moon ≥40°, 23 feasible JWST targets and a protected P8544 repeat at 3×300 s / 20 minutes. `october_review.py` incorporates September timing and follow-up decisions plus the final proposal's history questions and dated brightness. Writes lists, matched backups, standards, coverage, change audit and plots; run `51` afterwards. |
+| `53_october_observing_packet.py` | Updated October 22: joint 40+40 allocation with 14-minute default visits (2×300 s + 4-minute base overhead), 1.5″ / 2×3, full-visit Moon ≥40°, 23 feasible JWST targets and a protected P8544 repeat at 3×300 s / 20 minutes. `october_review.py` incorporates September timing and follow-up decisions plus the final proposal's history questions and dated brightness. Writes lists, matched backups, standards, coverage, change audit and plots; run `51` afterwards. |
 | `40_september_observing_packet.py` | Build the September sequence packet: NGPS CSVs, backups, timing, README and run information (pages retired 2026-09-21; run `16` then `51` afterwards). `sep23_backups.py` selects up to two public quasar backups per primary, with strict Moon >40°, X <1.5 over the full matching exposure/overhead block, cached r <19, an accepted public spectrum and recalculated S/N ≥5. Literature/Zeltyn regions rank first; ETC results use a separate cache. |
 | `41_september_snr5_plan.py` | One instrument setting for all science targets (1.5″ slit, 2×3 binning, 2×300 s); ETC screen for continuum S/N≥5 per Å with airmass-scaled seeing and a moonlit-sky model per slot; integer-program order that maximises slot S/N (airmass, Moon distance, visibility); retains the 12 PI choices and two current fills through `user_selection.json` / `preserve_sequence`; fails if a locked visit no longer fits. |
 | `42_science_reselection.py` | Separate projected-parent inventory and dated evidence review; no protected primaries and no telescope-packet writes. |
@@ -54,3 +62,11 @@ Scripts `00`–`14` contain the original manifold, calibration, selection, and e
 The six historical shell drivers are archived under `archive/2026-09-20/legacy_drivers/`. They preserve the old workflow verbatim and have not been ported to this layout. `13c_window_manifold.py` also retains its original scratch-output convention; it is a research prototype, not an observing entry point.
 
 Audit corrections use shared `spectral_utils.py` for wavelength bin centers and reduction/reference selection. Legacy six-Angstrom caches are centered on read without modifying downloads; new parsers mark the centered grid. Script `12` ingests the current target catalog and supplies local NGPS overlays; EW screening never automatically classifies broad-line state. Script `31` uses nightly ZTF medians while long-term page plots remain weekly.
+
+`64_helou_targets.py` analyzes cached public optical images and catalogue matches
+for the five Helou proposal targets. It records 1.5″/3″ circular apertures and
+a 1.5×3″ rectangular extraction over sampled position angles, then calculates
+explicit NGPS ETC scenarios. The runtime SciPy spline compatibility adapter
+does not edit the downloaded ETC. Rebuild with `64`, `53`, then `51`.
+`october_additions.py` preserves the pre-addition queue, protects requested
+feasible H targets, and records replacements separately from the October 14 audit.

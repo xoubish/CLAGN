@@ -2,17 +2,18 @@
 
 The single [observer page](index.html) opens on **About**, followed by **Sep23-targets · Sep23-observed · Oct26 · Oct27**. About starts with the Palomar telescope photograph, followed by the complete available target manifold, a collapsible searchable catalogue and its CSV, then the science and observing notes. Each of the four night/history tabs contains one target-list CSV button, with uppercase headers.
 
-- **About:** the manifold shows all 198 targets with saved projections; the catalogue includes all 218 targets. Click a point or name to load one detailed card. The catalogue CSV uses default settings and is not an observing sequence.
+- **About:** the manifold shows all 199 targets with saved projections; the catalogue includes all 224 targets. Click a point or name to load one detailed card. The catalogue CSV uses default settings and is not an observing sequence.
 - **Sep23-targets:** the 14 planned science targets, with their original exposure settings. Standards and backup notes remain within the tab.
 - **Sep23-observed:** the 18 targets actually observed, in exposure order; the CSV is the actual observation log. Spectrum FITS downloads remain on the cards.
 - **Oct26 / Oct27:** 40 science targets per night, with one NGPS science CSV each. Standards and alternatives appear as notes rather than extra CSV buttons.
 
-The **October 14 review** retains 40 targets per night and adds P8544 on
-October 27 at 3×300 s. All other October
-targets use 2×300 s. Default visits now reserve 14 minutes; P8544 reserves 20.
-September timestamps show a 4.4-minute median overhead, leaving only about
-34/29 minutes spare after the two nightly standards. The page and exports
-include dated brightness, optical-state science questions and timing flags.
+The **October 22 update** retains 40 targets per night and all protected observations.
+H5MUSES-327 is scheduled on October 26. Four requested galaxies
+are scheduled; HUGC-03097 remains in the catalogue because the Moon blocks both
+nights. All six requested identities have H prefixes. HIRAS-F23290-1252 uses
+4×300 s, 26 minutes and X≤1.5; P8544 retains 3×300 s and 20 minutes. The other
+78 visits use 2×300 s and 14 minutes. Galaxy brightness is central optical
+aperture photometry, with explicitly approximate exposure scenarios on each card.
 
 The five dataset exports are in [targets/](targets/). Search filters the catalogue under About; its CSV always contains the full catalogue, and the manifold keeps all available target positions visible. All five tabs stay on the same webpage. Legacy `#all` and `#pool` links open About; target links still open the selected card.
 
@@ -28,6 +29,12 @@ queue-conflict check. Geometry uses a 30-second grid at Palomar.
 Selected targets use a J prefix on their existing names (for example JP9506).
 The page and CSV downloads use the same names; catalogue search also accepts
 the original aliases, and existing target links and spectral filenames remain valid.
+
+The October 22 addition **H5MUSES-327** is a requested comparison target in About,
+with its saved-model W1 projection, ZTF/WISE curves, SDSS imaging, October
+visibility and archive-review links. Gaia astrometry favors a stellar optical
+counterpart; its redshift and AGN identity are unconfirmed. It is scheduled on October 26. Its archive payload and the five galaxy reviews are loaded by
+`scripts/additional_targets.py` from the local `data/additional_targets/` cache.
 
 The orange **Sep23-observed · 18** tab ([direct view](index.html#observed)) shows the
 September 23 science targets in actual observing order, including backups. Each

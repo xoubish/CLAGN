@@ -20,6 +20,7 @@ from october_web import attach_october
 from observer_tabs import attach_tabs
 from observer_visibility import attach_visibility
 from observer_names import attach_names
+from additional_targets import attach_additional_targets
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT/'data/reselection_2026-09-20'
@@ -80,7 +81,7 @@ def prepare(payload, slots, public_plans=None, public_science=None, slit_preview
                 t['science'] = sci
     for i, t in enumerate(targets, 1):
         t['code'] = f'{i:03d}'
-        t['cut40'] = cut40(t['name'])
+        t['cut40'] = cut40(t['name']) or t.get('cut40')
         t['slit_preview'] = (slit_previews or {}).get(t['name'], {})
         t['sep23_slots'] = slots.get(t['name'], [])
         screen = t.get('neighbour_screen') or {}
@@ -97,6 +98,7 @@ def main():
     template = (ROOT/'web/observer_page_template.html').read_text()
     public_slots = sep23_slots(public=True)
     local = json.loads((OUT/'candidate_payload_local.json').read_text())
+    attach_additional_targets(local)
     observed=build_observed()
     slit_previews = {t['name']: previews(t, local['sep23_sequence']) for t in local['targets']}
     public_plans = {}
@@ -115,7 +117,8 @@ def main():
             keep.update({k: sci.get(k) for k in PUBLIC_SCIENCE_IF_PUBLIC_REFERENCE if k in sci})
         keep['reference_private'] = bool(sci.get('reference_private'))
         public_science[t['name']] = {k: (None if isinstance(v, float) and v != v else v) for k, v in keep.items()}
-    payload = prepare(json.loads((OUT/'candidate_payload_public.json').read_text()), public_slots, public_plans, public_science, slit_previews)
+    public = attach_additional_targets(json.loads((OUT/'candidate_payload_public.json').read_text()))
+    payload = prepare(public, public_slots, public_plans, public_science, slit_previews)
     add_observed(payload,observed,DEST_PUBLIC)
     attach_october(payload,False,{t['name'] for t in local['targets'] if not t.get('science',{}).get('reference_private')})
     attach_tabs(payload)

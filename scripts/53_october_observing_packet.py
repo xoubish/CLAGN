@@ -25,6 +25,9 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from october_review import apply_review, write_review, september_performance, REVIEW_DATE
+import october_additions
+
+REVIEW_DATE = october_additions.DATE
 
 ROOT = Path(__file__).resolve().parents[1]
 CACHE = ROOT / 'data/reselection_2026-09-20'
@@ -106,6 +109,7 @@ def load_targets():
     t['science_score'] = scores
     t['priority_reason'] = reasons
     t = apply_review(t)
+    t = october_additions.apply_additions(t)
     t.index.name = 'name'
     # Reject spatial aliases, including JWST catalogue names differing from pool names.
     coords = SkyCoord(t.ra.to_numpy()*u.deg, t.dec.to_numpy()*u.deg)
@@ -142,13 +146,14 @@ def geometry(targets):
             ix = slice(k*VISIT*2, (k+1)*VISIT*2+1)
             xmax, xmin, moonmin = x[:,ix].max(axis=1), x[:,ix].min(axis=1), sep[:,ix].min(axis=1)
             # Small numerical margin relative to final 20-second checks.
-            limits = np.where(targets.is_jwst, 1.999, 1.799)
+            limits = targets.airmass_limit.to_numpy()-.001
             ok = (xmin>=1)&(xmax<=limits)&(moonmin>=40.02)&targets.eligible_science.to_numpy()
             sid = len(slots)
             slots.append(dict(night=night,slot=k,start=local(times[k*VISIT*2]),end=local(times[(k+1)*VISIT*2])))
             for i in np.where(ok)[0]:
                 r = targets.iloc[i]
                 if r.protected_followup and night != 'oct27': continue
+                if r.requested_night and night != r.requested_night: continue
                 stop = k*VISIT*2 + int(r.visit_minutes*2)
                 if stop >= len(times): continue
                 full = slice(k*VISIT*2, stop+1)
@@ -184,6 +189,7 @@ def solve(targets, slots, edges, windows):
     matrix = lil_matrix((nt+ns+2,ne),dtype=float)
     costs=[]
     covered={e[0] for e in edges}
+    previous=october_additions.previous_names()
     for k,(i,s,x,m,xmean) in enumerate(edges):
         r=targets.iloc[i]
         matrix[i,k]=1
@@ -193,14 +199,15 @@ def solve(targets, slots, edges, windows):
         matrix[nt+ns+(slots[s]['night']=='oct27'),k]=1
         # Science evidence dominates; use airmass and Moon separation to place
         # a chosen object. No calibrated yield probability is claimed.
-        costs.append(-float(r.science_score)+12*(xmean-1)+20*max(0,x-1.5)-.015*min(m,100)+1e-7*k)
+        costs.append(-float(r.science_score)-10000*(targets.index[i] in previous)+12*(xmean-1)+20*max(0,x-1.5)-.015*min(m,100)+1e-7*k)
     lower=np.zeros(nt+ns+2); upper=np.ones(nt+ns+2)
     for i,r in enumerate(targets.itertuples()):
-        if (r.is_jwst or r.protected_followup) and i in covered: lower[i]=1
+        if (r.is_jwst or r.protected_followup or r.requested_addition) and i in covered: lower[i]=1
         if r.protected_followup: assert i in covered, 'Protected follow-up has no feasible slot'
+        if r.requested_addition: assert i in covered, f'Requested target has no feasible slot: {r.Index}'
     lower[-2:]=40;upper[-2:]=40
     result=milp(np.array(costs),integrality=np.ones(ne),bounds=Bounds(0,1),
-        constraints=LinearConstraint(matrix.tocsc(),lower,upper),options={'time_limit':120,'mip_rel_gap':.001})
+        constraints=LinearConstraint(matrix.tocsc(),lower,upper),options={'time_limit':120,'mip_rel_gap':.000001})
     if result.x is None: raise RuntimeError(f'No feasible 40+40 sequence: {result.message}')
     print('Optimizer:',result.message,'gap',getattr(result,'mip_gap',None),flush=True)
     chosen=[k for k,v in enumerate(result.x) if v>.5]
@@ -209,7 +216,7 @@ def solve(targets, slots, edges, windows):
         i,s,x,m,mean=edges[k]; slot=dict(slots[s]);r=targets.iloc[i].to_dict();name=targets.index[i]
         slot['end'] = slot['start'] + pd.Timedelta(minutes=int(r['visit_minutes']))
         exact=PACK.geometry(float(r['ra']),float(r['dec']),slot['start'],slot['end'])
-        assert exact['moon_min']>=40 and exact['airmass_max_actual']<=(2 if r['is_jwst'] else 1.8)
+        assert exact['moon_min']>=40 and exact['airmass_max_actual']<=r['airmass_limit']
         flags=[]
         if r['r_adopted']>=19:flags.append('JWST faint exception to r<19; assess 2x300 s in Quicklook and use slack for depth')
         if name in ['CLAGN_0987','CLAGN_0969'] or r['r_adopted']<15:flags.append('Resolved galaxy: photometric r is not nuclear slit brightness; check first exposure for saturation and host dilution')
@@ -219,8 +226,9 @@ def solve(targets, slots, edges, windows):
         snr=number(r.get('snr300_x1p3_sky18p5'),np.nan)
         if np.isfinite(snr) and snr<5:flags.append('Cached nominal Hbeta continuum S/N/A below 5; not a slot prediction')
         if not np.isfinite(snr):flags.append('No cached NGPS Hbeta ETC calculation')
+        if r['requested_addition']:flags.append('Requested addition; see archive review and exposure-scenario limitations')
         matching=windows[(windows.name==name)&(windows.night==slot['night'])&
-            (windows.airmass_limit==(2 if r['is_jwst'] else 1.8))]
+            (windows.airmass_limit==r['airmass_limit'])]
         matching=matching[(pd.to_datetime(matching.start_pdt,utc=True)<=slot['start'])&
                           (pd.to_datetime(matching.end_pdt,utc=True)>=slot['end'])]
         assert len(matching)==1,(name,slot)
@@ -232,7 +240,7 @@ def solve(targets, slots, edges, windows):
             science_question=r['science_question'],pool_role=r['pool_role'],protected_followup=r['protected_followup'],
             reference_date=r.get('reference_date'),optical_delta_r=r.get('ztf_r_change_after_reference'),
             ir_delta_w1=r.get('neowise_change_after_reference_mag'),nominal_snr_per_A=snr,
-            slit_arcsec=1.5,binspat=2,binspect=3,exposures=int(r['exposures']),seconds_each=300,overhead_minutes=int(r['overhead_minutes']),visit_minutes=int(r['visit_minutes']),
+            slit_arcsec=1.5,binspat=2,binspect=3,exposures=int(r['exposures']),seconds_each=300,overhead_minutes=int(r['overhead_minutes']),visit_minutes=int(r['visit_minutes']),airmass_limit=r['airmass_limit'],
             flags='; '.join(flags),**exact))
     df=pd.DataFrame(rows).sort_values(['night','start_pdt']).reset_index(drop=True)
     df.insert(0,'order',df.groupby('night').cumcount()+1)
@@ -244,7 +252,7 @@ def solve(targets, slots, edges, windows):
 
 def telescope_row(r, note):
     comment=f"{r['start_pdt'][11:16]} PDT; latest start {r['latest_start_pdt'][11:16]}; r={r['r_adopted']:.2f} ({r['brightness_source']}); Moon>={r['moon_min']:.1f}deg; X<={r['airmass_max_actual']:.2f}. {r['priority_reason']}. {r['science_question']}. {r['flags']}"
-    return PACK.ngps_row(r,dict(seconds_each=300,exposures=r['exposures'],airmass=2.0 if r['jwst_id'] else 1.8),SETTINGS,note,comment)
+    return PACK.ngps_row(r,dict(seconds_each=300,exposures=r['exposures'],airmass=r['airmass_limit']),SETTINGS,note,comment)
 
 
 def write_outputs(targets,jwst,df,slots,edges,meta,result,windows):
@@ -318,7 +326,7 @@ def write_outputs(targets,jwst,df,slots,edges,meta,result,windows):
         bx.scatter(d.airmass_max_actual,range(40),c=d.moon_min,cmap='viridis',vmin=40,vmax=130)
         bx.axvline(1.8,color='gray',linestyle=':');bx.set_xlim(1,2.05);bx.set_ylim(39.5,-.5)
         bx.set_yticks(range(40),[f"{m:.0f}°" for m in d.moon_min],fontsize=8);bx.yaxis.tick_right();bx.set_xlabel('Maximum visit airmass');bx.set_title('Right labels: minimum Moon separation',fontsize=8)
-        fig.suptitle(f"{meta[night]['date']}: 40 targets · normally 2×300 s + 4 min · P8544: 3×300 s + 5 min\n{meta[night]['remaining_minutes']:.0f} min spare after 20 min standards; all Moon separations ≥40°",fontsize=12)
+        fig.suptitle(f"{meta[night]['date']}: 40 targets · normally 2×300 s + 4 min · P8544: 3×300 s; HIRAS-F23290-1252: 4×300 s\n{meta[night]['remaining_minutes']:.0f} min spare after 20 min standards; all Moon separations ≥40°",fontsize=12)
         fig.tight_layout(rect=(0,0,1,.955))
         for ext in ['png','pdf']:fig.savefig(DEST/f'{night}_schedule.{ext}',dpi=160)
         plt.close(fig)
@@ -346,6 +354,7 @@ def write_outputs(targets,jwst,df,slots,edges,meta,result,windows):
     audit=pd.DataFrame(audit);write_csv(audit,DEST/'jwst_coverage.csv')
     assert (audit.scheduled_night.ne('')|audit.observed_sep23).all()
     performance=write_review(DEST,targets,df,windows,write_csv)
+    october_additions.write_audit(targets,df,write_csv)
     summary=dict(review_date=REVIEW_DATE,september_performance=performance,
         settings={**SETTINGS,'exposures':2,'seconds_each':300,'overhead_minutes':4,'visit_minutes':14,
         'moon_min_deg':40,'airmass_normal_max':1.8,'airmass_jwst_max':2,'preferred_airmass_max':1.5},nights=meta,
@@ -353,18 +362,20 @@ def write_outputs(targets,jwst,df,slots,edges,meta,result,windows):
         jwst_september_only=audit.loc[audit.scheduled_night.eq(''),'name'].tolist(),
         jwst_repeats=df.loc[df.observed_sep23 & df.jwst_id.ne(''),'name'].tolist(),
         september_followups=df.loc[df.protected_followup,'name'].tolist(),
+        requested_additions=df.loc[df.name.str.startswith('H'),'name'].tolist(),
         fainter_than_r19=df.loc[df.r_adopted.ge(19),['name','r_adopted']].to_dict('records'),
         minimum_moon_deg=float(df.moon_min.min()),maximum_airmass=float(df.airmass_max_actual.max()),
         optimizer_message=result.message,optimizer_gap=float(result.mip_gap),
         geometry='Astropy builtin ephemeris; topocentric unrefracted AltAz; 30s placement, 20s final visit checks; bundled IERS extrapolation',
-        scope='Best feasible allocation of the prepared 202-object pool plus 24 authoritative JWST targets; not a complete new parent-catalogue search',
+        scope='Prepared pool plus authoritative JWST targets and six requested H identities; preserve prior membership where feasible; not a complete parent-catalogue search',
         inputs={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in [
             CACHE/'compact_review_objects.csv',CACHE/'three_night_review/science_and_sensitivity.csv',ROOT/'jwst_proposal/inputs/jwst_sample_cycle6.csv',
             ROOT/'jwst_proposal/proposal.tex',ROOT/'jwst_proposal/review/sample_reassessment/current_target_assessment.csv',
             ROOT/'jwst_proposal/review/history_audit/binned_measurements.csv',
             ROOT/'sep23_data/reduction_20260924/audit/raw_frames.csv',ROOT/'sep23_data/reduction_20260924/products_p330e/target_summary.csv',
             ROOT/'sep23_data/reduction_20260924/science_review/README.md',ROOT/'scripts/october_review.py',
-            ROOT/'scripts/53_october_observing_packet.py']})
+            ROOT/'scripts/53_october_observing_packet.py',ROOT/'scripts/october_additions.py',ROOT/'scripts/64_helou_targets.py',
+            ROOT/'data/additional_targets/helou_review/feasibility.csv',ROOT/'data/additional_targets/helou_review/targets.json']})
     (DEST/'validation.json').write_text(json.dumps(summary,indent=2)+'\n')
     return audit,summary
 
@@ -380,13 +391,13 @@ def report(df,audit,summary):
     changes=decisions[decisions.decision.isin(['added','removed'])]
     text=f'''# October 26–27, 2026: reviewed Palomar / NGPS queue
 
-Reviewed 2026-10-14 against the September reductions, raw timestamps, current `proposal.tex`, authoritative 24-target sample, and later history reassessment. [Observer page](../../docs/index.html#oct26). Dates label the PDT evening; UTC observations fall on October 27/28. Telescope upload is still a separate action.
+Updated 2026-10-22 with the [requested H-target additions](H_target_additions.md). The original October 14 review was against the September reductions, raw timestamps, current `proposal.tex`, authoritative 24-target sample, and later history reassessment. [Observer page](../../docs/index.html#oct26). Dates label the PDT evening; UTC observations fall on October 27/28. Telescope upload is still a separate action.
 
 ## Decision
 
-Keep **40 science targets per night**, as requested on October 14. Protect all 23 geometrically feasible JWST objects and add **P8544 on October 27 at 3×300 s** to test the September weakening lead at the same integration depth. The other 79 October visits use **2×300 s**. All use a 1.5″ slit, 2×3 spatial×spectral binning and parallactic angle. No object is duplicated across the October nights.
+Keep **40 science targets per night**, as requested on October 14. Protect all 23 geometrically feasible JWST objects and add **P8544 on October 27 at 3×300 s** to test the September weakening lead at the same integration depth. HIRAS-F23290-1252 uses **4×300 s** in a 26-minute block at X≤1.5; the other 78 October visits use **2×300 s**. All use a 1.5″ slit, 2×3 spatial×spectral binning and parallactic angle. No object is duplicated across the October nights.
 
-The default block is now **14 minutes: 10 minutes integration + 4 minutes overhead**. P8544 reserves 20 minutes (15 + 5). Four minutes is a base planning allowance, slightly below the measured median; the remaining gaps must absorb the difference, acquisition delays and any extra depth. This is an aggressive 40-target programme, not a promise that all targets will finish in poorer conditions.
+The default block is now **14 minutes: 10 minutes integration + 4 minutes overhead**. P8544 reserves 20 minutes (15 + 5), and HIRAS-F23290-1252 reserves 26 minutes (20 + 6). Four minutes is a base planning allowance, slightly below the measured median; the remaining gaps must absorb the difference, acquisition delays and any extra depth. This is an aggressive 40-target programme, not a promise that all targets will finish in poorer conditions.
 
 | Evening | Astronomical dark (PDT) | Science targets | JWST | Spare after standards | Moon illumination |
 | --- | --- | ---: | ---: | ---: | ---: |
@@ -427,7 +438,7 @@ The eight candidate replacements from the later modelling exercise remain [devel
 
 [All 80](all_80_targets.csv) · [JWST coverage](jwst_coverage.csv) · [visibility windows](visibility_windows.csv) · [free intervals](free_time.csv) · [slot backups](slot_backups.csv) · [validation and input hashes](validation.json).
 
-NGPS CSVs encode settings and order, not absolute starts or gaps. Follow the sequence times and `latest_start_pdt`; advancing a rising/Moon-limited object can violate a constraint. Spare time is fragmented and is not all available at dawn. When late, drop the lowest-priority ordinary target that no longer fits before sacrificing a protected JWST visit or P8544 depth. Backups are replacements for their listed slot, not additional targets; skip any already used. A backup does not satisfy a displaced JWST or P8544 observation. Coordinate-only files are headerless.
+NGPS CSVs encode settings and order, not absolute starts or gaps. Follow the sequence times and `latest_start_pdt`; advancing a rising/Moon-limited object can violate a constraint. Spare time is fragmented and is not all available at dawn. When late, drop the lowest-priority ordinary target that no longer fits before sacrificing a protected JWST visit or P8544 / HIRAS-F23290-1252 depth. Backups are replacements for their listed slot, not additional targets; skip any already used. A backup does not satisfy a displaced protected JWST, P8544 or requested H observation. Coordinate-only files are headerless.
 
 ## Calibration, brightness and limits
 
@@ -448,6 +459,7 @@ Rebuild with `/opt/anaconda3/bin/python scripts/53_october_observing_packet.py`,
 
 if __name__=='__main__':
     DEST.mkdir(parents=True,exist_ok=True)
+    october_additions.snapshot()
     snapshot=DEST/'before_review_20261014.csv'
     if not snapshot.exists():
         previous=DEST/'all_80_targets.csv'

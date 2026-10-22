@@ -72,3 +72,14 @@ independently at 20-second cadence in `tests/test_observer_visibility.py`.
 `scripts/observer_names.py` applies selected J-prefixed display names and CSV
 identities after geometry generation. Internal keys, old deep links and spectral
 asset filenames stay stable; both name forms are searchable in About.
+
+`scripts/additional_targets.py` attaches explicitly requested archive-review
+targets before catalogue and slit-preview generation. These additions survive
+candidate-payload rebuilds without entering the automatic selection or nightly
+queues by that loader alone. `scripts/october_additions.py` explicitly schedules the October 22 additions, including the 4×300 s IRAS visit. `scripts/63_5muses327.py` acquires and prepares H5MUSES-327, including its
+identity caveat, unknown redshift, full-visit visibility and public archive links.
+
+`scripts/64_helou_targets.py` prepares five H-prefixed proposal galaxies with
+Legacy Survey acquisition images, central-aperture brightness, ETC scenarios
+and full-visit geometry. Missing projections are shown as unavailable. Image
+captions use their actual survey rather than labeling all cutouts SDSS.

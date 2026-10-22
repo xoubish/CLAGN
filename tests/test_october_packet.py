@@ -46,12 +46,17 @@ class OctoberPacketTests(unittest.TestCase):
         followup=q[q.name=='P8544'].iloc[0]
         self.assertEqual(followup.night,'oct27')
         self.assertEqual((followup.exposures,followup.visit_minutes),(3,20))
+        deeper=q[q.name=='HIRAS-F23290-1252'].iloc[0]
+        self.assertEqual((deeper.exposures,deeper.visit_minutes,deeper.airmass_limit),(4,26,1.5))
+        self.assertEqual(q[q.name=='H5MUSES-327'].iloc[0].night,'oct26')
+        self.assertNotIn('HUGC-03097',set(q.name))
+        self.assertTrue({'HNGC-1377','HIC-1953','HNGC-0814'}.issubset(set(q.name)))
         windows=packet_csv('visibility_windows.csv')
         for name in set(audit.name)-set(q.name):
             self.assertFalse((windows.name==name).any())
         for col,v in [('seconds_each',300),('slit_arcsec',1.5),('binspat',2),('binspect',3)]:
             self.assertTrue(q[col].eq(v).all(),col)
-        normal=q[q.name!='P8544']
+        normal=q[~q.name.isin(['P8544','HIRAS-F23290-1252'])]
         self.assertTrue(normal.exposures.eq(2).all())
         self.assertTrue(normal.visit_minutes.eq(14).all())
         self.assertTrue((q.exposures*q.seconds_each/60+q.overhead_minutes).eq(q.visit_minutes).all())
@@ -82,7 +87,7 @@ class OctoberPacketTests(unittest.TestCase):
                 rows=list(csv.DictReader(f))
             q=self.queue[self.queue.night==night]
             self.assertEqual([r['NAME'] for r in rows],q.name.tolist())
-            self.assertTrue(all(r['EXPTIME']=='SET 300' and r['NEXP']==('3' if r['NAME']=='P8544' else '2') and r['SLITWIDTH']=='SET 1.5' and r['BINSPAT']=='2' and r['BINSPECT']=='3' for r in rows))
+            self.assertTrue(all(r['EXPTIME']=='SET 300' and r['NEXP']==({'P8544':'3','HIRAS-F23290-1252':'4'}.get(r['NAME'],'2')) and r['SLITWIDTH']=='SET 1.5' and r['BINSPAT']=='2' and r['BINSPECT']=='3' for r in rows))
             for upload,r in zip(rows,q.itertuples()):
                 coord=SkyCoord(upload['RA'],upload['DECL'],unit=(u.hourangle,u.deg))
                 original=SkyCoord(r.ra*u.deg,r.dec*u.deg)
@@ -97,7 +102,7 @@ class OctoberPacketTests(unittest.TestCase):
                     aa=coord.transform_to(AltAz(obstime=times,location=location,pressure=0*u.hPa))
                 self.assertGreaterEqual(separation.min(),40,r.name)
                 self.assertTrue(np.all(aa.alt.deg>0),r.name)
-                self.assertLessEqual(aa.secz.max().value,2 if r.jwst_id else 1.8,r.name)
+                self.assertLessEqual(aa.secz.max().value,float(upload['AIRMASS_MAX']),r.name)
                 self.assertAlmostEqual(separation.min(),r.moon_min,places=2)
 
     def test_backups_are_distinct_from_primaries_and_fit_slots(self):

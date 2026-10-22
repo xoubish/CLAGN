@@ -56,3 +56,30 @@ assert.equal((element('table').innerHTML.match(/data-catalog-target=/g)||[]).len
 assert(element('table').innerHTML.includes('>JP9694</a>'));
 assert(element('cards').innerHTML.includes('id="card-P9694"') || element('cards').innerHTML==='');
 console.log('PASS: three visibility charts and both original and prefixed name search.');
+
+// Optional local archive additions must render with unknown redshift/spectra.
+if(evaluate("D.targets.some(t=>t.name==='H5MUSES-327')")){
+  context.revealTarget('H5MUSES-327');
+  assert(element('cards').innerHTML.includes('id="card-H5MUSES-327"'));
+  assert(element('cards').innerHTML.includes('Archive review'));
+  assert(element('cards').innerHTML.includes('stellar'));
+  assert(!element('cards').innerHTML.includes('NaN'));
+  assert(element('bigmap').innerHTML.includes('data-name="H5MUSES-327"'));
+  evaluate("state.q='5muses';refresh()");
+  assert.equal((element('table').innerHTML.match(/data-catalog-target=/g)||[]).length,1);
+  console.log('PASS: requested target, unknown redshift, archive review, manifold marker and search.');
+}
+
+if(evaluate("D.targets.some(t=>t.name==='HUGC-03097')")){
+  for(const name of ['HNGC-1377','HIC-1953','HUGC-03097','HIRAS-F23290-1252','HNGC-0814']){
+    context.revealTarget(name);
+    assert(element('cards').innerHTML.includes(`id="card-${name}"`));
+    assert(element('cards').innerHTML.includes('Legacy Surveys'));
+    assert(element('cards').innerHTML.includes('No saved W1 projection'));
+    assert(!element('cards').innerHTML.includes('NaN'));
+  }
+  context.revealTarget('HUGC-03097');
+  assert(element('cards').innerHTML.includes('No Moon-safe window'));
+  assert(!evaluate("D.october.rows.some(r=>r.name==='HUGC-03097')"));
+  console.log('PASS: five proposal cards, unavailable projections, actual image surveys and Moon-blocked target.');
+}

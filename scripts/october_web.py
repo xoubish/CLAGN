@@ -36,7 +36,7 @@ def attach_october(payload,private,public_reference_names):
         'ra','dec','z','observed_sep23','r_adopted',
         'brightness_source','brightness_epoch','pool_role','slit_arcsec','binspat','binspect',
         'exposures','seconds_each','overhead_minutes','visit_minutes','protected_followup','airmass_start',
-        'airmass_end','airmass_max_actual','moon_min']
+        'airmass_end','airmass_max_actual','moon_min','airmass_limit']
     if not private:
         # The requested operational identities/settings are shown for all 80.
         # Reference-dependent measurements retain the existing local-only boundary.

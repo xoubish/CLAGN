@@ -53,7 +53,7 @@ class ObserverTabTests(unittest.TestCase):
         page=(ROOT/'docs/index.html').read_text()
         # Random base64 image bytes are not text or metadata.
         page=re.sub(r'data:[^;]+;base64,[A-Za-z0-9+/=]+','data:omitted',page)
-        self.assertNotRegex(page.lower(),r'jwst|miri|proposal')
+        self.assertIsNone(re.search(r'jwst|miri|proposal',page.lower()),'Proposal metadata leaked into public page')
         self.assertFalse((ROOT/'docs/october/jwst_coverage.csv').exists())
         self.assertNotRegex((ROOT/'docs/README.md').read_text().lower(),r'jwst|miri|proposal')
         for directory in ['october','targets']:
@@ -82,11 +82,11 @@ class ObserverTabTests(unittest.TestCase):
         for night in ['oct26','oct27']:
             rows=self.rows(night)
             self.assertEqual(len(rows),40)
-            self.assertTrue(all(r['NEXP']==('3' if r['NAME']=='P8544' else '2') and r['EXPTIME']=='SET 300' for r in rows))
+            self.assertTrue(all(r['NEXP']==({'P8544':'3','HIRAS-F23290-1252':'4'}.get(r['NAME'],'2')) and r['EXPTIME']=='SET 300' for r in rows))
 
     def test_review_and_public_downloads_match_packet(self):
         october=self.data['october']
-        self.assertEqual(october['review_date'],'2026-10-14')
+        self.assertEqual(october['review_date'],'2026-10-22')
         self.assertAlmostEqual(october['september_performance']['median_overhead_minutes'],4.4083664,places=5)
         rows=october['rows']
         for night in ['oct26','oct27']:

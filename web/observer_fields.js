@@ -1,7 +1,7 @@
 // SDSS images are north up / east left. SVG coordinates below are arcseconds.
 // A positive sky PA therefore requires a NEGATIVE SVG rotation.
 const fieldState={target:null,night:null,size:'30',sample:0,showSlit:true};
-function fieldNight(t){return state.night==='all'?nightsOf(t)[0]:state.night;}
+function fieldNight(t){return state.night==='all'?(nightsOf(t)[0]||t.nights?.[0]?.night):state.night;}
 function fieldSample(t,k){const p=t.slit_preview?.[k];return p?.samples[p.default_index];}
 function fieldCaption(t,k,sample=fieldSample(t,k)){
   if(!sample)return 'No observable PA preview available';
@@ -13,7 +13,7 @@ function fieldSvg(t,size,k,sample=fieldSample(t,k),showSlit=true){
   const sourceSize=wide?Number(t.cut?.field_arcsec):40;
   if(!src||!Number.isFinite(sourceSize)||sourceSize<=0)return '<div class="empty">No scaled cutout available.</div>';
   const fov=wide?sourceSize:Number(size),h=fov/2,pa=sample?.[1];
-  const caption=`${t.name}, ${fov} arcsecond SDSS field. North up, east left. ${fieldCaption(t,k,sample)}`;
+  const caption=`${t.name}, ${fov} arcsecond ${t.cut?.source||'SDSS'} field. North up, east left. ${fieldCaption(t,k,sample)}`;
   let svg=`<svg class="cutout field-svg" viewBox="${-h} ${-h} ${fov} ${fov}" role="img" aria-label="${esc(caption)}" style="overflow:hidden"><image href="${src}" x="${-sourceSize/2}" y="${-sourceSize/2}" width="${sourceSize}" height="${sourceSize}"/>`;
   if(showSlit&&Number.isFinite(pa))svg+=`<rect class="slit-footprint" x="-0.75" y="-30" width="1.5" height="60" transform="rotate(${-pa})" fill="none" stroke="#ffd480" stroke-width="1" vector-effect="non-scaling-stroke"><title>1.5″ × 60″ slit, centered on catalogue coordinates; PA ${fmt(pa,1)}° east of north</title></rect>`;
   // Compass and scale have their own pixel-like frame so they stay legible.
@@ -23,7 +23,7 @@ function fieldSvg(t,size,k,sample=fieldSample(t,k),showSlit=true){
 }
 function fieldCard(t){
   const k=fieldNight(t),size=t.cut40?'30':'wide',fov=t.cut40?30:t.cut?.field_arcsec;
-  return `<h3>SDSS · ${fov??'—'}″ × ${fov??'—'}″</h3><div><button class="field-button" data-field="${esc(t.name)}" data-size="${size}" aria-label="Enlarge field and inspect slit for ${esc(t.name)}">${fieldSvg(t,size,k)}</button><p class="plot-note"><span style="color:#ffd480">1.5″ slit</span> · North up · east left<br>${esc(fieldCaption(t,k))}</p><button class="small" data-field="${esc(t.name)}" data-size="${size}">Inspect slit / change time</button>${t.cut?.image?` <button class="small" data-field="${esc(t.name)}" data-size="wide">Wider field (${t.cut.field_arcsec}″)</button>`:''}</div>`;
+  return `<h3>${esc(t.cut?.source||'SDSS')} · ${fov??'—'}″ × ${fov??'—'}″</h3><div><button class="field-button" data-field="${esc(t.name)}" data-size="${size}" aria-label="Enlarge field and inspect slit for ${esc(t.name)}">${fieldSvg(t,size,k)}</button><p class="plot-note"><span style="color:#ffd480">1.5″ slit</span> · North up · east left<br>${esc(fieldCaption(t,k))}</p><button class="small" data-field="${esc(t.name)}" data-size="${size}">Inspect slit / change time</button>${t.cut?.image?` <button class="small" data-field="${esc(t.name)}" data-size="wide">Wider field (${t.cut.field_arcsec}″)</button>`:''}</div>`;
 }
 function renderField(){
   const t=fieldState.target,k=fieldState.night,p=t.slit_preview?.[k],sample=p?.samples[fieldState.sample];
