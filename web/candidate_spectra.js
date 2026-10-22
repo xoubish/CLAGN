@@ -46,13 +46,26 @@ function specPanel(t) {
   const dates=new Set(epochs.map(e=>e.epoch_day).filter(d=>d!=null));
   const missing=t.epochs.filter(e=>!e.file_available).length;
   let summary=`<p class="small spectrum-count"><b>${selected.length} of ${epochs.length} available spectra shown</b> · ${dates.size} dates with files · ${t.n_spec} dates identified.</p>`;
+  if(t.optical_archive_status)summary+=`<p class="small muted">${esc(t.optical_archive_status)}</p>`;
+  const undated=epochs.filter(e=>e.epoch_day==null).length;
+  if(undated)summary+=`<p class="small muted">${undated} spectra have unverified observing dates and are excluded from date counts.</p>`;
   if(missing)summary+=`<p class="small muted">${missing} identified ${missing===1?'date has':'dates have'} no spectrum file loaded yet.</p>`;
   if(!epochs.length)return summary+'<div class="empty">No spectrum files loaded for this source yet.</div>';
   let controls=`<div class="spectrum-actions"><button data-spec-action="all">Show all</button><button data-spec-action="ends">First &amp; last</button><button data-spec-action="none">Clear</button>${epochs.some(e=>e.instrument==='NGPS')?'<button data-spec-action="ngps">NGPS only</button>':''}</div><div class="spectrum-choices">`;
   controls+=epochs.map((e,i)=>`<label title="${esc([e.quality_note,e.coadd?'Combined spectrum; date may represent an observing interval.':''].filter(Boolean).join(' '))}"><input type="checkbox" data-spectrum-index="${i}" ${selected.includes(i)?'checked':''}><i style="background:${epochColor(t,i)}"></i><span>${esc(e.label)}</span>${e.quality_flag?'<span class="quality-flag">check quality</span>':''}</label>`).join('')+'</div>';
   if(hasNgps)controls+=`<div class="controls"><label>NGPS overlay smoothing <select data-ngps-smoothing>${[[0,'Off · native'],[3,'Light · 3 Å'],[6,'Moderate · 6 Å'],[10,'Stronger · 10 Å']].map(([v,label])=>`<option value="${v}" ${v===fwhm?'selected':''}>${label}</option>`).join('')}</select></label><span class="plot-note">${comparing&&fwhm?`Gaussian FWHM ${fwhm} Å · display only; not an exact resolution match.`:'Native NGPS spectrum; smoothing applies only when overlaid with archival spectra.'}</span></div>`;
   if(!selected.length)return summary+controls+'<div class="empty">Select a date to plot its spectrum.</div>';
-  const traces=selected.map(i=>({i,e:comparing&&epochs[i].instrument==='NGPS'?smoothNgpsEpoch(epochs[i],fwhm):epochs[i]}));
+  const relative=selected.some(i=>epochs[i].flux_unit==='relative');
+  const traces=selected.map(i=>{
+    let e=comparing&&epochs[i].instrument==='NGPS'?smoothNgpsEpoch(epochs[i],fwhm):epochs[i];
+    if(relative){
+      const finite=e.flux.filter(Number.isFinite).sort((a,b)=>a-b),median=finite[Math.floor(finite.length/2)];
+      const scale=median>0?median:1;
+      e={...e,flux:e.flux.map(f=>Number.isFinite(f)?f/scale:null)};
+    }
+    return {i,e};
+  });
+  if(relative)summary+='<p class="plot-note">At least one selected spectrum lacks absolute calibration. All selected spectra are divided by their own median for shape comparison; these curves cannot measure flux variability.</p>';
   const values=traces.flatMap(({e})=>e.flux.filter(Number.isFinite)).sort((a,b)=>a-b);
   const waves=traces.flatMap(({e})=>[e.wave[0],e.wave[e.wave.length-1]]);
   if(!values.length)return summary+controls+'<div class="empty">The selected spectra have no finite flux values.</div>';
@@ -72,7 +85,7 @@ function specPanel(t) {
   for(const {i,e} of traces){let path='',pen=false;e.flux.forEach((f,k)=>{if(!Number.isFinite(f)||!Number.isFinite(e.wave[k])){pen=false;return}path+=`${pen?'L':'M'}${X(e.wave[k]).toFixed(1)},${Y(f).toFixed(1)}`;pen=true});svg+=`<path data-epoch-trace="${i}" d="${path}" fill="none" stroke="${epochColor(t,i)}" stroke-width="1.15" opacity="${selected.length>8?.65:.9}"><title>${esc(e.label)}</title></path>`}
   svg+='</g>';
   niceTicks(x0,x1,7).forEach(v=>{svg+=`<text x="${X(v)}" y="${H-B+17}" text-anchor="middle">${v}</text>`});
-  svg+=`<text x="${W-R}" y="${H-3}" text-anchor="end">Observed wavelength (Å)</text><text x="${L+8}" y="${T+15}">Fλ · 10⁻¹⁷ erg s⁻¹ cm⁻² Å⁻¹</text></svg>`;
+  svg+=`<text x="${W-R}" y="${H-3}" text-anchor="end">Observed wavelength (Å)</text><text x="${L+8}" y="${T+15}">${relative?'Flux / own median (relative)':'Fλ · 10⁻¹⁷ erg s⁻¹ cm⁻² Å⁻¹'}</text></svg>`;
   return summary+controls+svg+'<p class="plot-note">Dates are UTC observing dates; exact exposure times are not available for every combined spectrum. Date labels do not imply that spectra have been matched in aperture or flux calibration.</p>';
 }
 function redrawSpectra(name=state.selected) {

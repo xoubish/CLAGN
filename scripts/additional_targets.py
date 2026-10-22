@@ -9,6 +9,14 @@ def attach_additional_targets(payload):
     targets = {t['name']: t for t in payload['targets']}
     for path in sorted((ROOT/'data/additional_targets').glob('*/target_payload.json')):
         target = json.loads(path.read_text())
+        archive_path = path.with_name('archive_payload.json')
+        if archive_path.exists():
+            archive = json.loads(archive_path.read_text())
+            review = target.setdefault('archive_review', {})
+            review['summary'] = archive.pop('archive_summary') + ' ' + review.get('summary', '')
+            review['note'] = archive.pop('archive_note') + ' ' + review.get('note', '')
+            review.setdefault('sources', []).extend(archive.pop('archive_sources'))
+            target.update(archive)
         name = target['name']
         if name in targets:
             raise ValueError(f'Additional target duplicates an existing identity: {name}')

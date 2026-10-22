@@ -83,3 +83,29 @@ if(evaluate("D.targets.some(t=>t.name==='HUGC-03097')")){
   assert(!evaluate("D.october.rows.some(r=>r.name==='HUGC-03097')"));
   console.log('PASS: five proposal cards, unavailable projections, actual image surveys and Moon-blocked target.');
 }
+
+if(evaluate("D.targets.some(t=>t.name==='HNGC-1377'&&t.ztf_archive_matches)")){
+  for(const name of ['HNGC-1377','HIC-1953','HUGC-03097','HIRAS-F23290-1252','HNGC-0814']){
+    const t=JSON.parse(evaluate(`JSON.stringify(D.targets.find(t=>t.name==='${name}'))`));
+    assert(t.ztf.g.length>0&&t.ztf.r.length>0);
+    assert(Object.values(t.ztf_archive_matches).every(m=>m.separation_arcsec<=2));
+    assert(t.archive_review.note.includes('intrinsic variability has not been established'));
+  }
+  context.revealTarget('HIRAS-F23290-1252');
+  assert(element('cards').innerHTML.includes('was rejected'));
+  assert.equal(evaluate("D.targets.find(t=>t.name==='HIRAS-F23290-1252').spec"),null);
+  context.revealTarget('HNGC-1377');
+  assert(element('cards').innerHTML.includes('Flux / own median (relative)'));
+  assert(element('cards').innerHTML.includes('unverified observing dates'));
+  assert(!element('cards').innerHTML.includes('NaN'));
+  evaluate("spectralSelection.set('HNGC-1377',new Set([1]))");
+  const calibrated=evaluate("specPanel(D.targets.find(t=>t.name==='HNGC-1377'))");
+  assert(calibrated.includes('10⁻¹⁷ erg'));
+  assert(!calibrated.includes('Flux / own median'));
+  const sdss=JSON.parse(evaluate("JSON.stringify(D.targets.find(t=>t.name==='HNGC-0814'))"));
+  assert.equal(sdss.n_spec,1);
+  assert.equal(sdss.spec.epochs.length,1);
+  assert.equal(sdss.spec.epochs[0].date,'2024-12-08');
+  assert(Math.abs(sdss.spec.epochs[0].meta.z-sdss.z)<.001);
+  console.log('PASS: ZTF matches, rejected DESI neighbor, honest spectral dates, relative/physical units and SDSS-V association.');
+}
