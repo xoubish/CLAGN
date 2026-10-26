@@ -94,11 +94,19 @@ class OctoberPacketTests(unittest.TestCase):
         self.assertLess(r['airmass_max_actual'],1.15)
         self.assertGreater(r['moon_min'],84)
         self.assertEqual(r['max_exposure_seconds'],10)
-        self.assertIn('Exact duration unset',r['exposure_status'])
+        self.assertEqual(r['seconds_each'],1)
         self.assertIn('prioritize a usable spectrum of C',r['science_priority'])
         upload=packet_csv('oct26_ngps.csv')
-        self.assertNotIn(r['name'],set(upload.name))
-        self.assertIn('PAUSE',upload[upload.name=='H5MUSES-327'].iloc[0]['comment'])
+        self.assertEqual(len(upload),41)
+        self.assertEqual(upload.iloc[2]['name'],r['upload_name'])
+        target=upload.iloc[2]
+        self.assertEqual(target.exptime,'SET 1')
+        self.assertEqual(target.nexp,1)
+        self.assertEqual(float(target.slitangle),133.04)
+        coord=SkyCoord(target.RA if 'RA' in target else target.ra,target.decl,unit=(u.hourangle,u.deg))
+        self.assertLess(coord.separation(SkyCoord(r['ra']*u.deg,r['dec']*u.deg)).arcsec,.02)
+        self.assertFalse(upload['comment'].fillna('').str.contains('PAUSE|exposure unset').any())
+        self.assertEqual([int(n.split()[0]) for n in upload.note],list(range(1,42)))
         moved=self.queue[self.queue.name=='P6677'].iloc[0]
         self.assertEqual(moved.start_pdt,'2026-10-27T00:57:00-07:00')
 
@@ -107,6 +115,7 @@ class OctoberPacketTests(unittest.TestCase):
         for night in ['oct26','oct27']:
             with (PACKET/f'{night}_ngps.csv').open() as f:
                 rows=list(csv.DictReader(f))
+            rows=[r for r in rows if r['NAME'] not in {m['upload_name'] for m in self.validation.get('manual_visits',[])}]
             q=self.queue[self.queue.night==night]
             self.assertEqual([r['NAME'] for r in rows],q.name.tolist())
             self.assertTrue(all(r['EXPTIME']=='SET 300' and r['NEXP']==({'P8544':'3','HIRAS-F23290-1252':'4'}.get(r['NAME'],'2')) and r['SLITWIDTH']=='SET 1.5' and r['BINSPAT']=='2' and r['BINSPECT']=='3' for r in rows))

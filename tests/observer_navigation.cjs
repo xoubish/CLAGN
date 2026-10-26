@@ -60,15 +60,15 @@ console.log('PASS: three visibility charts and both original and prefixed name s
 
 if(evaluate("(D.october.manual_visits||[]).length")){
   context.setView('oct26');
-  assert(element('october').innerHTML.includes('data-manual-visit="Z16 Cyg A/B/C"'));
-  assert(element('october').innerHTML.includes('not included in the executable NGPS CSV'));
-  assert(element('october').innerHTML.includes('20:03–20:17'));
-  assert(evaluate("D.visibility.oct26.standards.some(r=>r.name==='Z16 Cyg A/B/C'&&r.kind==='manual visit')"));
+  assert(!element('october').innerHTML.includes('data-manual-visit='));
+  assert(!element('october').innerHTML.includes('not included in the executable NGPS CSV'));
+  assert(evaluate("D.visibility.oct26.standards.every(r=>r.name!=='Z16 Cyg A/B/C')"));
   assert.equal(evaluate("D.visibility.oct26.rows[2].name"),'Z16 Cyg A/B/C');
   assert(element('october').innerHTML.includes('data-october-target="Z16 Cyg A/B/C"'));
-  assert(element('october').innerHTML.includes('≤10 s each'));
-  assert(evaluate("D.files['oct26_ngps.csv'].includes('PAUSE after this visit')"));
-  console.log('PASS: reserved manual acquisition, explicit exposure warning, pause note and blocked visibility interval.');
+  assert(element('october').innerHTML.includes('1 × 1 s'));
+  assert(evaluate("D.files['oct26_ngps.csv'].includes('Z16CygABC')"));
+  assert(!evaluate("D.files['oct26_ngps.csv'].includes('PAUSE')"));
+  console.log('PASS: Z16 Cyg is an ordinary ordered row with short exposure and no pause instructions.');
 }
 
 // Optional local archive additions must render with unknown redshift/spectra.

@@ -3,7 +3,7 @@ import csv
 import io
 import json
 from pathlib import Path
-from october_manual import pause_note
+from october_manual import pause_note, sequence_rows
 
 ROOT=Path(__file__).resolve().parents[1]
 PACKET=ROOT/'observing/oct26_27_2026'
@@ -33,6 +33,9 @@ def csv_table(rows):
 def attach_october(payload,private,public_reference_names):
     if not (PACKET/'validation.json').exists():return
     rows=read_table('all_80_targets.csv')
+    summary=json.loads((PACKET/'validation.json').read_text())
+    manual=summary.get('manual_visits',[])
+    supplemental={r['upload_name']:r for r in manual}
     safe_columns=['order','name','night','start_pdt','end_pdt','start_utc','latest_start_pdt',
         'ra','dec','z','observed_sep23','r_adopted',
         'brightness_source','brightness_epoch','pool_role','slit_arcsec','binspat','binspect',
@@ -70,16 +73,17 @@ def attach_october(payload,private,public_reference_names):
     files['slot_backups.csv']=csv_table(backups)
     for night in ['oct26','oct27']:
         selected=[r for r in rows if r['night']==night]
-        files[f'{night}_sequence.csv']=csv_table(selected)
+        files[f'{night}_sequence.csv']=csv_table(sequence_rows(selected,night,manual))
         for suffix in ['ngps','coordinates','standards_ngps','backups_ngps']:
             name=f'{night}_{suffix}.csv';text=(PACKET/name).read_text()
             if not private and suffix in ['ngps','backups_ngps']:
                 parsed=list(csv.DictReader(io.StringIO(text)))
                 by_name={r['name']:r for r in selected}
-                for record in parsed:
+                for order,record in enumerate(parsed,1):
+                    if record['NAME'] in supplemental:continue
                     if suffix=='ngps':
                         r=by_name[record['NAME']]
-                        record['NOTE']=f"{int(r['order']):02d} SCI {r['start_pdt'][11:16]}"
+                        record['NOTE']=f"{order:02d} SCI {r['start_pdt'][11:16]}"
                         comment=f"{r['start_pdt'][11:16]} PDT; latest start {r['latest_start_pdt'][11:16]}; r={float(r['r_adopted']):.2f} archival; Moon>={float(r['moon_min']):.1f}deg; X<={float(r['airmass_max_actual']):.2f}. {r['priority_reason']}. {r['flags']}"
                     else:
                         # Preserve the slot and geometry from the operational file;

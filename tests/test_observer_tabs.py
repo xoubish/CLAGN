@@ -81,7 +81,8 @@ class ObserverTabTests(unittest.TestCase):
             self.assertEqual(float(r['TOTAL_EXPTIME_S']),o['exposure_seconds'])
         for night in ['oct26','oct27']:
             rows=self.rows(night)
-            self.assertEqual(len(rows),40)
+            self.assertEqual(len(rows),41 if night=='oct26' else 40)
+            rows=[r for r in rows if r['NAME']!='Z16CygABC']
             self.assertTrue(all(r['NEXP']==({'P8544':'3','HIRAS-F23290-1252':'4'}.get(r['NAME'],'2')) and r['EXPTIME']=='SET 300' for r in rows))
 
     def test_review_and_public_downloads_match_packet(self):
@@ -93,7 +94,8 @@ class ObserverTabTests(unittest.TestCase):
             name=night+'_ngps.csv'
             self.assertEqual((ROOT/'docs/october'/name).read_text(),self.data['files'][name])
             exported=self.rows(night)
-            selected=[r for r in rows if r['night']==night]
+            selected=[r for r in rows if r['night']==night]+[dict(r,name=r['upload_name']) for r in october.get('manual_visits',[]) if r['night']==night]
+            selected.sort(key=lambda r:r['start_pdt'])
             self.assertEqual([r['NAME'] for r in exported],[self.displayed(r['name']) for r in selected])
             for upload,r in zip(exported,selected):
                 self.assertEqual(int(upload['NEXP']),int(r['exposures']))

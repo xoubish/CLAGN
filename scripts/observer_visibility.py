@@ -37,8 +37,6 @@ def attach_visibility(payload):
             queue = [dict(r, airmass_limit=limits[r['name']]) for r in payload['october']['rows'] if r['night']==night]
             standards = [dict(name=r['name'], start=millis(r['start_pdt']), end=millis(r['end_pdt']))
                          for r in payload['october']['standards'] if r['night']==night]
-            standards += [dict(name=r['name'], start=millis(r['start_pdt']), end=millis(r['end_pdt']), kind='manual visit')
-                          for r in payload['october'].get('manual_visits',[]) if r['night']==night]
             queue += [dict(r, manual=True, airmass_limit=1.8)
                       for r in payload['october'].get('manual_visits',[]) if r['night']==night]
             queue.sort(key=lambda r:r['start_pdt'])

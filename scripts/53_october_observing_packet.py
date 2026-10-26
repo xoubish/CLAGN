@@ -276,8 +276,8 @@ def write_outputs(targets,jwst,df,slots,edges,meta,result,windows):
         meta[night]['science_minutes'] = int(d.visit_minutes.sum())
         meta[night]['manual_minutes'] = sum(float(r['visit_minutes']) for r in manual if r['night']==night)
         meta[night]['remaining_minutes'] = meta[night]['minutes'] - meta[night]['science_minutes'] - meta[night]['manual_minutes'] - 20
-        write_csv(d,DEST/f'{night}_sequence.csv')
-        ngps=[telescope_row(r,f"{r['order']:02d} {r['jwst_id'] or 'SCI'} {r['start_pdt'][11:16]}") for r in d.to_dict('records')]
+        write_csv(pd.DataFrame(october_manual.sequence_rows(d.to_dict('records'),night,manual)),DEST/f'{night}_sequence.csv')
+        ngps=october_manual.upload_rows(d.to_dict('records'),night,PACK,telescope_row)
         (DEST/f'{night}_ngps.csv').write_text(PACK.csv_text(ngps),encoding='ascii')
         (DEST/f'{night}_coordinates.csv').write_text(PACK.csv_text(ngps,True),encoding='ascii')
         cal=[]
@@ -338,7 +338,7 @@ def write_outputs(targets,jwst,df,slots,edges,meta,result,windows):
         fig.suptitle(f"{meta[night]['date']}: 40 targets · normally 2×300 s + 4 min · P8544: 3×300 s; HIRAS-F23290-1252: 4×300 s\n{meta[night]['remaining_minutes']:.0f} min spare after 20 min standards; all Moon separations ≥40°",fontsize=12)
         fig.tight_layout(rect=(0,0,1,.955))
         if any(r['night']==night for r in manual):
-            fig.text(.5,.005,'Manual block: '+ '; '.join(f"{r['name']} {r['start_pdt'][11:16]}–{r['end_pdt'][11:16]} PDT; exposure unset; see acquisition note" for r in manual if r['night']==night),ha='center',fontsize=8)
+            fig.text(.5,.005,'Manual block: '+ '; '.join(f"{r['name']} {r['start_pdt'][11:16]}–{r['end_pdt'][11:16]} PDT" for r in manual if r['night']==night),ha='center',fontsize=8)
         for ext in ['png','pdf']:fig.savefig(DEST/f'{night}_schedule.{ext}',dpi=160)
         plt.close(fig)
     write_csv(pd.DataFrame(standards_rows),DEST/'standards.csv')
@@ -471,7 +471,7 @@ Rebuild with `/opt/anaconda3/bin/python scripts/53_october_observing_packet.py`,
     (DEST/'README.md').write_text(text)
     if summary.get('manual_visits'):
         with (DEST/'README.md').open('a') as f:
-            f.write('\n## Additional manual acquisition\n\n40 regular targets per night remain in the upload lists. October 26 also has a reserved Z16 Cyg A/B/C block at 20:03–20:17 PDT, giving 41 visits that night. P6677 moves to 00:57–01:11 PDT. The manual block is excluded from executable NGPS CSVs because exposure time is unset. Pause after H5MUSES-327; do not advance P7344 into this block. Read [16 Cyg acquisition](16Cyg_acquisition.md) and [manual timings](manual_visits.csv).\n')
+            f.write('\n## Additional manual acquisition\n\n40 regular targets per night remain in the upload lists. October 26 also has a reserved Z16 Cyg A/B/C block at 20:03–20:17 PDT, giving 41 visits that night. P6677 moves to 00:57–01:11 PDT. Z16CygABC is row 3 in the executable October 26 NGPS CSV with 1 x 1 s and fixed PA 133.04 degrees; each exposure must remain at or below 10 s. Read [16 Cyg acquisition](16Cyg_acquisition.md) and [manual timings](manual_visits.csv).\n')
 
 
 if __name__=='__main__':
