@@ -18,6 +18,7 @@ from slit_preview import previews
 from observed_ngps import build_observed, add_observed
 from october_web import attach_october
 from observer_tabs import attach_tabs
+from stellar_field_card import attach_stellar_field_cards
 from observer_visibility import attach_visibility
 from observer_names import attach_names
 from additional_targets import attach_additional_targets
@@ -121,6 +122,7 @@ def main():
     payload = prepare(public, public_slots, public_plans, public_science, slit_previews)
     add_observed(payload,observed,DEST_PUBLIC)
     attach_october(payload,False,{t['name'] for t in local['targets'] if not t.get('science',{}).get('reference_private')})
+    attach_stellar_field_cards(payload)
     attach_tabs(payload)
     attach_visibility(payload)
     attach_names(payload)

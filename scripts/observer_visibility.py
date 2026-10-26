@@ -72,7 +72,7 @@ def attach_visibility(payload):
             samples = [[round(float(x),3) if np.isfinite(x) and x<100 else None,
                         round(float(m),2), int(t)] for x,m,t in zip(xmax,mmin,tiers)]
             rows.append(dict(name=r['name'], order=int(r['order']), duration=duration, airmass_limit=limit,
-                manual=bool(r.get('manual')),
+                manual=bool(r.get('manual')), card_name=r.get('upload_name',r['name']),
                 planned_start=millis(r['start_utc']), planned_end=millis(r.get('end_utc') or r['end_pdt']),
                 windows=windows, samples=samples))
         result[night] = dict(start=round(start), end=round(end), sample_start=int(grid[0]), step=STEP,

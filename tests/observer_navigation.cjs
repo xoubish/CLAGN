@@ -29,7 +29,7 @@ assert.equal(element('cards').innerHTML,'');
 assert.equal((element('table').innerHTML.match(/data-catalog-target=/g)||[]).length,evaluate('D.all_targets.length'));
 const nav=html.match(/<nav[\s\S]*?<\/nav>/)[0];
 assert.deepEqual([...nav.matchAll(/data-view="([^"]+)"/g)].map(m=>m[1]),['about','sep23','observed','oct26','oct27']);
-for(const [tab,count] of [['sep23',14],['observed',18],['oct26',40],['oct27',40],['about',0]]){
+for(const [tab,count] of [['sep23',14],['observed',18],['oct26',41],['oct27',40],['about',0]]){
   context.setView(tab);
   assert.equal((element('cards').innerHTML.match(/<article /g)||[]).length,count,tab);
 }
@@ -68,7 +68,27 @@ if(evaluate("(D.october.manual_visits||[]).length")){
   assert(element('october').innerHTML.includes('1 × 1 s'));
   assert(evaluate("D.files['oct26_ngps.csv'].includes('Z16CygABC')"));
   assert(!evaluate("D.files['oct26_ngps.csv'].includes('PAUSE')"));
-  console.log('PASS: Z16 Cyg is an ordinary ordered row with short exposure and no pause instructions.');
+  assert(element('october').innerHTML.includes('href="#card-Z16CygABC"'));
+  assert(!element('october').innerHTML.includes('16Cyg_acquisition.md'));
+  assert(element('cards').innerHTML.includes('id="card-Z16CygABC"'));
+  assert(element('tab-summary').innerHTML.includes('41 targets'));
+  context.revealTarget('Z16CygABC');
+  assert(element('cards').innerHTML.includes('Pan-STARRS gri'));
+  assert(element('cards').innerHTML.includes('SDSS: outside imaging footprint'));
+  const stellar=context.stellarCard(JSON.parse(evaluate('JSON.stringify(D.field_cards[0])')));
+  assert.equal((stellar.match(/class="stellar-slice"/g)||[]).length,3);
+  for(const name of ['A','B','C'])assert(stellar.includes(`data-component="${name}"`));
+  assert(!stellar.includes('NaN'));
+  if(evaluate('Boolean(D.field_cards[0].archive_review)')){
+    assert(stellar.includes('CFHT / ESPaDOnS · 2013-06-29'));
+    assert(stellar.includes('1634976i.fits')&&stellar.includes('1634979i.fits'));
+    assert(stellar.includes('No securely identified optical spectrum found'));
+    assert(stellar.includes('Gaia BP/RP'));
+  }
+  context.setView('about');context.revealTarget('Z16CygABC');
+  assert.equal((element('cards').innerHTML.match(/<article /g)||[]).length,1);
+  assert(element('cards').innerHTML.includes('id="card-Z16CygABC"'));
+  console.log('PASS: Z16 Cyg card, image provenance, three slices, components, catalogue navigation and 41-row schedule.');
 }
 
 // Optional local archive additions must render with unknown redshift/spectra.

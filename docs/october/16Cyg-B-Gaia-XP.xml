@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VOTABLE version="1.4" xmlns="http://www.ivoa.net/xml/VOTable/v1.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.ivoa.net/xml/VOTable/v1.3 http://www.ivoa.net/xml/VOTable/v1.3" xmlns:spec="http://www.ivoa.net/xml/SpectrumModel/v1.01">
+<RESOURCE type="results" utype="spec:Spectrum">
+<TIMESYS ID="time_frame" refposition="BARYCENTER" timeorigin="2455197.5" timescale="TCB"/>
+<TABLE>
+<PARAM arraysize="49" datatype="char" name="citation" ucd="meta.bib" value="https://www.cosmos.esa.int/web/gaia-users/credits">
+<DESCRIPTION>How to cite and acknowledge Gaia:</DESCRIPTION>
+</PARAM>
+<PARAM arraysize="8" datatype="char" name="release" ucd="meta.version" value="Gaia DR3">
+<DESCRIPTION>Gaia Data Release</DESCRIPTION>
+</PARAM>
+<PARAM arraysize="49" datatype="char" name="help" ucd="meta.ref.url" value="https://www.cosmos.esa.int/web/gaia-users/archive">
+<DESCRIPTION>Tutorials, documentation, and help:</DESCRIPTION>
+</PARAM>
+<PARAM arraysize="54" datatype="char" name="issues" ucd="meta.ref.url" value="https://www.cosmos.esa.int/web/gaia-users/known-issues">
+<DESCRIPTION>Known issues in the data:</DESCRIPTION>
+</PARAM>
+<PARAM arraysize="47" datatype="char" name="data" ucd="meta.ref.url" value="https://www.cosmos.esa.int/web/gaia/data-access">
+<DESCRIPTION>Gaia data:</DESCRIPTION>
+</PARAM>
+<PARAM arraysize="56" datatype="char" name="terms" ucd="meta.ref.url" value="https://www.cosmos.esa.int/web/esdc/terms-and-conditions">
+<DESCRIPTION>Terms and conditions for use of Gaia data:</DESCRIPTION>
+</PARAM>
+<PARAM arraysize="35" datatype="char" name="home" ucd="meta.ref.url" value="https://www.cosmos.esa.int/web/gaia">
+<DESCRIPTION>Gaia mission home:</DESCRIPTION>
+</PARAM>
+<PARAM arraysize="13" datatype="char" name="publisher" ucd="meta.id;meta.curation" value="ESA/Gaia/DPAC">
+<DESCRIPTION>Dataset publisher</DESCRIPTION>
+</PARAM>
+<PARAM arraysize="18" datatype="char" name="creator" ucd="meta.ref" value="Gaia Collaboration">
+<DESCRIPTION>Dataset creator</DESCRIPTION>
+</PARAM>
+<PARAM datatype="long" name="source_id" ucd="meta.id;meta.main" value="2135550755683407232">
+<DESCRIPTION>Unique source identifier (unique within a particular Data Release)</DESCRIPTION>
+</PARAM>
+<PARAM datatype="long" name="solution_id" ucd="meta.version" value="4545469030156206080">
+<DESCRIPTION>Solution Identifier</DESCRIPTION>
+</PARAM>
+<PARAM arraysize="2" datatype="double" name="spatialLocation" ucd="pos.eq" unit="deg" utype="spec:Char.SpatialAxis.Coverage.Location.Value" value="295.46561283744234 50.51680164969824">
+<DESCRIPTION>Right Ascension and Declination</DESCRIPTION>
+</PARAM>
+<PARAM datatype="double" name="TimeAxisCoverageLocation" ref="time_frame" ucd="time.epoch" unit="yr" utype="spec:Char.TimeAxis.Coverage.Location.Value" value="2016.0">
+<DESCRIPTION>Reference Epoch</DESCRIPTION>
+</PARAM>
+<PARAM datatype="double" name="TimeAxisCoverageBoundsExtent" ref="time_frame" ucd="time.duration" unit="yr" utype="spec:Char.TimeAxis.Coverage.Bounds.Extent" value="2.83">
+<DESCRIPTION>Total elapsed time</DESCRIPTION>
+</PARAM>
+<PARAM datatype="double" name="spectralAccuracyStatError" ucd="stat.error;em.wl" unit="nm" utype="spec:Char.SpectralAxis.Accuracy.StatError" value="0.0">
+<DESCRIPTION>Spectral coordinate measurement error</DESCRIPTION>
+</PARAM>
+<PARAM datatype="double" name="spectralLocation" ucd="em.wl;instr.bandpass" unit="nm" utype="spec:Char.SpectralAxis.Coverage.Location.Value" value="0.0">
+<DESCRIPTION>Spectral coordinate value</DESCRIPTION>
+</PARAM>
+<PARAM datatype="double" name="spectralCoverageBoundsExtent" ucd="instr.bandwidth" unit="nm" utype="spec:Char.SpectralAxis.Coverage.Bounds.Extent" value="684.0">
+<DESCRIPTION>Spectral bandwidth</DESCRIPTION>
+</PARAM>
+<PARAM datatype="double" name="spectralCoverageBoundsStart" ucd="em.wl;stat.min" unit="nm" utype="spec:Char.SpectralAxis.Coverage.Bounds.Start" value="336.0">
+<DESCRIPTION>Spectral coordinate start</DESCRIPTION>
+</PARAM>
+<PARAM datatype="double" name="spectralCoverageBoundsStop" ucd="em.wl;stat.max" unit="nm" utype="spec:Char.SpectralAxis.Coverage.Bounds.Stop" value="1020.0">
+<DESCRIPTION>Spectral coordinate end</DESCRIPTION>
+</PARAM>
+<PARAM datatype="double" name="SpatialExtent" ucd="instr.fov" unit="deg" utype="spec:Spectrum.Char.SpatialAxis.Coverage.Bounds.Extent" value="5.8932666E-4">
+<DESCRIPTION>Spectrum aperture: nominal across-scan window size</DESCRIPTION>
+</PARAM>
+<PARAM arraysize="13" datatype="char" name="DataModel" utype="spec:Spectrum.DataModel" value="Spectrum 1.01">
+<DESCRIPTION>Datamodel name and version</DESCRIPTION>
+</PARAM>
+<PARAM arraysize="13" datatype="char" name="Publisher" ucd="meta.curation" utype="spec:Curation.Publisher" value="ESA/Gaia/DPAC">
+<DESCRIPTION>Dataset publisher</DESCRIPTION>
+</PARAM>
+<PARAM arraysize="8" datatype="char" name="Title" ucd="meta.title;meta.dataset" utype="spec:DataID.Title" value="Spectrum">
+<DESCRIPTION>Dataset title</DESCRIPTION>
+</PARAM>
+<PARAM arraysize="5" datatype="char" name="SpectralAxisUcd" ucd="meta.ucd" utype="spec:Spectrum.Char.SpectralAxis.Ucd" value="em.wl">
+<DESCRIPTION>Spectral coordinate UCD</DESCRIPTION>
+</PARAM>
+<PARAM arraysize="2" datatype="char" name="SpectralAxisUnit" ucd="meta.unit" unit="nm" utype="spec:Spectrum.Char.SpectralAxis.Unit" value="nm">
+<DESCRIPTION>Spectral coordinate unit</DESCRIPTION>
+</PARAM>
+<PARAM arraysize="18" datatype="char" name="FluxAxisUcd" ucd="meta.ucd" utype="spec:Spectrum.Char.FluxAxis.Ucd" value="phot.fluence;em.wl">
+<DESCRIPTION>Flux coordinate UCD</DESCRIPTION>
+</PARAM>
+<PARAM arraysize="10" datatype="char" name="FluxAxisUnit" ucd="meta.unit" unit="W.m**-2.nm**-1" utype="spec:Spectrum.Char.FluxAxis.Unit" value="Flux value">
+<DESCRIPTION>Flux coordinate unit</DESCRIPTION>
+</PARAM>
+<FIELD datatype="double" name="wavelength" ucd="em.wl" unit="nm" utype="spec:Data.SpectralAxis.Value">
+<DESCRIPTION>wavelength</DESCRIPTION>
+</FIELD>
+<FIELD datatype="float" name="flux" ucd="spect" unit="W.m**-2.nm**-1">
+<DESCRIPTION>mean BP + RP combined spectrum flux</DESCRIPTION>
+</FIELD>
+<FIELD datatype="float" name="flux_error" ucd="stat.error;spect" unit="W.m**-2.nm**-1">
+<DESCRIPTION>mean BP + RP combined spectrum flux error</DESCRIPTION>
+</FIELD>
+<DATA>
+<BINARY2>
+<STREAM encoding='base64'>
+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
+KownTV/yAECP4AAAAAAAKVTvOSdKR+8=
+</STREAM>
+</BINARY2>
+</DATA>
+</TABLE>
+</RESOURCE>
+</VOTABLE>

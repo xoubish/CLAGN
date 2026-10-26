@@ -28,6 +28,10 @@ def attach_tabs(payload):
             inventory[name]=dict(name=name,ra=float(r['ra']),dec=float(r['dec']),z=float(r['z']),
                 r=float(r['r_adopted']),observed=False,sep23=False,has_detail=False)
         inventory[name].update(target_label=r.get('target_label','') or inventory[name].get('target_label',''),scheduled_night=r['night'])
+    field_cards={r['name']:r for r in payload.get('field_cards',[])}
+    for name,r in field_cards.items():
+        inventory[name]=dict(name=name,ra=r['ra'],dec=r['dec'],z=None,r=None,
+            target_label=r['label'],scheduled_night=r['night'],observed=False,sep23=False,has_detail=True)
     inventory=sorted(inventory.values(),key=lambda t:t['ra'])
     pool=[]
     for r in inventory:
@@ -37,6 +41,10 @@ def attach_tabs(payload):
         pool.append(dict(NAME=r['name'],RA=r['ra_hms'],DECL=r['dec_dms'],SLITWIDTH='SET 1.5',
             EXPTIME='SET 300',NEXP=2,BINSPAT=2,BINSPECT=3,SLITANGLE='PA',AIRMASS_MAX=1.8,
             NOTE='POOL',COMMENT='Candidate catalogue; not an observing sequence. Use the selected night tab for exposure settings and order.'))
+    for r in pool:
+        if r['NAME'] in field_cards:
+            f=field_cards[r['NAME']]
+            r.update(EXPTIME=f"SET {f['seconds_each']}",NEXP=f['exposures'],SLITANGLE=f['pa_deg'])
     files=payload['files']
     files['all_targets.csv']=csv_text(pool)
     primaries=list(csv.DictReader(io.StringIO(files['sep23_primaries_ngps.csv'])))

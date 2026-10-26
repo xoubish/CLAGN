@@ -39,10 +39,14 @@ class ObserverTabTests(unittest.TestCase):
             self.assertEqual((ROOT/'docs/targets'/name).read_text(),self.data['files'][name])
 
     def test_all_contains_both_prepared_pool_and_added_october_targets(self):
-        expected={self.displayed(t['name']) for t in self.data['targets']}|{self.displayed(r['name']) for r in self.data['october']['rows']}
+        expected={t['name'] for t in self.data.get('field_cards',[])}|{self.displayed(t['name']) for t in self.data['targets']}|{self.displayed(r['name']) for r in self.data['october']['rows']}
         rows=self.rows('all')
         self.assertEqual({r['NAME'] for r in rows},expected)
         self.assertEqual(len(rows),len(expected))
+        if self.data.get('field_cards'):
+            star=next(r for r in rows if r['NAME']=='Z16CygABC')
+            self.assertEqual(star['EXPTIME'],'SET 1')
+            self.assertEqual(star['SLITANGLE'],'133.04')
         with (ROOT/'jwst_proposal/inputs/jwst_sample_cycle6.csv').open() as f:
             protected={r['internal_id'] for r in csv.DictReader(f)}
         self.assertTrue({self.displayed(n) for n in protected}<={r['NAME'] for r in rows})
