@@ -3,6 +3,7 @@ import csv
 import io
 import json
 from pathlib import Path
+from october_manual import pause_note
 
 ROOT=Path(__file__).resolve().parents[1]
 PACKET=ROOT/'observing/oct26_27_2026'
@@ -84,6 +85,7 @@ def attach_october(payload,private,public_reference_names):
                         # Preserve the slot and geometry from the operational file;
                         # remove the reference-dependent prioritization sentence.
                         comment=record['COMMENT'].split('deg.')[0]+'deg. Prepared slot alternative; skip if already observed; review priorities before replacing a target.'
+                    if suffix=='ngps':comment=pause_note(r)+' '+comment
                     record['COMMENT']=comment.encode('ascii','ignore').decode().replace(',',';').replace('"',"'")[:1024].rstrip()
                 text=csv_table(parsed)
             files[name]=text
@@ -94,10 +96,13 @@ def attach_october(payload,private,public_reference_names):
     windows=read_table('visibility_windows.csv')
     files['october_visibility_windows.csv']=csv_table([w for w in windows if w['name'] in selected_names])
     summary=json.loads((PACKET/'validation.json').read_text())
+    manual=summary.get('manual_visits',[])
+    if manual:
+        files['manual_visits.csv']=uppercase_header((PACKET/'manual_visits.csv').read_text())
     settings=dict(summary['settings'])
     if not private:
         settings['airmass_exception_max']=settings.pop('airmass_jwst_max')
-    payload['october']=dict(rows=rows,backups=backups,
+    payload['october']=dict(rows=rows,backups=backups,manual_visits=manual,
         standards=read_table('standards.csv'),nights=summary['nights'],settings=settings,
         review_date=summary.get('review_date'),september_performance=summary.get('september_performance',{}),
         membership_changes=[{k:r[k] for k in ['name','decision','previous_night','scheduled_night']}
@@ -111,5 +116,6 @@ def attach_october(payload,private,public_reference_names):
         # Remove the former public audit as well as omitting it from new builds.
         (dest/'jwst_coverage.csv').unlink(missing_ok=True)
         names=['all_80_targets.csv','standards.csv','free_time.csv','slot_backups.csv','october_visibility_windows.csv']
+        if manual:names.append('manual_visits.csv')
         names += [f'{n}_{suffix}.csv' for n in ['oct26','oct27'] for suffix in ['sequence','ngps','coordinates','standards_ngps','backups_ngps']]
         for name in names:(dest/name).write_text(files[name])

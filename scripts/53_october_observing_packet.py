@@ -26,6 +26,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from october_review import apply_review, write_review, september_performance, REVIEW_DATE
 import october_additions
+import october_manual
 
 REVIEW_DATE = october_additions.DATE
 
@@ -181,7 +182,7 @@ def geometry(targets):
             minutes=float((dawn-dusk).to_value(u.min)),moon_illumination_percent=100*float(moon_illumination(dusk+(dawn-dusk)/2)),
             standard_start_pdt=start.isoformat(),standard_end_start_pdt=(end-pd.Timedelta(minutes=10)).isoformat(),
             science_minutes=560,standard_minutes=20,remaining_minutes=float((dawn-dusk).to_value(u.min))-580)
-    return slots,edges,meta,pd.DataFrame(windows)
+    return slots,october_manual.filter_edges(targets,slots,edges),meta,pd.DataFrame(windows)
 
 
 def solve(targets, slots, edges, windows):
@@ -252,10 +253,16 @@ def solve(targets, slots, edges, windows):
 
 def telescope_row(r, note):
     comment=f"{r['start_pdt'][11:16]} PDT; latest start {r['latest_start_pdt'][11:16]}; r={r['r_adopted']:.2f} ({r['brightness_source']}); Moon>={r['moon_min']:.1f}deg; X<={r['airmass_max_actual']:.2f}. {r['priority_reason']}. {r['science_question']}. {r['flags']}"
+    comment=october_manual.pause_note(r)+' '+comment
     return PACK.ngps_row(r,dict(seconds_each=300,exposures=r['exposures'],airmass=r['airmass_limit']),SETTINGS,note,comment)
 
 
 def write_outputs(targets,jwst,df,slots,edges,meta,result,windows):
+    manual=october_manual.visits()
+    for r in manual:
+        r.update(PACK.geometry(r['ra'],r['dec'],pd.Timestamp(r['start_pdt']),pd.Timestamp(r['end_pdt'])))
+        assert r['airmass_max_actual']<=1.8 and r['moon_min']>=40
+    if manual:write_csv(pd.DataFrame([{k:v for k,v in r.items() if k!='relocated_visit'} for r in manual]),DEST/'manual_visits.csv')
     write_csv(df,DEST/'all_80_targets.csv')
     ranked=targets.reset_index().sort_values(['eligible_science','is_jwst','science_score'],ascending=False)
     ranked.insert(0,'review_rank',np.arange(1,len(ranked)+1))
@@ -267,7 +274,8 @@ def write_outputs(targets,jwst,df,slots,edges,meta,result,windows):
     for night in ['oct26','oct27']:
         d=df[df.night==night]
         meta[night]['science_minutes'] = int(d.visit_minutes.sum())
-        meta[night]['remaining_minutes'] = meta[night]['minutes'] - meta[night]['science_minutes'] - 20
+        meta[night]['manual_minutes'] = sum(float(r['visit_minutes']) for r in manual if r['night']==night)
+        meta[night]['remaining_minutes'] = meta[night]['minutes'] - meta[night]['science_minutes'] - meta[night]['manual_minutes'] - 20
         write_csv(d,DEST/f'{night}_sequence.csv')
         ngps=[telescope_row(r,f"{r['order']:02d} {r['jwst_id'] or 'SCI'} {r['start_pdt'][11:16]}") for r in d.to_dict('records')]
         (DEST/f'{night}_ngps.csv').write_text(PACK.csv_text(ngps),encoding='ascii')
@@ -285,6 +293,7 @@ def write_outputs(targets,jwst,df,slots,edges,meta,result,windows):
         (DEST/f'{night}_standards_ngps.csv').write_text(PACK.csv_text(cal),encoding='ascii')
         occupied=[(pd.Timestamp(r.start_pdt),pd.Timestamp(r.end_pdt)) for r in d.itertuples()]
         occupied += [(pd.Timestamp(r['start_pdt']),pd.Timestamp(r['end_pdt'])) for r in standards_rows if r['night']==night]
+        occupied += [(pd.Timestamp(r['start_pdt']),pd.Timestamp(r['end_pdt'])) for r in manual if r['night']==night]
         occupied.sort();last=pd.Timestamp(meta[night]['dusk_pdt'])
         for a,b in occupied+[(pd.Timestamp(meta[night]['dawn_pdt']),pd.Timestamp(meta[night]['dawn_pdt']))]:
             assert a>=last
@@ -328,6 +337,8 @@ def write_outputs(targets,jwst,df,slots,edges,meta,result,windows):
         bx.set_yticks(range(40),[f"{m:.0f}°" for m in d.moon_min],fontsize=8);bx.yaxis.tick_right();bx.set_xlabel('Maximum visit airmass');bx.set_title('Right labels: minimum Moon separation',fontsize=8)
         fig.suptitle(f"{meta[night]['date']}: 40 targets · normally 2×300 s + 4 min · P8544: 3×300 s; HIRAS-F23290-1252: 4×300 s\n{meta[night]['remaining_minutes']:.0f} min spare after 20 min standards; all Moon separations ≥40°",fontsize=12)
         fig.tight_layout(rect=(0,0,1,.955))
+        if any(r['night']==night for r in manual):
+            fig.text(.5,.005,'Manual block: '+ '; '.join(f"{r['name']} {r['start_pdt'][11:16]}–{r['end_pdt'][11:16]} PDT; exposure unset; see acquisition note" for r in manual if r['night']==night),ha='center',fontsize=8)
         for ext in ['png','pdf']:fig.savefig(DEST/f'{night}_schedule.{ext}',dpi=160)
         plt.close(fig)
     write_csv(pd.DataFrame(standards_rows),DEST/'standards.csv')
@@ -358,7 +369,7 @@ def write_outputs(targets,jwst,df,slots,edges,meta,result,windows):
     summary=dict(review_date=REVIEW_DATE,september_performance=performance,
         settings={**SETTINGS,'exposures':2,'seconds_each':300,'overhead_minutes':4,'visit_minutes':14,
         'moon_min_deg':40,'airmass_normal_max':1.8,'airmass_jwst_max':2,'preferred_airmass_max':1.5},nights=meta,
-        science_targets=len(df),unique_targets=df.name.nunique(),jwst_total=len(jwst),jwst_october=int(df.jwst_id.ne('').sum()),
+        science_targets=len(df),unique_targets=df.name.nunique(),manual_visits=manual,jwst_total=len(jwst),jwst_october=int(df.jwst_id.ne('').sum()),
         jwst_september_only=audit.loc[audit.scheduled_night.eq(''),'name'].tolist(),
         jwst_repeats=df.loc[df.observed_sep23 & df.jwst_id.ne(''),'name'].tolist(),
         september_followups=df.loc[df.protected_followup,'name'].tolist(),
@@ -376,6 +387,9 @@ def write_outputs(targets,jwst,df,slots,edges,meta,result,windows):
             ROOT/'sep23_data/reduction_20260924/science_review/README.md',ROOT/'scripts/october_review.py',
             ROOT/'scripts/53_october_observing_packet.py',ROOT/'scripts/october_additions.py',ROOT/'scripts/64_helou_targets.py',
             ROOT/'data/additional_targets/helou_review/feasibility.csv',ROOT/'data/additional_targets/helou_review/targets.json']})
+    if manual:
+        for p in [october_manual.CONFIG,ROOT/'scripts/october_manual.py']:
+            summary['inputs'][str(p.relative_to(ROOT))]=hashlib.sha256(p.read_bytes()).hexdigest()
     (DEST/'validation.json').write_text(json.dumps(summary,indent=2)+'\n')
     return audit,summary
 
@@ -455,6 +469,9 @@ All science visits satisfy Moon ≥40° for their full duration. Ordinary target
 Rebuild with `/opt/anaconda3/bin/python scripts/53_october_observing_packet.py`, then `scripts/51_observer_page.py`. The September packet and JWST proposal remain historical/scientific inputs. The review's previous queue is preserved in `before_review_20261014.csv`.
 '''
     (DEST/'README.md').write_text(text)
+    if summary.get('manual_visits'):
+        with (DEST/'README.md').open('a') as f:
+            f.write('\n## Additional manual acquisition\n\n40 regular targets per night remain in the upload lists. October 26 also has a reserved Z16 Cyg A/B/C block at 20:03–20:17 PDT, giving 41 visits that night. P6677 moves to 00:57–01:11 PDT. The manual block is excluded from executable NGPS CSVs because exposure time is unset. Pause after H5MUSES-327; do not advance P7344 into this block. Read [16 Cyg acquisition](16Cyg_acquisition.md) and [manual timings](manual_visits.csv).\n')
 
 
 if __name__=='__main__':

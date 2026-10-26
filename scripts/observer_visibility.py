@@ -37,6 +37,8 @@ def attach_visibility(payload):
             queue = [dict(r, airmass_limit=limits[r['name']]) for r in payload['october']['rows'] if r['night']==night]
             standards = [dict(name=r['name'], start=millis(r['start_pdt']), end=millis(r['end_pdt']))
                          for r in payload['october']['standards'] if r['night']==night]
+            standards += [dict(name=r['name'], start=millis(r['start_pdt']), end=millis(r['end_pdt']), kind='manual visit')
+                          for r in payload['october'].get('manual_visits',[]) if r['night']==night]
         grid = np.arange(np.ceil(start/STEP)*STEP, np.floor(end/STEP)*STEP+1, STEP)
         times = Time(grid/1000, format='unix')
         frame = AltAz(obstime=times, location=LOCATION, pressure=0*u.hPa)

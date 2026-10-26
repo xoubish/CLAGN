@@ -71,6 +71,8 @@ class OctoberPacketTests(unittest.TestCase):
             q=self.queue[self.queue.night==night]
             self.assertEqual(q.order.tolist(),list(range(1,41)))
             visits=pd.concat([q[['start_pdt','end_pdt']],standards[standards.night==night][['start_pdt','end_pdt']]])
+            manual=[r for r in self.validation.get('manual_visits',[]) if r['night']==night]
+            if manual:visits=pd.concat([visits,pd.DataFrame(manual)[['start_pdt','end_pdt']]])
             visits=visits.sort_values('start_pdt')
             previous=pd.Timestamp(m['dusk_pdt'])
             for r in visits.itertuples():
@@ -80,8 +82,25 @@ class OctoberPacketTests(unittest.TestCase):
                 previous=b
             for r in q.itertuples():
                 self.assertEqual((pd.Timestamp(r.end_pdt)-pd.Timestamp(r.start_pdt)).total_seconds()/60,r.visit_minutes)
-            self.assertAlmostEqual(gaps[gaps.night==night].minutes.sum()+q.visit_minutes.sum()+20,m['minutes'],places=5)
+            self.assertAlmostEqual(gaps[gaps.night==night].minutes.sum()+q.visit_minutes.sum()+sum(r['visit_minutes'] for r in manual)+20,m['minutes'],places=5)
             self.assertEqual(q.visit_minutes.sum(),m['science_minutes'])
+
+    def test_manual_bright_star_reservation_has_no_default_exposure(self):
+        manual=self.validation.get('manual_visits',[])
+        if not manual:self.skipTest('No manual reservation')
+        r=next(r for r in manual if r['name']=='Z16 Cyg A/B/C')
+        self.assertEqual(r['start_pdt'],'2026-10-26T20:03:00-07:00')
+        self.assertEqual(r['visit_minutes'],14)
+        self.assertLess(r['airmass_max_actual'],1.15)
+        self.assertGreater(r['moon_min'],84)
+        self.assertEqual(r['max_exposure_seconds'],10)
+        self.assertIn('Exact duration unset',r['exposure_status'])
+        self.assertIn('prioritize a usable spectrum of C',r['science_priority'])
+        upload=packet_csv('oct26_ngps.csv')
+        self.assertNotIn(r['name'],set(upload.name))
+        self.assertIn('PAUSE',upload[upload.name=='H5MUSES-327'].iloc[0]['comment'])
+        moved=self.queue[self.queue.name=='P6677'].iloc[0]
+        self.assertEqual(moved.start_pdt,'2026-10-27T00:57:00-07:00')
 
     def test_upload_coordinates_and_independent_moon_frame(self):
         location=EarthLocation.from_geodetic(-116.865*u.deg,33.3563*u.deg,1712*u.m)

@@ -9,7 +9,7 @@ function visibilityStatus(V,r,index){
   const start=V.sample_start+index*V.step;
   let reason=VIS_LABELS[tier];
   if(!tier){
-    if(V.standards.some(s=>start<s.end&&start+r.duration*60000>s.start))reason='Standard overlap';
+    if(V.standards.some(s=>start<s.end&&start+r.duration*60000>s.start))reason='Reserved block overlap';
     else if(moon<40.02)reason='Moon too close';
     else reason=x===null?'Below horizon / too low':'Above X limit';
   }
@@ -19,7 +19,7 @@ function visibilitySVG(night,index){
   const V=D.visibility[night],W=1280,L=225,R=260,T=34,B=30,H=T+B+V.rows.length*25;
   const X=lin(V.start,V.end,L,W-R),time=V.sample_start+index*V.step;
   let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" data-visibility-chart="${night}" role="img" aria-label="Full-visit start windows in observing order; all times PDT"><text x="8" y="18">ORDER · TARGET</text><text x="${W-R+14}" y="18">IF STARTED AT ${pdt(time)} PDT</text>`;
-  V.standards.forEach(b=>s+=`<rect x="${X(b.start)}" y="${T-8}" width="${X(b.end)-X(b.start)}" height="${H-T-B+12}" fill="#80909b" opacity=".16"><title>${esc(b.name)} standard: ${pdt(b.start)}–${pdt(b.end)} PDT</title></rect>`);
+  V.standards.forEach(b=>s+=`<rect x="${X(b.start)}" y="${T-8}" width="${X(b.end)-X(b.start)}" height="${H-T-B+12}" fill="#80909b" opacity=".16"><title>${esc(b.name)} ${b.kind||'standard'}: ${pdt(b.start)}–${pdt(b.end)} PDT</title></rect>`);
   for(let t=Math.ceil(V.start/3600000)*3600000;t<=V.end;t+=3600000){
     s+=`<line x1="${X(t)}" x2="${X(t)}" y1="${T-8}" y2="${H-B}" stroke="var(--hair2)"/><text x="${X(t)}" y="18" text-anchor="middle">${pdt(t)}</text><text x="${X(t)}" y="${H-7}" text-anchor="middle">${pdt(t)}</text>`;
   }
@@ -38,7 +38,7 @@ function visibilityReadout(night,index){
 function renderVisibility(night){
   const V=D.visibility?.[night];if(!V)return '';
   const index=Math.max(0,Math.round((V.rows[0].planned_start-V.sample_start)/V.step));
-  return `<section class="visibility"><h3>Visibility windows · observing order</h3><p class="plot-note">Colored bars show when a <b>complete visit can start</b>, including overhead, with Moon separation ≥40° throughout. Yellow: best, X ≤1.5. Blue: usable, X ≤1.8. Purple: X ≤2.0, only where the target’s limit permits. Blank: blocked. Outlined boxes show planned visits; shaded columns reserve standards.</p><div class="visibility-controls"><label for="visibility-time-${night}">Try a start time (PDT)</label><input id="visibility-time-${night}" data-visibility-time="${night}" type="range" min="0" max="${V.count-1}" step="1" value="${index}" aria-valuetext="${pdt(V.sample_start+index*V.step)} PDT"><output id="visibility-readout-${night}" for="visibility-time-${night}">${visibilityReadout(night,index)}</output></div><div class="table-scroll visibility-plot" id="visibility-plot-${night}">${visibilitySVG(night,index)}</div><p class="plot-note">Drag the time slider or click the chart’s time axis to compare swaps. Right-hand values are maximum airmass and minimum Moon separation over the whole visit. Other science visits are not reserved here: check queue conflicts and avoid repeats when swapping. Palomar geometry on a 30-second grid, rounded inward at limits; confirm current conditions and sequencer limits at the telescope.</p></section>`;
+  return `<section class="visibility"><h3>Visibility windows · observing order</h3><p class="plot-note">Colored bars show when a <b>complete visit can start</b>, including overhead, with Moon separation ≥40° throughout. Yellow: best, X ≤1.5. Blue: usable, X ≤1.8. Purple: X ≤2.0, only where the target’s limit permits. Blank: blocked. Outlined boxes show planned visits; shaded columns reserve standards and manual visits.</p><div class="visibility-controls"><label for="visibility-time-${night}">Try a start time (PDT)</label><input id="visibility-time-${night}" data-visibility-time="${night}" type="range" min="0" max="${V.count-1}" step="1" value="${index}" aria-valuetext="${pdt(V.sample_start+index*V.step)} PDT"><output id="visibility-readout-${night}" for="visibility-time-${night}">${visibilityReadout(night,index)}</output></div><div class="table-scroll visibility-plot" id="visibility-plot-${night}">${visibilitySVG(night,index)}</div><p class="plot-note">Drag the time slider or click the chart’s time axis to compare swaps. Right-hand values are maximum airmass and minimum Moon separation over the whole visit. Other science visits are not reserved here: check queue conflicts and avoid repeats when swapping. Palomar geometry on a 30-second grid, rounded inward at limits; confirm current conditions and sequencer limits at the telescope.</p></section>`;
 }
 function updateVisibility(night,index){
   const slider=$('visibility-time-'+night);

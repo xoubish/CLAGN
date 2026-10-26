@@ -57,6 +57,16 @@ assert(element('table').innerHTML.includes('>JP9694</a>'));
 assert(element('cards').innerHTML.includes('id="card-P9694"') || element('cards').innerHTML==='');
 console.log('PASS: three visibility charts and both original and prefixed name search.');
 
+if(evaluate("(D.october.manual_visits||[]).length")){
+  context.setView('oct26');
+  assert(element('october').innerHTML.includes('data-manual-visit="Z16 Cyg A/B/C"'));
+  assert(element('october').innerHTML.includes('not included in the executable NGPS CSV'));
+  assert(element('october').innerHTML.includes('20:03–20:17'));
+  assert(evaluate("D.visibility.oct26.standards.some(r=>r.name==='Z16 Cyg A/B/C'&&r.kind==='manual visit')"));
+  assert(evaluate("D.files['oct26_ngps.csv'].includes('PAUSE after this visit')"));
+  console.log('PASS: reserved manual acquisition, explicit exposure warning, pause note and blocked visibility interval.');
+}
+
 // Optional local archive additions must render with unknown redshift/spectra.
 if(evaluate("D.targets.some(t=>t.name==='H5MUSES-327')")){
   context.revealTarget('H5MUSES-327');
