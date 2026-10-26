@@ -9,7 +9,7 @@ function visibilityStatus(V,r,index){
   const start=V.sample_start+index*V.step;
   let reason=VIS_LABELS[tier];
   if(!tier){
-    if(V.standards.some(s=>start<s.end&&start+r.duration*60000>s.start))reason='Reserved block overlap';
+    if(V.standards.some(s=>!(r.manual&&s.name===r.name)&&start<s.end&&start+r.duration*60000>s.start))reason='Reserved block overlap';
     else if(moon<40.02)reason='Moon too close';
     else reason=x===null?'Below horizon / too low':'Above X limit';
   }
@@ -25,7 +25,8 @@ function visibilitySVG(night,index){
   }
   V.rows.forEach((r,i)=>{
     const y=T+i*25,status=visibilityStatus(V,r,index),label=displayName(r.name);
-    s+=`<g data-visibility-target="${esc(r.name)}"><line x1="0" x2="${W}" y1="${y+21}" y2="${y+21}" stroke="var(--hair)"/><a href="#card-${esc(r.name)}"><text x="8" y="${y+13}"><title>${esc(label)}${label!==r.name?' · alias '+esc(r.name):''} · ${r.duration} min · X ≤${r.airmass_limit}</title>${String(r.order).padStart(2,'0')} · ${esc(label.length>25?label.slice(0,24)+'…':label)}</text></a>`;
+    const targetLink=r.manual?`href="#${night}" data-manual-target="${esc(r.name)}"`:`href="#card-${esc(r.name)}"`;
+    s+=`<g data-visibility-target="${esc(r.name)}"><line x1="0" x2="${W}" y1="${y+21}" y2="${y+21}" stroke="var(--hair)"/><a ${targetLink}><text x="8" y="${y+13}"><title>${esc(label)}${r.manual?' · manual acquisition · ≤10 s per exposure':''}${label!==r.name?' · alias '+esc(r.name):''} · ${r.duration} min · X ≤${r.airmass_limit}</title>${String(r.order).padStart(2,'0')} · ${esc(label.length>25?label.slice(0,24)+'…':label)}</text></a>`;
     r.windows.forEach(w=>s+=`<rect data-visibility-tier="${w.tier}" x="${X(w.start)}" y="${y+3}" width="${Math.max(1,X(w.end)-X(w.start))}" height="12" rx="1" fill="${VIS_COLORS[w.tier]}"><title>${esc(label)} · ${VIS_LABELS[w.tier]} starts ${pdt(w.start)}–${pdt(w.end)} PDT; last finish ${pdt(w.end+r.duration*60000)}. ${r.duration} min including overhead; Moon ≥40° throughout.</title></rect>`);
     s+=`<rect x="${X(r.planned_start)}" y="${y}" width="${X(r.planned_end)-X(r.planned_start)}" height="18" fill="none" stroke="var(--ink)" stroke-width="1.5"><title>Planned ${esc(label)} visit ${pdt(r.planned_start)}–${pdt(r.planned_end)} PDT</title></rect><text data-visibility-status="${status.tier}" x="${W-R+14}" y="${y+13}" style="fill:${status.tier?VIS_COLORS[status.tier]:'var(--ink3)'}">${esc(status.text)}</text></g>`;
   });

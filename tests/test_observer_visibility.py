@@ -26,7 +26,9 @@ class VisibilityTests(unittest.TestCase):
         for night,V in self.data['visibility'].items():
             if night=='sep23':
                 expected=[n for n,r in sorted(self.data['sep23_sequence'].items(),key=lambda p:p[1]['rank'])]
-            else:expected=[r['name'] for r in self.data['october']['rows'] if r['night']==night]
+            else:
+                combined=self.data['october']['rows']+self.data['october'].get('manual_visits',[])
+                expected=[r['name'] for r in sorted(combined,key=lambda r:r['start_pdt']) if r['night']==night]
             self.assertEqual([r['name'] for r in V['rows']],expected)
             for r in V['rows']:
                 self.assertEqual(r['planned_end']-r['planned_start'],r['duration']*60000)
@@ -40,12 +42,14 @@ class VisibilityTests(unittest.TestCase):
                     start=V['sample_start']+j*V['step'];end=start+r['duration']*60000
                     self.assertGreaterEqual(start,V['start'])
                     self.assertLessEqual(end,V['end'])
-                    self.assertFalse(any(start<s['end'] and end>s['start'] for s in V['standards']))
+                    self.assertFalse(any(start<s['end'] and end>s['start'] for s in V['standards']
+                                         if not(r.get('manual') and s['name']==r['name'])))
 
     def test_window_edges_independently_at_twenty_second_cadence(self):
         iers.conf.auto_download=False;iers.conf.auto_max_age=None
         coordinates={t['name']:(t['ra'],t['dec']) for t in self.data['targets']}
         coordinates.update({t['name']:(float(t['ra']),float(t['dec'])) for t in self.data['october']['rows']})
+        coordinates.update({t['name']:(float(t['ra']),float(t['dec'])) for t in self.data['october'].get('manual_visits',[])})
         for night,V in self.data['visibility'].items():
             for duration in sorted({r['duration'] for r in V['rows']}):
                 starts=[];ras=[];decs=[];limits=[]

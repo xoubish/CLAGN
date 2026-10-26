@@ -39,6 +39,10 @@ def attach_visibility(payload):
                          for r in payload['october']['standards'] if r['night']==night]
             standards += [dict(name=r['name'], start=millis(r['start_pdt']), end=millis(r['end_pdt']), kind='manual visit')
                           for r in payload['october'].get('manual_visits',[]) if r['night']==night]
+            queue += [dict(r, manual=True, airmass_limit=1.8)
+                      for r in payload['october'].get('manual_visits',[]) if r['night']==night]
+            queue.sort(key=lambda r:r['start_pdt'])
+            for order,r in enumerate(queue,1):r['order']=order
         grid = np.arange(np.ceil(start/STEP)*STEP, np.floor(end/STEP)*STEP+1, STEP)
         times = Time(grid/1000, format='unix')
         frame = AltAz(obstime=times, location=LOCATION, pressure=0*u.hPa)
@@ -55,6 +59,7 @@ def attach_visibility(payload):
             starts = grid[:len(xmax)]
             free = np.ones(len(starts), dtype=bool)
             for s in standards:
+                if r.get('manual') and s['name']==r['name']:continue
                 free &= ~((starts < s['end']) & (starts+duration*60000 > s['start']))
             limit = float(r['airmass_limit'])
             # Small margins protect boundaries between samples; evaluate the entire
@@ -69,6 +74,7 @@ def attach_visibility(payload):
             samples = [[round(float(x),3) if np.isfinite(x) and x<100 else None,
                         round(float(m),2), int(t)] for x,m,t in zip(xmax,mmin,tiers)]
             rows.append(dict(name=r['name'], order=int(r['order']), duration=duration, airmass_limit=limit,
+                manual=bool(r.get('manual')),
                 planned_start=millis(r['start_utc']), planned_end=millis(r.get('end_utc') or r['end_pdt']),
                 windows=windows, samples=samples))
         result[night] = dict(start=round(start), end=round(end), sample_start=int(grid[0]), step=STEP,

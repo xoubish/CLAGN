@@ -48,8 +48,9 @@ location.hash='#pool';assert.equal(context.tabFromHash(),'about');
 console.log('PASS: default About, five tabs, complete catalogue and manifold, one target card at a time, search and legacy links.');
 
 for(const [night,n] of [['sep23',14],['oct26',40],['oct27',40]]){
-  assert.equal((context.renderVisibility(night).match(/data-visibility-target=/g)||[]).length,n);
-  assert(context.visibilityReadout(night,0).includes('0 of '+n));
+  const count=n+evaluate(`(D.october.manual_visits||[]).filter(r=>r.night==='${night}').length`);
+  assert.equal((context.renderVisibility(night).match(/data-visibility-target=/g)||[]).length,count);
+  assert(context.visibilityReadout(night,0).includes('0 of '+count));
 }
 evaluate("state.q='jp9694';refresh()");
 assert.equal((element('table').innerHTML.match(/data-catalog-target=/g)||[]).length,1);
@@ -63,6 +64,9 @@ if(evaluate("(D.october.manual_visits||[]).length")){
   assert(element('october').innerHTML.includes('not included in the executable NGPS CSV'));
   assert(element('october').innerHTML.includes('20:03–20:17'));
   assert(evaluate("D.visibility.oct26.standards.some(r=>r.name==='Z16 Cyg A/B/C'&&r.kind==='manual visit')"));
+  assert.equal(evaluate("D.visibility.oct26.rows[2].name"),'Z16 Cyg A/B/C');
+  assert(element('october').innerHTML.includes('data-october-target="Z16 Cyg A/B/C"'));
+  assert(element('october').innerHTML.includes('≤10 s each'));
   assert(evaluate("D.files['oct26_ngps.csv'].includes('PAUSE after this visit')"));
   console.log('PASS: reserved manual acquisition, explicit exposure warning, pause note and blocked visibility interval.');
 }
