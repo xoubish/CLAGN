@@ -19,6 +19,7 @@ NIGHTS={
     'sep23':dict(reduction=ROOT/'sep23_data/reduction_20260924',products='products_p330e',
         assets=ROOT/'docs/observed/sep23_p330e',standard='P330E',standard_label='P330E',
         standard_note='P330E · 60 s standards',telluric='BD284211',targets=18,exposures=39,rename={},
+        photo=ROOT/'docs/observed/palomar-sep23.jpg',
         quality_note='P330E flux calibration; central slice; vacuum heliocentric wavelengths. Masked pixels omitted. Absolute slit losses are not included in statistical errors.'),
     'oct26':dict(reduction=ROOT/'oct26_data/reduction_20261027',products='products_feige34',
         assets=ROOT/'docs/observed/oct26_feige34',standard='FEIGE34',standard_label='Feige 34',
@@ -26,6 +27,9 @@ NIGHTS={
         targets=43,exposures=85,
         # The frames were labelled P8828 at the telescope; their coordinates are P8823's.
         rename={'P8828':'P8823'},
+        photo=ROOT/'docs/observed/palomar-oct26.jpg',
+        # Interpretation shown on the target's card (page names).
+        notes={'H5MUSES-327':'The optical source at this position is the Gaia star (0.1″ away; parallax 0.49 ± 0.03 mas, about 2 kpc): this NGPS spectrum shows a G–K star at z ≈ 0, with no galaxy or AGN emission lines found (Hβ, [O III], Hα, [N II] searched for z = 0.005–0.5). The infrared source that 5MUSES selected coincides with it (WISE within 0.14″) but cannot be the stellar photosphere. Hot dust appears from 4.6 µm (W1−W2 = 0.89), W3/W4 exceed the photosphere by 4–6 mag, the infrared output is comparable to the star\'s optical output, Spitzer IRS (2008) shows a broad silicate feature near 10–11 µm without PAH bands, and W1/W2 vary by 0.3–0.4 mag. Two explanations remain. The infrared may come from a dust-obscured background object (most likely an AGN) blended within about 1″ and optically much fainter than the star. Or the star itself is dusty and active, as its narrow Hα emission and variability suggest, though it lies about 1 kpc above the Galactic plane. High-resolution imaging, or a deep spectrum after subtracting the star, would tell them apart.'},
         quality_note='Feige 34 flux calibration; central slice; vacuum heliocentric wavelengths. Masked pixels omitted. Absolute slit losses are not included in statistical errors.'),
 }
 STELLAR=dict(name='Z16CygABC',products='products_16cyg',stem='16CYG_STAR',frames=['0051','0052','0053'],
@@ -128,9 +132,12 @@ def add_observed(payload,visits,dest,night='sep23'):
     assets=NIGHTS[night]['assets']
     key='observed' if night=='sep23' else f'observed_{night}'
     by_name={t['name']:t for t in payload['targets']}
-    photo=ROOT/'docs/observed/palomar-sep23.jpg'
+    photo=NIGHTS[night]['photo']
     if photo.exists():
-        payload['observed_photo']=Path(os.path.relpath(photo,dest.parent)).as_posix()
+        rel=Path(os.path.relpath(photo,dest.parent)).as_posix()
+        payload.setdefault('observed_photos',{})[key]=rel
+        if night=='sep23':payload['observed_photo']=rel
+    notes=NIGHTS[night].get('notes',{})
     payload[key]=[]
     for visit in visits:
         record={k:v for k,v in visit.items() if k!='epoch'}
@@ -144,6 +151,7 @@ def add_observed(payload,visits,dest,night='sep23'):
         if record['detail']:
             t[key]=record
             if visit.get('line_ids'):t['line_ids']=visit['line_ids']
+            if visit['name'] in notes:t['interpretation']=notes[visit['name']]
             if not t.get('spec'):t['spec']={}
             epochs=t['spec'].setdefault('epochs',[])
             epochs.append(visit['epoch'])
