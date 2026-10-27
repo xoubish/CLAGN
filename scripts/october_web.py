@@ -36,6 +36,7 @@ def attach_october(payload,private,public_reference_names):
     summary=json.loads((PACKET/'validation.json').read_text())
     manual=summary.get('manual_visits',[])
     supplemental={r['upload_name']:r for r in manual}
+    standard_names={r['name'] for r in read_table('standards.csv')}
     safe_columns=['order','name','night','start_pdt','end_pdt','start_utc','latest_start_pdt',
         'ra','dec','z','observed_sep23','r_adopted',
         'brightness_source','brightness_epoch','pool_role','slit_arcsec','binspat','binspect',
@@ -79,8 +80,11 @@ def attach_october(payload,private,public_reference_names):
             if not private and suffix in ['ngps','backups_ngps']:
                 parsed=list(csv.DictReader(io.StringIO(text)))
                 by_name={r['name']:r for r in selected}
-                for order,record in enumerate(parsed,1):
-                    if record['NAME'] in supplemental:continue
+                science_order={r['NAME']:i for i,r in enumerate(
+                    [r for r in parsed if r['NAME'] not in standard_names],1)}
+                for record in parsed:
+                    if record['NAME'] in standard_names or record['NAME'] in supplemental:continue
+                    order=science_order[record['NAME']]
                     if suffix=='ngps':
                         r=by_name[record['NAME']]
                         record['NOTE']=f"{order:02d} SCI {r['start_pdt'][11:16]}"

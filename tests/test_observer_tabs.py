@@ -85,9 +85,25 @@ class ObserverTabTests(unittest.TestCase):
             self.assertEqual(float(r['TOTAL_EXPTIME_S']),o['exposure_seconds'])
         for night in ['oct26','oct27']:
             rows=self.rows(night)
-            self.assertEqual(len(rows),41 if night=='oct26' else 40)
+            self.assertEqual(len(rows),43 if night=='oct26' else 42)
+            rows=rows[1:-1]
             rows=[r for r in rows if r['NAME']!='Z16CygABC']
             self.assertTrue(all(r['NEXP']==({'P8544':'3','HIRAS-F23290-1252':'4'}.get(r['NAME'],'2')) and r['EXPTIME']=='SET 300' for r in rows))
+
+    def test_october_uploads_include_standards_at_both_ends(self):
+        for night in ['oct26','oct27']:
+            rows=self.rows(night)
+            standards=list(csv.DictReader(io.StringIO(self.data['files'][night+'_standards_ngps.csv'])))
+            self.assertEqual(rows[0],standards[0])
+            self.assertEqual(rows[-1],standards[-1])
+            self.assertEqual(rows[0]['NAME'],'BD+28 4211')
+            self.assertEqual(rows[-1]['NAME'],'Feige 34')
+            self.assertEqual([r['EXPTIME'] for r in [rows[0],rows[-1]]],['SET 10','SET 20'])
+            for standard in [rows[0],rows[-1]]:
+                self.assertEqual((standard['NEXP'],standard['SLITWIDTH'],standard['BINSPAT'],standard['BINSPECT']),('2','SET 1.5','2','3'))
+                self.assertEqual(sum(r['NAME']==standard['NAME'] for r in rows),1)
+            coordinates=list(csv.reader(io.StringIO(self.data['files'][night+'_coordinates.csv'])))
+            self.assertEqual(coordinates,[[r[k] for k in ['NAME','RA','DECL']] for r in rows])
 
     def test_review_and_public_downloads_match_packet(self):
         october=self.data['october']
@@ -97,7 +113,7 @@ class ObserverTabTests(unittest.TestCase):
         for night in ['oct26','oct27']:
             name=night+'_ngps.csv'
             self.assertEqual((ROOT/'docs/october'/name).read_text(),self.data['files'][name])
-            exported=self.rows(night)
+            exported=self.rows(night)[1:-1]
             selected=[r for r in rows if r['night']==night]+[dict(r,name=r['upload_name']) for r in october.get('manual_visits',[]) if r['night']==night]
             selected.sort(key=lambda r:r['start_pdt'])
             self.assertEqual([r['NAME'] for r in exported],[self.displayed(r['name']) for r in selected])

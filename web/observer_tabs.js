@@ -56,7 +56,7 @@ function refresh(){
   for(const night of ['oct26','oct27']){
     const rows=[...(D.october?.rows||[]),...(D.october?.manual_visits||[])].filter(r=>r.night===night);
     counts[night]=rows.length;
-    descriptions[night]=`${rows.length} science targets in observing order. Reviewed ${D.october?.review_date||''}. The CSV is the science NGPS list; standards and alternatives are noted below.`;
+    descriptions[night]=`${rows.length} science targets in observing order. Reviewed ${D.october?.review_date||''}. The CSV includes the opening standard, all science targets, and the closing standard in order.`;
   }
   if(view!=='about')$('tab-summary').innerHTML=`<div class="tab-heading"><div><h2>${TAB_LABELS[view]} <span class="count">${counts[view]} targets</span></h2><p class="muted">${descriptions[view]}</p></div><button class="tab-download" data-download="${D.tab_downloads[view]}">DOWNLOAD ${TAB_LABELS[view].toUpperCase()} CSV</button></div>`;
   if(view==='about'){

@@ -1,6 +1,6 @@
 # Z16 Cyg A/B/C — acquisition, October 26
 
-**Reserved 20:03–20:17 PDT (03:03–03:17 UTC October 27).** Third in the upload order, between H5MUSES-327 and P7344. P6677 moves to 00:57–01:11 PDT October 27. The 40 regular science targets are retained; this is an additional manual visit, bringing tonight to 41 visits. The NGPS upload includes Z16CygABC with 1 x 1 s and fixed slit PA 133.04 degrees.
+**Reserved 20:03–20:17 PDT (03:03–03:17 UTC October 27).** Third science target (upload row 4 after the opening standard), between H5MUSES-327 and P7344. P6677 moves to 00:57–01:11 PDT October 27. The 40 regular science targets are retained; this is an additional manual visit, bringing tonight to 41 visits. The NGPS upload includes Z16CygABC with 1 x 1 s and fixed slit PA 133.04 degrees.
 
 Airmass 1.124–1.145; minimum Moon separation 84.47 degrees. A 14-minute block is a time reservation, not a prescribed integration. Check progress and stop in time to resume the regular sequence.
 

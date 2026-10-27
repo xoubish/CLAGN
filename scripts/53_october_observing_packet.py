@@ -278,8 +278,6 @@ def write_outputs(targets,jwst,df,slots,edges,meta,result,windows):
         meta[night]['remaining_minutes'] = meta[night]['minutes'] - meta[night]['science_minutes'] - meta[night]['manual_minutes'] - 20
         write_csv(pd.DataFrame(october_manual.sequence_rows(d.to_dict('records'),night,manual)),DEST/f'{night}_sequence.csv')
         ngps=october_manual.upload_rows(d.to_dict('records'),night,PACK,telescope_row)
-        (DEST/f'{night}_ngps.csv').write_text(PACK.csv_text(ngps),encoding='ascii')
-        (DEST/f'{night}_coordinates.csv').write_text(PACK.csv_text(ngps,True),encoding='ascii')
         cal=[]
         for name,seconds,key in [('BD+28 4211',10,'standard_start_pdt'),('Feige 34',20,'standard_end_start_pdt')]:
             r=standards.loc[name].to_dict();r['name']=name
@@ -291,6 +289,10 @@ def write_outputs(targets,jwst,df,slots,edges,meta,result,windows):
             cal.append(PACK.ngps_row(r,dict(seconds_each=seconds,exposures=2,airmass=1.8),SETTINGS,
                 f"STD {start:%H:%M}",f"10 min reserved. Starting exposure estimate; inspect all four channels and adjust before repeat. V={r['V']}; X<={geo['airmass_max_actual']:.2f}"))
         (DEST/f'{night}_standards_ngps.csv').write_text(PACK.csv_text(cal),encoding='ascii')
+        # Each night is one complete upload: opening standard, science, closing standard.
+        complete=[cal[0],*ngps,cal[-1]]
+        (DEST/f'{night}_ngps.csv').write_text(PACK.csv_text(complete),encoding='ascii')
+        (DEST/f'{night}_coordinates.csv').write_text(PACK.csv_text(complete,True),encoding='ascii')
         occupied=[(pd.Timestamp(r.start_pdt),pd.Timestamp(r.end_pdt)) for r in d.itertuples()]
         occupied += [(pd.Timestamp(r['start_pdt']),pd.Timestamp(r['end_pdt'])) for r in standards_rows if r['night']==night]
         occupied += [(pd.Timestamp(r['start_pdt']),pd.Timestamp(r['end_pdt'])) for r in manual if r['night']==night]
@@ -471,7 +473,7 @@ Rebuild with `/opt/anaconda3/bin/python scripts/53_october_observing_packet.py`,
     (DEST/'README.md').write_text(text)
     if summary.get('manual_visits'):
         with (DEST/'README.md').open('a') as f:
-            f.write('\n## Additional manual acquisition\n\n40 regular targets per night remain in the upload lists. October 26 also has a reserved Z16 Cyg A/B/C block at 20:03–20:17 PDT, giving 41 visits that night. P6677 moves to 00:57–01:11 PDT. Z16CygABC is row 3 in the executable October 26 NGPS CSV with 1 x 1 s and fixed PA 133.04 degrees; each exposure must remain at or below 10 s. Read [16 Cyg acquisition](16Cyg_acquisition.md) and [manual timings](manual_visits.csv).\n')
+            f.write('\n## Additional manual acquisition\n\n40 regular targets per night remain in the upload lists. October 26 also has a reserved Z16 Cyg A/B/C block at 20:03–20:17 PDT, giving 41 science visits and 43 upload rows including the opening and closing standards. P6677 moves to 00:57–01:11 PDT. Z16CygABC is the third science target (row 4 after the opening standard) in the executable October 26 NGPS CSV with 1 x 1 s and fixed PA 133.04 degrees; each exposure must remain at or below 10 s. Read [16 Cyg acquisition](16Cyg_acquisition.md) and [manual timings](manual_visits.csv).\n')
 
 
 if __name__=='__main__':

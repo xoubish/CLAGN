@@ -97,7 +97,10 @@ class OctoberPacketTests(unittest.TestCase):
         self.assertEqual(r['seconds_each'],1)
         self.assertIn('prioritize a usable spectrum of C',r['science_priority'])
         upload=packet_csv('oct26_ngps.csv')
-        self.assertEqual(len(upload),41)
+        self.assertEqual(len(upload),43)
+        self.assertEqual(upload.iloc[0]['name'],'BD+28 4211')
+        self.assertEqual(upload.iloc[-1]['name'],'Feige 34')
+        upload=upload.iloc[1:-1]
         self.assertEqual(upload.iloc[2]['name'],r['upload_name'])
         target=upload.iloc[2]
         self.assertEqual(target.exptime,'SET 1')
@@ -115,7 +118,7 @@ class OctoberPacketTests(unittest.TestCase):
         for night in ['oct26','oct27']:
             with (PACKET/f'{night}_ngps.csv').open() as f:
                 rows=list(csv.DictReader(f))
-            rows=[r for r in rows if r['NAME'] not in {m['upload_name'] for m in self.validation.get('manual_visits',[])}]
+            rows=[r for r in rows[1:-1] if r['NAME'] not in {m['upload_name'] for m in self.validation.get('manual_visits',[])}]
             q=self.queue[self.queue.night==night]
             self.assertEqual([r['NAME'] for r in rows],q.name.tolist())
             self.assertTrue(all(r['EXPTIME']=='SET 300' and r['NEXP']==({'P8544':'3','HIRAS-F23290-1252':'4'}.get(r['NAME'],'2')) and r['SLITWIDTH']=='SET 1.5' and r['BINSPAT']=='2' and r['BINSPECT']=='3' for r in rows))
