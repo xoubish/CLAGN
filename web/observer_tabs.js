@@ -66,7 +66,7 @@ function refresh(){
   $('cards').classList.remove('hidden');
   if(view==='observed'){$('observed').classList.remove('hidden');$('cards').innerHTML=observedTargets().map(observedCard).join('');return;}
   if(view==='sep23'){$('sequence').classList.remove('hidden');$('cards').innerHTML=Object.entries(SEQ).sort((a,b)=>a[1].rank-b[1].rank).map(([name])=>targetCard(name)).join('');return;}
-  if(view==='oct26'||view==='oct27'){$('october').classList.remove('hidden');fillOctober(view);$('cards').innerHTML=[...D.october.rows,...(D.field_cards||[])].filter(r=>r.night===view).sort((a,b)=>a.start_pdt.localeCompare(b.start_pdt)).map(r=>targetCard(r.name)).join('');return;}
+  if(view==='oct26'||view==='oct27'){$('october').classList.remove('hidden');fillOctober(view);const fields=D.field_cards||[],manual=(D.october.manual_visits||[]).map(r=>({...r,name:r.upload_name||r.name})).filter(r=>!fields.some(f=>f.night===r.night&&f.name===r.name));$('cards').innerHTML=[...D.october.rows,...fields,...manual].filter(r=>r.night===view).sort((a,b)=>a.start_pdt.localeCompare(b.start_pdt)).map(r=>targetCard(r.name)).join('');return;}
 }
 
 function stellarCard(t){

@@ -83,7 +83,7 @@ def attach_october(payload,private,public_reference_names):
                 science_order={r['NAME']:i for i,r in enumerate(
                     [r for r in parsed if r['NAME'] not in standard_names],1)}
                 for record in parsed:
-                    if record['NAME'] in standard_names or record['NAME'] in supplemental:continue
+                    if record['NAME'] in standard_names or (suffix=='ngps' and record['NAME'] in supplemental):continue
                     order=science_order[record['NAME']]
                     if suffix=='ngps':
                         r=by_name[record['NAME']]

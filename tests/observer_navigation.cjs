@@ -29,7 +29,7 @@ assert.equal(element('cards').innerHTML,'');
 assert.equal((element('table').innerHTML.match(/data-catalog-target=/g)||[]).length,evaluate('D.all_targets.length'));
 const nav=html.match(/<nav[\s\S]*?<\/nav>/)[0];
 assert.deepEqual([...nav.matchAll(/data-view="([^"]+)"/g)].map(m=>m[1]),['about','sep23','observed','oct26','oct27']);
-for(const [tab,count] of [['sep23',14],['observed',18],['oct26',41],['oct27',40],['about',0]]){
+for(const [tab,count] of [['sep23',14],['observed',18],['oct26',45],['oct27',42],['about',0]]){
   context.setView(tab);
   assert.equal((element('cards').innerHTML.match(/<article /g)||[]).length,count,tab);
 }
@@ -47,7 +47,7 @@ location.hash='#all';assert.equal(context.tabFromHash(),'about');
 location.hash='#pool';assert.equal(context.tabFromHash(),'about');
 console.log('PASS: default About, five tabs, complete catalogue and manifold, one target card at a time, search and legacy links.');
 
-for(const [night,n] of [['sep23',14],['oct26',40],['oct27',40]]){
+for(const [night,n] of [['sep23',14],['oct26',40],['oct27',39]]){
   const count=n+evaluate(`(D.october.manual_visits||[]).filter(r=>r.night==='${night}').length`);
   assert.equal((context.renderVisibility(night).match(/data-visibility-target=/g)||[]).length,count);
   assert(context.visibilityReadout(night,0).includes('0 of '+count));
@@ -71,7 +71,7 @@ if(evaluate("(D.october.manual_visits||[]).length")){
   assert(element('october').innerHTML.includes('href="#card-Z16CygABC"'));
   assert(!element('october').innerHTML.includes('16Cyg_acquisition.md'));
   assert(element('cards').innerHTML.includes('id="card-Z16CygABC"'));
-  assert(element('tab-summary').innerHTML.includes('41 targets'));
+  assert(element('tab-summary').innerHTML.includes('45 targets'));
   context.revealTarget('Z16CygABC');
   assert(element('cards').innerHTML.includes('Pan-STARRS gri'));
   assert(element('cards').innerHTML.includes('SDSS: outside imaging footprint'));
