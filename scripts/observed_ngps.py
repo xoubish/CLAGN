@@ -92,6 +92,13 @@ def build_observed(night='sep23'):
         visits.append(record)
         for folder,extension in [('plots','png'),('spectra','csv'),('spectra','fits')]:
             shutil.copy2(products/f'{folder}/{product}.{extension}',assets/f'{name}.{extension}')
+        lines=products/f'line_ids/{product}.json'
+        if lines.exists():
+            # Line identifications from 68_ngps_line_ids.py (stellar spectra).
+            ids=json.loads(lines.read_text())
+            record['line_ids']={k:ids[k] for k in ['classification','velocity_kms','velocity_error_kms','z','marks','halpha_emission','note']}
+            record['plot_plain']=record['plot'];record['plot']=f'{name}_lines.png'
+            shutil.copy2(products/f'plots/{product}_lines.png',assets/f'{name}_lines.png')
     assert len(visits)==cfg['targets'] and sum(v['exposures'] for v in visits)==cfg['exposures']
     if night=='oct26':
         visits.append(stellar_visit(reduction,frames,assets))
@@ -127,7 +134,7 @@ def add_observed(payload,visits,dest,night='sep23'):
     payload[key]=[]
     for visit in visits:
         record={k:v for k,v in visit.items() if k!='epoch'}
-        for field in ['plot','csv','fits','profiles']:
+        for field in ['plot','plot_plain','csv','fits','profiles']:
             if field in record:
                 record[field]=Path(os.path.relpath(assets/visit[field],dest.parent)).as_posix()
         t=by_name.get(visit['name'])
@@ -136,6 +143,7 @@ def add_observed(payload,visits,dest,night='sep23'):
             assert t is not None,visit['name']
         if record['detail']:
             t[key]=record
+            if visit.get('line_ids'):t['line_ids']=visit['line_ids']
             if not t.get('spec'):t['spec']={}
             epochs=t['spec'].setdefault('epochs',[])
             epochs.append(visit['epoch'])

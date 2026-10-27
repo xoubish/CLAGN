@@ -77,9 +77,13 @@ function specPanel(t) {
   const clipId=`spectral-clip-${t.name}`;
   let svg=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${selected.length} selected spectra of ${esc(t.name)}"><defs><clipPath id="${esc(clipId)}"><rect x="${L}" y="${T}" width="${W-L-R}" height="${H-B-T}"/></clipPath></defs>`;
   niceTicks(lo,hi,4).forEach(v=>{svg+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${L-6}" y="${Y(v)+4}" text-anchor="end">${Math.abs(v)<10?v.toFixed(1):v.toFixed(0)}</text>`});
-  if(t.z!=null)[['Mg II',2798.75,0],['Hβ',4862.68,1],['[O III]',5008.24,0],['Hα',6564.61,1]].forEach(([name,rest,row])=>{
-    const obs=rest*(1+t.z);if(obs<x0||obs>x1)return;
-    const x=X(obs);svg+=`<line x1="${x}" x2="${x}" y1="${T}" y2="${H-B}" stroke="var(--hair2)"/><text x="${x}" y="${row?T-5:T-20}" text-anchor="middle">${name}</text>`;
+  // Stars carry their own line list and velocity (68_ngps_line_ids.py); quasars use the Balmer/narrow-line set at t.z.
+  const marks=t.line_ids?t.line_ids.marks.map((m,k)=>[m.label,m.rest,m.row??k%2]):t.z!=null?[['Mg II',[2798.75],0],['Hβ',[4862.68],1],['[O III]',[5008.24],0],['Hα',[6564.61],1]]:[];
+  const zMark=t.line_ids?t.line_ids.z:t.z;
+  marks.forEach(([name,rests,row])=>{
+    const obs=rests.map(r=>r*(1+zMark)).filter(w=>w>=x0&&w<=x1);if(!obs.length)return;
+    obs.forEach(w=>{svg+=`<line x1="${X(w)}" x2="${X(w)}" y1="${T}" y2="${H-B}" stroke="var(--hair2)"/>`});
+    svg+=`<text x="${X(obs.reduce((a,b)=>a+b)/obs.length)}" y="${t.line_ids?T-5-14*row:row?T-5:T-20}" text-anchor="middle">${name}</text>`;
   });
   svg+=`<g clip-path="url(#${esc(clipId)})">`;
   for(const {i,e} of traces){let path='',pen=false;e.flux.forEach((f,k)=>{if(!Number.isFinite(f)||!Number.isFinite(e.wave[k])){pen=false;return}path+=`${pen?'L':'M'}${X(e.wave[k]).toFixed(1)},${Y(f).toFixed(1)}`;pen=true});svg+=`<path data-epoch-trace="${i}" d="${path}" fill="none" stroke="${epochColor(t,i)}" stroke-width="1.15" opacity="${selected.length>8?.65:.9}"><title>${esc(e.label)}</title></path>`}

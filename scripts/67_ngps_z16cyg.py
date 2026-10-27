@@ -7,8 +7,8 @@ unsaturated central-slice star from the two 1 s frames, fluxed with the nearest
 standard, plus spatial-profile and outer/central diagnostics for the companion C.
 
 Run with NGPS_NIGHT_CONFIG pointing at the October night.json:
-    63_ngps_z16cyg.py reduce u      # PypeIt run(s) for the listed channels
-    63_ngps_z16cyg.py products [--standard FEIGE34]   # default: nearest standard in time
+    67_ngps_z16cyg.py reduce u      # PypeIt run(s) for the listed channels
+    67_ngps_z16cyg.py products [--standard FEIGE34]   # default: nearest standard in time
 """
 import importlib
 import json
