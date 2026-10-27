@@ -34,6 +34,7 @@ data/*.pdf
 # Includes sep23_data/shemmati/ and sep23_data/reduction_20260924/.
 # Curated webpage spectra in docs/observed/ remain eligible for Git.
 /sep23_data/
+/oct26_data/
 
 # keep the small inputs the pipeline needs
 !data/zeltyn2024_table5.csv

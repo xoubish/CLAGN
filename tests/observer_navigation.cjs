@@ -28,8 +28,8 @@ assert.equal(evaluate('state.view'),'about');
 assert.equal(element('cards').innerHTML,'');
 assert.equal((element('table').innerHTML.match(/data-catalog-target=/g)||[]).length,evaluate('D.all_targets.length'));
 const nav=html.match(/<nav[\s\S]*?<\/nav>/)[0];
-assert.deepEqual([...nav.matchAll(/data-view="([^"]+)"/g)].map(m=>m[1]),['about','sep23','observed','oct26','oct27']);
-for(const [tab,count] of [['sep23',14],['observed',18],['oct26',45],['oct27',42],['about',0]]){
+assert.deepEqual([...nav.matchAll(/data-view="([^"]+)"/g)].map(m=>m[1]),['about','sep23','observed','oct26','observed_oct26','oct27']);
+for(const [tab,count] of [['sep23',14],['observed',18],['observed_oct26',44],['oct26',45],['oct27',42],['about',0]]){
   context.setView(tab);
   assert.equal((element('cards').innerHTML.match(/<article /g)||[]).length,count,tab);
 }

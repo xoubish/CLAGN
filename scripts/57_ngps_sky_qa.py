@@ -11,7 +11,7 @@ from pypeit.core.wave import airtovac
 from astropy import units as u
 
 def main():
-    lines=np.loadtxt(env.BASE/'software/PypeIt/pypeit/data/sky_spec/sky_single_mg.dat',skiprows=1)
+    lines=np.loadtxt(env.SOFTWARE/'PypeIt/pypeit/data/sky_spec/sky_single_mg.dat',skiprows=1)
     rows=[]
     corrected='--corrected' in sys.argv
     for ch in 'gri':
@@ -19,7 +19,7 @@ def main():
         directory=env.NIGHT/'central_exposures'/ch if corrected else env.pypeit_file(ch).parent/'Science'
         for p in sorted(directory.glob('spec1d*fits')):
             with fits.open(p) as h:
-                a=[x for x in h[1:] if x.header.get('SLITID')=={'g':240,'r':243,'i':236}[ch]]
+                a=[x for x in h[1:] if x.header.get('SLITID')==env.CONFIG['slits'][ch]]
                 if len(a)!=1:continue
                 d=a[0].data;w=d['OPT_WAVE']/a[0].header.get('VEL_CORR',1.)
                 sky=d['OPT_COUNTS_SKY'];mask=d['OPT_MASK']&(w>0)
@@ -43,7 +43,7 @@ def main():
     Table(rows=rows).write(env.BASE/f'audit/sky_line_measurements{suffix}.csv',overwrite=True)
     summary={}
     for ch in 'gri':
-        q=[r for r in rows if r['channel']==ch and r['target'] not in ['P330E','BD284211']]
+        q=[r for r in rows if r['channel']==ch and not env.is_standard(r['target'])]
         z=np.array([r['offset'] for r in q])
         summary[ch]=dict(n=len(z),median=float(np.median(z)),std=float(np.std(z)),
             p16=float(np.percentile(z,16)),p84=float(np.percentile(z,84)))

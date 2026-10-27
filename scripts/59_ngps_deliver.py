@@ -20,6 +20,9 @@ COLORS=dict(u='#7851a9',g='#16843b',r='#d94c36',i='#8a451e')
 WINDOWS=dict(u=(3500,4200),g=(4500,5500),r=(6000,6800),i=(8000,8800))
 LIMITS=dict(u=(3241,4340),g=(4340,5790),r=(5790,7740),i=(7740,10234))
 UNIT='1e-17 erg s-1 cm-2 Angstrom-1'
+# I wavelengths validated by the sky refinement of 60_ngps_sky_refine.py --apply-i.
+_refined=json.loads((env.BASE/'audit/i_sky_refinement_applied.json').read_text())
+IVALID=(_refined['valid_min']+1e-4,_refined['valid_max']+1e-4)
 
 def read(p):
     with fits.open(p) as h:
@@ -28,11 +31,15 @@ def read(p):
         order=keep[np.argsort(d['wave'][keep])]
         return h[0].header.copy(),{k:v[order] for k,v in d.items()}
 
+def sensfiles(ch,star):
+    # File names keep the header spelling (BD+284211, Feige34).
+    return [p for p in sorted((env.BASE/f'audit/standards/{ch}').glob('sens*fits')) if star in env.canonical(p.name)]
+
 def responses(ch,w):
     result={}
-    for star in ['P330E','BD284211']:
+    for star in env.STANDARDS:
         arr=[]
-        for p in sorted((env.BASE/f'audit/standards/{ch}').glob(f'sens*{star}*fits')):
+        for p in sensfiles(ch,star):
             with fits.open(p) as h:
                 d=h['SENS'].data[0]
                 arr.append(np.interp(w,d['SENS_WAVE'],d['SENS_ZEROPOINT_FIT']))
@@ -41,9 +48,9 @@ def responses(ch,w):
     return result
 
 def build_transmission(ch):
-    p=TELLURIC_COADDS/f'BD284211_{ch.upper()}.fits'
+    p=TELLURIC_COADDS/f'{env.TELLURIC_STANDARD}_{ch.upper()}.fits'
     h,_=read(p);d=load_1d(p)
-    sens=sorted((env.BASE/f'audit/standards/{ch}').glob('sens*BD284211*fits'))[0]
+    sens=sensfiles(ch,env.TELLURIC_STANDARD)[0]
     w,t=empirical_T_per_channel(p,sens,ch)
     # Telluric lines are terrestrial: remove the standard's heliocentric shift
     # before evaluating on each science spectrum's observed-frame grid.
@@ -58,20 +65,21 @@ def build_transmission(ch):
 def main():
     for directory in ['spectra','channels','plots','calibration']:(OUT/directory).mkdir(parents=True,exist_ok=True)
     allpaths=sorted(COADDS.glob('*_G.fits'))
-    targets=[p.name.removesuffix('_G.fits') for p in allpaths if not p.name.startswith(('P330E_','BD284211_'))]
-    assert len(targets)==18
+    targets=[p.name.removesuffix('_G.fits') for p in allpaths if not p.name.startswith(tuple(s+'_' for s in env.STANDARDS))]
+    assert len(targets)==env.CONFIG['expected_targets'],len(targets)
     trans={ch:build_transmission(ch) for ch in 'ugri'}
-    standards={ch:read(TELLURIC_COADDS/f'BD284211_{ch.upper()}.fits')[0] for ch in 'ugri'}
+    standards={ch:read(TELLURIC_COADDS/f'{env.TELLURIC_STANDARD}_{ch.upper()}.fits')[0] for ch in 'ugri'}
     summaries=[];overlap=[];calibration=[]
     fig,axes=plt.subplots(2,2,figsize=(11,7))
     for ch,ax in zip('ugri',axes.flat):
         grid=np.linspace(*WINDOWS[ch],300);z=responses(ch,grid)
-        ratio=10**(.4*(z['BD284211'].mean(axis=0)-z['P330E'].mean(axis=0)))
+        first,second=env.STANDARDS
+        ratio=10**(.4*(z[second].mean(axis=0)-z[first].mean(axis=0)))
         repeat={s:float(np.median(abs(10**(.4*(a[0]-a[1]))-1))) for s,a in z.items()}
-        calibration.append(dict(CHANNEL=ch.upper(),P330E_OVER_BD_FLUX=float(np.median(ratio)),
-            P330E_REPEAT_FRAC=repeat['P330E'],BD_REPEAT_FRAC=repeat['BD284211']))
+        calibration.append({'CHANNEL':ch.upper(),f'{first}_OVER_{second}_FLUX':float(np.median(ratio)),
+            **{f'{s}_REPEAT_FRAC':repeat[s] for s in env.STANDARDS}})
         ax.plot(grid,ratio);ax.axhline(1,c='gray',ls=':');ax.set_title(ch.upper())
-        ax.set(xlabel='Vacuum wavelength (Å)',ylabel='P330E / BD-calibrated flux')
+        ax.set(xlabel='Vacuum wavelength (Å)',ylabel=f'{first} / {second}-calibrated flux')
     fig.tight_layout();fig.savefig(OUT/'calibration/standard_comparison.png',dpi=160);plt.close(fig)
     Table(rows=calibration).write(OUT/'calibration/standard_comparison.csv',overwrite=True)
     with PdfPages(OUT/'plots/all_targets.pdf') as pdf:
@@ -95,9 +103,9 @@ def main():
                 for lo,hi in TELLURIC_WINDOWS[ch]:twindow|=(wobs>=lo)&(wobs<=hi)
                 quality[twindow]|=4
                 quality[(tt<.3)|(~tellvalid&twindow)]|=8
-                if ch=='i':quality[(wobs<7717.6501)|(wobs>9975.2001)]|=16
+                if ch=='i':quality[(wobs<IVALID[0])|(wobs>IVALID[1])]|=16
                 # The alternate standard measures a calibration choice, not a 1-sigma error.
-                zp=responses(ch,w);main=h['FLUXSTD'];other='BD284211' if main=='P330E' else 'P330E'
+                zp=responses(ch,w);main=h['FLUXSTD'];other=next(s for s in env.STANDARDS if s!=main)
                 assignments=json.loads((env.BASE/f'audit/flux_assignments_{ch}{ASSIGNMENTS_SUFFIX}.json').read_text())
                 used=next(a['sensfile'] for a in assignments if a['target']==target)
                 with fits.open(used) as sh:
@@ -110,7 +118,7 @@ def main():
                 tab.meta=dict(TARGET=target,FLUXSTD=main,ALTSTD=other,BUNIT=UNIT,WAVEREF='HELIOCENTRIC VACUUM',
                     NEXP=h['NEXP'],TEXPTIME=h['TEXPTIME'],SLICE='CENTRAL',RA=float(h['RA']),DEC=float(h['DEC']),
                     MJD=float(h['MJD']),AIRMASS=float(h['AIRMASS']),MEANVEL=float(h['MEANVEL']),
-                    SLITASEC=1.5,EXTRACT='OPT',BINSPAT=2,BINSPEC=3,TELLSTD='BD284211')
+                    SLITASEC=1.5,EXTRACT='OPT',BINSPAT=2,BINSPEC=3,TELLSTD=env.TELLURIC_STANDARD)
                 tab['WAVE_VAC_HELIO_A'].unit=units.AA
                 for column in ['FLUX','FLUX_ERR','FLUX_UNCORR','ERR_UNCORR','FLUX_ALTSTD']:
                     tab[column].unit=units.Unit(1e-17*units.erg/units.s/units.cm**2/units.AA)

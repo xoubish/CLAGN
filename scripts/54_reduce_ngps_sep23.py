@@ -1,6 +1,7 @@
 """Run the documented four-channel NGPS/PypeIt reduction on staged September data.
 
 Use sep23_data/reduction_20260924/.venv/bin/python to execute this script.
+Set NGPS_NIGHT_CONFIG to reduce another night with the same steps (see CONFIG).
 Raw originals are inventoried by 53_ngps_reduction_audit.py and never modified here.
 """
 import argparse
@@ -12,10 +13,33 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = ROOT/'sep23_data/reduction_20260924'
-NIGHT = BASE/'work/20260924'
+SEP23 = ROOT/'sep23_data/reduction_20260924'
+# Another night: point NGPS_NIGHT_CONFIG at a JSON file with any of the keys below.
+# The defaults reproduce the September 23 reduction exactly.
+CONFIG = dict(base=str(SEP23), night='20260924', raw=str(ROOT/'sep23_data/shemmati'),
+    venv=str(SEP23/'.venv'), software=str(SEP23/'software'),
+    standards=['P330E', 'BD284211'], telluric_standard='BD284211',
+    slits=dict(u=550, g=240, r=243, i=236), spats=dict(u=545, g=235, r=236, i=229),
+    expected_targets=18, exclude_targets=[])
+if os.environ.get('NGPS_NIGHT_CONFIG'):
+    CONFIG.update(json.loads(Path(os.environ['NGPS_NIGHT_CONFIG']).read_text()))
+BASE = Path(CONFIG['base'])
+NIGHT = BASE/'work'/CONFIG['night']
+RAW = Path(CONFIG['raw'])
+SOFTWARE = Path(CONFIG['software'])
+STANDARDS = list(CONFIG['standards'])
+TELLURIC_STANDARD = CONFIG['telluric_standard']
 LOGS = NIGHT/'logs'
-BIN = BASE/'.venv/bin'
+BIN = Path(CONFIG['venv'])/'bin'
+
+
+def canonical(name):
+    """Target name as written by PypeIt into file names (BD+284211 -> BD284211)."""
+    return str(name).strip().upper().replace('+', '').replace(' ', '')
+
+
+def is_standard(name):
+    return canonical(name) in STANDARDS
 for directory in [BASE/'cache', BASE/'config', BASE/'cache/matplotlib']:
     directory.mkdir(parents=True, exist_ok=True)
 for key, value in dict(MPLBACKEND='Agg', MPLCONFIGDIR=str(BASE/'cache/matplotlib'),

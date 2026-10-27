@@ -16,14 +16,15 @@ from pypeit.core.flexure import spec_flex_shift, flexure_interp
 from pypeit.core.wave import airtovac
 from pypeit.spectrographs.util import load_spectrograph
 
-SLITS=dict(u=550,g=240,r=243,i=236)
-SPATS=dict(u=545,g=235,r=236,i=229)
+SLITS=env.CONFIG['slits']
+SPATS=env.CONFIG['spats']
 
 def prepare(ch):
     out=env.NIGHT/'central_exposures'/ch;out.mkdir(parents=True,exist_ok=True)
     records=[];objects=[]
     for path in sorted((env.pypeit_file(ch).parent/'Science').glob('spec1d*fits')):
         sobjs=specobjs.SpecObjs.from_fitsfile(str(path))
+        if env.canonical(sobjs.header['TARGET']) in env.CONFIG['exclude_targets']:continue
         selected=[o for o in sobjs if o.SLITID==SLITS[ch]]
         assert len(selected)==1,(path,[o.NAME for o in selected])
         obj=selected[0]
@@ -56,7 +57,7 @@ def prepare(ch):
             snr=float(np.median((obj.OPT_COUNTS*np.sqrt(obj.OPT_COUNTS_IVAR))[mask])),
             shift_pixel=shift,method=method,heliocentric_factor=float(obj.VEL_CORR)))
         objects.append((sobjs,obj))
-    finite=[r['shift_pixel'] for r in records if np.isfinite(r['shift_pixel']) and r['target'] not in ['P330E','BD284211']]
+    finite=[r['shift_pixel'] for r in records if np.isfinite(r['shift_pixel']) and not env.is_standard(r['target'])]
     assert len(finite)>30
     for r,(sobjs,obj) in zip(records,objects):
         if not np.isfinite(r['shift_pixel']):
@@ -86,12 +87,12 @@ def flux_and_coadd(ch, standard=None, variant=None):
     out=env.NIGHT/('fluxed_exposures'+suffix)/ch;out.mkdir(parents=True,exist_ok=True)
     standards=env.BASE/'audit/standards'/ch
     paths=sorted(indir.glob('spec1d*fits'));groups=defaultdict(list)
-    for p in paths:groups[fits.getheader(p)['TARGET'].upper()].append(p)
+    for p in paths:groups[env.canonical(fits.getheader(p)['TARGET'])].append(p)
     sens=[]
     for p in sorted(standards.glob('sens_spec1d*fits')):
         h=fits.getheader(standards/p.name.removeprefix('sens_'))
-        sens.append((float(h['MJD']),p,h['TARGET']))
-    assert len(sens)==4
+        sens.append((float(h['MJD']),p,env.canonical(h['TARGET'])))
+    assert len(sens)==2*len(env.STANDARDS)
     if standard is not None:
         sens=[row for row in sens if row[2]==standard]
         assert len(sens)==2, (standard,sens)

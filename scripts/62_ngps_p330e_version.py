@@ -1,4 +1,4 @@
-"""Recalibrate this night's extracted spectra using P330E for every flux scale.
+"""Recalibrate this night's extracted spectra using one standard (default P330E) for every flux scale.
 
 Preserves the original mixed-standard products and atmospheric transmission.
 """
@@ -10,23 +10,24 @@ import shutil
 
 env=importlib.import_module('54_reduce_ngps_sep23')
 
-def run_channel(ch):
-    env.run([env.BIN/'python',Path(__file__).resolve(),'--channel',ch],
-        f'p330e_flux_coadd_{ch}.log')
+def run_channel(ch,standard):
+    env.run([env.BIN/'python',Path(__file__).resolve(),'--channel',ch,'--standard',standard],
+        f'{standard.lower()}_flux_coadd_{ch}.log')
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--channel',choices=list('ugri'))
-    args=p.parse_args()
+    p.add_argument('--standard',default='P330E')
+    args=p.parse_args();variant=args.standard.lower()
     if args.channel:
         importlib.import_module('58_ngps_central_products').flux_and_coadd(
-            args.channel,standard='P330E',variant='p330e')
+            args.channel,standard=args.standard,variant=variant)
         return
-    with ThreadPoolExecutor(max_workers=4) as pool:list(pool.map(run_channel,'ugri'))
+    with ThreadPoolExecutor(max_workers=4) as pool:list(pool.map(lambda ch:run_channel(ch,args.standard),'ugri'))
     deliver=importlib.import_module('59_ngps_deliver')
-    deliver.OUT=env.BASE/'products_p330e'
-    deliver.COADDS=env.NIGHT/'coadded_channels_p330e'
-    deliver.ASSIGNMENTS_SUFFIX='_p330e'
-    # Only the flux standard changes. The already validated BD+28 atmospheric
+    deliver.OUT=env.BASE/f'products_{variant}'
+    deliver.COADDS=env.NIGHT/f'coadded_channels_{variant}'
+    deliver.ASSIGNMENTS_SUFFIX='_'+variant
+    # Only the flux standard changes. The already validated atmospheric
     # transmission template is retained, and does not set the flux scale.
     deliver.main()
     for name in ['extraction_qa.csv']:

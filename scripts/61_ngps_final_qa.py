@@ -15,7 +15,7 @@ def main():
     for ch in 'ugri':
         for p in sorted((env.NIGHT/'central_exposures'/ch).glob('*fits')):
             with fits.open(p) as h:
-                d=h[1].data;head=h[0].header;name=head['TARGET'].upper();w=d['OPT_WAVE']
+                d=h[1].data;head=h[0].header;name=env.canonical(head['TARGET']);w=d['OPT_WAVE']
                 lo,hi={'u':(3600,4000),'g':(4800,5200),'r':(6300,6700),'i':(8400,8800)}[ch]
                 q=(w>lo)&(w<hi)&d['OPT_MASK']&d['BOX_MASK']
                 rate=np.median(d['OPT_COUNTS'][q])/head['EXPTIME']
@@ -33,7 +33,7 @@ def main():
                     rec.update(SKY_RESID_MEDIAN=float(np.median(z)),
                         SKY_RESID_ROBUST_SIGMA=float(1.4826*np.median(abs(z-np.median(z)))),
                         SKY_RESID_FRAC_GT5=float(np.mean(abs(z)>5)))
-                    if name not in ['P330E','BD284211'] and ch not in targets.setdefault(name,{}):
+                    if not env.is_standard(name) and name not in env.CONFIG['exclude_targets'] and ch not in targets.setdefault(name,{}):
                         sl=slice(int(spat)-15,int(spat)+16)
                         signal=((sci-sky)*np.sqrt(iv))[:,sl].T
                         targets[name][ch]=(signal,raw2.name)
@@ -52,7 +52,7 @@ def main():
     manifest=env.BASE/'audit/raw_sha256_manifest.csv';fail=[];count=0
     with manifest.open() as f:
         for r in csv.DictReader(f):
-            p=env.ROOT/'sep23_data/shemmati'/r['path'];d=hashlib.sha256()
+            p=env.RAW/r['path'];d=hashlib.sha256()
             with p.open('rb') as fp:
                 for chunk in iter(lambda:fp.read(1024*1024),b''):d.update(chunk)
             if d.hexdigest()!=r['sha256']:fail.append(r['path'])

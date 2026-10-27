@@ -12,10 +12,10 @@ def channel(ch):
     out=env.BASE/'audit/standards'/ch
     out.mkdir(parents=True,exist_ok=True)
     for p in sorted(sci.glob('spec1d*fits')):
-        if not any(s in p.name for s in ['P330E','BD284211']):
+        if not any(s in p.name.upper().replace('+','') for s in env.STANDARDS):
             continue
         objs=specobjs.SpecObjs.from_fitsfile(str(p))
-        slit={'u':550,'g':240,'r':243,'i':236}[ch]
+        slit=env.CONFIG['slits'][ch]
         ix=[i for i,o in enumerate(objs) if o.SLITID==slit]
         assert len(ix)==1, (p,ix)
         central=specobjs.SpecObjs(specobjs=np.array([objs[ix[0]]]),header=objs.header)

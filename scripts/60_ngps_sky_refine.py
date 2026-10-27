@@ -11,7 +11,7 @@ from scipy.optimize import least_squares
 env=importlib.import_module('54_reduce_ngps_sep23')
 
 def measure(ch):
-    with fits.open(env.BASE/'software/PypeIt/pypeit/data/sky_spec/paranal_sky.fits') as h:
+    with fits.open(env.SOFTWARE/'PypeIt/pypeit/data/sky_spec/paranal_sky.fits') as h:
         aw=h[1].data.copy();af=h[0].data.copy()
     step=np.median(np.diff(aw));sigma=1.8 if ch=='r' else 2.2
     smooth=gaussian_filter1d(af,sigma/step)
@@ -42,7 +42,7 @@ def measure(ch):
     Table(rows=records).write(env.BASE/f'audit/sky_template_local_{ch}.csv',overwrite=True)
     # Fit nightly wavelength dependence using many science frames. Calibration
     # standards are held out. Per-frame offsets are estimated after this fit.
-    sci=[r for r in records if r['target'] not in ['P330E','BD284211']]
+    sci=[r for r in records if not env.is_standard(r['target'])]
     x=np.array([r['wave'] for r in sci]);y=np.array([r['offset'] for r in sci]);pivot=(lo+hi)/2
     fun=lambda v:v[0]+v[1]*(x-pivot)/1000-y
     model=least_squares(fun,[np.median(y),0],loss='soft_l1',f_scale=.12)
@@ -57,7 +57,7 @@ def measure(ch):
 def apply_i():
     import pandas as pd
     ch='i';d=pd.read_csv(env.BASE/'audit/sky_template_local_i.csv')
-    grouped=d[~d.target.isin(['P330E','BD284211'])].groupby('wave').offset.agg(['count','median','std'])
+    grouped=d[~d.target.map(env.is_standard)].groupby('wave').offset.agg(['count','median','std'])
     grouped=grouped[grouped['count']>=15]
     x=(grouped.index.to_numpy()-8950)/1000;y=grouped['median'].to_numpy()
     trials=[]

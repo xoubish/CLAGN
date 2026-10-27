@@ -1,5 +1,5 @@
-const TAB_KEYS=['about','sep23','observed','oct26','oct27'];
-const TAB_LABELS={sep23:'Sep23-targets',observed:'Sep23-observed',oct26:'Oct26',oct27:'Oct27',about:'About'};
+const TAB_KEYS=['about','sep23','observed','oct26','observed_oct26','oct27'];
+const TAB_LABELS={sep23:'Sep23-targets',observed:'Sep23-observed',oct26:'Oct26',observed_oct26:'Oct26-observed',oct27:'Oct27',about:'About'};
 function tabFromHash(){const key=location.hash.slice(1);return ({all:'about',pool:'about',sequence:'sep23',october:'oct26','oct26-sequence':'oct26','oct27-sequence':'oct27'})[key]||(TAB_KEYS.includes(key)?key:'about');}
 function setView(view){
   if(!TAB_KEYS.includes(view))view='about';
@@ -39,7 +39,7 @@ function renderCatalogue(){
   $('pool-night-label').textContent=`${list.length} of ${D.all_targets.length} candidates`;
   $('count').textContent=`${list.length} shown`;
   $('bigmap').innerHTML=bigMap(detailed);
-  $('night-summary').innerHTML=`<p>${D.all_targets.length} unique candidates.</p><p class="small muted">The manifold shows all ${detailed.length} targets with saved projections. The remaining ${D.all_targets.length-detailed.length} targets are in the catalogue below. Click a point or target name to open its details.</p><p class="small muted">Sep23-targets is the planned list; Sep23-observed contains the 18 targets actually observed. Oct26 and Oct27 show the observing queues in scheduled order.</p>`;
+  $('night-summary').innerHTML=`<p>${D.all_targets.length} unique candidates.</p><p class="small muted">The manifold shows all ${detailed.length} targets with saved projections. The remaining ${D.all_targets.length-detailed.length} targets are in the catalogue below. Click a point or target name to open its details.</p><p class="small muted">Sep23-targets is the planned list; Sep23-observed and Oct26-observed contain the targets actually observed, with their new spectra. Oct26 and Oct27 show the observing queues in scheduled order.</p>`;
   $('table').innerHTML=`<table><thead><tr>${['TARGET','RA (H:M:S)','DEC (D:M:S)','CACHED r','z','SEP 23 PLAN','OBSERVED','OCTOBER QUEUE'].map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${list.map(t=>`<tr data-catalog-target="${esc(t.name)}"><td><a href="#card-${esc(t.name)}">${esc(displayName(t.name))}</a></td><td class="mono">${esc(t.ra_hms)}</td><td class="mono">${esc(t.dec_dms)}</td><td>${fmt(t.r,2)}</td><td>${fmt(t.z,4)}</td><td>${t.sep23?'Yes':'—'}</td><td>${t.observed?'Yes':'—'}</td><td>${t.scheduled_night?TAB_LABELS[t.scheduled_night]:'—'}</td></tr>`).join('')}</tbody></table>`;
   // Rendering all detailed spectra and SVG plots at once freezes the browser.
   // Keep the entire catalogue, but create only the explicitly selected card.
@@ -51,8 +51,8 @@ function refresh(){
   $('tab-content').setAttribute('aria-labelledby','tab-'+view);
   document.querySelectorAll('[data-view]').forEach(b=>{const active=b.dataset.view===view;b.setAttribute('aria-selected',active);b.setAttribute('aria-pressed',active);b.tabIndex=active?0:-1;});
   $('tab-summary').classList.toggle('hidden',view==='about');
-  const counts={all:D.all_targets.length,sep23:Object.keys(SEQ).length,observed:D.observed.length,oct26:40,oct27:40};
-  const descriptions={sep23:'The 14 science targets planned for September 23. Standards and slot alternatives are shown below; the CSV contains the science targets only. Actual observations are in Observed.',observed:'The 18 science targets actually observed on September 23, in exposure order. The CSV is an observation log with actual exposure totals and measured S/N.',oct26:'',oct27:''};
+  const counts={all:D.all_targets.length,sep23:Object.keys(SEQ).length,observed:D.observed.length,observed_oct26:(D.observed_oct26||[]).length,oct26:40,oct27:40};
+  const descriptions={sep23:'The 14 science targets planned for September 23. Standards and slot alternatives are shown below; the CSV contains the science targets only. Actual observations are in Observed.',observed:'The 18 science targets actually observed on September 23, in exposure order. The CSV is an observation log with actual exposure totals and measured S/N.',observed_oct26:'The science targets observed on October 26, plus Z16 Cyg, in exposure order. The CSV is an observation log with actual exposure totals and measured S/N.',oct26:'',oct27:''};
   for(const night of ['oct26','oct27']){
     const rows=[...(D.october?.rows||[]),...(D.october?.manual_visits||[])].filter(r=>r.night===night);
     counts[night]=rows.length;
@@ -64,7 +64,7 @@ function refresh(){
     renderCatalogue();return;
   }
   $('cards').classList.remove('hidden');
-  if(view==='observed'){$('observed').classList.remove('hidden');$('cards').innerHTML=observedTargets().map(observedCard).join('');return;}
+  if(view==='observed'||view==='observed_oct26'){$('observed').classList.remove('hidden');fillObserved(view);$('cards').innerHTML=observedCards(view);return;}
   if(view==='sep23'){$('sequence').classList.remove('hidden');$('cards').innerHTML=Object.entries(SEQ).sort((a,b)=>a[1].rank-b[1].rank).map(([name])=>targetCard(name)).join('');return;}
   if(view==='oct26'||view==='oct27'){$('october').classList.remove('hidden');fillOctober(view);const fields=D.field_cards||[],manual=(D.october.manual_visits||[]).map(r=>({...r,name:r.upload_name||r.name})).filter(r=>!fields.some(f=>f.night===r.night&&f.name===r.name));$('cards').innerHTML=[...D.october.rows,...fields,...manual].filter(r=>r.night===view).sort((a,b)=>a.start_pdt.localeCompare(b.start_pdt)).map(r=>targetCard(r.name)).join('');return;}
 }
