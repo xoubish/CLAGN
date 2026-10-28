@@ -102,6 +102,7 @@ def main():
     attach_additional_targets(local)
     observed=build_observed()
     observed_oct26=build_observed('oct26')
+    observed_oct27=build_observed('oct27')
     slit_previews = {t['name']: previews(t, local['sep23_sequence']) for t in local['targets']}
     public_plans = {}
     for t in local['targets']:
@@ -123,6 +124,7 @@ def main():
     payload = prepare(public, public_slots, public_plans, public_science, slit_previews)
     add_observed(payload,observed,DEST_PUBLIC)
     add_observed(payload,observed_oct26,DEST_PUBLIC,'oct26')
+    add_observed(payload,observed_oct27,DEST_PUBLIC,'oct27')
     attach_october(payload,False,{t['name'] for t in local['targets'] if not t.get('science',{}).get('reference_private')})
     attach_stellar_field_cards(payload)
     attach_tabs(payload)

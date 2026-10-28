@@ -96,6 +96,12 @@ def flux_and_coadd(ch, standard=None, variant=None):
     if standard is not None:
         sens=[row for row in sens if row[2]==standard]
         assert len(sens)==2, (standard,sens)
+        # Optional night config {"standard_frames": {"BD284211": "ngps_261028_0040"}}:
+        # use one repeat when the other lost light to cloud.
+        pin=env.CONFIG.get('standard_frames',{}).get(standard)
+        if pin:
+            sens=[row for row in sens if pin in row[1].name]
+            assert len(sens)==1, (pin,sens)
     assignments=[]
     for target,files in groups.items():
         # Select once per target so a pair straddling the midpoint never uses

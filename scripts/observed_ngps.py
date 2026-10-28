@@ -1,7 +1,8 @@
 """Package the reduced NGPS spectra of each observed night for the observer page.
 
 Only the delivered science products are exported (September 23: the 18 P330E-calibrated
-spectra; October 26: the 43 Feige 34-calibrated spectra plus the 16 Cyg relative spectrum),
+spectra; October 26: the 43 Feige 34-calibrated spectra plus the 16 Cyg relative spectrum;
+October 27: the 42 BD+28 4211-calibrated spectra),
 never raw frames or unrelated private archival spectra. Each night's manifest supports
 rebuilding without the reduction directories.
 """
@@ -31,6 +32,14 @@ NIGHTS={
         # Interpretation shown on the target's card (page names).
         notes={'H5MUSES-327':'The optical source at this position is the Gaia star (0.1″ away; parallax 0.49 ± 0.03 mas, about 2 kpc): this NGPS spectrum shows a G–K star at z ≈ 0, with no galaxy or AGN emission lines found (Hβ, [O III], Hα, [N II] searched for z = 0.005–0.5). The infrared source that 5MUSES selected coincides with it (WISE within 0.14″) but cannot be the stellar photosphere. Hot dust appears from 4.6 µm (W1−W2 = 0.89), W3/W4 exceed the photosphere by 4–6 mag, the infrared output is comparable to the star\'s optical output, Spitzer IRS (2008) shows a broad silicate feature near 10–11 µm without PAH bands, and W1/W2 vary by 0.3–0.4 mag. Two explanations remain. The infrared may come from a dust-obscured background object (most likely an AGN) blended within about 1″ and optically much fainter than the star. Or the star itself is dusty and active, as its narrow Hα emission and variability suggest, though it lies about 1 kpc above the Galactic plane. High-resolution imaging, or a deep spectrum after subtracting the star, would tell them apart.'},
         quality_note='Feige 34 flux calibration; central slice; vacuum heliocentric wavelengths. Masked pixels omitted. Absolute slit losses are not included in statistical errors.'),
+    'oct27':dict(reduction=ROOT/'oct27_data/reduction_20261028',products='products_bd284211',
+        assets=ROOT/'docs/observed/oct27_bd284211',standard='BD284211',standard_label='BD+28 4211',
+        standard_note='BD+28 4211 · 10 s standard, frame 0040 (the closing Feige 34 was taken through cloud)',
+        telluric='BD284211',targets=42,exposures=87,
+        # PypeIt drops the '+' from the header name.
+        rename={'J085337.26014303.6':'J085337.26+014303.6'},
+        photo=ROOT/'docs/observed/palomar-oct27.jpg',
+        quality_note='BD+28 4211 flux calibration; central slice; vacuum heliocentric wavelengths. Masked pixels omitted. Partly cloudy night: absolute flux carries grey cloud losses (typically 0.2–0.4 mag, up to ~1 mag) beyond slit losses; use for line ratios and shape.'),
 }
 STELLAR=dict(name='Z16CygABC',products='products_16cyg',stem='16CYG_STAR',frames=['0051','0052','0053'],
     note='A and B fell along the central slice (one at the slice end, saturated in R/I); C cannot be separated from their PSF wings. Spectrum of the unsaturated central-slice star from the 1 s frames, fluxed with Feige 34, not telluric-corrected, about 2.3 mag of slit loss: use for shape and lines, not absolute flux.')

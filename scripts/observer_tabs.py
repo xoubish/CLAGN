@@ -58,16 +58,18 @@ def attach_tabs(payload):
             NEXP=o['exposures'],TOTAL_EXPTIME_S=o['exposure_seconds'],FLUX_STANDARD=o['flux_standard'],
             **{f'SNR_{ch}':o['snr'][ch] for ch in 'UGRI'}))
     files['observed_targets.csv']=csv_text(observed)
-    observed_oct26=[]
-    for o in payload.get('observed_oct26',[]):
-        t=by_name[o['name']];t['observed']=True
-        observed_oct26.append(dict(ORDER=o['order'],NAME=o['name'],RA=t['ra_hms'],DECL=t['dec_dms'],
-            START_UTC=o['start_utc'],END_UTC=o['end_utc'],START_PDT=o['start_pdt'],END_PDT=o['end_pdt'],
-            NEXP=o['exposures'],TOTAL_EXPTIME_S=o['exposure_seconds'],FLUX_STANDARD=o['flux_standard'],
-            **{f'SNR_{ch}':o.get('snr',{}).get(ch,'') for ch in 'UGRI'}))
-    files['observed_oct26_targets.csv']=csv_text(observed_oct26)
+    for night in ['oct26','oct27']:
+        rows=[]
+        for o in payload.get(f'observed_{night}',[]):
+            t=by_name[o['name']];t['observed']=True
+            rows.append(dict(ORDER=o['order'],NAME=o['name'],RA=t['ra_hms'],DECL=t['dec_dms'],
+                START_UTC=o['start_utc'],END_UTC=o['end_utc'],START_PDT=o['start_pdt'],END_PDT=o['end_pdt'],
+                NEXP=o['exposures'],TOTAL_EXPTIME_S=o['exposure_seconds'],FLUX_STANDARD=o['flux_standard'],
+                **{f'SNR_{ch}':o.get('snr',{}).get(ch,'') for ch in 'UGRI'}))
+        files[f'observed_{night}_targets.csv']=csv_text(rows)
     payload['all_targets']=inventory
     payload['tab_downloads']=dict(all='all_targets.csv',sep23='sep23_targets.csv',observed='observed_targets.csv',
-        oct26='oct26_ngps.csv',observed_oct26='observed_oct26_targets.csv',oct27='oct27_ngps.csv')
+        oct26='oct26_ngps.csv',observed_oct26='observed_oct26_targets.csv',oct27='oct27_ngps.csv',
+        observed_oct27='observed_oct27_targets.csv')
     dest=ROOT/'docs/targets';dest.mkdir(exist_ok=True)
     for name in payload['tab_downloads'].values():(dest/name).write_text(files[name])

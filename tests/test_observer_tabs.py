@@ -32,8 +32,8 @@ class ObserverTabTests(unittest.TestCase):
 
     def test_one_distinct_export_for_each_target_tab(self):
         downloads=self.data['tab_downloads']
-        self.assertEqual(set(downloads),{'all','sep23','observed','oct26','observed_oct26','oct27'})
-        self.assertEqual(len(set(downloads.values())),6)
+        self.assertEqual(set(downloads),{'all','sep23','observed','oct26','observed_oct26','oct27','observed_oct27'})
+        self.assertEqual(len(set(downloads.values())),7)
         for tab,name in downloads.items():
             self.assertTrue(all(c==c.upper() for c in self.rows(tab)[0]))
             self.assertEqual((ROOT/'docs/targets'/name).read_text(),self.data['files'][name])
