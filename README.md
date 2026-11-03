@@ -1,5 +1,7 @@
 # Palomar CLAGN observing project
 
+**Post-observing science exploration:** [executed notebooks, the 99-source atlas, and the discovery work plan](exploration/palomar_2026/README.md).
+
 **Current JWST proposal for Overleaf: [jwst_proposal/proposal.tex](jwst_proposal/proposal.tex).**
 Use it with [Figure 1](jwst_proposal/fig1_targets.pdf),
 [Figure 2](jwst_proposal/fig2_miri.pdf), and

@@ -1,0 +1,4 @@
+# Executed notebooks and derived products can contain collaboration spectra.
+notebooks/
+outputs/
+.cache/
