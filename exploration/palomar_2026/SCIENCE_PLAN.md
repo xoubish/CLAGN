@@ -1,5 +1,11 @@
 # Scientific program after the Palomar campaign
 
+**Current priority:** the user has chosen the Palomar spectral-evolution paper
+and deferred dust work to JWST. The [executed pilot and updated paper plan](PALOMAR_PAPER.md)
+supersede the first-look priorities below where full-line fits change the
+interpretation. Notebooks 06–07 contain the completed 15-source pilot; the wider
+program below remains a roadmap, not a claim of completed joint inference.
+
 This plan is grounded in the [Palomar science notes](../../observing/science_review/README.md)
 and the [current JWST proposal](../../jwst_proposal/proposal.tex), as requested.
 It is a discovery and measurement program, not a claim that every listed analysis

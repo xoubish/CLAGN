@@ -4,6 +4,7 @@ from pathlib import Path
 import json
 import time
 import sys
+import re
 import nbformat
 from nbclient import NotebookClient
 from nbconvert import HTMLExporter
@@ -20,7 +21,7 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     result_path = HERE/'outputs/notebook_execution.json'
     results = json.loads(result_path.read_text()) if result_path.exists() and sys.argv[1:] else []
-    for path in sorted((HERE/'notebooks').glob('0[0-5]_*.ipynb')):
+    for path in sorted((HERE/'notebooks').glob('0[0-7]_*.ipynb')):
         if sys.argv[1:] and path.name[:2] not in sys.argv[1:]:
             continue
         start = time.monotonic()
@@ -33,6 +34,8 @@ def main():
         body, _ = exporter.from_notebook_node(book)
         # Notebook artifact links are one directory up; HTML lives in outputs/html.
         body = body.replace('../outputs/', '../').replace('../../../reference/', '../../../../reference/').replace('../../../observing/', '../../../../observing/').replace('../../../jwst_proposal/', '../../../../jwst_proposal/')
+        body = re.sub(r'href="(0[0-7]_[^"]+)\.ipynb"',r'href="\1.html"',body)
+        body = body.replace('href="../PALOMAR_PAPER.md"','href="../../PALOMAR_PAPER.md"')
         (out/f'{path.stem}.html').write_text(body)
         rows = [c for c in book.cells if c.cell_type == 'code']
         results = [r for r in results if r['notebook'] != path.name]

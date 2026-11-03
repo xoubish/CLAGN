@@ -1,6 +1,16 @@
 # Palomar 2026 discovery exploration
 
-**Start with [the executed census notebook](notebooks/00_start_here_census_and_quality.ipynb), or [its browser-readable HTML](outputs/html/00_start_here_census_and_quality.html).**
+**Current work: [Palomar paper pilot, executed notebook 07](notebooks/07_palomar_paper_fits_and_results.ipynb) · [read in a browser](outputs/html/07_palomar_paper_fits_and_results.html) · [paper plan](PALOMAR_PAPER.md).**
+
+The Palomar-only pilot adds 15 sources, 43 selected epochs (42 fitted), three
+host/Fe II model families, alternative-standard refits, independent-exposure
+checks, refreshed optical alerts, and a 15-page fit atlas. Dust physics is deferred
+to JWST. P21422 remains the strongest weakening lead; P7947 and P9506 merit the
+next fitting effort. Full-line fitting reduces the apparent P24930 change and
+shows why P17881's EW growth alone does not establish broad-flux growth. The
+pilot is outcome-informed and cannot demonstrate selection yield or prediction.
+
+For the original all-source exploration, start with [the census notebook](notebooks/00_start_here_census_and_quality.ipynb), or [its HTML](outputs/html/00_start_here_census_and_quality.html).
 
 This is the first reproducible exploration of the completed three-night campaign,
 using the Palomar science notes and current JWST proposal, as agreed. It includes
@@ -18,6 +28,8 @@ observing products are read only.
 | [03 — individual sources](notebooks/03_individual_sources_and_atlas.ipynb) · [HTML](outputs/html/03_individual_sources_and_atlas.html) | Editable source inspection, eight highlighted cases, and the complete 99-source atlas. |
 | [04 — population experiments](notebooks/04_population_and_selection_experiments.ipynb) · [HTML](outputs/html/04_population_and_selection_experiments.html) | Frozen selection groups, measurable denominators, descriptive source-level bootstrap, and requirements for a valid enrichment test. |
 | [05 — proposal and next steps](notebooks/05_proposal_mapping_and_next_measurements.ipynb) · [HTML](outputs/html/05_proposal_mapping_and_next_measurements.html) | Actual JWST coverage, proposal-to-measurement map, and per-source work queue. |
+| [06 — Palomar paper protocol](notebooks/06_palomar_paper_protocol_and_pilot.ipynb) · [HTML](outputs/html/06_palomar_paper_protocol_and_pilot.html) | Pilot sample, covariate-matched comparisons, pre-selection timing audit, native errors and prospective-test limitations. |
+| [07 — Palomar paper pilot fits](notebooks/07_palomar_paper_fits_and_results.ipynb) · [HTML](outputs/html/07_palomar_paper_fits_and_results.html) | Actual fitting code, decomposed profiles/residuals, calibration tests, independent exposures, injections, refreshed optical data and publication priorities. |
 
 **All targets:** [99-page PDF atlas](outputs/all_sources_atlas.pdf) ·
 [individual-source index](outputs/source_index.html) ·
@@ -70,7 +82,13 @@ are close to the latest accepted archival measurements. The atlas also retains
 H5MUSES-327's stellar optical spectrum and the ancillary targets as separate
 discovery opportunities.
 
-## The most consequential gaps
+## The most consequential gaps in the first exploration
+
+The new pilot updates the first two items below for its 15 sources: it performs
+independent conditional decompositions and finds five visits with qualifying
+refreshed alert coverage, including three October visits. Full joint inference
+and full-sample photometric refresh remain outstanding. The original first-pass
+tables and wing-index measurements are preserved.
 
 * **Current optical photometry:** 97 sources have an optical cache, but the strict
   ±30-day match finds only **one Palomar visit** with accepted unbinned optical
@@ -140,7 +158,7 @@ under a new filename before rebuilding. Rerunning notebook 03 rebuilds the atlas
 set its `REBUILD_ATLAS=False` when you only want to inspect existing figures.
 
 `outputs/provenance.json` hashes the actual inputs; notebook cell counts and
-execution status are in `outputs/notebook_execution.json`. All six notebooks
+execution status are in `outputs/notebook_execution.json`. All eight notebooks
 were executed successfully. Numerical validation covers units/redshift factors,
 grey-calibration invariance, masked gaps, common support, missing errors and
 sideband error propagation against noise realizations.
@@ -148,3 +166,7 @@ sideband error propagation against noise realizations.
 Executed notebooks, figures and tables are ignored by Git because they can
 contain collaboration data. The code, this guide and the science plan are kept
 as small reviewable source files. No commit or publication was made.
+
+The separate pilot reproduction commands and remaining paper requirements are
+in [PALOMAR_PAPER.md](PALOMAR_PAPER.md). Its source-template licenses, input hashes,
+fit arrays, diagnostic figures and tables live under `outputs/palomar_paper/`.

@@ -7,3 +7,6 @@ nbformat
 nbclient
 nbconvert
 ipykernel
+requests
+pyarrow
+pypdf
