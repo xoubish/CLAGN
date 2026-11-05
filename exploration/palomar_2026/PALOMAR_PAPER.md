@@ -1,8 +1,9 @@
 # Palomar paper: full-sample decomposition, A/B/C/D selection experiment, and joint physical transitions
 
 The active project is **multi-epoch broad-line evolution and a full-sample test of the
-pre-run manifold selection** across all 99 unique AGN systems (365 spectral epochs) in the
-2026 Palomar 200-inch (NGPS) campaign. Dust physics waits for JWST.
+pre-run manifold selection** across all 96 unique non-collaborator AGN systems (362 spectral epochs:
+109 new Palomar NGPS spectra + 253 archival SDSS/DESI spectra) in the
+2026 Palomar 200-inch (NGPS) campaign (excluding the 3 `H*` collaborator targets). Dust physics waits for JWST.
 
 In addition to the locked 15-source pilot ([executed notebook 07](notebooks/07_palomar_paper_fits_and_results.ipynb),
 [HTML](outputs/html/07_palomar_paper_fits_and_results.html), [protocol notebook 06](notebooks/06_palomar_paper_protocol_and_pilot.ipynb),
@@ -16,9 +17,9 @@ and [15-source pilot fit atlas](outputs/palomar_paper/pilot_fit_atlas.pdf)), the
 
 ## What the full-sample decomposition and joint analysis accomplished (Steps 1 & 2)
 
-1. **Full 365-epoch multi-line spectral decomposition (`full_sample_fits.py`):**
-   - **Hβ + [O III] + optical Fe II + BC03 host (`4200–5500 Å`):** Decomposed all 365 baseline epochs across 83 multi-epoch objects with native archival comparison uncertainties across three model families (`baseline`, `young_host`, `wide_fe`) plus alternate NGPS standard-star reductions (1,404 saved `.npz` component fits in `outputs/full_sample/fits_hb/`).
-   - **Hα + [N II] + [S II] (`6200–6850 Å`):** Decomposed 177 baseline epochs across 46 multi-epoch objects (`ha_fit_results.csv`, `ha_fit_comparisons.csv`, `ha_model_sensitivity_envelope.csv`).
+1. **Full 362-epoch multi-line spectral decomposition (`full_sample_fits.py`):**
+   - **Hβ + [O III] + optical Fe II + BC03 host (`4200–5500 Å`):** Decomposed all 362 baseline epochs across 83 multi-epoch objects with native archival comparison uncertainties across three model families (`baseline`, `young_host`, `wide_fe`) plus alternate NGPS standard-star reductions (1,386 saved `.npz` component fits in `outputs/full_sample/fits_hb/`).
+   - **Hα + [N II] + [S II] (`6200–6850 Å`):** Decomposed 174 baseline non-collaborator epochs across 46 multi-epoch objects (`ha_fit_results.csv`, `ha_fit_comparisons.csv`, `ha_model_sensitivity_envelope.csv`).
    - **Mg II + UV Fe II (`2600–3050 Å`):** Decomposed 234 baseline epochs across 45 multi-epoch objects (`mgii_fit_results.csv`, `mgii_fit_comparisons.csv`, `mgii_model_sensitivity_envelope.csv`).
 2. **Unbiased A/B/C/D selection experiment (`abcd_group_experiment_summary.csv`, `selection_experiment_tests.json`):**
    - Evaluated across all 79 pre-run reviewed AGN targets with native-error Hβ multi-epoch comparisons (76 excluding prior catalog-confirmed CLAGNs: Group A $n=11$, Group B $n=58$, Group C $n=1$, Group D $n=6$).
@@ -106,7 +107,7 @@ must be modeled; the four comparisons are not a calibrated control experiment.
    Do not interpret fitted continuum slopes as intrinsic disk changes without
    Balmer-decrement and narrow-line flux cross-checks.
 3. **Measure the full observed denominator (Completed in Step 1).** Extended the
-   validated decomposition procedure across all 365 epochs of the 99 campaign
+   validated decomposition procedure across all 362 epochs of the 96 non-collaborator campaign
    sources (`outputs/full_sample/`), retaining non-detections, coverage masks,
    and 3-model + alternate-standard sensitivity envelopes.
 4. **Test incremental selection information (Completed in Step 1).** Preserved
@@ -116,9 +117,9 @@ must be modeled; the four comparisons are not a calibrated control experiment.
    Because the selection enrichment over Group D controls is statistically null
    ($p_{\text{perm}} = 0.68$), we report this negative selection test transparently
    alongside the full spectral-evolution catalog and individual discoveries.
-5. **Resolve forecasting provenance.** Of 99 campaign sources, 46 pass a timing
+5. **Resolve forecasting provenance.** Of 96 non-collaborator campaign sources, 46 pass a timing
    screen in which the latest archive follows all linked original W1 inputs;
-   29 have a baseline preceding some inputs and 24 have unresolved feature
+   29 have a baseline preceding some inputs and 21 have unresolved feature
    support. Pool IDs and Sample A training IDs must not be equated by their integer values.
 
 ## Measurement and provenance limits
@@ -163,7 +164,7 @@ python exploration/palomar_2026/build_paper_notebooks.py
 python exploration/palomar_2026/execute_notebooks.py 06 07
 OPENBLAS_NUM_THREADS=1 python exploration/palomar_2026/validate_paper_outputs.py
 
-# 2. Step 1: Full-sample 365-epoch Hbeta + Halpha + Mg II decomposition & A/B/C/D test
+# 2. Step 1: Full-sample 362-epoch Hbeta + Halpha + Mg II decomposition & A/B/C/D test
 OPENBLAS_NUM_THREADS=1 MPLCONFIGDIR=/private/tmp/palomar_mpl python exploration/palomar_2026/full_sample_fits.py
 
 # 3. Step 2: Joint multi-epoch Hbeta+Halpha fits, Balmer decrement & virial tests, and lead fit atlas
@@ -181,10 +182,10 @@ Detailed outputs are in:
   native-data audit and hashes, template provenance, fit coefficients/components/residuals,
   model and calibration envelopes, independent-exposure indices, injection trials,
   raw alert responses, timing matches, diagnostic figures, and `pilot_validation_manifest.json`.
-- `outputs/full_sample/`: full 365-epoch decomposition tables (`hb_fit_results.csv`,
+- `outputs/full_sample/`: full 362-epoch decomposition tables (`hb_fit_results.csv`,
   `ha_fit_results.csv`, `mgii_fit_results.csv`), multi-epoch comparisons and 3-model +
   alternate-standard envelopes, `full_sample_object_summary.csv`, `abcd_group_experiment_summary.csv`,
-  `selection_experiment_tests.json`, 1,404 `.npz` component fits in `fits_hb/`, and
+  `selection_experiment_tests.json`, 1,386 `.npz` component fits in `fits_hb/`, and
   full-sample summary figures in `figures/`.
 - `outputs/deep_dive/`: joint multi-epoch fits (`joint_multi_epoch_lead_fits.csv`),
   physical mechanism & virial transition diagnostics (`lead_physical_transitions.csv`),

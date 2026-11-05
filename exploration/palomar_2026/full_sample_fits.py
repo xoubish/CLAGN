@@ -111,10 +111,13 @@ PF.Basis.__init__ = _fast_hb_basis_init
 
 
 def load_all_spectra():
-    """Load all 365 retained epochs across the 99 objects, recovering native DESI FITS and SDSS wdisp."""
+    """Load all 362 retained epochs across the 96 non-collaborator (non-H*) objects, recovering native DESI FITS and SDSS wdisp."""
     OUT.mkdir(parents=True, exist_ok=True)
     objects, visits, _, _ = A.census()
+    objects = objects[~objects['name'].astype(str).str.startswith('H')].copy()
+    visits = visits[~visits['name'].astype(str).str.startswith('H')].copy()
     spectra, _ = A.load_spectra(objects, visits)
+    spectra = [s for s in spectra if not str(s['name']).startswith('H')]
     obj_map = objects.set_index('name')
     desi_dir = ROOT / 'data/reselection_2026-09-20/desi_direct'
 
@@ -828,7 +831,9 @@ def main():
     t0 = time.monotonic()
     spectra, objects = load_all_spectra()
     epochs_df = pd.read_csv(HERE / 'outputs/epochs.csv')
+    epochs_df = epochs_df[~epochs_df['name'].astype(str).str.startswith('H')].copy()
     analysis_sample = pd.read_csv(PILOT_OUT / 'analysis_sample.csv')
+    analysis_sample = analysis_sample[~analysis_sample['name'].astype(str).str.startswith('H')].copy()
 
     print(f"Loaded {len(spectra)} total spectral epochs across {len(objects)} objects.")
 
